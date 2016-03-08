@@ -1,0 +1,33 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_vm
+    - node.type.sessions
+id: node.sessions.field_vm
+field_name: field_vm
+entity_type: node
+bundle: sessions
+label: VM
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: 'default:user'
+  handler_settings:
+    include_anonymous: true
+    filter:
+      type: role
+      role:
+        vm: vm
+        administrator: '0'
+        photographer: '0'
+        stylish: '0'
+        qc: '0'
+    target_bundles: null
+    sort:
+      field: name
+      direction: ASC
+field_type: entity_reference

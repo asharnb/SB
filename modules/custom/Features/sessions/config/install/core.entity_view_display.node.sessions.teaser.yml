@@ -1,0 +1,28 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - core.entity_view_mode.node.teaser
+    - field.field.node.sessions.field_notes
+    - field.field.node.sessions.field_photographer
+    - field.field.node.sessions.field_shoot_class
+    - field.field.node.sessions.field_shoot_type
+    - field.field.node.sessions.field_stylish
+    - field.field.node.sessions.field_vm
+    - node.type.sessions
+  module:
+    - user
+id: node.sessions.teaser
+targetEntityType: node
+bundle: sessions
+mode: teaser
+content:
+  links:
+    weight: 100
+hidden:
+  field_notes: true
+  field_photographer: true
+  field_shoot_class: true
+  field_shoot_type: true
+  field_stylish: true
+  field_vm: true

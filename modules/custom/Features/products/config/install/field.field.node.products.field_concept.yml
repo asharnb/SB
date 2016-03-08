@@ -1,0 +1,20 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_concept
+    - node.type.products
+  module:
+    - options
+id: node.products.field_concept
+field_name: field_concept
+entity_type: node
+bundle: products
+label: Concept
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: list_string
