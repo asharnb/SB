@@ -91,6 +91,7 @@ class OpenSessionsRestResource extends ResourceBase
      */
     public function get($random)
     {
+        // todo: First update query set with entityquery
 
         //todo : Add conditions
         //todo : Check permission for requested user
@@ -104,6 +105,7 @@ class OpenSessionsRestResource extends ResourceBase
         foreach ($result as $node) {
             $nids[] = $node->nid;
         }
+        // todo : return empty set if record not found its better instead of returning warning message :) .
         if (!empty($nids)) {
             return new ResourceResponse($nids);
         }

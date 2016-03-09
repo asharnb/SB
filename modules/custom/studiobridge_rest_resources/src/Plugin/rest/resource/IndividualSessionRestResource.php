@@ -93,6 +93,11 @@ class IndividualSessionRestResource extends ResourceBase {
       if ($id) {
           $record = db_query("SELECT * FROM {node} WHERE nid = :nid", array(':nid' => $id))
               ->fetchAssoc();
+          // todo : update with entity query
+//          $ids = \Drupal::entityQuery('node')
+//              ->condition('nid', $id)
+//              ->execute();
+          // todo : return empty set if record not found its better instead of returning warning message :) .
           if (!empty($record)) {
               return new ResourceResponse($record);
           }
