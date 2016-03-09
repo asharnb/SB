@@ -1,0 +1,68 @@
+<?php
+
+/**
+ * @file
+ * Contains studiobridge_store_images.module..
+ */
+
+use Drupal\Core\Routing\RouteMatchInterface;
+use \Drupal\node\Entity\Node;
+use \Drupal\file\Entity\File;
+
+/**
+ * Implements hook_help().
+ */
+function studiobridge_store_images_help($route_name, RouteMatchInterface $route_match) {
+  switch ($route_name) {
+    // Main module help for the studiobridge_store_images module.
+    case 'help.page.studiobridge_store_images':
+      $output = '';
+      $output .= '<h3>' . t('About') . '</h3>';
+      $output .= '<p>' . t('This is StudioBridge custom module to assign images to products when system recieved a image.') . '</p>';
+      return $output;
+
+    default:
+  }
+}
+
+/**
+ * Implements hook_entity_insert().
+ *
+ * This function is created for to add received image to current product in the current session.
+ */
+function studiobridge_store_images_entity_insert(Drupal\Core\Entity\EntityInterface $entity) {
+    // todo: save logs here
+    \Drupal::logger('test_module')->notice('New file received');
+
+    $bundle = $entity->bundle(); //image
+    // When new image is relieved by server, assign it to Current open product of particular session
+    if($bundle == 'image'){
+
+        $values = $entity->toArray();
+        // Load existing node and attach file.
+        // @todo: take product nid dynamically. (current Product in the session sent by external)
+        // @todo: if no product available then create unmapped product & add it to that
+        $node = Node::load(1);
+        // todo : attach width, height and other image properties
+        $image =  array(
+            'target_id' => $values['fid'][0]['value'],
+            'alt' => $values['field_image_alt_text'][0]['value'],
+            'title' => $values['field_image_title_text'][0]['value'],
+            //'width' => '283',
+            //'height' => '266',
+            //'url' => '/file/43',
+        );
+        // Get the available images
+        $images = $node->field_images->getValue();
+
+        // add new image to existing
+        $images = array_merge($images,$image);
+
+        // Set the image array to image field
+        $node->field_images->setValue($images);
+
+        // finally save the node
+        $node->save();
+    }
+
+}

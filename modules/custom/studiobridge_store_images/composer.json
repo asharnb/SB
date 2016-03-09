@@ -1,0 +1,14 @@
+{
+  "name": "drupal/studiobridge_store_images",
+  "type": "drupal-module",
+  "description": "This is StudioBridge custom module to assign images to products when system recieved a image.",
+  "keywords": ["Drupal"],
+  "license": "GPL-2.0+",
+  "homepage": "https://www.drupal.org/project/studiobridge_store_images",
+  "minimum-stability": "dev",
+  "support": {
+    "issues": "http://drupal.org/project/issues/studiobridge_store_images",
+    "source": "http://cgit.drupalcode.org/studiobridge_store_images"
+  },
+  "require": { }
+}

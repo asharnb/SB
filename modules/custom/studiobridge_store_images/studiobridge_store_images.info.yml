@@ -1,0 +1,7 @@
+name: StudioBridge Store Images
+type: module
+description: This is StudioBridge custom module to assign images to products when system recieved a image.
+core: 8.x
+package: StudioBridge
+dependencies:
+  - restui
