@@ -1,0 +1,7 @@
+name: StudioBridge Rest Resources
+type: module
+description: This module contains rest resources for studiobridge operations.
+core: 8.x
+package: StudioBridge
+dependencies:
+  - restui

@@ -1,0 +1,24 @@
+<?php
+
+/**
+ * @file
+ * Contains studiobridge_rest_resources.module..
+ */
+
+use Drupal\Core\Routing\RouteMatchInterface;
+
+/**
+ * Implements hook_help().
+ */
+function studiobridge_rest_resources_help($route_name, RouteMatchInterface $route_match) {
+  switch ($route_name) {
+    // Main module help for the studiobridge_rest_resources module.
+    case 'help.page.studiobridge_rest_resources':
+      $output = '';
+      $output .= '<h3>' . t('About') . '</h3>';
+      $output .= '<p>' . t('This module contains rest resources for studiobridge operations.') . '</p>';
+      return $output;
+
+    default:
+  }
+}
