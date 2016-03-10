@@ -4,8 +4,10 @@ dependencies:
   config:
     - field.field.node.sessions.field_notes
     - field.field.node.sessions.field_photographer
+    - field.field.node.sessions.field_product
     - field.field.node.sessions.field_shoot_class
     - field.field.node.sessions.field_shoot_type
+    - field.field.node.sessions.field_status
     - field.field.node.sessions.field_stylish
     - field.field.node.sessions.field_vm
     - node.type.sessions
@@ -94,4 +96,6 @@ content:
       size: 60
       placeholder: ''
     third_party_settings: {  }
-hidden: {  }
+hidden:
+  field_product: true
+  field_status: true
