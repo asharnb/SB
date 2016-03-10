@@ -42,7 +42,21 @@ function studiobridge_store_images_entity_insert(Drupal\Core\Entity\EntityInterf
         // Load existing node and attach file.
         // @todo: take product nid dynamically. (current Product in the session sent by external)
         // @todo: if no product available then create unmapped product & add it to that
-        $node = Node::load(9);
+
+        $node_id = \Drupal::entityQuery('node')
+            ->condition('type', 'products')
+            ->sort('created', 'DESC')
+            ->condition('field_state','open')
+            ->range(0,1)
+            ->execute();
+        if(count($node_id)){
+            $node_id = array_values($node_id);
+            $node = Node::load($node_id[0]);
+        }
+        // @todo: create new unmapped product / check for unmapped product
+        else{
+            $node = Node::load(9);
+        }
         // todo : attach width, height and other image properties
         $image =  array(
             'target_id' => $values['fid'][0]['value'],
