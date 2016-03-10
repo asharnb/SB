@@ -1,0 +1,7 @@
+studio-bridge-view-product:
+  version: VERSION
+  js:
+    js/studio-bridge-auto-submit.js: {}
+  css:
+    theme:
+      css/studio-bridge-auto-submit.css: {}

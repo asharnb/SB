@@ -1,0 +1,30 @@
+.views-field.views-field-field-images img {
+    float: right;
+    height: 220px;
+    padding: 4px;
+ /*   width: 260px; */
+}
+
+.products-information-view-bloc {
+    float: right;
+    margin-right: 25%;
+    margin-top: -40px;
+}
+.view-content .views-field.views-field-field-images {
+    margin-top: 16%;
+}
+
+
+.control-label {
+    margin-left: 1% !important;
+}
+#edit-title {
+    margin-left: 1%;
+    margin-top: 2%;
+}
+#edit-actions button {
+    margin-top: 9%;
+}
+.form-inline .form-group {
+    width: 25%;
+}
