@@ -8,7 +8,9 @@ dependencies:
     - field.field.node.products.field_ean_code
     - field.field.node.products.field_images
     - field.field.node.products.field_sku_id
+    - field.field.node.products.field_state
     - field.field.node.products.field_style_family
+    - field.field.node.products.field_type
     - field.field.node.products.field_variant_no
     - node.type.products
   module:
@@ -78,4 +80,6 @@ content:
     type: string
   links:
     weight: 100
-hidden: {  }
+hidden:
+  field_state: true
+  field_type: true

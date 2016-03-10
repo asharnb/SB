@@ -1,0 +1,65 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.field.node.sessions.field_notes
+    - field.field.node.sessions.field_photographer
+    - field.field.node.sessions.field_product
+    - field.field.node.sessions.field_shoot_class
+    - field.field.node.sessions.field_shoot_type
+    - field.field.node.sessions.field_status
+    - field.field.node.sessions.field_stylish
+    - field.field.node.sessions.field_vm
+    - node.type.sessions
+  module:
+    - options
+    - user
+id: node.sessions.default
+targetEntityType: node
+bundle: sessions
+mode: default
+content:
+  field_notes:
+    weight: 107
+    label: above
+    settings: {  }
+    third_party_settings: {  }
+    type: basic_string
+  field_photographer:
+    weight: 102
+    label: above
+    settings:
+      link: true
+    third_party_settings: {  }
+    type: entity_reference_label
+  field_shoot_class:
+    weight: 106
+    label: above
+    settings: {  }
+    third_party_settings: {  }
+    type: list_default
+  field_shoot_type:
+    weight: 105
+    label: above
+    settings: {  }
+    third_party_settings: {  }
+    type: list_default
+  field_stylish:
+    weight: 104
+    label: above
+    settings:
+      link: true
+    third_party_settings: {  }
+    type: entity_reference_label
+  field_vm:
+    weight: 103
+    label: above
+    settings:
+      link: true
+    third_party_settings: {  }
+    type: entity_reference_label
+  links:
+    weight: 100
+hidden:
+  field_product: true
+  field_status: true
