@@ -119,6 +119,9 @@ function studiobridge_store_images_page_attachments(array &$attachments) {
     }
 }
 
+/*
+ * Helper function to create unmapped products.
+ */
 function studiobridge_store_images_create_unmapped_product($image, $session_id){
     $values = array(
         'nid' => NULL,

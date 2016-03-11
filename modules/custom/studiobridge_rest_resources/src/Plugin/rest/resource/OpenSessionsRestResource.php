@@ -91,23 +91,17 @@ class OpenSessionsRestResource extends ResourceBase
      */
     public function get($random)
     {
-        // todo: First update query set with entityquery
-
         //todo : Add conditions
         //todo : Check permission for requested user
-        $select = \Drupal::database()->select('node');
-        $select->orderBy('nid', 'DESC');
-        $select->fields('node', ['nid']);
-        //$select->condition('nid',1);
-        $select->execute();
-        $result = iterator_to_array($select->execute());
-        $nids = array();
-        foreach ($result as $node) {
-            $nids[] = $node->nid;
-        }
-        // todo : return empty set if record not found its better instead of returning warning message :) .
-        if (!empty($nids)) {
-            return new ResourceResponse($nids);
+
+        $result = \Drupal::entityQuery('node')
+            ->condition('type', 'sessions')
+            ->sort('created', 'DESC')
+            ->condition('field_status','open')  // todo : poc on structure.
+            ->range(0,100)
+            ->execute();
+        if(!empty($result)){
+            return new ResourceResponse($result);
         }
 
         // Throw an exception if it is required.
