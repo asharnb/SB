@@ -39,6 +39,20 @@ function studiobridge_store_images_entity_insert(Drupal\Core\Entity\EntityInterf
     if($bundle == 'image'){
 
         $values = $entity->toArray();
+        $session_id = $values['field_session'][0]['target_id'];
+
+        //\Drupal::logger('test_module')->notice('<pre>'.print_r($values,true).'<pre>');
+
+        // todo : attach width, height and other image properties
+        $image =  array(
+            'target_id' => $values['fid'][0]['value'],
+            'alt' => $values['field_image_alt_text'][0]['value'],
+            'title' => $values['field_image_title_text'][0]['value'],
+            //'width' => '283',
+            //'height' => '266',
+            //'url' => '/file/43',
+        );
+
         // Load existing node and attach file.
         // @todo: take product nid dynamically. (current Product in the session sent by external)
         // @todo: if no product available then create unmapped product & add it to that
@@ -55,17 +69,21 @@ function studiobridge_store_images_entity_insert(Drupal\Core\Entity\EntityInterf
         }
         // @todo: create new unmapped product / check for unmapped product
         else{
-            $node = Node::load(9);
+            $node_id_unmapped = \Drupal::entityQuery('node')
+                ->condition('type', 'unmapped_products')
+                ->sort('created', 'DESC')
+                ->condition('field_state','open')  // todo : poc on structure.
+                ->range(0,1)
+                ->execute();
+            if(count($node_id_unmapped)){
+                $node_id_unmapped = array_values($node_id_unmapped);
+                $node = Node::load($node_id_unmapped[0]);
+            }else{
+                studiobridge_store_images_create_unmapped_product($image, $session_id);
+                return;
+            }
         }
-        // todo : attach width, height and other image properties
-        $image =  array(
-            'target_id' => $values['fid'][0]['value'],
-            'alt' => $values['field_image_alt_text'][0]['value'],
-            'title' => $values['field_image_title_text'][0]['value'],
-            //'width' => '283',
-            //'height' => '266',
-            //'url' => '/file/43',
-        );
+
         // Get the available images
         $images = $node->field_images->getValue();
 
@@ -77,6 +95,10 @@ function studiobridge_store_images_entity_insert(Drupal\Core\Entity\EntityInterf
 
         // finally save the node
         $node->save();
+
+        // todo : add product to session
+        studiobridge_store_images_add_product_to_session($session_id, $node);
+
     }
 
 }
@@ -89,9 +111,58 @@ function studiobridge_store_images_page_attachments(array &$attachments) {
     $route_name = \Drupal::routeMatch()->getRouteName();
     if ($route_name === 'view.individual_project_view.page_1' ||
         $route_name == 'view.individual_project_view.page_2'  ||
-        $route_name == 'view.individual_project_view.page_3'
+        $route_name == 'view.individual_project_view.page_3'  ||
+        $route_name == 'view.view_sessions.page_3'
     )
     {
         $attachments['#attached']['library'][] = 'studiobridge_store_images/studio-bridge-view-product';
+    }
+}
+
+function studiobridge_store_images_create_unmapped_product($image, $session_id){
+    $values = array(
+        'nid' => NULL,
+        'type' => 'unmapped_products',
+        'title' => 'UnMapped',
+        'uid' => 1,
+        'status' => TRUE,
+        'field_images' => $image
+    );
+    $node = \Drupal::entityManager()->getStorage('node')->create($values);
+    $node->save();
+
+    studiobridge_store_images_add_product_to_session($session_id, $node);
+}
+
+/*
+ * Helper function to add product to session.
+ */
+function studiobridge_store_images_add_product_to_session($session_id, $node){
+    // Load session node object
+    $session_node = Node::load($session_id);
+    // Get products
+    $session_products = $session_node->field_product->getValue();
+    // Get product id
+    $product_nid = $node->id();
+
+    // Check for this product already exist in the current session
+    // todo : other logs and property settings may come here
+    $product_exist = false;
+    if(count($session_products)){
+        foreach($session_products as $each){
+            if($each['target_id'] == $product_nid){
+                $product_exist = true;
+                break;
+            }
+        }
+    }
+    if(!$product_exist){
+        $product = array(array(
+            'target_id' => $product_nid
+        ));
+        $products = array_merge($product, $session_products);
+
+        $session_node->field_product->setValue($products);
+        $session_node->save();
     }
 }
