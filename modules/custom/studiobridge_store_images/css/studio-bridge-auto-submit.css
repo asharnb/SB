@@ -1,4 +1,4 @@
-.views-field.views-field-field-images img {
+.product-view-grid-page-2 img {
     float: right;
     height: 220px;
     padding: 4px;
@@ -10,7 +10,7 @@
     margin-right: 25%;
     margin-top: -40px;
 }
-.view-content .views-field.views-field-field-images {
+.product-view-grid-page-2 .views-field.views-field-field-images {
     margin-top: 16%;
 }
 
@@ -27,4 +27,19 @@
 }
 .form-inline .form-group {
     width: 25%;
+}
+.view-individual-project-view .view-header h3 {
+    float: left;
+    padding: 20px;
+    width: 50%;
+}
+
+.view-display-id-page_3 .view-header h3 {
+    float: left;
+    padding: 20px;
+    width: 50%;
+}
+
+.product-view-list-view img {
+    padding: 10px;
 }

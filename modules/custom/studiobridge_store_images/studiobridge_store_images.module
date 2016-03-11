@@ -87,7 +87,11 @@ function studiobridge_store_images_entity_insert(Drupal\Core\Entity\EntityInterf
 function studiobridge_store_images_page_attachments(array &$attachments) {
     //echo \Drupal::routeMatch()->getRouteName(); die;
     $route_name = \Drupal::routeMatch()->getRouteName();
-    if ($route_name === 'view.individual_project_view.page_1' || $route_name == 'view.individual_project_view.page_2') {
+    if ($route_name === 'view.individual_project_view.page_1' ||
+        $route_name == 'view.individual_project_view.page_2'  ||
+        $route_name == 'view.individual_project_view.page_3'
+    )
+    {
         $attachments['#attached']['library'][] = 'studiobridge_store_images/studio-bridge-view-product';
     }
 }
