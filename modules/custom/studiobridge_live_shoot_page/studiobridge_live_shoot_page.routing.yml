@@ -1,0 +1,13 @@
+studiobridge_live_shoot_page.form:
+    path: '/live-shooting-page1'
+    defaults:
+        _form: 'Drupal\studiobridge_live_shoot_page\Form\StudioBridgeLiveShootingForm'
+        _title: 'Live shooting page'
+    requirements:
+        _permission: 'access administration pages'
+studiobridge_live_shoot_page.autocomplete:
+  path: '/studiobridge-live-shoot-page/autocomplete'
+  defaults:
+    _controller: '\Drupal\studiobridge_live_shoot_page\Controller\StudioAutocompleteController::autocomplete'
+  requirements:
+    _permission: 'access content'

@@ -1,0 +1,5 @@
+name: 'StudioBridge Live shooting page'
+description: 'This module contains all functionalities required live-shoot page, functionalities like ajax forms, auto reload image container.'
+core: 8.x
+type: module
+package: StudioBridge
