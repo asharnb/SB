@@ -28,22 +28,23 @@ class StudioBridgeLiveShootingForm extends FormBase {
 
         $form['block_category1'] = array(
             '#type' => 'textfield',
+            '#title' => 'Scan product',
             '#autocomplete_route_name' => 'studiobridge_live_shoot_page.autocomplete',
-            '#description' => $this->t('The category this block will appear under on the <a href=":href">blocks placement page</a>.', array(':href' => \Drupal::url('block.admin_display'))),
+            '#description' => $this->t('description will come here'),
             '#default_value' => 'abcd',
         );
 
-        $users = entity_load_multiple('user');
-        $default_value = EntityAutocomplete::getEntityLabels($users);
-        $form['value'] = array(
-            '#type' => 'entity_autocomplete',
-            '#title' => $this->t('Usernames'),
-            '#description' => $this->t('Enter a comma separated list of user names.'),
-            '#target_type' => 'node',
-            '#tags' => TRUE,
-            '#default_value' => $default_value,
-            '#process_default_value' => FALSE,
-        );
+//        $users = entity_load_multiple('user');
+//        $default_value = EntityAutocomplete::getEntityLabels($users);
+//        $form['value'] = array(
+//            '#type' => 'entity_autocomplete',
+//            '#title' => $this->t('Usernames'),
+//            '#description' => $this->t('Enter a comma separated list of user names.'),
+//            '#target_type' => 'node',
+//            '#tags' => TRUE,
+//            '#default_value' => $default_value,
+//            '#process_default_value' => FALSE,
+//        );
 
         $form['user_name'] = array(
             '#type' => 'textfield',

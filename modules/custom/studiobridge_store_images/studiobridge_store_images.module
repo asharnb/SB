@@ -8,6 +8,7 @@
 use Drupal\Core\Routing\RouteMatchInterface;
 use \Drupal\node\Entity\Node;
 use \Drupal\file\Entity\File;
+use Drupal\Core\Entity\ContentEntityInterface;
 
 /**
  * Implements hook_help().
@@ -30,7 +31,7 @@ function studiobridge_store_images_help($route_name, RouteMatchInterface $route_
  *
  * This function is created for to add received image to current product in the current session.
  */
-function studiobridge_store_images_entity_insert(Drupal\Core\Entity\EntityInterface $entity) {
+function studiobridge_store_images_entity_insert1(Drupal\Core\Entity\EntityInterface $entity) {
     // todo: save logs here
     \Drupal::logger('test_module')->notice('New file received');
 
@@ -112,7 +113,8 @@ function studiobridge_store_images_page_attachments(array &$attachments) {
     if ($route_name === 'view.individual_project_view.page_1' ||
         $route_name == 'view.individual_project_view.page_2'  ||
         $route_name == 'view.individual_project_view.page_3'  ||
-        $route_name == 'view.view_sessions.page_3'
+        $route_name == 'view.view_sessions.page_3' ||
+        $route_name == 'studiobridge_live_shoot_page.form'
     )
     {
         $attachments['#attached']['library'][] = 'studiobridge_store_images/studio-bridge-view-product';
