@@ -23,7 +23,7 @@ use Drupal\Core\Render\Markup;
  *   id = "studio_live_image_container_rest_resource",
  *   label = @Translation("Live shooting page image container"),
  *   uri_paths = {
- *     "canonical" = "/live-shoot-image-container/{random}"
+ *     "canonical" = "/live-shoot-image-container/{identifier}/{random}"
  *   }
  * )
  */
@@ -85,15 +85,30 @@ class StudioLiveImageContainerRestResource extends ResourceBase {
    * @throws \Symfony\Component\HttpKernel\Exception\HttpException
    *   Throws exception expected.
    */
-  public function get($random) {
-    $this->getBlockData();
+  public function get($identifier,$random) {
+    $this->getBlockData($identifier);
     return new ResourceResponse(array('content' =>$this->content));
   }
 
-  public function getBlockData(){
-    //$aa = \Drupal::service('renderer')->renderPlain(views_embed_view('delete_it', 'block_1'),false);
-    $block = \Drupal::service('renderer')->renderPlain(views_embed_view('individual_project_view', 'block_2',6),false);
-    $this->content = (string) $block;
+  public function getBlockData($identifier){
+    // todo : if identifier found in db then get the node id of mapped product, else check for unmapped product id
+    // todo : if both are failed then ????????
+
+    // todo : get node id by identifier
+    $node_id = \Drupal::entityQuery('node')
+      ->condition('title', $identifier)
+      ->sort('created', 'DESC')
+      //->condition('field_state','open')
+      ->range(0,1)
+      ->execute();
+    if(count($node_id)){
+      $node_id = reset($node_id);
+      $block = \Drupal::service('renderer')->renderPlain(views_embed_view('individual_project_view', 'block_2',$node_id),false);
+      $this->content = (string) $block;
+    }else{
+      $block = '<span color="red">No product scanned</span>';
+      $this->content = (string) $block;
+    }
   }
 
 }
