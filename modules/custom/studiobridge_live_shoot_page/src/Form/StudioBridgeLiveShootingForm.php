@@ -154,7 +154,7 @@ class StudioBridgeLiveShootingForm extends FormBase {
       $inject_script = '<script>
         var result = confirm("Do you want to reshoot this product ?")
         if (result) {
-          window.location="/live-shooting-page1?reshoot&identifier='.$identifier.'"
+          window.location="'.base_path().'live-shooting-page1?reshoot&identifier='.$identifier.'"
         }
         </script>';
     }else{

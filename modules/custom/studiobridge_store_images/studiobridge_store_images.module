@@ -9,6 +9,8 @@ use Drupal\Core\Routing\RouteMatchInterface;
 use \Drupal\node\Entity\Node;
 use \Drupal\file\Entity\File;
 use Drupal\Core\Entity\ContentEntityInterface;
+use Drupal\Core\Form\FormStateInterface;
+
 
 /**
  * Implements hook_help().
@@ -284,4 +286,19 @@ function studiobridge_store_images_update_product_as_open($identifier){
 
   }
   // todo exception handling
+}
+
+
+function studiobridge_store_images_form_alter(&$form, FormStateInterface $form_state) {
+  if($form['#id'] == 'node-sessions-form'){
+    //echo '<pre>'; print_r($form['actions']); die;
+
+    //$form['actions']['submit']['#submit'][] = 'studiobridge_store_images_form_submit1';
+    //print_r($form_state->getRedirect());
+    //die;
+  }
+}
+
+function studiobridge_store_images_form_submit1($form, FormStateInterface $form_state) {
+  //$form_state->setRedirect('user.page');
 }
