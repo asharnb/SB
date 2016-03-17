@@ -28,7 +28,7 @@
     });
 
     function triggerit(identifier, rand){
-        $.get("http://studiobridge.local/live-shoot-image-container/" + identifier + "/"+ rand +"?_format=json", function(data, status){
+        $.get("/live-shoot-image-container/" + identifier + "/"+ rand +"?_format=json", function(data, status){
             //alert("Data: " + data + "\nStatus: " + status);
             document.getElementById('studio-img-container').innerHTML = data.content;
             //console.log(data.content);
