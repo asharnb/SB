@@ -87,7 +87,15 @@ class StudioLiveImageContainerRestResource extends ResourceBase {
    */
   public function get($identifier,$random) {
     $this->getBlockData($identifier);
-    return new ResourceResponse(array('content' =>$this->content));
+    $content = array('content' =>$this->content);
+
+    $block1 = \Drupal\block\Entity\Block::load('currentsessionviewblock');
+    $block_content1 = \Drupal::entityManager()
+      ->getViewBuilder('block')
+      ->view($block1);
+
+    $content['block1'] = \Drupal::service('renderer')->renderPlain($block_content1);
+    return new ResourceResponse($content);
   }
 
   public function getBlockData($identifier){

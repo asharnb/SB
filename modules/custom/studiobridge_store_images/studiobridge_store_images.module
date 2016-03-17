@@ -193,14 +193,14 @@ function studiobridge_store_images_add_product_to_session($session_id, $node){
  */
 function studiobridge_store_images_get_open_product(){
   $node_id = \Drupal::entityQuery('node')
-    ->condition('type', 'products')
+    ->condition('type', array('products','unmapped_products'),'IN')
     ->sort('created', 'DESC')
     ->condition('field_state','open')
     ->range(0,1)
     ->execute();
   if(count($node_id)){
-    $node_id = array_values($node_id);
-    return $node = Node::load($node_id[0]);
+    $node_id = reset($node_id);
+    return $node = Node::load($node_id);
   }
   else{
     $node_id_unmapped = \Drupal::entityQuery('node')
@@ -301,4 +301,23 @@ function studiobridge_store_images_form_alter(&$form, FormStateInterface $form_s
 
 function studiobridge_store_images_form_submit1($form, FormStateInterface $form_state) {
   //$form_state->setRedirect('user.page');
+}
+
+/*
+ * todo
+ */
+function studiobridge_store_images_get_product_status_by_identifier($identifier){
+
+  $node_id = \Drupal::entityQuery('node')
+    ->condition('title', $identifier)
+    ->sort('created', 'DESC')
+    // ->condition('type',array('products','unmapped_products'))
+    ->range(0,1)
+    ->execute();
+
+  if(count($node_id)){
+    $node_id = reset($node_id);
+    $product_node = Node::load($node_id);
+    return $product_node->field_state->getValue();
+  }
 }

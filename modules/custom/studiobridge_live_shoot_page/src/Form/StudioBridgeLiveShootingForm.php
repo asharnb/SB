@@ -19,7 +19,9 @@ use Drupal\Core\Form\FormBase;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Entity\Element\EntityAutocomplete;
 use Drupal\Core\Routing\TrustedRedirectResponse;
+use Drupal\node\Plugin\migrate\source\d7\Node;
 use Symfony\Component\HttpFoundation\RedirectResponse;
+use Drupal\Core\Entity;
 
 class StudioBridgeLiveShootingForm extends FormBase {
 
@@ -83,6 +85,7 @@ class StudioBridgeLiveShootingForm extends FormBase {
         ),
       ),
     );
+    $form_state->setRebuild(TRUE);
     return $form;
   }
 
@@ -91,8 +94,10 @@ class StudioBridgeLiveShootingForm extends FormBase {
   }
 
   public function productGetOrUpdateCallback(array &$form, FormStateInterface $form_state) {
+    //$form_state->setRebuild(TRUE);
     $ajax_response = new AjaxResponse();
     $reshoot = false;
+    $is_unmapped_product = true;
 
     // todo : current open session
     $session_id = studiobridge_store_images_open_session_recent();
@@ -133,6 +138,7 @@ class StudioBridgeLiveShootingForm extends FormBase {
       if(isset($product->msg)){
         // product not found on the server so save it as unmapped product.
         studiobridge_store_images_create_unmapped_product(array(),$session_id,$identifier);
+        $is_unmapped_product = true;
       }else{
         // import it in our drupal
         $new_product = self::createNodeProduct($product, $identifier);
@@ -149,6 +155,19 @@ class StudioBridgeLiveShootingForm extends FormBase {
       studiobridge_store_images_update_product_as_open($identifier);
     }
 
+
+    // Once product is scanned update it to session
+    if(!$is_unmapped_product){
+      studiobridge_store_images_add_product_to_session($session_id, \Drupal\node\Entity\Node::load($new_or_old_product_nid));
+    }
+
+//    $state_product = studiobridge_store_images_get_product_status_by_identifier($identifier);
+//    $state_product = isset($state_product[0]['value']) ? $state_product[0]['value'] : false;
+//
+//    if($state_product == 'open'){
+//     // $reshoot = false;
+//    }
+
     // If current product is reshoot then prompt user to confirm
     if($reshoot){
       $inject_script = '<script>
@@ -160,14 +179,13 @@ class StudioBridgeLiveShootingForm extends FormBase {
     }else{
       $inject_script = '';
     }
-
     $block = \Drupal::service('renderer')
       ->renderPlain(views_embed_view('individual_project_view', 'block_2', $new_or_old_product_nid), FALSE);
     $block = (string) $block;
 
     $ajax_response->addCommand(new HtmlCommand('#studio-img-container', $block));
     $ajax_response->addCommand(new HtmlCommand('#tmp-delete', $inject_script));
-    $ajax_response->addCommand(new InvokeCommand('#studio-img-container', 'css', array('color', 'red')));
+    //$ajax_response->addCommand(new InvokeCommand('#studio-img-container', 'css', array('color', 'red')));
     $ajax_response->addCommand(new InvokeCommand('#edit-identifier-hidden', 'val', array($identifier)));
     $ajax_response->addCommand(new InvokeCommand('#edit-identifier-hidden', 'change'));
 
@@ -226,8 +244,8 @@ class StudioBridgeLiveShootingForm extends FormBase {
    * Helper function to create unmapped products.
    */
   public function createNodeProduct($product, $identifier) {
-    if (is_object($product[0])) {
-      $title = $product[0]->field_style_no_value;
+    if (is_object($product)) {
+      $title = $product->base_product_id;
     }
     $values = array(
       'nid' => NULL,

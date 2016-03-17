@@ -35,6 +35,7 @@
         $.get(url + identifier + "/"+ rand +"?_format=json", function(data, status){
             //alert("Data: " + data + "\nStatus: " + status);
             document.getElementById('studio-img-container').innerHTML = data.content;
+            document.getElementById('block-currentsessionviewblock').innerHTML = data.block1;
             //console.log(data.content);
         });
     }
