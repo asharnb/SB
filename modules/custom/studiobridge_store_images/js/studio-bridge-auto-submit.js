@@ -28,7 +28,11 @@
     });
 
     function triggerit(identifier, rand){
-        $.get("/live-shoot-image-container/" + identifier + "/"+ rand +"?_format=json", function(data, status){
+        var url = "/live-shoot-image-container/";
+        if(window.location.hostname == "staging.dreamcms.me"){
+            url = "/studiobridge/live-shoot-image-container/";
+        }
+        $.get(url + identifier + "/"+ rand +"?_format=json", function(data, status){
             //alert("Data: " + data + "\nStatus: " + status);
             document.getElementById('studio-img-container').innerHTML = data.content;
             //console.log(data.content);
