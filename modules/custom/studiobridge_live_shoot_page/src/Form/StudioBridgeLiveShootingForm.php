@@ -30,6 +30,10 @@ class StudioBridgeLiveShootingForm extends FormBase {
   }
 
   public function buildForm(array $form, FormStateInterface $form_state) {
+
+    $user = \Drupal::currentUser();
+    $uid = $user->id();
+
     // todo : current open session
     $session_id = studiobridge_store_images_open_session_recent();
     // todo : if no session found then redirect to some other page
@@ -40,13 +44,15 @@ class StudioBridgeLiveShootingForm extends FormBase {
 
     //echo '<pre>'; print_r($_GET); die;
     $identifier_hidden = '';
+    $identifier_hidden = \Drupal::state()->get('last_scan_product_'.$uid.'_'.$session_id,false);
+
 
     // On page load we need to identify that current open product
-    $node = studiobridge_store_images_get_open_product();
-    if($node){
-      //print_r($node->title->getValue());
-      $identifier_hidden = $node->getTitle();
-    }
+    //    $node = studiobridge_store_images_get_open_product();
+    //    if($node){
+    //      //print_r($node->title->getValue());
+    //      $identifier_hidden = $node->getTitle();
+    //    }
 
     // todo : identifier might available in query
     // todo : get default product (current open product last)
@@ -94,31 +100,31 @@ class StudioBridgeLiveShootingForm extends FormBase {
   }
 
   public function productGetOrUpdateCallback(array &$form, FormStateInterface $form_state) {
-    //$form_state->setRebuild(TRUE);
-    $ajax_response = new AjaxResponse();
-    $reshoot = false;
-    $is_unmapped_product = true;
 
-    // todo : current open session
+    $user = \Drupal::currentUser();
+    $uid = $user->id();
+
+    // Get current session
     $session_id = studiobridge_store_images_open_session_recent();
-    // todo : if no session found then redirect to some other page
+    // If no session found then redirect to some other page
     if(!$session_id){
-      //return new TrustedRedirectResponse('/sessions');
       return new RedirectResponse('/sessions');
     }
 
+    // Generate new ajax response object
+    $ajax_response = new AjaxResponse();
+    $reshoot = false;
+    $is_unmapped_product = false;
+
     $identifier = $form_state->getValue('identifier');
     $identifier_old = $form_state->getValue('identifier_hidden');  // @note : this will be the recent product.
+
+    $last_scan_product = \Drupal::state()->get('last_scan_product_'.$uid.'_'.$session_id,false);
 
     if (empty(trim($identifier))) {
       $ajax_response->addCommand(new HtmlCommand('#studio-img-container', 'No identifier entered'));
       $ajax_response->addCommand(new InvokeCommand('#studio-img-container', 'css', array('color', 'red')));
       return $ajax_response;
-    }
-
-    if($identifier != $identifier_old){
-      // todo : update last product as closed status
-      studiobridge_store_images_update_product_as_closed($identifier_old);
     }
 
     // todo : if identifier found in our products then skip importing
@@ -127,7 +133,6 @@ class StudioBridgeLiveShootingForm extends FormBase {
       ->condition('type', array('products','unmapped_products'),'IN')
       ->sort('created', 'DESC')
       ->condition('title', $identifier) // todo : title will be changed as per response
-      //->condition('field_status','open')
       ->range(0, 1)
       ->execute();
 
@@ -148,46 +153,69 @@ class StudioBridgeLiveShootingForm extends FormBase {
     else {
       // todo : code for product re shoot
       $new_or_old_product_nid = reset($result);
-      // todo : update node by re shoot
-      if($identifier != $identifier_old){
-        $reshoot = true;
+
+      $db =  \Drupal::database();
+      $sessions_nids = $db->select('node__field_product','c')
+        ->fields('c')
+        ->condition('field_product_target_id',$new_or_old_product_nid)
+        ->execute()->fetchAll();
+
+      // todo : if count is more than 1
+      if(count($sessions_nids)){
+        // $session_id
+        foreach($sessions_nids as $field){
+          if($field->entity_id != $session_id) {
+            $reshoot = true;
+            break;
+          }
+        }
       }
+      // If current product is reshoot then prompt user to confirm
+      if($reshoot && !isset($_GET['reshoot'])){
+        $inject_script = '<script>
+        var result = confirm("Do you want to reshoot this product ?")
+        if (result) {
+          window.location="'.base_path().'live-shooting-page1?reshoot&identifier='.$identifier.'"
+        }else{
+          //window.location="'.base_path().'live-shooting-page1"
+          //document.getElementById("edit-identifier").value = "'.$last_scan_product.'";
+          //document.getElementById("edit-identifier-hidden").value = "'.$last_scan_product.'";
+        }
+        </script>';
+        // return ajax here.
+        $ajax_response->addCommand(new HtmlCommand('#tmp-delete', $inject_script));
+        return $ajax_response;
+      }
+
+      // update the current product as open status
       studiobridge_store_images_update_product_as_open($identifier);
     }
 
+    if($last_scan_product != $identifier){
+      // todo : update last product as closed status
+      studiobridge_store_images_update_product_as_closed($last_scan_product);
+    }
 
     // Once product is scanned update it to session
     if(!$is_unmapped_product){
       studiobridge_store_images_add_product_to_session($session_id, \Drupal\node\Entity\Node::load($new_or_old_product_nid));
     }
 
-//    $state_product = studiobridge_store_images_get_product_status_by_identifier($identifier);
-//    $state_product = isset($state_product[0]['value']) ? $state_product[0]['value'] : false;
-//
-//    if($state_product == 'open'){
-//     // $reshoot = false;
-//    }
-
-    // If current product is reshoot then prompt user to confirm
-    if($reshoot){
-      $inject_script = '<script>
-        var result = confirm("Do you want to reshoot this product ?")
-        if (result) {
-          window.location="'.base_path().'live-shooting-page1?reshoot&identifier='.$identifier.'"
-        }
-        </script>';
-    }else{
-      $inject_script = '';
-    }
     $block = \Drupal::service('renderer')
       ->renderPlain(views_embed_view('individual_project_view', 'block_2', $new_or_old_product_nid), FALSE);
     $block = (string) $block;
 
     $ajax_response->addCommand(new HtmlCommand('#studio-img-container', $block));
-    $ajax_response->addCommand(new HtmlCommand('#tmp-delete', $inject_script));
+    //$ajax_response->addCommand(new HtmlCommand('#tmp-delete', $inject_script));
     //$ajax_response->addCommand(new InvokeCommand('#studio-img-container', 'css', array('color', 'red')));
     $ajax_response->addCommand(new InvokeCommand('#edit-identifier-hidden', 'val', array($identifier)));
     $ajax_response->addCommand(new InvokeCommand('#edit-identifier-hidden', 'change'));
+
+    \Drupal::state()->set('last_scan_product_'.$uid.'_'.$session_id,$identifier);
+
+    if($new_or_old_product_nid){
+      \Drupal::state()->set('last_scan_product_nid'.$uid.'_'.$session_id,$new_or_old_product_nid);
+    }
 
     return $ajax_response;
   }
@@ -244,22 +272,30 @@ class StudioBridgeLiveShootingForm extends FormBase {
    * Helper function to create unmapped products.
    */
   public function createNodeProduct($product, $identifier) {
+    $user = \Drupal::currentUser();
+    $uid = $user->id();
     if (is_object($product)) {
-      $title = $product->base_product_id;
+      $values = array(
+        'nid' => NULL,
+        'type' => 'products',
+        'title' => $identifier,
+        'uid' => $uid,
+        'status' => TRUE,
+        'field_base_product_id' => array('value'=>$product->base_product_id),
+        'field_style_family' => array('value'=>$product->style_no),
+        'field_concept_name' => array('value'=> $product->concept),
+        'field_gender' => array('value'=> $product->gender),
+        'field_description' => array('value'=> $product->description),
+        'field_color_variant' => array('value'=> $product->color_variant), // todo: may be multiple
+        'field_color_name' => array('value'=> $product->color_name),  //  todo: may be multiple
+        'field_size_name' => array('value'=> $product->size_name),  // todo: may be multiple
+        'field_size_variant' => array('value'=> $product->size_variant),  // todo: may be multiple
+      );
+      $node = \Drupal::entityManager()->getStorage('node')->create($values);
+      $node->save();
+      // todo : add exceptions
+      return $node;
     }
-    $values = array(
-      'nid' => NULL,
-      'type' => 'products',
-      'title' => $identifier,
-      'uid' => 1,
-      'status' => TRUE,
-      //'field_images' => $image
-    );
-    $node = \Drupal::entityManager()->getStorage('node')->create($values);
-    $node_created = $node->save();
-    // todo : add exceptions
-    return $node;
-    //studiobridge_store_images_add_product_to_session($session_id, $node);
   }
 
 }

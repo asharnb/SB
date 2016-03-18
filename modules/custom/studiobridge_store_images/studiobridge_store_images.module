@@ -10,7 +10,7 @@ use \Drupal\node\Entity\Node;
 use \Drupal\file\Entity\File;
 use Drupal\Core\Entity\ContentEntityInterface;
 use Drupal\Core\Form\FormStateInterface;
-
+use Symfony\Component\HttpFoundation\RedirectResponse;
 
 /**
  * Implements hook_help().
@@ -38,10 +38,11 @@ function studiobridge_store_images_entity_insert(Drupal\Core\Entity\EntityInterf
     \Drupal::logger('test_module')->notice('New file received');
 
     $bundle = $entity->bundle(); //image
-    // When new image is relieved by server, assign it to Current open product of particular session
-    if($bundle == 'image'){
+    $values = $entity->toArray();
 
-        $values = $entity->toArray();
+  // When new image is relieved by server, assign it to Current open product of particular session
+    if($bundle == 'image' && isset($values['field_session'][0]['target_id'])){
+
         $session_id = $values['field_session'][0]['target_id'];
         //$session_id = 22;
 
@@ -62,44 +63,27 @@ function studiobridge_store_images_entity_insert(Drupal\Core\Entity\EntityInterf
         // @todo: if no product available then create unmapped product & add it to that
 
         // On page load we need to identify that current open product
-        $node = studiobridge_store_images_get_open_product();
+        $product_last_updated = studiobridge_store_images_get_open_product($session_id);
 
-        if($node){
+        $session = Node::load($session_id);
+        $session_uid = $session->getOwnerId();
+
+        // todo : get scanned product from state:
+        $scanned_product_nid = \Drupal::state()->get('last_scan_product_nid'.$session_uid.'_'.$session_id,false);
+
+        if($scanned_product_nid){
+          $node = Node::load($scanned_product_nid);
           $node_title = $node->getTitle();
           $bundle = $node->bundle();
           \Drupal::logger('krishna')->notice($node_title.'--'.$bundle);
+        }
+        elseif($product_last_updated){
+          $node = $product_last_updated;
         }
         else{
           studiobridge_store_images_create_unmapped_product($image, $session_id);
           return;
         }
-
-//        $node_id = \Drupal::entityQuery('node')
-//            ->condition('type', 'products')
-//            ->sort('created', 'DESC')
-//            ->condition('field_state','open')
-//            ->range(0,1)
-//            ->execute();
-//        if(count($node_id)){
-//            $node_id = array_values($node_id);
-//            $node = Node::load($node_id[0]);
-//        }
-        // @todo: create new unmapped product / check for unmapped product
-//        else{
-//            $node_id_unmapped = \Drupal::entityQuery('node')
-//                ->condition('type', 'unmapped_products')
-//                ->sort('created', 'DESC')
-//                ->condition('field_state','open')  // todo : poc on structure.
-//                ->range(0,1)
-//                ->execute();
-//            if(count($node_id_unmapped)){
-//                $node_id_unmapped = array_values($node_id_unmapped);
-//                $node = Node::load($node_id_unmapped[0]);
-//            }else{
-//                studiobridge_store_images_create_unmapped_product($image, $session_id);
-//                return;
-//            }
-//        }
 
         // Get the available images
         $images = $node->field_images->getValue();
@@ -141,11 +125,18 @@ function studiobridge_store_images_page_attachments(array &$attachments) {
  * Helper function to create unmapped products.
  */
 function studiobridge_store_images_create_unmapped_product($image = array(), $session_id, $identifier='UnMapped'){
+  //$user = \Drupal::currentUser();
+  //$uid = $user->id();
+
+  // The owner of session will be become owner of unmapped product
+  $session = Node::load($session_id);
+  $session_uid = $session->getOwnerId();
+
     $values = array(
         'nid' => NULL,
         'type' => 'unmapped_products',
         'title' => $identifier,
-        'uid' => 1,
+        'uid' => $session_uid,
         'status' => TRUE,
         'field_images' => $image
     );
@@ -191,11 +182,15 @@ function studiobridge_store_images_add_product_to_session($session_id, $node){
 /*
  * todo
  */
-function studiobridge_store_images_get_open_product(){
+function studiobridge_store_images_get_open_product($session_id){
+  $session = Node::load($session_id);
+  $session_uid = $session->getOwnerId();
+
   $node_id = \Drupal::entityQuery('node')
     ->condition('type', array('products','unmapped_products'),'IN')
     ->sort('created', 'DESC')
     ->condition('field_state','open')
+    ->condition('uid',$session_uid)
     ->range(0,1)
     ->execute();
   if(count($node_id)){
@@ -207,6 +202,7 @@ function studiobridge_store_images_get_open_product(){
       ->condition('type', 'unmapped_products')
       ->sort('created', 'DESC')
       ->condition('field_state','open')
+      ->condition('uid',$session_uid)
       ->range(0,1)
       ->execute();
     if(count($node_id_unmapped)){
@@ -224,10 +220,14 @@ function studiobridge_store_images_get_open_product(){
  * todo
  */
 function studiobridge_store_images_open_session_recent(){
+  $user = \Drupal::currentUser();
+  $uid = $user->id();
+
   $result = \Drupal::entityQuery('node')
     ->condition('type', 'sessions')
     ->sort('created', 'DESC')
     ->condition('field_status','open')  // todo : poc on structure.
+    ->condition('uid',$uid)
     ->range(0,1)
     ->execute();
   if(count($result)){
@@ -289,20 +289,6 @@ function studiobridge_store_images_update_product_as_open($identifier){
 }
 
 
-function studiobridge_store_images_form_alter(&$form, FormStateInterface $form_state) {
-  if($form['#id'] == 'node-sessions-form'){
-    //echo '<pre>'; print_r($form['actions']); die;
-
-    //$form['actions']['submit']['#submit'][] = 'studiobridge_store_images_form_submit1';
-    //print_r($form_state->getRedirect());
-    //die;
-  }
-}
-
-function studiobridge_store_images_form_submit1($form, FormStateInterface $form_state) {
-  //$form_state->setRedirect('user.page');
-}
-
 /*
  * todo
  */
@@ -320,4 +306,47 @@ function studiobridge_store_images_get_product_status_by_identifier($identifier)
     $product_node = Node::load($node_id);
     return $product_node->field_state->getValue();
   }
+}
+
+function studiobridge_store_images_form_alter(&$form, \Drupal\Core\Form\FormStateInterface $form_state, $form_id) {
+  // todo : delete this line
+  //drupal_set_message($form_id);
+  $user = \Drupal::currentUser();
+  $uid = $user->id();
+
+  if($form_id == 'node_sessions_form'){
+    $result = \Drupal::entityQuery('node')
+      ->condition('type', 'sessions')
+      ->condition('uid', $uid)
+      ->sort('created', 'DESC')
+      ->condition('field_status','open')  // todo : poc on structure.
+      ->range(0,1)
+      ->execute();
+    if(count($result)){
+      // todo : dsm will not work because of we are redirecting from httpfoundation.
+      // redirect to sessions page
+      $response = new Symfony\Component\HttpFoundation\RedirectResponse('/view-sessions');
+      drupal_set_message('There is a open session, please close it to add new session','warning');
+      $response->send();
+      exit;
+    }
+  }
+
+}
+
+function studiobridge_store_images_form_node_sessions_form_alter(&$form, FormStateInterface $form_state) {
+//  $form_state->setRedirect('view.view_sessions.page_1');
+//  return new RedirectResponse('/sessions');
+  foreach (array_keys($form['actions']) as $action) {
+    if ($action != 'preview' && isset($form['actions'][$action]['#type']) && $form['actions'][$action]['#type'] === 'submit') {
+      $form['actions'][$action]['#submit'][] = 'studiobridge_store_images_upload_enabled_types_submit';
+    }
+  }
+}
+
+function studiobridge_store_images_upload_enabled_types_submit($form, FormStateInterface $form_state) {
+  $response = new Symfony\Component\HttpFoundation\RedirectResponse('/');
+  drupal_set_message('There is a ...');
+  $response->send();
+  exit;
 }
