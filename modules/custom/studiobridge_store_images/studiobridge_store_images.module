@@ -143,6 +143,8 @@ function studiobridge_store_images_create_unmapped_product($image = array(), $se
     $node = \Drupal::entityManager()->getStorage('node')->create($values);
     $node->save();
 
+    \Drupal::state()->set('last_scan_product_nid'.$session_uid.'_'.$session_id,$node->id());
+
     studiobridge_store_images_add_product_to_session($session_id, $node);
 }
 
