@@ -39,7 +39,7 @@ class StudioBridgeLiveShootingForm extends FormBase {
     // todo : if no session found then redirect to some other page
     if(!$session_id){
       drupal_set_message('No open sessions found','warning');
-      return new RedirectResponse('/view-sessions');
+      return new RedirectResponse(base_path().'view-sessions');
     }
 
     //echo '<pre>'; print_r($_GET); die;
@@ -108,7 +108,7 @@ class StudioBridgeLiveShootingForm extends FormBase {
     $session_id = studiobridge_store_images_open_session_recent();
     // If no session found then redirect to some other page
     if(!$session_id){
-      return new RedirectResponse('/sessions');
+      return new RedirectResponse(base_path().'sessions');
     }
 
     // Generate new ajax response object

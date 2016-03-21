@@ -327,7 +327,7 @@ function studiobridge_store_images_form_alter(&$form, \Drupal\Core\Form\FormStat
     if(count($result)){
       // todo : dsm will not work because of we are redirecting from httpfoundation.
       // redirect to sessions page
-      $response = new Symfony\Component\HttpFoundation\RedirectResponse('/view-sessions');
+      $response = new Symfony\Component\HttpFoundation\RedirectResponse(base_path().'view-sessions');
       drupal_set_message('There is a open session, please close it to add new session','warning');
       $response->send();
       exit;
