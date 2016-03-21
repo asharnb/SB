@@ -347,7 +347,7 @@ function studiobridge_store_images_form_node_sessions_form_alter(&$form, FormSta
 }
 
 function studiobridge_store_images_upload_enabled_types_submit($form, FormStateInterface $form_state) {
-  $response = new Symfony\Component\HttpFoundation\RedirectResponse('/');
+  $response = new Symfony\Component\HttpFoundation\RedirectResponse(base_path());
   drupal_set_message('There is a ...');
   $response->send();
   exit;

@@ -23,6 +23,7 @@ use Drupal\node\Plugin\migrate\source\d7\Node;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Drupal\Core\Entity;
 
+
 class StudioBridgeLiveShootingForm extends FormBase {
 
   public function getFormId() {
@@ -42,22 +43,33 @@ class StudioBridgeLiveShootingForm extends FormBase {
       return new RedirectResponse(base_path().'view-sessions');
     }
 
-    //echo '<pre>'; print_r($_GET); die;
     $identifier_hidden = '';
     $identifier_hidden = \Drupal::state()->get('last_scan_product_'.$uid.'_'.$session_id,false);
-
-
-    // On page load we need to identify that current open product
-    //    $node = studiobridge_store_images_get_open_product();
-    //    if($node){
-    //      //print_r($node->title->getValue());
-    //      $identifier_hidden = $node->getTitle();
-    //    }
 
     // todo : identifier might available in query
     // todo : get default product (current open product last)
     if(!empty($_GET['identifier']) && isset($_GET['reshoot'])){
       $identifier_hidden = $_GET['identifier'];
+
+      $result = \Drupal::entityQuery('node')
+        ->condition('type', array('products','unmapped_products'),'IN')
+        ->sort('created', 'DESC')
+        ->condition('title', $_GET['identifier']) // todo : title will be changed as per response
+        ->range(0, 1)
+        ->execute();
+
+      if($result){
+        $new_or_old_product_nid = reset($result);
+      }else{
+        drupal_set_message('Invalid identifier','warning');
+        return new RedirectResponse(base_path());
+      }
+
+      if($new_or_old_product_nid){
+        \Drupal::state()->set('last_scan_product_nid'.$uid.'_'.$session_id,$new_or_old_product_nid);
+        studiobridge_store_images_update_product_as_open($_GET['identifier']);
+        \Drupal::state()->set('last_scan_product_'.$uid.'_'.$session_id,$_GET['identifier']);
+      }
     }
 
     $identifier = $identifier_hidden;
