@@ -35,6 +35,7 @@ class StudioLiveImageContainerRestResource extends ResourceBase {
    */
   protected $currentUser;
   public $content = '';
+  public $content2 = '';
 
   /**
    * Constructs a Drupal\rest\Plugin\ResourceBase object.
@@ -95,6 +96,9 @@ class StudioLiveImageContainerRestResource extends ResourceBase {
       ->view($block1);
 
     $content['block1'] = \Drupal::service('renderer')->renderPlain($block_content1);
+
+    $content['block2'] = $this->content2;
+
     return new ResourceResponse($content);
   }
 
@@ -113,10 +117,76 @@ class StudioLiveImageContainerRestResource extends ResourceBase {
       $node_id = reset($node_id);
       $block = \Drupal::service('renderer')->renderPlain(views_embed_view('individual_project_view', 'block_2',$node_id),false);
       $this->content = (string) $block;
+
+      //product_by_nid
+      //$block = \Drupal::service('renderer')->renderPlain(views_embed_view('product_by_nid', 'block_1',$node_id),false);
+      $this->content2 = $this->getBlockData2($node_id,$identifier);
+
     }else{
       $block = '<span color="red">No product scanned</span>';
       $this->content = (string) $block;
     }
+  }
+
+  public function getBlockData2($nid,$identifier){
+
+    $output = '<div class="live-shoot-product-container">';
+
+    $product = \Drupal\node\Entity\Node::load($nid);
+    $bundle = $product->bundle();
+    $style_no = '';
+    $color_variant = '';
+    $gender = '';
+    $description = '';
+    $color = '';
+
+
+    if($bundle == 'unmapped_products'){
+      $concept = 'Unmapped';
+    }else{
+
+      $product_concept = $product->field_concept_name->getValue();
+      if($product_concept){
+        $concept = $product_concept[0]['value'];
+      }
+
+      $product_style_no = $product->field_style_family->getValue();
+      if($product_style_no){
+        $style_no = $product_style_no[0]['value'];
+      }
+      $product_color_variant = $product->field_color_variant->getValue();
+      if($product_color_variant){
+        $color_variant = $product_color_variant[0]['value'];
+      }
+      $product_gender = $product->field_gender->getValue();
+      if($product_gender){
+        $gender = $product_gender[0]['value'];
+      }
+      $product_color = $product->field_color_name->getValue();
+      if($product_color){
+        $color = $product_color[0]['value'];
+      }
+
+      $product_description = $product->field_description->getValue();
+      if($product_description){
+        $description = $product_description[0]['value'];
+      }
+
+    }
+
+    $output .= '<div class="product-div1"> Concept: '.$concept.'</div>';
+    $output .= '<div class="product-div1"> Identifier: '.$identifier.'</div>';
+    $output .= '<div class="product-div2"> Style No: '.$style_no.'</div>';
+    $output .= '<div class="product-div3"> Color Variant: '.$color_variant.'</div>';
+      $output .= '<div class="product-wrapper-2">';
+        $output .= '<div class="product-div4"> Gender: '.$gender.'</div>';
+        $output .= '<div class="product-div5"> Color: '.$color.'</div>';
+        $output .= '<div class="product-div5"> Description: '.$description.'</div>';
+        //$output .= '<div class="product-div5"> Color: '.$color.'</div>';
+      $output .= '</div>';
+    $output .= '</div>';
+
+    return $output;
   }
 
 }

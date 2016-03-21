@@ -74,10 +74,13 @@ class StudioBridgeLiveShootingForm extends FormBase {
 
     $identifier = $identifier_hidden;
 
+    $form['markup_product_details'] = array(
+      '#suffix' => '<div id="studio-bridge-product-details"></div>',
+    );
+
     $form['identifier'] = array(
       '#type' => 'textfield',
       '#title' => 'Scan product',
-      //'#autocomplete_route_name' => 'studiobridge_live_shoot_page.autocomplete',
       '#description' => $this->t('description will come here'),
       '#default_value' => $identifier,
     );
@@ -218,8 +221,6 @@ class StudioBridgeLiveShootingForm extends FormBase {
     $block = (string) $block;
 
     $ajax_response->addCommand(new HtmlCommand('#studio-img-container', $block));
-    //$ajax_response->addCommand(new HtmlCommand('#tmp-delete', $inject_script));
-    //$ajax_response->addCommand(new InvokeCommand('#studio-img-container', 'css', array('color', 'red')));
     $ajax_response->addCommand(new InvokeCommand('#edit-identifier-hidden', 'val', array($identifier)));
     $ajax_response->addCommand(new InvokeCommand('#edit-identifier-hidden', 'change'));
 

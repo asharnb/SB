@@ -36,6 +36,7 @@
             //alert("Data: " + data + "\nStatus: " + status);
             document.getElementById('studio-img-container').innerHTML = data.content;
             document.getElementById('block-currentsessionviewblock').innerHTML = data.block1;
+            document.getElementById('studio-bridge-product-details').innerHTML = data.block2;
             //console.log(data.content);
         });
     }
