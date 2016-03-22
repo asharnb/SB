@@ -41,15 +41,19 @@ class CurrentSessionViewBlock extends BlockBase {
       $status = $session->field_status->getValue();
       $status = isset($status[0]['value']) ? $status[0]['value'] : '';
       $products =  $session->field_product->getValue();
+      $last_scanned_product_title = '';
+      $last_scanned_product_stauts = '';
+      $last_scanned_product_images = 0;
 
       $last_scanned_product_nid = \Drupal::state()->get('last_scan_product_nid'.$session->getOwnerId().'_'.$session_id);
       $last_scanned_product = Node::load($last_scanned_product_nid);
-      $last_scanned_product_stauts = $last_scanned_product->field_state->getValue();
-      $last_scanned_product_stauts = $last_scanned_product_stauts[0]['value'];
-      $last_scanned_product_title  = $last_scanned_product->title->getValue();
-      $last_scanned_product_title  = $last_scanned_product_title[0]['value'];
-      $last_scanned_product_images  = count($last_scanned_product->field_images->getValue());
-
+      if($last_scanned_product){
+        $last_scanned_product_stauts = $last_scanned_product->field_state->getValue();
+        $last_scanned_product_stauts = $last_scanned_product_stauts[0]['value'];
+        $last_scanned_product_title  = $last_scanned_product->title->getValue();
+        $last_scanned_product_title  = $last_scanned_product_title[0]['value'];
+        $last_scanned_product_images  = count($last_scanned_product->field_images->getValue());
+      }
 
       $output = '<div id="current-open-session-container">';
         $output .= '<div id="current-open-session-div1">';
