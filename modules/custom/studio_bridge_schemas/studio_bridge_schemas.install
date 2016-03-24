@@ -1,0 +1,15 @@
+<?php
+
+function studio_bridge_schemas_schema() {
+  $schema['studio_file_transfers'] = array(
+    'fields' => array(
+      'id' => array('type' => 'serial', 'not null' => TRUE,),
+      'fid' => array('type' => 'varchar', 'length' => 40, 'not null' => TRUE,),
+      'pid' => array('type' => 'varchar', 'length' => 250, 'not null' => TRUE,),
+      'sid' => array('type' => 'varchar', 'length' => 250, 'not null' => TRUE,),
+      'created'   => array('type' => 'int', 'not null' => TRUE, 'default' => 0),
+    ),
+    'primary key' => array('id'),
+  );
+  return $schema;
+}

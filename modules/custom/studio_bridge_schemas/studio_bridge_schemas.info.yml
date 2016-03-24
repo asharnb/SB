@@ -1,0 +1,5 @@
+name: Studio Bridge Schemas
+type: module
+description: Studio bridge module contains all required schemas
+core: 8.x
+package: StudioBridge

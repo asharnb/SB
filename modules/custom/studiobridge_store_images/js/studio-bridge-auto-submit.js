@@ -34,12 +34,35 @@
         }
         $.get(url + identifier + "/"+ rand +"?_format=json", function(data, status){
             //alert("Data: " + data + "\nStatus: " + status);
-            document.getElementById('studio-img-container').innerHTML = data.content;
+            //document.getElementById('studio-img-container').innerHTML = data.content;
             document.getElementById('block-currentsessionviewblock').innerHTML = data.block1;
             document.getElementById('studio-bridge-product-details').innerHTML = data.block2;
+
+            var a = data.block3;
+            if(a){
+                a.forEach(function(img) {
+                    //console.log(img);
+                    append_img(img);
+                });
+            }
+
             //console.log(data.content);
         });
     }
+
+    function append_img(img) {
+        var ul = document.getElementById("sortable");
+        var li = document.createElement("li");
+        //li.appendChild(document.createTextNode(100));
+        li.setAttribute("class", "ui-state-default ui-sortable-handle"); // added line
+        li.innerHTML = "<img src='"+ img +"' />";
+        ul.appendChild(li);
+    }
+
+    $(function() {
+        $( "#sortable" ).sortable();
+        $( "#sortable" ).disableSelection();
+    });
 
 })(jQuery);
 
