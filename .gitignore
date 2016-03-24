@@ -16,7 +16,7 @@ sites/*/settings*.php
 sites/*/services*.yml
 
 # Ignore paths that contain user-generated content.
-sites
+sites/*/files
 sites/*/private
 
 # Ignore SimpleTest multi-site environment.
@@ -37,5 +37,3 @@ sites/simpletest
 
 # Ignore PHPStorm .idea folder
 .idea
-
-themes/*
