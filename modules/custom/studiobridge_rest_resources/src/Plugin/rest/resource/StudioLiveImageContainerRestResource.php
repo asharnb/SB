@@ -15,6 +15,8 @@ use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 use Psr\Log\LoggerInterface;
 use Drupal\Core\Render\Markup;
+use Drupal\file\Entity\File;
+use Drupal\image\Entity\ImageStyle;
 
 /**
  * Provides a resource to get view modes by entity and bundle.
@@ -36,6 +38,7 @@ class StudioLiveImageContainerRestResource extends ResourceBase {
   protected $currentUser;
   public $content = '';
   public $content2 = '';
+  public $pnid;
 
   /**
    * Constructs a Drupal\rest\Plugin\ResourceBase object.
@@ -88,7 +91,7 @@ class StudioLiveImageContainerRestResource extends ResourceBase {
    */
   public function get($identifier,$random) {
     $this->getBlockData($identifier);
-    $content = array('content' =>$this->content);
+    //$content = array('content' =>$this->content);
 
     $block1 = \Drupal\block\Entity\Block::load('currentsessionviewblock');
     $block_content1 = \Drupal::entityManager()
@@ -98,6 +101,8 @@ class StudioLiveImageContainerRestResource extends ResourceBase {
     $content['block1'] = \Drupal::service('renderer')->renderPlain($block_content1);
 
     $content['block2'] = $this->content2;
+
+    $content['block3'] = $this->getLastImages($this->pnid,$identifier);
 
     return new ResourceResponse($content);
   }
@@ -115,8 +120,9 @@ class StudioLiveImageContainerRestResource extends ResourceBase {
       ->execute();
     if(count($node_id)){
       $node_id = reset($node_id);
-      $block = \Drupal::service('renderer')->renderPlain(views_embed_view('individual_project_view', 'block_2',$node_id),false);
-      $this->content = (string) $block;
+      $this->pnid = $node_id;
+      //$block = \Drupal::service('renderer')->renderPlain(views_embed_view('individual_project_view', 'block_2',$node_id),false);
+      //$this->content = (string) $block;
 
       //product_by_nid
       //$block = \Drupal::service('renderer')->renderPlain(views_embed_view('product_by_nid', 'block_1',$node_id),false);
@@ -187,6 +193,31 @@ class StudioLiveImageContainerRestResource extends ResourceBase {
     $output .= '</div>';
 
     return $output;
+  }
+
+  public function getLastImages($nid,$identifier = null){
+
+    $sid = studiobridge_store_images_open_session_recent();
+    if($sid){
+      $last_scanned_fid = \Drupal::state()->get('last_img_sent_'.$sid.'_'.$nid,false);
+      // todo :
+      if($last_scanned_fid){
+        $record = db_query("SELECT fid FROM {studio_file_transfers} where pid=:pid AND  sid=:sid AND fid > :fid",array(':pid'=> $nid,':sid'=>$sid,':fid' => $last_scanned_fid))->fetchAll();
+      }else{
+        $record = db_query("SELECT fid FROM {studio_file_transfers} where pid=:pid AND  sid=:sid",array(':pid'=> $nid,':sid'=>$sid))->fetchAll();
+      }
+      if ($record) {
+        $image_uri = array();
+        foreach ($record as $img) {
+          $fid = $img->fid;
+          $file = File::load($fid);
+          $image_uri[] = ImageStyle::load('live_shoot_preview')->buildUrl($file->getFileUri());
+        }
+        \Drupal::state()->set('last_img_sent_'.$sid.'_'.$nid,$fid);
+        return $image_uri;
+      }
+    }
+    return false;
   }
 
 }

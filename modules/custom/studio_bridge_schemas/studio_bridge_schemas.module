@@ -1,0 +1,24 @@
+<?php
+
+/**
+ * @file
+ * Contains studio_bridge_schemas.module..
+ */
+
+use Drupal\Core\Routing\RouteMatchInterface;
+
+/**
+ * Implements hook_help().
+ */
+function studio_bridge_schemas_help($route_name, RouteMatchInterface $route_match) {
+  switch ($route_name) {
+    // Main module help for the studio_bridge_schemas module.
+    case 'help.page.studio_bridge_schemas':
+      $output = '';
+      $output .= '<h3>' . t('About') . '</h3>';
+      $output .= '<p>' . t('Studio bridge module contains all required schemas') . '</p>';
+      return $output;
+
+    default:
+  }
+}

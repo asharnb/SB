@@ -73,15 +73,31 @@ function studiobridge_store_images_entity_insert(Drupal\Core\Entity\EntityInterf
 
         if($scanned_product_nid){
           $node = Node::load($scanned_product_nid);
-          $node_title = $node->getTitle();
-          $bundle = $node->bundle();
-          \Drupal::logger('krishna')->notice($node_title.'--'.$bundle);
+          //$node_title = $node->getTitle();
+          //$bundle = $node->bundle();
+          //\Drupal::logger('krishna')->notice($node_title.'--'.$bundle);
+          db_insert('studio_file_transfers')
+            ->fields(array(
+              'fid' => $entity->id(),
+              'pid' => $scanned_product_nid,
+              'sid' => $session_id,
+              'created' => REQUEST_TIME,
+            ))
+            ->execute();
         }
         elseif($product_last_updated){
           $node = $product_last_updated;
+          db_insert('studio_file_transfers')
+            ->fields(array(
+              'fid' => $entity->id(),
+              'pid' => $node->id(),
+              'sid' => $session_id,
+              'created' => REQUEST_TIME,
+            ))
+            ->execute();
         }
         else{
-          studiobridge_store_images_create_unmapped_product($image, $session_id);
+          studiobridge_store_images_create_unmapped_product($image, $session_id,'UnMapped', $entity->id());
           return;
         }
 
@@ -124,7 +140,7 @@ function studiobridge_store_images_page_attachments(array &$attachments) {
 /*
  * Helper function to create unmapped products.
  */
-function studiobridge_store_images_create_unmapped_product($image = array(), $session_id, $identifier='UnMapped'){
+function studiobridge_store_images_create_unmapped_product($image = array(), $session_id, $identifier='UnMapped', $fid){
   //$user = \Drupal::currentUser();
   //$uid = $user->id();
 
@@ -144,6 +160,15 @@ function studiobridge_store_images_create_unmapped_product($image = array(), $se
     $node->save();
 
     \Drupal::state()->set('last_scan_product_nid'.$session_uid.'_'.$session_id,$node->id());
+
+  db_insert('studio_file_transfers')
+    ->fields(array(
+      'fid' => $fid,
+      'pid' => $node->id(),
+      'sid' => $session_id,
+      'created' => REQUEST_TIME,
+    ))
+    ->execute();
 
     studiobridge_store_images_add_product_to_session($session_id, $node);
 }

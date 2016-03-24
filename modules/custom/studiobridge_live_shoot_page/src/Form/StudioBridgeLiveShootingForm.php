@@ -22,6 +22,8 @@ use Drupal\Core\Routing\TrustedRedirectResponse;
 use Drupal\node\Plugin\migrate\source\d7\Node;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Drupal\Core\Entity;
+use Drupal\file\Entity\File;
+use Drupal\image\Entity\ImageStyle;
 
 
 class StudioBridgeLiveShootingForm extends FormBase {
@@ -74,6 +76,9 @@ class StudioBridgeLiveShootingForm extends FormBase {
 
     $identifier = $identifier_hidden;
 
+
+    $list = '<ul id="sortable"></ul>';
+
     $form['markup_product_details'] = array(
       '#suffix' => '<div id="studio-bridge-product-details"></div>',
     );
@@ -91,10 +96,33 @@ class StudioBridgeLiveShootingForm extends FormBase {
       '#default_value' => $identifier_hidden,
     );
 
+    $images = array();
+    $pid = \Drupal::state()->get('last_scan_product_nid'.$uid.'_'.$session_id,false);
+    if($pid){
+      $images = self::getProductImages($pid);
+    }else{
+      $result = \Drupal::entityQuery('node')
+        ->condition('type', array('products','unmapped_products'),'IN')
+        ->sort('created', 'DESC')
+        ->condition('title', $identifier) // todo : title will be changed as per response
+        ->range(0, 1)
+        ->execute();
+
+      if($result){
+        $images = self::getProductImages(reset($result));
+      }
+    }
+
+    $block = '<ul id="sortable" class="ui-sortable">';
+    foreach($images as $src){
+      $block .= "<li class='ui-state-default ui-sortable-handle'><img src='$src' /></li>";
+    }
+    $block .= '</ul>';
+
     $form['random_user'] = array(
       '#type' => 'button',
       '#value' => 'Apply',
-      '#suffix' => '<div id="studio-img-container"></div><div id="tmp-delete"></div>',
+      '#suffix' => '<div id="studio-img-container"></div><div id="js-holder"></div><div id="studio-img-container1">'.$block.'</div>',
       '#ajax' => array(
         'callback' => 'Drupal\studiobridge_live_shoot_page\Form\StudioBridgeLiveShootingForm::productGetOrUpdateCallback',
         //'callback' => 'Drupal\studiobridge_live_shoot_page\Form\StudioBridgeLiveShootingForm::randomUsernameCallback',
@@ -106,6 +134,10 @@ class StudioBridgeLiveShootingForm extends FormBase {
         ),
       ),
     );
+
+    $form['#attached']['library'][] = 'core/jquery.ui.sortable';
+    //$form['#attached']['library'][] = 'core/jquery';
+
     $form_state->setRebuild(TRUE);
     return $form;
   }
@@ -198,7 +230,7 @@ class StudioBridgeLiveShootingForm extends FormBase {
         }
         </script>';
         // return ajax here.
-        $ajax_response->addCommand(new HtmlCommand('#tmp-delete', $inject_script));
+        $ajax_response->addCommand(new HtmlCommand('#js-holder', $inject_script));
         return $ajax_response;
       }
 
@@ -216,20 +248,28 @@ class StudioBridgeLiveShootingForm extends FormBase {
       studiobridge_store_images_add_product_to_session($session_id, \Drupal\node\Entity\Node::load($new_or_old_product_nid));
     }
 
-    $block = \Drupal::service('renderer')
-      ->renderPlain(views_embed_view('individual_project_view', 'block_2', $new_or_old_product_nid), FALSE);
-    $block = (string) $block;
-
-    $ajax_response->addCommand(new HtmlCommand('#studio-img-container', $block));
-    $ajax_response->addCommand(new InvokeCommand('#edit-identifier-hidden', 'val', array($identifier)));
-    $ajax_response->addCommand(new InvokeCommand('#edit-identifier-hidden', 'change'));
-
     \Drupal::state()->set('last_scan_product_'.$uid.'_'.$session_id,$identifier);
 
     if($new_or_old_product_nid){
       \Drupal::state()->set('last_scan_product_nid'.$uid.'_'.$session_id,$new_or_old_product_nid);
     }
 
+    $images = self::getProductImages($new_or_old_product_nid);
+
+    $block = '<ul id="sortable" class="ui-sortable">';
+    //$block = '';
+    foreach($images as $src){
+      $block .= "<li class='ui-state-default ui-sortable-handle'><img src='$src' /></li>";
+    }
+    $block .= '</ul>';
+    $sort_js = '<script>!function(e){e(function(){e("#sortable").sortable(),e("#sortable").disableSelection()})}(jQuery);</script>';
+
+    $ajax_response->addCommand(new HtmlCommand('#studio-img-container1', $block));
+    $ajax_response->addCommand(new HtmlCommand('#studio-img-container', ''));
+    $ajax_response->addCommand(new HtmlCommand('#js-holder', $sort_js));
+    //$ajax_response->addCommand(new HtmlCommand('#sortable', $block));
+    $ajax_response->addCommand(new InvokeCommand('#edit-identifier-hidden', 'val', array($identifier)));
+    $ajax_response->addCommand(new InvokeCommand('#edit-identifier-hidden', 'change'));
     return $ajax_response;
   }
 
@@ -309,6 +349,25 @@ class StudioBridgeLiveShootingForm extends FormBase {
       // todo : add exceptions
       return $node;
     }
+  }
+
+  public function getProductImages($nid){
+
+    $sid = studiobridge_store_images_open_session_recent();
+    if($sid){
+
+      $record = db_query("SELECT fid FROM {studio_file_transfers} where pid=:pid AND  sid=:sid",array(':pid'=> $nid,':sid'=>$sid))->fetchAll();
+      if ($record) {
+        $image_uri = array();
+        foreach ($record as $img) {
+          $fid = $img->fid;
+          $file = File::load($fid);
+          $image_uri[] = ImageStyle::load('live_shoot_preview')->buildUrl($file->getFileUri());
+        }
+        return $image_uri;
+      }
+    }
+    return false;
   }
 
 }
