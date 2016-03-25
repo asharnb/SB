@@ -377,3 +377,18 @@ function studiobridge_store_images_upload_enabled_types_submit($form, FormStateI
   $response->send();
   exit;
 }
+
+function studiobridge_store_images_entity_delete(Drupal\Core\Entity\EntityInterface $entity) {
+
+  $bundle = $entity->bundle(); //image
+  //$values = $entity->toArray();
+
+  // When new image is relieved by server, assign it to Current open product of particular session
+  if($bundle == 'image'){
+    // Delete the entity's entry from a fictional table of all entities.
+    db_delete('studio_file_transfers')
+      //->condition('type', $entity->getEntityTypeId())
+      ->condition('id', $entity->id())
+      ->execute();
+  }
+}

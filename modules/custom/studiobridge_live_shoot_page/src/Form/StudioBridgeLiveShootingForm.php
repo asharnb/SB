@@ -113,16 +113,11 @@ class StudioBridgeLiveShootingForm extends FormBase {
       }
     }
 
-    $block = '<ul id="sortable" class="ui-sortable">';
-    foreach($images as $src){
-      $block .= "<li class='ui-state-default ui-sortable-handle'><img src='$src' /></li>";
-    }
-    $block .= '</ul>';
-
     $form['random_user'] = array(
       '#type' => 'button',
       '#value' => 'Apply',
-      '#suffix' => '<div id="studio-img-container"></div><div id="js-holder"></div><div id="studio-img-container1">'.$block.'</div>',
+      //'#suffix' => '<div id="studio-img-container"></div><div id="js-holder"></div><div id="studio-img-container1">'.$block.'</div>',
+      '#suffix' => '<div id="studio-img-container"></div><div id="js-holder"></div>',
       '#ajax' => array(
         'callback' => 'Drupal\studiobridge_live_shoot_page\Form\StudioBridgeLiveShootingForm::productGetOrUpdateCallback',
         //'callback' => 'Drupal\studiobridge_live_shoot_page\Form\StudioBridgeLiveShootingForm::randomUsernameCallback',
@@ -135,15 +130,73 @@ class StudioBridgeLiveShootingForm extends FormBase {
       ),
     );
 
+    $form['sequence'] = array(
+      '#type' => 'button',
+      '#value' => 'Apply Resequence',
+      //'#suffix' => '<div id="studio-img-container"></div><div id="js-holder"></div><div id="studio-img-container1">'.$block.'</div>',
+      //'#suffix' => '<div id="studio-img-container"></div><div id="js-holder"></div>',
+      '#ajax' => array(
+        'callback' => 'Drupal\studiobridge_live_shoot_page\Form\StudioBridgeLiveShootingForm::productUpdateSeqCallback',
+        'event' => 'click',
+        'progress' => array(
+          'type' => 'throbber',
+          //'type' => 'bar',
+          'message' => 'Updating Product',
+        ),
+      ),
+    );
+
+    $form['markup_product_details_first'] = array(
+      '#suffix' => '<div id="studio-img-container1"><ul id="sortable" class="ui-sortable">',
+    );
+
+    $i = 0;
+    foreach($images as $fid => $src){
+      $form['markup_product_details_'.$fid] = array(
+        '#suffix' => "<li class='ui-state-default ui-sortable-handle' onclick='javascript: alert(1)'><img src='$src' onclick='javascript: alert(2) />",
+        //'#attributes' => array('onclick' => "alert('Hello World!..')"),
+        '#tree' => TRUE,
+
+      );
+      $form['images['.$fid.']'] = array(
+        '#type' => 'textfield',
+        '#value' => $i,
+        //'#attributes' => array('class' => "display:none"),
+      );
+      $form['markup_product_details__'.$fid] = array(
+        '#suffix' => "</li>",
+      );
+      $i ++;
+    }
+
+    $form['markup_product_details_second'] = array(
+      '#suffix' => '</ul></div>',
+    );
+
     $form['#attached']['library'][] = 'core/jquery.ui.sortable';
     //$form['#attached']['library'][] = 'core/jquery';
+
+
+    $form['actions'] = array(
+
+      '#type' => 'submit',
+      '#value' => 'Submit'
+
+    );
 
     $form_state->setRebuild(TRUE);
     return $form;
   }
 
   public function submitForm(array &$form, FormStateInterface $form_state) {
+    $v = $form_state->getValues();
+    $form_state->setRebuild(TRUE);
+
     drupal_set_message('Nothing Submitted. Just an Example.');
+  }
+
+  public function productUpdateSeqCallback(array &$form, FormStateInterface $form_state) {
+    $v = $form_state->getValues();
   }
 
   public function productGetOrUpdateCallback(array &$form, FormStateInterface $form_state) {
@@ -258,8 +311,8 @@ class StudioBridgeLiveShootingForm extends FormBase {
 
     $block = '<ul id="sortable" class="ui-sortable">';
     //$block = '';
-    foreach($images as $src){
-      $block .= "<li class='ui-state-default ui-sortable-handle'><img src='$src' /></li>";
+    foreach($images as $fid => $src){
+      $block .= "<li class='ui-state-default ui-sortable-handle krishna'><img src='$src' /><input type='hidden' name='image[$fid]' value='$fid' /></li>";
     }
     $block .= '</ul>';
     $sort_js = '<script>!function(e){e(function(){e("#sortable").sortable(),e("#sortable").disableSelection()})}(jQuery);</script>';
@@ -362,7 +415,7 @@ class StudioBridgeLiveShootingForm extends FormBase {
         foreach ($record as $img) {
           $fid = $img->fid;
           $file = File::load($fid);
-          $image_uri[] = ImageStyle::load('live_shoot_preview')->buildUrl($file->getFileUri());
+          $image_uri[$fid] = ImageStyle::load('live_shoot_preview')->buildUrl($file->getFileUri());
         }
         return $image_uri;
       }

@@ -211,7 +211,7 @@ class StudioLiveImageContainerRestResource extends ResourceBase {
         foreach ($record as $img) {
           $fid = $img->fid;
           $file = File::load($fid);
-          $image_uri[] = ImageStyle::load('live_shoot_preview')->buildUrl($file->getFileUri());
+          $image_uri[$fid] = ImageStyle::load('live_shoot_preview')->buildUrl($file->getFileUri());
         }
         \Drupal::state()->set('last_img_sent_'.$sid.'_'.$nid,$fid);
         return $image_uri;
