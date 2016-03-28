@@ -400,13 +400,14 @@ class StudioBridgeLiveShootingForm extends FormBase {
   public function getProductImages($nid){
 
     $sid = studiobridge_store_images_open_session_recent();
-    if($sid){
+    $image_uri = array();
 
-      $record = db_query("SELECT fid FROM {studio_file_transfers} where pid=:pid AND  sid=:sid",array(':pid'=> $nid,':sid'=>$sid))->fetchAll();
-      if ($record) {
-        $image_uri = array();
-        foreach ($record as $img) {
-          $fid = $img->fid;
+    $product = \Drupal\node\Entity\Node::load($nid);
+    if($product){
+      $images = $product->field_images->getValue();
+      if($images){
+        foreach($images as $img){
+          $fid = $img['target_id'];
           $file = File::load($fid);
           $image_uri[$fid] = ImageStyle::load('live_shoot_preview')->buildUrl($file->getFileUri());
         }
