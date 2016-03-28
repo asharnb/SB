@@ -156,14 +156,14 @@ class StudioBridgeLiveShootingForm extends FormBase {
       '#suffix' => '<div id="studio-img-container1"><ul id="sortable" class="ui-sortable">',
     );
 
-    $i = 0;
+    $i = 1;
     foreach($images as $fid => $src){
 
-
+        $block = '<li>';
         $block .= '<div class="bulkviewfiles imagefile">';
         $block .= '<div class="box" style="max-width: 250px;">';
 
-        $block .=  '<div class="ribbon"><span>'.$fid.'</span></div>';
+        $block .=  '<div class="ribbon"><span>'.$i.'</span></div>';
 
         $block .=  '<div class="scancontainer">';
         $block .=  '<img src="'.$src.'" class="scanpicture">';

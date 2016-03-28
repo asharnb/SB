@@ -39,28 +39,21 @@
     function update_w() {
         document.getElementById('msg-up').innerHTML = 'Updating....';
 
-        var p = document.getElementById('sortable');
-        var a = p.childNodes;
-
+        var container, inputs, index;
         var imgs = [];
 
-        //imgs.push({"target_id":"34"});
-        //imgs.push({"target_id":"35"});
+        // Get the container element
+        container = document.getElementById('sortable');
 
-        console.log(imgs);
-        for (var j in p.childNodes) {
-            var k = j;
-            if (a[j].childNodes) {
-                var x = a[j].childNodes;
-                if (x) {
-                    imgs.push({"target_id": x[1].value});
-                    //console.log(x[1].value);
-                }
-            }
+        // Find its child `input` elements
+        inputs = container.getElementsByTagName('input');
+        for (index = 0; index < inputs.length; ++index) {
+            // deal with inputs[index] element.
+            //console.log(inputs[index].value);
+            imgs.push({"target_id": inputs[index].value});
         }
-        //console.log(imgs);
 
-        var url = window.location.protocol +'//' + window.location.hostname;;
+        var url = window.location.protocol +'//' + window.location.hostname;
         if(window.location.hostname == "staging.dreamcms.me"){
             url = window.location.protocol +'//' + window.location.hostname + "/studiobridge";
         }
