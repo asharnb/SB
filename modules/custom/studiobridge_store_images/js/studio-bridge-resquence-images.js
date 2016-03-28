@@ -10,8 +10,12 @@
     }
 
     function patchNode(csrfToken, node, nid) {
+        var url = "/node/";
+        if(window.location.hostname == "staging.dreamcms.me"){
+            url = "/studiobridge/node/";
+        }
         $.ajax({
-            url: 'http://studiobridge.local/node/' + nid + '?_format=hal_json',
+            url: url + nid + '?_format=hal_json',
             method: 'PATCH',
             headers: {
                 'Content-Type': 'application/hal+json',
