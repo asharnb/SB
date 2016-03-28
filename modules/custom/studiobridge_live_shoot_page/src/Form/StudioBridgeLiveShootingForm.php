@@ -104,16 +104,6 @@ class StudioBridgeLiveShootingForm extends FormBase {
       '#title' => 'Scan product',
       '#description' => $this->t('description will come here'),
       '#default_value' => $identifier,
-      '#ajax' => array(
-        'callback' => 'Drupal\studiobridge_live_shoot_page\Form\StudioBridgeLiveShootingForm::productGetOrUpdateCallback',
-        //'callback' => 'Drupal\studiobridge_live_shoot_page\Form\StudioBridgeLiveShootingForm::randomUsernameCallback',
-        'event' => 'enter',
-        'progress' => array(
-          'type' => 'throbber',
-          //'type' => 'bar',
-          'message' => 'Getting Product',
-        ),
-      ),
     );
 
     $form['identifier_hidden'] = array(
@@ -150,16 +140,26 @@ class StudioBridgeLiveShootingForm extends FormBase {
       '#value' => 'Apply',
       //'#suffix' => '<div id="studio-img-container"></div><div id="js-holder"></div><div id="studio-img-container1">'.$block.'</div>',
       '#suffix' => '<div id="studio-img-container"></div><div id="js-holder"></div><a id="studio-resequence-bt" class="btn btn-warning">Resequence</a><div id="msg-up"></div>',
+      '#ajax' => array(
+        'callback' => 'Drupal\studiobridge_live_shoot_page\Form\StudioBridgeLiveShootingForm::productGetOrUpdateCallback',
+        //'callback' => 'Drupal\studiobridge_live_shoot_page\Form\StudioBridgeLiveShootingForm::randomUsernameCallback',
+        'event' => 'click',
+        'progress' => array(
+          'type' => 'throbber',
+          //'type' => 'bar',
+          'message' => 'Getting Product',
+        ),
+      ),
     );
 
     $form['markup_product_details_first'] = array(
-      '#suffix' => '<div id="studio-img-container1"><ul id="sortable" class="ui-sortable">',
+      '#suffix' => '<div id="studio-img-container1"><div id="sortable" class="ui-sortable">',
     );
 
     $i = 1;
     foreach($images as $fid => $src){
 
-        $block = '<li>';
+        $block = '';
         $block .= '<div class="bulkviewfiles imagefile">';
         $block .= '<div class="box" style="max-width: 250px;">';
 
@@ -185,7 +185,7 @@ class StudioBridgeLiveShootingForm extends FormBase {
 
         $block .= '</div>';
         $block .= '</div>';
-        $block .= '</div>';
+        //$block .= '</div>';
 
 
       $form['markup_product_details_'.$fid] = array(
@@ -198,13 +198,13 @@ class StudioBridgeLiveShootingForm extends FormBase {
         '#value' => $fid,
       );
       $form['markup_product_details__'.$fid] = array(
-        '#suffix' => "</li>",
+        '#suffix' => "</div>",
       );
       $i ++;
     }
 
     $form['markup_product_details_second'] = array(
-      '#suffix' => '</ul></div>',
+      '#suffix' => '</div></div>',
     );
 
     $form['#attached']['library'][] = 'core/jquery.ui.sortable';
