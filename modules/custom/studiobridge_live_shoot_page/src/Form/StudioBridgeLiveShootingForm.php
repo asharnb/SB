@@ -37,13 +37,15 @@ class StudioBridgeLiveShootingForm extends FormBase {
     $user = \Drupal::currentUser();
     $uid = $user->id();
 
-    // todo : current open session
+    // current open session
     $session_id = studiobridge_store_images_open_session_recent();
-    // todo : if no session found then redirect to some other page
+    // if no session found then redirect to some other page
     if(!$session_id){
       drupal_set_message('No open sessions found','warning');
       return new RedirectResponse(base_path().'view-sessions');
     }
+
+    $new_or_old_product_nid =0;
 
     $identifier_hidden = '';
     $identifier_hidden = \Drupal::state()->get('last_scan_product_'.$uid.'_'.$session_id,false);
@@ -72,6 +74,17 @@ class StudioBridgeLiveShootingForm extends FormBase {
         studiobridge_store_images_update_product_as_open($_GET['identifier']);
         \Drupal::state()->set('last_scan_product_'.$uid.'_'.$session_id,$_GET['identifier']);
       }
+    }else{
+      $result = \Drupal::entityQuery('node')
+        ->condition('type', array('products','unmapped_products'),'IN')
+        ->sort('created', 'DESC')
+        ->condition('title', $identifier_hidden) // todo : title will be changed as per response
+        ->range(0, 1)
+        ->execute();
+
+      if($result){
+        $new_or_old_product_nid = reset($result);
+      }
     }
 
     $identifier = $identifier_hidden;
@@ -95,6 +108,11 @@ class StudioBridgeLiveShootingForm extends FormBase {
       '#value' => $identifier_hidden,
       '#default_value' => $identifier_hidden,
     );
+    $form['identifier_nid'] = array(
+      '#type' => 'hidden',
+      '#value' => $new_or_old_product_nid,
+      '#default_value' => $new_or_old_product_nid,
+    );
 
     $images = array();
     $pid = \Drupal::state()->get('last_scan_product_nid'.$uid.'_'.$session_id,false);
@@ -117,7 +135,7 @@ class StudioBridgeLiveShootingForm extends FormBase {
       '#type' => 'button',
       '#value' => 'Apply',
       //'#suffix' => '<div id="studio-img-container"></div><div id="js-holder"></div><div id="studio-img-container1">'.$block.'</div>',
-      '#suffix' => '<div id="studio-img-container"></div><div id="js-holder"></div>',
+      '#suffix' => '<div id="studio-img-container"></div><div id="js-holder"></div><a id="studio-resequence-bt" class="btn btn-warning">Resequence</a><div id="msg-up"></div>',
       '#ajax' => array(
         'callback' => 'Drupal\studiobridge_live_shoot_page\Form\StudioBridgeLiveShootingForm::productGetOrUpdateCallback',
         //'callback' => 'Drupal\studiobridge_live_shoot_page\Form\StudioBridgeLiveShootingForm::randomUsernameCallback',
@@ -130,22 +148,6 @@ class StudioBridgeLiveShootingForm extends FormBase {
       ),
     );
 
-    $form['sequence'] = array(
-      '#type' => 'button',
-      '#value' => 'Apply Resequence',
-      //'#suffix' => '<div id="studio-img-container"></div><div id="js-holder"></div><div id="studio-img-container1">'.$block.'</div>',
-      //'#suffix' => '<div id="studio-img-container"></div><div id="js-holder"></div>',
-      '#ajax' => array(
-        'callback' => 'Drupal\studiobridge_live_shoot_page\Form\StudioBridgeLiveShootingForm::productUpdateSeqCallback',
-        'event' => 'click',
-        'progress' => array(
-          'type' => 'throbber',
-          //'type' => 'bar',
-          'message' => 'Updating Product',
-        ),
-      ),
-    );
-
     $form['markup_product_details_first'] = array(
       '#suffix' => '<div id="studio-img-container1"><ul id="sortable" class="ui-sortable">',
     );
@@ -153,15 +155,13 @@ class StudioBridgeLiveShootingForm extends FormBase {
     $i = 0;
     foreach($images as $fid => $src){
       $form['markup_product_details_'.$fid] = array(
-        '#suffix' => "<li class='ui-state-default ui-sortable-handle' onclick='javascript: alert(1)'><img src='$src' onclick='javascript: alert(2) />",
-        //'#attributes' => array('onclick' => "alert('Hello World!..')"),
+        '#suffix' => "<li class='ui-state-default ui-sortable-handle'><img src='$src' />",
         '#tree' => TRUE,
 
       );
       $form['images['.$fid.']'] = array(
-        '#type' => 'textfield',
-        '#value' => $i,
-        //'#attributes' => array('class' => "display:none"),
+        '#type' => 'hidden',
+        '#value' => $fid,
       );
       $form['markup_product_details__'.$fid] = array(
         '#suffix' => "</li>",
@@ -174,17 +174,9 @@ class StudioBridgeLiveShootingForm extends FormBase {
     );
 
     $form['#attached']['library'][] = 'core/jquery.ui.sortable';
-    //$form['#attached']['library'][] = 'core/jquery';
+    //$form['#attached']['library'][] = 'studiobridge_store_images/studio-bridge-view-product';
 
-
-    $form['actions'] = array(
-
-      '#type' => 'submit',
-      '#value' => 'Submit'
-
-    );
-
-    $form_state->setRebuild(TRUE);
+    //$form_state->setRebuild(TRUE);
     return $form;
   }
 
@@ -322,6 +314,7 @@ class StudioBridgeLiveShootingForm extends FormBase {
     $ajax_response->addCommand(new HtmlCommand('#js-holder', $sort_js));
     //$ajax_response->addCommand(new HtmlCommand('#sortable', $block));
     $ajax_response->addCommand(new InvokeCommand('#edit-identifier-hidden', 'val', array($identifier)));
+    $ajax_response->addCommand(new InvokeCommand('#edit-identifier-nid', 'val', array($new_or_old_product_nid)));
     $ajax_response->addCommand(new InvokeCommand('#edit-identifier-hidden', 'change'));
     return $ajax_response;
   }

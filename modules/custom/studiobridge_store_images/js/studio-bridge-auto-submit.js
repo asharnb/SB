@@ -9,7 +9,7 @@
             triggerit(identifier, rand);
             //document.getElementById('views-exposed-form-individual-project-view-page-1').submit();
 
-        }, 99991000);
+        }, 1000);
          var rand = Math.floor((Math.random() * 1000000) + 1);
          triggerit(identifier, rand);
 
@@ -23,7 +23,7 @@
                 triggerit(identifier, rand);
              }
 
-         }, 99991000);
+         }, 1000);
      }
     });
 
@@ -67,34 +67,6 @@
         ul.appendChild(li);
     }
 
-    function update_weight(){
-//        var p = document.getElementById('sortable');
-//        var a = p.childNodes;
-//
-//        for(var j in p.childNodes){
-//            var x = a[j].childNodes;
-//            if(x){
-//                x[1].value = j;
-//            }
-//            //console.log();
-//        }
-
-        var p = document.getElementById('sortable');
-        var a = p.childNodes;
-
-        for(var j in p.childNodes){
-            var x = a[j].childNodes;
-            if(x){
-                var div = x[1].childNodes;
-                if(div){
-                    div[1].value = j;
-                    //console.log(div[1]);
-                }
-
-            }
-        }
-    }
-
     $(function() {
         $( "#sortable" ).sortable();
         $( "#sortable" ).disableSelection();
@@ -103,10 +75,6 @@
 //    $( "#sortable" ).click(function() {
 //        update_weight();
 //    });
-
-    setInterval(function() {
-        update_weight();
-    }, 1000);
 
 })(jQuery);
 
