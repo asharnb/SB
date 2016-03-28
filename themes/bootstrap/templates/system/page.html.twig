@@ -62,43 +62,69 @@
  */
 #}
 {% set container = theme.settings.fluid_container ? 'container-fluid' : 'container' %}
+<header id="header">
+  <div id="logo-group">
+
+    <!-- PLACE YOUR LOGO HERE -->
+    <span id="logo"> <img src="/ca/img/logo-white.png" alt="ContentAssist"> </span>
+    <!-- END LOGO PLACEHOLDER -->
+
+      </div>
+
+        <!-- projects dropdown -->
+        <div class="project-context hidden-xs">
+
+          <span class="label">Your Role:</span>
+          <span class="project-selector dropdown-toggle" data-toggle="dropdown"><?php echo $row['departmentrole']; ?> </span>
+
+          <!-- end dropdown-menu-->
+
+        </div>
+        <!-- end projects dropdown -->
+
+      </header>
+      <!-- END HEADER -->
 {# Navbar #}
 {% if page.navigation or page.navigation_collapsible %}
   {% block navbar %}
-    {%
-      set navbar_classes = [
-        'navbar',
-        theme.settings.navbar_inverse ? 'navbar-inverse' : 'navbar-default',
-        theme.settings.navbar_position ? 'navbar-' ~ theme.settings.navbar_position|clean_class : container,
-      ]
-    %}
-    <header{{ navbar_attributes.addClass(navbar_classes) }} id="navbar" role="banner">
-      <div class="navbar-header">
-        {{ page.navigation }}
-        {# .btn-navbar is used as the toggle for collapsed navbar content #}
-        {% if page.navigation_collapsible %}
-          <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
-            <span class="sr-only">{{ 'Toggle navigation'|t }}</span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-          </button>
-        {% endif %}
-      </div>
-
-      {# Navigation (collapsible) #}
-      {% if page.navigation_collapsible %}
-        <div class="navbar-collapse collapse">
-          {{ page.navigation_collapsible }}
-        </div>
-      {% endif %}
-    </header>
+      {{ page.navigation_collapsible }}
   {% endblock %}
 {% endif %}
 
 {# Main #}
 {% block main %}
-  <div role="main" class="main-container {{ container }} js-quickedit-main-content">
+  <div id="main" role="main">
+
+
+    <div id="ribbon">
+
+				<span class="ribbon-button-alignment">
+					<span id="refresh" class="btn btn-ribbon" data-action="resetWidgets" data-title="refresh" rel="tooltip" data-placement="bottom" data-original-title="<i class='text-warning fa fa-warning'></i> Warning! This will reset all your widget settings." data-html="true">
+						<i class="fa fa-refresh"></i>
+					</span>
+				</span>
+
+      <!-- breadcrumb -->
+      <ol class="breadcrumb">
+        <li>Studio<strong>Bridge</strong></li>
+        {% for item in breadcrumb %}
+          <li {{ item.attributes }}>
+            {% if item.url %}
+              <a href="{{ item.url }}">{{ item.text }}</a>
+            {% else %}
+              {{ item.text }}
+            {% endif %}
+          </li>
+        {% endfor %}
+      </ol>
+
+    </div>
+
+
+
+
+
+    <div id="content" >
     <div class="row">
 
       {# Header #}
@@ -175,6 +201,7 @@
       {% endif %}
     </div>
   </div>
+</div>
 {% endblock %}
 
 {% if page.footer %}
