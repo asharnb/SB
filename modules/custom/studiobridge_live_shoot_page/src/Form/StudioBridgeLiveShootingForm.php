@@ -92,15 +92,28 @@ class StudioBridgeLiveShootingForm extends FormBase {
 
     $list = '<ul id="sortable"></ul>';
 
+    // @ashar : this does not need to be refreshed
+
     $form['markup_product_details'] = array(
       '#suffix' => '<div id="studio-bridge-product-details"></div>',
     );
+    // @ashar : add the ajax call back to the identifier
 
     $form['identifier'] = array(
       '#type' => 'textfield',
       '#title' => 'Scan product',
       '#description' => $this->t('description will come here'),
       '#default_value' => $identifier,
+      '#ajax' => array(
+        'callback' => 'Drupal\studiobridge_live_shoot_page\Form\StudioBridgeLiveShootingForm::productGetOrUpdateCallback',
+        //'callback' => 'Drupal\studiobridge_live_shoot_page\Form\StudioBridgeLiveShootingForm::randomUsernameCallback',
+        'event' => 'enter',
+        'progress' => array(
+          'type' => 'throbber',
+          //'type' => 'bar',
+          'message' => 'Getting Product',
+        ),
+      ),
     );
 
     $form['identifier_hidden'] = array(
@@ -130,22 +143,13 @@ class StudioBridgeLiveShootingForm extends FormBase {
         $images = self::getProductImages(reset($result));
       }
     }
+// @ashar : seperate this image container so we can apply theme formatting to it
 
     $form['random_user'] = array(
       '#type' => 'button',
       '#value' => 'Apply',
       //'#suffix' => '<div id="studio-img-container"></div><div id="js-holder"></div><div id="studio-img-container1">'.$block.'</div>',
       '#suffix' => '<div id="studio-img-container"></div><div id="js-holder"></div><a id="studio-resequence-bt" class="btn btn-warning">Resequence</a><div id="msg-up"></div>',
-      '#ajax' => array(
-        'callback' => 'Drupal\studiobridge_live_shoot_page\Form\StudioBridgeLiveShootingForm::productGetOrUpdateCallback',
-        //'callback' => 'Drupal\studiobridge_live_shoot_page\Form\StudioBridgeLiveShootingForm::randomUsernameCallback',
-        'event' => 'click',
-        'progress' => array(
-          'type' => 'throbber',
-          //'type' => 'bar',
-          'message' => 'Getting Product',
-        ),
-      ),
     );
 
     $form['markup_product_details_first'] = array(
@@ -154,8 +158,38 @@ class StudioBridgeLiveShootingForm extends FormBase {
 
     $i = 0;
     foreach($images as $fid => $src){
+
+
+        $block .= '<div class="bulkviewfiles imagefile">';
+        $block .= '<div class="box" style="max-width: 250px;">';
+
+        $block .=  '<div class="ribbon"><span>'.$fid.'</span></div>';
+
+        $block .=  '<div class="scancontainer">';
+        $block .=  '<img src="'.$src.'" class="scanpicture">';
+        $block .=  '</div>';
+        $block .=  '<div class="file-name">';
+        $block .=  '<span class="bkname"><i class="fa fa-camera"></i><b>Image</b></span>';
+        $block .=  '<hr class="simple">';
+
+        $block .= '<div class="row">';
+        $block .= '<div class="col col-sm-6">';
+        $block .= '<span><a class=" dropdown-toggle label label-default dropdown mr-5" data-toggle="dropdown" ><i class="fa fa-cog"></i> <i class="fa fa-caret-down"></i></a>';
+        $block .=	'<ul class="dropdown-menu pull-right"><li><a class="label label-default no-margin" onclick="return false;">Use this as full shot</a></li></ul>';
+        $block .= '<span ><a target ="_blank" href="#" class="label label-info"><i class="glyphicon glyphicon-fullscreen"></i></a>';
+        $block .= '</div>';
+        $block .= '<div class="col col-sm-6">';
+        $block .= '<span><a onclick="return false;" class="label label-danger mr5 pull-right">Delete</a>';
+        $block .= '</div>';
+        $block .= '</div>';
+
+        $block .= '</div>';
+        $block .= '</div>';
+        $block .= '</div>';
+
+
       $form['markup_product_details_'.$fid] = array(
-        '#suffix' => "<li class='ui-state-default ui-sortable-handle'><img src='$src' />",
+        '#suffix' => "'$block''",
         '#tree' => TRUE,
 
       );
