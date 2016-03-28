@@ -67,7 +67,7 @@
                 }
             },
             type: {
-                target_id: 'test'
+                target_id: 'products'
             },
             field_images: imgs
         };
