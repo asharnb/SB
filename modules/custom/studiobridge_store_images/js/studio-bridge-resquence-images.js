@@ -60,10 +60,15 @@
         }
         //console.log(imgs);
 
+        var url = window.location.protocol +'//' + window.location.hostname;;
+        if(window.location.hostname == "staging.dreamcms.me"){
+            url = window.location.protocol +'//' + window.location.hostname + "/studiobridge";
+        }
+
         var Node1 = {
             _links: {
                 type: {
-                    href: 'http://studiobridge.local/rest/type/node/products'
+                    href: url + '/rest/type/node/products'
                 }
             },
             type: {
