@@ -25,6 +25,20 @@
             success: function (node) {
                 //console.log(node);
                 document.getElementById('msg-up').innerHTML = 'Updated!';
+
+                // update whole img container
+                var container, inputs, index;
+
+                // Get the container element
+                container = document.getElementById('sortable');
+
+                // Find its child `input` elements
+                inputs = container.getElementsByTagName('input');
+                for (index = 0; index < inputs.length; ++index) {
+                    // deal with inputs[index] element.
+                    document.getElementById('seq-'+inputs[index].value).innerHTML = index + 1;
+                }
+
                 setTimeout(function(){
                     document.getElementById('msg-up').innerHTML = '';
                 }, 3300);

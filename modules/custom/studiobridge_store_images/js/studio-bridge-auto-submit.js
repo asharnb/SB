@@ -80,7 +80,7 @@
         //var block = '';
         block += '<div class="box" style="max-width: 250px;">';
 
-        block +=  '<div class="ribbon"><span>'+ seq +'</span></div>';
+        block +=  '<div class="ribbon"><span id="seq-'+ fid +'">'+ seq +'</span></div>';
 
         block +=  '<div class="scancontainer">';
         block +=  '<img src="'+ img +'" class="scanpicture">';

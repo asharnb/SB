@@ -163,7 +163,7 @@ class StudioBridgeLiveShootingForm extends FormBase {
         $block .= '<div class="bulkviewfiles imagefile">';
         $block .= '<div class="box" style="max-width: 250px;">';
 
-        $block .=  '<div class="ribbon"><span>'.$i.'</span></div>';
+        $block .=  '<div class="ribbon"><span id="seq-'. $fid .'">'.$i.'</span></div>';
 
         $block .=  '<div class="scancontainer">';
         $block .=  '<img src="'.$src.'" class="scanpicture">';
@@ -343,7 +343,7 @@ class StudioBridgeLiveShootingForm extends FormBase {
       $block .= '<div class="bulkviewfiles imagefile">';
       $block .= '<div class="box" style="max-width: 250px;">';
 
-      $block .=  '<div class="ribbon"><span>'.$i.'</span></div>';
+      $block .=  '<div class="ribbon"><span id="seq-'. $fid .'">'.$i.'</span></div>';
 
       $block .=  '<div class="scancontainer">';
       $block .=  '<img src="'.$src.'" class="scanpicture">';
