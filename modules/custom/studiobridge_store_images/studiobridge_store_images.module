@@ -42,9 +42,10 @@ function studiobridge_store_images_entity_insert(Drupal\Core\Entity\EntityInterf
 
   // When new image is relieved by server, assign it to Current open product of particular session
     if($bundle == 'image' && isset($values['field_session'][0]['target_id'])){
+    //if($bundle == 'image'){
 
         $session_id = $values['field_session'][0]['target_id'];
-        //$session_id = 22;
+        //$session_id = 155;
 
         //\Drupal::logger('test_module')->notice('<pre>'.print_r($values,true).'<pre>');
 
@@ -70,9 +71,23 @@ function studiobridge_store_images_entity_insert(Drupal\Core\Entity\EntityInterf
 
         // todo : get scanned product from state:
         $scanned_product_nid = \Drupal::state()->get('last_scan_product_nid'.$session_uid.'_'.$session_id,false);
+        $file_name = '';
 
         if($scanned_product_nid){
           $node = Node::load($scanned_product_nid);
+          $product_bundle = $node->bundle();
+
+          if($product_bundle == 'products'){
+            $field_base_product_id = $node->field_base_product_id->getValue();
+            if($field_base_product_id){
+              $field_base_product_id = $field_base_product_id[0]['value'];
+            }
+          }elseif($product_bundle = 'unmapped_products'){
+            $field_identifier = $node->field_identifier->getValue();
+            if($field_identifier){
+              $field_base_product_id = $field_identifier[0]['value'];
+            }
+          }
           //$node_title = $node->getTitle();
           //$bundle = $node->bundle();
           //\Drupal::logger('krishna')->notice($node_title.'--'.$bundle);
@@ -95,6 +110,20 @@ function studiobridge_store_images_entity_insert(Drupal\Core\Entity\EntityInterf
               'created' => REQUEST_TIME,
             ))
             ->execute();
+          $product_bundle = $node->bundle();
+
+          if($product_bundle == 'products'){
+            $field_base_product_id = $node->field_base_product_id->getValue();
+            if($field_base_product_id){
+              $field_base_product_id = $field_base_product_id[0]['value'];
+            }
+          }elseif($product_bundle = 'unmapped_products'){
+            $field_identifier = $node->field_identifier->getValue();
+            if($field_identifier){
+              $field_base_product_id = $field_identifier[0]['value'];
+            }
+          }
+
         }
         else{
           studiobridge_store_images_create_unmapped_product($image, $session_id,'UnMapped', $entity->id());
@@ -116,7 +145,26 @@ function studiobridge_store_images_entity_insert(Drupal\Core\Entity\EntityInterf
         // todo : add product to session
         studiobridge_store_images_add_product_to_session($session_id, $node);
 
+      // todo : file name change
+      if($field_base_product_id){
+
+        $filemime = $entity->filemime->getValue();
+        if($filemime){
+          $filemime = $filemime[0]['value'];
+          $filemime = explode('/',$filemime);
+          $filemime = $filemime[1];
+          if($filemime = 'octet-stream'){
+            $filemime = 'jpeg';
+          }
+
+          $entity->filename->setValue($field_base_product_id.'_'.count($node->field_images->getValue()).".$filemime");
+          $entity->save();
+        }
+      }
+
     }
+
+  //\Drupal::logger('test_module')->notice('<pre>'.print_r($_FILES,true).'<pre>');
 
 }
 
@@ -170,7 +218,22 @@ function studiobridge_store_images_create_unmapped_product($image = array(), $se
     ))
     ->execute();
 
+  if($image){
+    $file = File::load($image['target_id']);
+    $filemime = $file->filemime->getValue();
+    if($filemime){
+      $filemime = $filemime[0]['value'];
+      $filemime = explode('/',$filemime);
+      $filemime = $filemime[1];
+
+      $file->filename->setValue($identifier.'_1'.$filemime);
+      $file->save();
+    }
+
+  }
+
     studiobridge_store_images_add_product_to_session($session_id, $node);
+
 }
 
 /*
@@ -390,5 +453,25 @@ function studiobridge_store_images_entity_delete(Drupal\Core\Entity\EntityInterf
       //->condition('type', $entity->getEntityTypeId())
       ->condition('id', $entity->id())
       ->execute();
+  }
+}
+
+/**
+ * Act on an entity before it is created or updated.
+ *
+ * @param \Drupal\Core\Entity\EntityInterface $entity
+ *   The entity object.
+ *
+ * @ingroup entity_crud
+ * @see hook_ENTITY_TYPE_presave()
+ */
+function studiobridge_store_images_entity_presave(Drupal\Core\Entity\EntityInterface $entity) {
+
+    //  $b = $entity->filename->setValue('hello.png');
+    //  $entity->destination = "public://favicon.png";
+
+  if ($entity instanceof ContentEntityInterface && $entity->isTranslatable()) {
+    $route_match = \Drupal::routeMatch();
+    \Drupal::service('content_translation.synchronizer')->synchronizeFields($entity, $entity->language()->getId(), $route_match->getParameter('source_langcode'));
   }
 }

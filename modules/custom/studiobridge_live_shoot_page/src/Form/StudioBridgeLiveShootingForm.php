@@ -166,17 +166,17 @@ class StudioBridgeLiveShootingForm extends FormBase {
         $block .=  '<div class="ribbon"><span id="seq-'. $fid .'">'.$i.'</span></div>';
 
         $block .=  '<div class="scancontainer">';
-        $block .=  '<img src="'.$src.'" class="scanpicture">';
+        $block .=  '<img src="'.$src['uri'].'" class="scanpicture">';
         $block .=  '</div>';
         $block .=  '<div class="file-name">';
-        $block .=  '<span class="bkname"><i class="fa fa-camera"></i><b>Image</b></span>';
+        $block .=  '<span class="bkname"><i class="fa fa-camera"></i><b>'.$src['name'].'</b></span>';
         $block .=  '<hr class="simple">';
 
         $block .= '<div class="row">';
         $block .= '<div class="col col-sm-6">';
         $block .= '<span><a class=" dropdown-toggle label label-default dropdown mr-5" data-toggle="dropdown" ><i class="fa fa-cog"></i> <i class="fa fa-caret-down"></i></a>';
         $block .=	'<ul class="dropdown-menu pull-right"><li><a class="label label-default no-margin" onclick="return false;">Use this as full shot</a></li></ul>';
-        $block .= '<span ><a target ="_blank" href="#" class="label label-info"><i class="glyphicon glyphicon-fullscreen"></i></a>';
+        $block .= '<span ><a target ="_blank" href="/file/'.$fid.'" class="label label-info"><i class="glyphicon glyphicon-fullscreen"></i></a>';
         $block .= '</div>';
         $block .= '<div class="col col-sm-6">';
         $block .= '<span><a onclick="return false;" class="label label-danger mr5 pull-right">Delete</a>';
@@ -346,17 +346,17 @@ class StudioBridgeLiveShootingForm extends FormBase {
       $block .=  '<div class="ribbon"><span id="seq-'. $fid .'">'.$i.'</span></div>';
 
       $block .=  '<div class="scancontainer">';
-      $block .=  '<img src="'.$src.'" class="scanpicture">';
+      $block .=  '<img src="'.$src['uri'].'" class="scanpicture">';
       $block .=  '</div>';
       $block .=  '<div class="file-name">';
-      $block .=  '<span class="bkname"><i class="fa fa-camera"></i><b>Image</b></span>';
+      $block .=  '<span class="bkname"><i class="fa fa-camera"></i><b>'.$src['name'].'</b></span>';
       $block .=  '<hr class="simple">';
 
       $block .= '<div class="row">';
       $block .= '<div class="col col-sm-6">';
       $block .= '<span><a class=" dropdown-toggle label label-default dropdown mr-5" data-toggle="dropdown" ><i class="fa fa-cog"></i> <i class="fa fa-caret-down"></i></a>';
       $block .=	'<ul class="dropdown-menu pull-right"><li><a class="label label-default no-margin" onclick="return false;">Use this as full shot</a></li></ul>';
-      $block .= '<span ><a target ="_blank" href="#" class="label label-info"><i class="glyphicon glyphicon-fullscreen"></i></a>';
+      $block .= '<span ><a target ="_blank" href="/file/'.$fid.'" class="label label-info"><i class="glyphicon glyphicon-fullscreen"></i></a>';
       $block .= '</div>';
       $block .= '<div class="col col-sm-6">';
       $block .= '<span><a onclick="return false;" class="label label-danger mr5 pull-right">Delete</a>';
@@ -472,7 +472,10 @@ class StudioBridgeLiveShootingForm extends FormBase {
         foreach($images as $img){
           $fid = $img['target_id'];
           $file = File::load($fid);
-          $image_uri[$fid] = ImageStyle::load('live_shoot_preview')->buildUrl($file->getFileUri());
+          $file_name = $file->filename->getValue();
+          $file_name = $file_name[0]['value'];
+          $image_uri_value = ImageStyle::load('live_shoot_preview')->buildUrl($file->getFileUri());
+          $image_uri[$fid] = array('uri'=>$image_uri_value,'name'=>$file_name);
         }
         return $image_uri;
       }
