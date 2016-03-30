@@ -86,12 +86,18 @@
 
         console.log(Node1);
 
-        getCsrfToken(function (csrfToken) {
-            var nid = document.getElementById('edit-identifier-nid').value;
-            if (nid) {
-                patchNode(csrfToken, Node1, nid);
-            }
-        });
+        if(imgs.length){
+            getCsrfToken(function (csrfToken) {
+                var nid = document.getElementById('edit-identifier-nid').value;
+                if (nid) {
+                    patchNode(csrfToken, Node1, nid);
+                }
+            });
+        }
+        else{
+            alert('No images found');
+
+        }
     }
 
     $("#studio-resequence-bt").click(function () {

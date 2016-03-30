@@ -348,6 +348,8 @@ class StudioBridgeLiveShootingForm extends FormBase {
       $block .=  '<div class="scancontainer">';
       $block .=  '<img src="'.$src['uri'].'" class="scanpicture">';
       $block .=  '</div>';
+      $block .=  "<input name='image[" . $fid . "]' type='hidden' value='" . $fid . "'/>";
+
       $block .=  '<div class="file-name">';
       $block .=  '<span class="bkname"><i class="fa fa-camera"></i><b>'.$src['name'].'</b></span>';
       $block .=  '<hr class="simple">';
