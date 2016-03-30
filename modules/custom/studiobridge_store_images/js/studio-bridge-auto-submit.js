@@ -87,7 +87,7 @@
         block +=  '</div>';
         block +=  "<input name='image[" + fid + "]' type='hidden' value='" + fid + "'/>";
         block +=  '<div class="file-name">';
-        block +=  '<span class="bkname"><i class="fa fa-camera"></i><b>'+img.name+'</b></span>';
+        block +=  '<span class="bkname"><i class="fa fa-camera"></i><b id="seq-img-' + fid + '">'+img.name+'</b></span>';
         block +=  '<hr class="simple">';
 
         block += '<div class="row">';

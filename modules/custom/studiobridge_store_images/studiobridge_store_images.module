@@ -471,6 +471,49 @@ function studiobridge_store_images_entity_presave(Drupal\Core\Entity\EntityInter
 
     //  $b = $entity->filename->setValue('hello.png');
     //  $entity->destination = "public://favicon.png";
+  if($entity->bundle() == 'products' || $entity->bundle() == 'unmapped_products'){
+
+    $product_bundle = $entity->bundle();
+
+    if($product_bundle == 'products'){
+      $field_base_product_id = $entity->field_base_product_id->getValue();
+      if($field_base_product_id){
+        $field_base_product_id = $field_base_product_id[0]['value'];
+      }
+    }elseif($product_bundle = 'unmapped_products'){
+      $field_identifier = $entity->field_identifier->getValue();
+      if($field_identifier){
+        $field_base_product_id = $field_identifier[0]['value'];
+      }
+    }
+
+    $images = $entity->field_images->getValue();
+    //\Drupal::logger('store_images')->notice('*****  <pre>'.print_r($images,true).'<pre>');
+
+    if($field_base_product_id && $images){
+      $i = 1;
+      foreach($images as $img){
+        $file = File::load($img['target_id']);
+
+        $filemime = $file->filemime->getValue();
+        if($filemime){
+          $filemime = $filemime[0]['value'];
+          $filemime = explode('/',$filemime);
+          $filemime = $filemime[1];
+          if($filemime = 'octet-stream'){
+            $filemime = 'jpeg';
+          }
+          // todo : filemime will be wrong
+
+          $file->filename->setValue($field_base_product_id.'_'.$i.".$filemime");
+          //$file->filename->setValue('hello'.rand(999,9999999).'.png');
+          $file->save();
+          $i++;
+        }
+      }
+    }
+
+  }
 
   if ($entity instanceof ContentEntityInterface && $entity->isTranslatable()) {
     $route_match = \Drupal::routeMatch();

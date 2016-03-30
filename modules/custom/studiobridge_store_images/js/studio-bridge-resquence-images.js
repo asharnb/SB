@@ -9,6 +9,15 @@
             });
     }
 
+    function getFileName(callback, fid) {
+
+        $.get(Drupal.url('filename/'+ fid +'/'+ Math.floor((Math.random() * 1000000) + 1) +'?_format=json'))
+            .done(function (data) {
+                document.getElementById('seq-img-'+ fid).innerHTML = data.filename;
+                callback(data.filename);
+            });
+    }
+
     function patchNode(csrfToken, node, nid) {
         var url = "/node/";
         if(window.location.hostname == "staging.dreamcms.me"){
@@ -37,6 +46,14 @@
                 for (index = 0; index < inputs.length; ++index) {
                     // deal with inputs[index] element.
                     document.getElementById('seq-'+inputs[index].value).innerHTML = index + 1;
+                    // todo : get img file name
+                        var rand = Math.floor((Math.random() * 1000000) + 1);
+                        var fid =  inputs[index].value;
+                    getFileName(function (filename) {
+                        //console.log(csrfToken);
+                        //document.getElementById('seq-img-'+ fid).innerHTML = filename;
+                    }, fid);
+
                 }
 
                 setTimeout(function(){
