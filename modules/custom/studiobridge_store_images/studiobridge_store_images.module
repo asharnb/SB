@@ -209,14 +209,16 @@ function studiobridge_store_images_create_unmapped_product($image = array(), $se
 
     \Drupal::state()->set('last_scan_product_nid'.$session_uid.'_'.$session_id,$node->id());
 
-  db_insert('studio_file_transfers')
-    ->fields(array(
-      'fid' => $fid,
-      'pid' => $node->id(),
-      'sid' => $session_id,
-      'created' => REQUEST_TIME,
-    ))
-    ->execute();
+  if($fid){
+    db_insert('studio_file_transfers')
+      ->fields(array(
+        'fid' => $fid,
+        'pid' => $node->id(),
+        'sid' => $session_id,
+        'created' => REQUEST_TIME,
+      ))
+      ->execute();
+  }
 
   if($image){
     $file = File::load($image['target_id']);

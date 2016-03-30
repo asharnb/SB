@@ -268,7 +268,7 @@ class StudioBridgeLiveShootingForm extends FormBase {
       // validate product
       if(isset($product->msg)){
         // product not found on the server so save it as unmapped product.
-        studiobridge_store_images_create_unmapped_product(array(),$session_id,$identifier);
+        studiobridge_store_images_create_unmapped_product(array(),$session_id,$identifier,false);
         $is_unmapped_product = true;
       }else{
         // import it in our drupal
