@@ -83,11 +83,11 @@
         block +=  '<div class="ribbon"><span id="seq-'+ fid +'">'+ seq +'</span></div>';
 
         block +=  '<div class="scancontainer">';
-        block +=  '<img src="'+ img +'" class="scanpicture">';
+        block +=  '<img src="'+ img.uri +'" class="scanpicture">';
         block +=  '</div>';
         block +=  "<input name='image[" + fid + "]' type='hidden' value='" + fid + "'/>";
         block +=  '<div class="file-name">';
-        block +=  '<span class="bkname"><i class="fa fa-camera"></i><b>Image</b></span>';
+        block +=  '<span class="bkname"><i class="fa fa-camera"></i><b>'+img.name+'</b></span>';
         block +=  '<hr class="simple">';
 
         block += '<div class="row">';
