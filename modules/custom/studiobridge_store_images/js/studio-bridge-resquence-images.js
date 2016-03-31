@@ -19,12 +19,9 @@
     }
 
     function patchNode(csrfToken, node, nid) {
-        var url = "/node/";
-        if(window.location.hostname == "staging.dreamcms.me"){
-            url = "/studiobridge/node/";
-        }
+
         $.ajax({
-            url: url + nid + '?_format=hal_json',
+            url: Drupal.url('node/' + nid + '?_format=hal_json'),
             method: 'PATCH',
             headers: {
                 'Content-Type': 'application/hal+json',
@@ -84,15 +81,10 @@
             imgs.push({"target_id": inputs[index].value});
         }
 
-        var url = window.location.protocol +'//' + window.location.hostname;
-        if(window.location.hostname == "staging.dreamcms.me"){
-            url = window.location.protocol +'//' + window.location.hostname + "/studiobridge";
-        }
-
         var Node1 = {
             _links: {
                 type: {
-                    href: url + '/rest/type/node/products'
+                    href: Drupal.url.toAbsolute(drupalSettings.path.baseUrl + 'rest/type/node/products')
                 }
             },
             type: {
