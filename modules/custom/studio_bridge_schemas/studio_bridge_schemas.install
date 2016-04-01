@@ -1,5 +1,8 @@
 <?php
 
+/*
+ * Implements hook_schema().
+ */
 function studio_bridge_schemas_schema() {
   $schema['studio_file_transfers'] = array(
     'fields' => array(
