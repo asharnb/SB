@@ -1,0 +1,13 @@
+<?php
+
+function studiobridge_live_shoot_page_theme() {
+  return array(
+    'sbtheme_product' => array(
+      'variables' => array(
+        'inputs' => '',
+      ),
+      'template' => 'sbtheme'
+    ),
+  );
+}
+
