@@ -7,6 +7,7 @@
 
 namespace Drupal\studiobridge_rest_resources\Plugin\rest\resource;
 
+use Drupal\Core\Database\Connection;
 use Drupal\Core\Session\AccountProxyInterface;
 use Drupal\rest\Plugin\ResourceBase;
 use Drupal\rest\ResourceResponse;
@@ -36,6 +37,13 @@ class FileNameRestResource extends ResourceBase {
   protected $currentUser;
 
   /**
+   * The current database connection.
+   *
+   * @var \Drupal\Core\Database\Connection
+   */
+  protected $database;
+
+  /**
    * Constructs a Drupal\rest\Plugin\ResourceBase object.
    *
    * @param array $configuration
@@ -50,6 +58,9 @@ class FileNameRestResource extends ResourceBase {
    *   A logger instance.
    * @param \Drupal\Core\Session\AccountProxyInterface $current_user
    *   A current user instance.
+   * @param \Drupal\Core\Database\Connection $database
+   *   The active database connection.
+   *
    */
   public function __construct(
     array $configuration,
@@ -57,10 +68,12 @@ class FileNameRestResource extends ResourceBase {
     $plugin_definition,
     array $serializer_formats,
     LoggerInterface $logger,
-    AccountProxyInterface $current_user) {
+    AccountProxyInterface $current_user,
+    Connection $database) {
     parent::__construct($configuration, $plugin_id, $plugin_definition, $serializer_formats, $logger);
 
     $this->currentUser = $current_user;
+    $this->database = $database;
   }
 
   /**
@@ -73,7 +86,8 @@ class FileNameRestResource extends ResourceBase {
       $plugin_definition,
       $container->getParameter('serializer.formats'),
       $container->get('logger.factory')->get('rest'),
-      $container->get('current_user')
+      $container->get('current_user'),
+      $container->get('database')
     );
   }
   /**
@@ -86,11 +100,13 @@ class FileNameRestResource extends ResourceBase {
    */
   public function get($fid, $random) {
 
+    // Return filename.
     if ($fid && $random) {
-      $record = db_query("select filename from {file_managed} WHERE fid = :fid", array(':fid' => $fid))
-        ->fetchAssoc();
+      $record = $this->database->select('file_managed', 'f')->fields('f', ['filename'])->condition('f.fid', $fid)->execute();
+      $record = $record->fetchField();
+
       if (!empty($record)) {
-        return new ResourceResponse($record);
+        return new ResourceResponse(array('filename'=>$record));
       }
       throw new NotFoundHttpException(t('File entry with ID @id was not found', array('@id' => $fid)));
     }

@@ -545,7 +545,7 @@ function studiobridge_store_images_entity_presave(Drupal\Core\Entity\EntityInter
           $filemime = $filemime[0]['value'];
           $filemime = explode('/', $filemime);
           $filemime = $filemime[1];
-          if ($filemime = 'octet-stream') {
+          if ($filemime == 'octet-stream') {
             $filemime = 'jpeg';
           }
           // todo : filemime will be wrong

@@ -7,6 +7,7 @@
 
 namespace Drupal\studiobridge_rest_resources\Plugin\rest\resource;
 
+use Drupal\Core\Database\Connection;
 use Drupal\Core\Session\AccountProxyInterface;
 use Drupal\rest\Plugin\ResourceBase;
 use Drupal\rest\ResourceResponse;
@@ -41,6 +42,13 @@ class StudioLiveImageContainerRestResource extends ResourceBase {
   public $pnid;
 
   /**
+   * The current database connection.
+   *
+   * @var \Drupal\Core\Database\Connection
+   */
+  protected $database;
+
+  /**
    * Constructs a Drupal\rest\Plugin\ResourceBase object.
    *
    * @param array $configuration
@@ -55,6 +63,9 @@ class StudioLiveImageContainerRestResource extends ResourceBase {
    *   A logger instance.
    * @param \Drupal\Core\Session\AccountProxyInterface $current_user
    *   A current user instance.
+   * @param \Drupal\Core\Database\Connection $database
+   *   The active database connection.
+   *
    */
   public function __construct(
     array $configuration,
@@ -62,10 +73,13 @@ class StudioLiveImageContainerRestResource extends ResourceBase {
     $plugin_definition,
     array $serializer_formats,
     LoggerInterface $logger,
-    AccountProxyInterface $current_user) {
+    AccountProxyInterface $current_user,
+    Connection $database) {
     parent::__construct($configuration, $plugin_id, $plugin_definition, $serializer_formats, $logger);
 
     $this->currentUser = $current_user;
+    $this->database = $database;
+
   }
 
   /**
@@ -78,7 +92,8 @@ class StudioLiveImageContainerRestResource extends ResourceBase {
       $plugin_definition,
       $container->getParameter('serializer.formats'),
       $container->get('logger.factory')->get('rest'),
-      $container->get('current_user')
+      $container->get('current_user'),
+      $container->get('database')
     );
   }
   /**
@@ -134,6 +149,9 @@ class StudioLiveImageContainerRestResource extends ResourceBase {
     }
   }
 
+  /*
+   * Helper function,
+   */
   public function getBlockData2($nid,$identifier){
 
     $output = '<div class="live-shoot-product-container">';
@@ -195,23 +213,42 @@ class StudioLiveImageContainerRestResource extends ResourceBase {
     return $output;
   }
 
+  /*
+   *  Helper function, to get last scanned image in the current open session.
+   */
   public function getLastImages($nid,$identifier = null){
 
+    // Get session id.
     $sid = studiobridge_store_images_open_session_recent();
     if($sid){
+      // Get last scanned file entity id.
       $last_scanned_fid = \Drupal::state()->get('last_img_sent_'.$sid.'_'.$nid,false);
-      // todo :
+      // Get images received after last scanned image.
+      // Else get all images in the current product of the session.
       if($last_scanned_fid){
-        $record = db_query("SELECT fid FROM {studio_file_transfers} where pid=:pid AND  sid=:sid AND fid > :fid",array(':pid'=> $nid,':sid'=>$sid,':fid' => $last_scanned_fid))->fetchAll();
+        $record = $this->database->select('studio_file_transfers', 'sft')
+          ->fields('sft', ['fid'])
+          ->condition('sft.pid', $nid)
+          ->condition('sft.sid', $sid)
+          ->condition('sft.fid', $last_scanned_fid,'>')
+          ->execute();
+        $record = $record->fetchAll();
+
       }else{
-        $record = db_query("SELECT fid FROM {studio_file_transfers} where pid=:pid AND  sid=:sid",array(':pid'=> $nid,':sid'=>$sid))->fetchAll();
+        $record = $this->database->select('studio_file_transfers', 'sft')
+          ->fields('sft', ['fid'])
+          ->condition('sft.pid', $nid)
+          ->condition('sft.sid', $sid)
+          ->execute();
+        $record = $record->fetchAll();
       }
       if ($record) {
+        // Build the return data.
         $image_uri = array();
         foreach ($record as $img) {
           $fid = $img->fid;
+          // Load the file entity by its fid.
           $file = File::load($fid);
-          //$image_uri[$fid] = ImageStyle::load('live_shoot_preview')->buildUrl($file->getFileUri());
 
           $file_name = $file->filename->getValue();
           $file_name = $file_name[0]['value'];
@@ -219,6 +256,7 @@ class StudioLiveImageContainerRestResource extends ResourceBase {
           $image_uri[$fid] = array('uri'=>$image_uri_value,'name'=>$file_name);
 
         }
+        // Set last scanned image with its fid.
         \Drupal::state()->set('last_img_sent_'.$sid.'_'.$nid,$fid);
         return $image_uri;
       }

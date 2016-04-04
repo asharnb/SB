@@ -265,6 +265,7 @@ class StudioBridgeLiveShootingForm extends FormBase {
     if (!$result) {
       // Get product from server
       $product = self::getProductExternal($identifier);
+      $product = json_decode($product);
       // validate product
       if(isset($product->msg)){
         // product not found on the server so save it as unmapped product.
@@ -404,32 +405,14 @@ class StudioBridgeLiveShootingForm extends FormBase {
    */
   public function getProductExternal($input) {
 
-    $curl = curl_init();
+    // todo : multiple search, means if product not found with sku_id then look for color variant.
+    // todo : for now external resource is public, but it might be changed to auth.
+    $response = \Drupal::httpClient()
+      ->get("http://staging.dreamcms.me/service/product-data?sku_id=$input"
+        //['auth' => ['username', 'password'],]
+      );
 
-    curl_setopt_array($curl, array(
-      CURLOPT_URL => "http://staging.dreamcms.me/service/product-data?sku_id=$input",
-      CURLOPT_RETURNTRANSFER => TRUE,
-      CURLOPT_ENCODING => "",
-      CURLOPT_MAXREDIRS => 10,
-      CURLOPT_TIMEOUT => 30,
-      CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
-      CURLOPT_CUSTOMREQUEST => "GET",
-      CURLOPT_HTTPHEADER => array(
-        "cache-control: no-cache",
-      ),
-    ));
-
-    $response = curl_exec($curl);
-    $err = curl_error($curl);
-
-    curl_close($curl);
-
-    if ($err) {
-      return NULL;
-    }
-    else {
-      return json_decode($response);
-    }
+    return (string) $response->getBody();
   }
 
   /*
