@@ -9,21 +9,28 @@
         <div class="panel-body">
             <h3>
                 <span class="semi-bold">Scan</span> Product Tag</h3>
-            <form  class="smart-form" >
+            <div  class="smart-form" >
 
 
 
                 <div class="form-group form-group-default required">
                     <label>SKU/Barcode/EAN</label>
-                    {{ xx }}
-                    {% block input %}
-                        <input {{ xx }} abc {{ id }}/>
-                    {% endblock %}
-                    {{ dump(xx) }}
+                    {% spaceless %}
+                        {%
+                        set classes = [
+                        'form-control',
+                        ]
+                        %}
+                        {% block input %}
+                            <input{{ attributes.addClass(classes) }} />
+                        {% endblock %}
+                    {% endspaceless %}
+
                 </div>
 
-            </form>
+            </div>
         </div>
     </div>
 
 </article>
+

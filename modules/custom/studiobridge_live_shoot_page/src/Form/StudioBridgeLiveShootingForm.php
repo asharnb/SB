@@ -94,25 +94,29 @@ class StudioBridgeLiveShootingForm extends FormBase {
 
     // @ashar : this does not need to be refreshed
 
-      $variables = array(
-          '#id' => 'barcode',
-          '#name' => 'identifier',
-          '#class' => 'form-control');
 
     $form['identifier'] = array(
         '#theme' => 'sbtheme_scan',
-          '#xx' => $variables,
         '#type' => 'textfield',
-
         '#description' => $this->t('description will come here'),
         '#default_value' => $identifier,
+        '#ajax' => array(
+            'callback' => 'Drupal\studiobridge_live_shoot_page\Form\StudioBridgeLiveShootingForm::productGetOrUpdateCallback',
+          //'callback' => 'Drupal\studiobridge_live_shoot_page\Form\StudioBridgeLiveShootingForm::randomUsernameCallback',
+            'event' => 'enter',
+            'progress' => array(
+                'type' => 'throbber',
+              //'type' => 'bar',
+                'message' => 'Getting Product',
+            ),
+        ),
     );
 
     $productdetails =$this->getProductData($new_or_old_product_nid);
 
     $form['markup_product_details'] = array(
       '#theme' => 'sbtheme_product',
-      '#concept' => $productdetails['concept'],
+        '#concept' => $productdetails['concept'],
         '#styleno' => $productdetails['styleno'],
         '#colorvariant' => $productdetails['colorvariant'],
         '#gender' => $productdetails['gender'],
@@ -154,45 +158,52 @@ class StudioBridgeLiveShootingForm extends FormBase {
     $form['random_user'] = array(
       '#type' => 'button',
       '#value' => 'Apply',
+      '#visible' => FALSE,
       //'#suffix' => '<div id="studio-img-container"></div><div id="js-holder"></div><div id="studio-img-container1">'.$block.'</div>',
-      '#suffix' => '<div id="studio-img-container"></div><div id="js-holder"></div><a id="studio-resequence-bt" class="btn btn-warning">Resequence</a><div id="msg-up"></div>',
-      '#ajax' => array(
-        'callback' => 'Drupal\studiobridge_live_shoot_page\Form\StudioBridgeLiveShootingForm::productGetOrUpdateCallback',
-        //'callback' => 'Drupal\studiobridge_live_shoot_page\Form\StudioBridgeLiveShootingForm::randomUsernameCallback',
-        'event' => 'click',
-        'progress' => array(
-          'type' => 'throbber',
-          //'type' => 'bar',
-          'message' => 'Getting Product',
-        ),
-      ),
+      //'#suffix' => '<div id="studio-img-container"></div><div id="js-holder"></div><a id="studio-resequence-bt" class="btn btn-warning">Resequence</a><div id="msg-up"></div>',
+
     );
+
+
+
 
     $form['product_container'] = array(
       '#theme' => 'sbtheme_image_container',
+      '#variables' => '',
+
       //'#suffix' => '<div id="studio-img-container1"><div id="sortable" class="ui-sortable">',
+    );
+
+    $form['resequence_button'] = array(
+        //'#theme' => 'sbtheme_image_container',
+        '#type' => 'button',
+        '#value' => 'Resequence',
+        '#name' => '',
+
+        '#markup' => '<input id="studio-resequence-bt" class="btn btn-warning"></input><div id="msg-up"></div>',
+
     );
 
 
     $i = 1;
-    foreach($images as $fid => $src){
-
-      $form['product_container']['markup_product_details__'.$fid] = array(
-          '#theme' => 'sbtheme_image',
-          '#url' => $src['uri'],
-          '#name' => $src['name'],
-          '#fid' => $fid,
-          '#id' => $i,
-      );
-
-
-      $form['images['.$fid.']'] = array(
-        '#type' => 'hidden',
-        '#value' => $fid,
-      );
-
-      $i ++;
-    }
+        foreach($images as $fid => $src){
+    
+          $form['markup_product_details__'.$fid] = array(
+              '#visible' => TRUE,
+              '#theme' => 'sbtheme_image',
+              '#url' => $src['uri'],
+              '#name' => $src['name'],
+              '#fid' => $fid,
+              '#id' => $i,
+          );
+    
+          $form['images['.$fid.']'] = array(
+            '#type' => 'hidden',
+            '#value' => $fid,
+          );
+    
+          $i ++;
+        }
 
     $form['markup_product_details_second'] = array(
       '#suffix' => '</div></div>',

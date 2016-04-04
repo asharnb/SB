@@ -15,7 +15,12 @@
                 <div class="col-lg-6">
                     <dl class="dl-horizontal">
                         <dt>Concept:</dt>
-                        <dd class="mb-10"><img src="/ca/img/brands/brand_logo_{{ concept }}.png" height="20px"></dd>
+
+                        {% if concept == 'Unmapped' %}
+                            <dd class="mb-10"><img src="/ca/img/brands/brand_logo_.png" height="20px"></dd>
+                        {% else %}
+                        <dd class="mb-10"><img src="/ca/img/brands/brand_logo_{{ concept|lower }}.png" height="20px"></dd>
+                        {% endif %}
                     </dl>
 
                 </div>

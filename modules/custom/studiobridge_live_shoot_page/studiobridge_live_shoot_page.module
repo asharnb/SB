@@ -17,7 +17,7 @@ function studiobridge_live_shoot_page_theme() {
     ),
       'sbtheme_scan' => array(
           'variables' => array(
-              'xx' => array(),
+              'attributes' => array(),
           ),
           'template' => 'sbtheme_scan'
       ),
@@ -31,6 +31,9 @@ function studiobridge_live_shoot_page_theme() {
           'template' => 'sbtheme_image'
       ),
       'sbtheme_image_container' => array(
+          'variables' => array(
+
+          ),
           'template' => 'sbtheme_image_container'
       ),
   );
