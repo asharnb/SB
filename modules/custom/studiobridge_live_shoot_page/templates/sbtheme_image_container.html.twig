@@ -1,0 +1,48 @@
+<article class="col-xs-12 col-md-12 col-lg-12 ">
+
+    <div id="portlet-linear-color" class="panel panel-default">
+        <div class="panel-heading seperator">
+            <div class="panel-title">Product Images
+            </div>
+            <div class="panel-controls">
+
+                <div class="btn-group">
+                    <button class="btn dropdown-toggle btn-xs btn-default" data-toggle="dropdown">
+                        Aspect Ratio <i class="fa fa-caret-down"></i>
+                    </button>
+                    <ul class="dropdown-menu pull-right">
+                        <li>
+                            <a href="javascript:void(0);">1:1</a>
+                        </li>
+                        <li>
+                            <a href="javascript:void(0);">Best Fit</a>
+                        </li>
+                    </ul>
+                </div>
+
+
+
+
+                <a class="btn btn-xs btn-success" onclick="return forceRefresh();">Refresh</a>
+
+
+                <a class="btn btn-xs btn-info" onclick="return resequenceData();">Re-sequence</a>
+
+
+            </div>
+        </div>
+        <div class="panel-body">
+            <div class="row">
+                <div id="imagecontainer" name="imagecontainer" class="ui-sortable">
+                    {{ sbtheme_images }}
+</div>
+
+        </div>
+    </div>
+
+
+
+
+
+
+</article>

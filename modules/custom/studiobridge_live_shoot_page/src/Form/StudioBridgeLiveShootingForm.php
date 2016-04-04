@@ -94,16 +94,32 @@ class StudioBridgeLiveShootingForm extends FormBase {
 
     // @ashar : this does not need to be refreshed
 
-    $form['markup_product_details'] = array(
-      '#suffix' => '<div id="studio-bridge-product-details"></div>',
-    );
-    // @ashar : add the ajax call back to the identifier
+      $variables = array(
+          '#id' => 'barcode',
+          '#name' => 'identifier',
+          '#class' => 'form-control');
 
     $form['identifier'] = array(
-      '#type' => 'textfield',
-      '#title' => 'Scan product',
-      '#description' => $this->t('description will come here'),
-      '#default_value' => $identifier,
+        '#theme' => 'sbtheme_scan',
+          '#xx' => $variables,
+        '#type' => 'textfield',
+
+        '#description' => $this->t('description will come here'),
+        '#default_value' => $identifier,
+    );
+
+    $productdetails =$this->getProductData($new_or_old_product_nid);
+
+    $form['markup_product_details'] = array(
+      '#theme' => 'sbtheme_product',
+      '#concept' => $productdetails['concept'],
+        '#styleno' => $productdetails['styleno'],
+        '#colorvariant' => $productdetails['colorvariant'],
+        '#gender' => $productdetails['gender'],
+        '#color' => $productdetails['color'],
+        '#description' => $productdetails['description'],
+        '#identifier' => $identifier,
+        '#visible' => TRUE,
     );
 
     $form['identifier_hidden'] = array(
@@ -152,54 +168,29 @@ class StudioBridgeLiveShootingForm extends FormBase {
       ),
     );
 
-    $form['markup_product_details_first'] = array(
-      '#suffix' => '<div id="studio-img-container1"><div id="sortable" class="ui-sortable">',
+    $form['product_container'] = array(
+      '#theme' => 'sbtheme_image_container',
+      //'#suffix' => '<div id="studio-img-container1"><div id="sortable" class="ui-sortable">',
     );
+
 
     $i = 1;
     foreach($images as $fid => $src){
 
-        $block = '';
-        $block .= '<div class="bulkviewfiles imagefile">';
-        $block .= '<div class="box" style="max-width: 250px;">';
-
-        $block .=  '<div class="ribbon"><span id="seq-'. $fid .'">'.$i.'</span></div>';
-
-        $block .=  '<div class="scancontainer">';
-        $block .=  '<img src="'.$src['uri'].'" class="scanpicture">';
-        $block .=  '</div>';
-        $block .=  '<div class="file-name">';
-        $block .=  '<span class="bkname"><i class="fa fa-camera"></i><b id="seq-img-'. $fid .'">'.$src['name'].'</b></span>';
-        $block .=  '<hr class="simple">';
-
-        $block .= '<div class="row">';
-        $block .= '<div class="col col-sm-6">';
-        $block .= '<span><a class=" dropdown-toggle label label-default dropdown mr-5" data-toggle="dropdown" ><i class="fa fa-cog"></i> <i class="fa fa-caret-down"></i></a>';
-        $block .=	'<ul class="dropdown-menu pull-right"><li><a class="label label-default no-margin" onclick="return false;">Use this as full shot</a></li></ul>';
-        $block .= '<span ><a target ="_blank" href="/file/'.$fid.'" class="label label-info"><i class="glyphicon glyphicon-fullscreen"></i></a>';
-        $block .= '</div>';
-        $block .= '<div class="col col-sm-6">';
-        $block .= '<span><a onclick="return false;" class="label label-danger mr5 pull-right">Delete</a>';
-        $block .= '</div>';
-        $block .= '</div>';
-
-        $block .= '</div>';
-        $block .= '</div>';
-        //$block .= '</div>';
-
-
-      $form['markup_product_details_'.$fid] = array(
-        '#suffix' => "'$block''",
-        '#tree' => TRUE,
-
+      $form['product_container']['markup_product_details__'.$fid] = array(
+          '#theme' => 'sbtheme_image',
+          '#url' => $src['uri'],
+          '#name' => $src['name'],
+          '#fid' => $fid,
+          '#id' => $i,
       );
+
+
       $form['images['.$fid.']'] = array(
         '#type' => 'hidden',
         '#value' => $fid,
       );
-      $form['markup_product_details__'.$fid] = array(
-        '#suffix' => "</div>",
-      );
+
       $i ++;
     }
 
@@ -484,5 +475,63 @@ class StudioBridgeLiveShootingForm extends FormBase {
     }
     return false;
   }
+
+
+  function getProductData($nid){
+
+    $product = \Drupal\node\Entity\Node::load($nid);
+    $bundle = $product->bundle();
+    $style_no = '';
+    $color_variant = '';
+    $gender = '';
+    $description = '';
+    $color = '';
+
+
+    if($bundle == 'unmapped_products'){
+      $concept = 'Unmapped';
+    }else{
+
+      $product_concept = $product->field_concept_name->getValue();
+      if($product_concept){
+        $concept = $product_concept[0]['value'];
+      }
+
+      $product_style_no = $product->field_style_family->getValue();
+      if($product_style_no){
+        $style_no = $product_style_no[0]['value'];
+      }
+      $product_color_variant = $product->field_color_variant->getValue();
+      if($product_color_variant){
+        $color_variant = $product_color_variant[0]['value'];
+      }
+      $product_gender = $product->field_gender->getValue();
+      if($product_gender){
+        $gender = $product_gender[0]['value'];
+      }
+      $product_color = $product->field_color_name->getValue();
+      if($product_color){
+        $color = $product_color[0]['value'];
+      }
+
+      $product_description = $product->field_description->getValue();
+      if($product_description){
+        $description = $product_description[0]['value'];
+      }
+
+    }
+
+
+    $output_array = array("concept" => $concept,
+        "styleno" => $style_no,
+        "colorvariant" => $color_variant,
+        "gender" => $gender,
+        "color" => $color,
+        "description" => $description);
+
+    $output = $output_array;
+    return $output;
+  }
+
 
 }

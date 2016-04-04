@@ -180,18 +180,21 @@ class StudioLiveImageContainerRestResource extends ResourceBase {
 
     }
 
-    $output .= '<div class="product-div1"> Concept: '.$concept.'</div>';
-    $output .= '<div class="product-div1"> Identifier: '.$identifier.'</div>';
-    $output .= '<div class="product-div2"> Style No: '.$style_no.'</div>';
-    $output .= '<div class="product-div3"> Color Variant: '.$color_variant.'</div>';
-      $output .= '<div class="product-wrapper-2">';
-        $output .= '<div class="product-div4"> Gender: '.$gender.'</div>';
-        $output .= '<div class="product-div5"> Color: '.$color.'</div>';
-        $output .= '<div class="product-div5"> Description: '.$description.'</div>';
-        //$output .= '<div class="product-div5"> Color: '.$color.'</div>';
-      $output .= '</div>';
-    $output .= '</div>';
 
+    $output_array = array('concept' => $concept);
+
+//    $output .= '<div class="product-div1"> Concept: '.$concept.'</div>';
+//    $output .= '<div class="product-div1"> Identifier: '.$identifier.'</div>';
+//    $output .= '<div class="product-div2"> Style No: '.$style_no.'</div>';
+//    $output .= '<div class="product-div3"> Color Variant: '.$color_variant.'</div>';
+//      $output .= '<div class="product-wrapper-2">';
+//        $output .= '<div class="product-div4"> Gender: '.$gender.'</div>';
+//        $output .= '<div class="product-div5"> Color: '.$color.'</div>';
+//        $output .= '<div class="product-div5"> Description: '.$description.'</div>';
+//        //$output .= '<div class="product-div5"> Color: '.$color.'</div>';
+//      $output .= '</div>';
+//    $output .= '</div>';
+    $output = $output_array;
     return $output;
   }
 

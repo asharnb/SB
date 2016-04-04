@@ -1,0 +1,27 @@
+<div class="bulkviewfiles imagefile">
+    <div class="ribbon"><span id="seq">{{ id }}</span></div>
+
+    <div class="scancontainer">
+        <img src="{{ url }}" class="scanpicture">
+    </div>
+    <div class="file-name">
+        <span class="bkname"><i class="fa fa-camera"></i><b id="seq-img-{{ fid }}">{{ name }}</b></span>
+        <hr class="simple">
+
+        <div class="row">
+            <div class="col col-sm-6">
+<span><a class=" dropdown-toggle label label-default dropdown mr-5" data-toggle="dropdown"><i class="fa fa-cog"></i> <i
+                class="fa fa-caret-down"></i></a>
+<ul class="dropdown-menu pull-right">
+    <li><a class="label label-default no-margin" onclick="return false;">Use this as full shot</a></li>
+</ul>
+<span><a target="_blank" href="/sb/file/{{ fid }}" class="label label-info"><i
+                class="glyphicon glyphicon-fullscreen"></i></a>
+            </div>
+            <div class="col col-sm-6">
+<span><a onclick="return false;" class="label label-danger mr5 pull-right">Delete</a>
+            </div>
+        </div>
+
+    </div>
+</div>
