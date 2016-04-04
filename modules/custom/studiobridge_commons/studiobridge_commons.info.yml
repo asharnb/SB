@@ -1,0 +1,5 @@
+name: StudioBridge Commons
+type: module
+description: This module holds all helper functions required by other studio bridge modules.
+core: 8.x
+package: StudioBridge

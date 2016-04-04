@@ -12,6 +12,7 @@ namespace Drupal\studiobridge_rest_resources\Plugin\rest\resource;
 use Drupal\Core\Session\AccountProxyInterface;
 use Drupal\rest\Plugin\ResourceBase;
 use Drupal\rest\ResourceResponse;
+use Drupal\studiobridge_commons\Sessions;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\HttpKernel\Exception\HttpException;
@@ -91,15 +92,8 @@ class OpenSessionsRestResource extends ResourceBase
      */
     public function get($random)
     {
-        //todo : Add conditions
-        //todo : Check permission for requested user
-
-        $result = \Drupal::entityQuery('node')
-            ->condition('type', 'sessions')
-            ->sort('created', 'DESC')
-            ->condition('field_status','open')  // todo : poc on structure.
-            ->range(0,100)
-            ->execute();
+        // Get all open sessions.
+        $result = Sessions::openSessionsAll();
         if(!empty($result)){
             return new ResourceResponse($result);
         }

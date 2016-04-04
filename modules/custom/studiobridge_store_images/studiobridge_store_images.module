@@ -10,6 +10,9 @@ use \Drupal\node\Entity\Node;
 use \Drupal\file\Entity\File;
 use Drupal\Core\Entity\ContentEntityInterface;
 use Drupal\Core\Form\FormStateInterface;
+use Drupal\studiobridge_commons\Products;
+use Drupal\studiobridge_commons\Sessions;
+use Drupal\studiobridge_commons\StudioImages;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 
 /**
@@ -94,27 +97,15 @@ function studiobridge_store_images_entity_insert(Drupal\Core\Entity\EntityInterf
         }
       }
       // Log file transfer into {studio_file_transfers} table.
-      db_insert('studio_file_transfers')
-        ->fields(array(
-          'fid' => $entity->id(),
-          'pid' => $scanned_product_nid,
-          'sid' => $session_id,
-          'created' => REQUEST_TIME,
-        ))
-        ->execute();
+      StudioImages::AddFileTransfer($entity->id(), $scanned_product_nid,$session_id);
+
     }
     elseif ($product_last_updated) {
       $node = $product_last_updated;
 
       // Log file transfer into {studio_file_transfers} table.
-      db_insert('studio_file_transfers')
-        ->fields(array(
-          'fid' => $entity->id(),
-          'pid' => $node->id(),
-          'sid' => $session_id,
-          'created' => REQUEST_TIME,
-        ))
-        ->execute();
+      StudioImages::AddFileTransfer($entity->id(), $node->id(),$session_id);
+
       // check for mapped or un mapped product.
       $product_bundle = $node->bundle();
 
@@ -136,7 +127,8 @@ function studiobridge_store_images_entity_insert(Drupal\Core\Entity\EntityInterf
     }
     else {
       // Create unmapped product if any image received under no products scanned state.
-      studiobridge_store_images_create_unmapped_product($image, $session_id, 'UnMapped', $entity->id());
+      //studiobridge_store_images_create_unmapped_product($image, $session_id, 'UnMapped', $entity->id());
+      Products::createUnmappedProduct($image, $session_id, 'UnMapped', $entity->id());
       return;
     }
 
@@ -153,7 +145,8 @@ function studiobridge_store_images_entity_insert(Drupal\Core\Entity\EntityInterf
     $node->save();
 
     // Add product to session.
-    studiobridge_store_images_add_product_to_session($session_id, $node);
+    //studiobridge_store_images_add_product_to_session($session_id, $node);
+    Products::addProductToSession($session_id, $node);
 
     // Update file name for resequence.
     if ($field_base_product_id) {
@@ -225,14 +218,7 @@ function studiobridge_store_images_create_unmapped_product($image = array(), $se
 
   // Log transferred image.
   if ($fid) {
-    db_insert('studio_file_transfers')
-      ->fields(array(
-        'fid' => $fid,
-        'pid' => $node->id(),
-        'sid' => $session_id,
-        'created' => REQUEST_TIME,
-      ))
-      ->execute();
+    StudioImages::AddFileTransfer($fid,$node->id(),$session_id);
   }
 
   // Update image sequence number.
@@ -251,7 +237,8 @@ function studiobridge_store_images_create_unmapped_product($image = array(), $se
   }
 
   // Update product to current session, ie,, session sent by chrome app.
-  studiobridge_store_images_add_product_to_session($session_id, $node);
+  //studiobridge_store_images_add_product_to_session($session_id, $node);
+  Products::addProductToSession($session_id, $node);
 }
 
 /*
@@ -302,30 +289,20 @@ function studiobridge_store_images_get_open_product($session_id) {
   $session_uid = $session->getOwnerId();
 
   // query for getting last nid by photographer.
-  $node_id = \Drupal::entityQuery('node')
-    ->condition('type', array('products', 'unmapped_products'), 'IN')
-    ->sort('created', 'DESC')
-    ->condition('field_state', 'open')
-    ->condition('uid', $session_uid)
-    ->range(0, 1)
-    ->execute();
+  $node_id = Products::getProductByUid($session_uid);
+
   if (count($node_id)) {
     $node_id = reset($node_id);
     return $node = Node::load($node_id);
   }
   else {
-    $node_id_unmapped = \Drupal::entityQuery('node')
-      ->condition('type', 'unmapped_products')
-      ->sort('created', 'DESC')
-      ->condition('field_state', 'open')
-      ->condition('uid', $session_uid)
-      ->range(0, 1)
-      ->execute();
+    $node_id_unmapped = Products::getProductByUid($session_uid);
     if (count($node_id_unmapped)) {
       $node_id_unmapped = array_values($node_id_unmapped);
       return $node = Node::load($node_id_unmapped[0]);
     }
     else {
+      // todo : check this line *
       //studiobridge_store_images_create_unmapped_product($image, $session_id);
       return FALSE;
     }
@@ -340,13 +317,8 @@ function studiobridge_store_images_open_session_recent() {
   $user = \Drupal::currentUser();
   $uid = $user->id();
 
-  $result = \Drupal::entityQuery('node')
-    ->condition('type', 'sessions')
-    ->sort('created', 'DESC')
-    ->condition('field_status', 'open') // todo : poc on structure.
-    ->condition('uid', $uid)
-    ->range(0, 1)
-    ->execute();
+  // Get session by uid.
+  $result = Sessions::getSessionByUid($uid);
   if (count($result)) {
     return $node_id = reset($result);
   }
@@ -363,7 +335,6 @@ function studiobridge_store_images_update_product_as_closed($identifier) {
   $node_id = \Drupal::entityQuery('node')
     ->condition('title', $identifier)
     ->sort('created', 'DESC')
-    // ->condition('type',array('products','unmapped_products'))
     ->range(0, 1)
     ->execute();
 
@@ -382,73 +353,18 @@ function studiobridge_store_images_update_product_as_closed($identifier) {
 }
 
 /*
- * Helper function, update product as open state.
- *
- * @param identifier
- */
-function studiobridge_store_images_update_product_as_open($identifier) {
-
-  $node_id = \Drupal::entityQuery('node')
-    ->condition('title', $identifier)
-    ->sort('created', 'DESC')
-    // ->condition('type',array('products','unmapped_products'))
-    ->range(0, 1)
-    ->execute();
-
-  if (count($node_id)) {
-    $node_id = reset($node_id);
-    $product_node = Node::load($node_id);
-    $state = array(
-      'value' => 'open'
-    );
-
-    $product_node->field_state->setValue($state);
-    $product_node->save();
-
-  }
-  // todo exception handling
-}
-
-
-/*
- * Helper function, to get product status by its identifier.
- *
- * @param identifier
- */
-function studiobridge_store_images_get_product_status_by_identifier($identifier) {
-
-  $node_id = \Drupal::entityQuery('node')
-    ->condition('title', $identifier)
-    ->sort('created', 'DESC')
-    // ->condition('type',array('products','unmapped_products'))
-    ->range(0, 1)
-    ->execute();
-
-  if (count($node_id)) {
-    $node_id = reset($node_id);
-    $product_node = Node::load($node_id);
-    return $product_node->field_state->getValue();
-  }
-}
-
-/*
  *  Implements hook_form_alter().
  */
 function studiobridge_store_images_form_alter(&$form, \Drupal\Core\Form\FormStateInterface $form_state, $form_id) {
   // current logged in user object.
   $user = \Drupal::currentUser();
-  // uid of current logged in user
+  // uid of current logged in user.
   $uid = $user->id();
 
   // Validate in node/add/sessions page to avoid creating multiple open sessions.
   if ($form_id == 'node_sessions_form') {
-    $result = \Drupal::entityQuery('node')
-      ->condition('type', 'sessions')
-      ->condition('uid', $uid)
-      ->sort('created', 'DESC')
-      ->condition('field_status', 'open') // todo : poc on structure.
-      ->range(0, 1)
-      ->execute();
+    // Get session of logged in user.
+    $result = Sessions::getSessionByUid($uid);
     if (count($result)) {
       // redirect to sessions page.
       $response = new Symfony\Component\HttpFoundation\RedirectResponse(base_path() . 'view-sessions');
@@ -492,10 +408,7 @@ function studiobridge_store_images_entity_delete(Drupal\Core\Entity\EntityInterf
   // When image deleted delete this log from {studio_file_transfers} table.
   if ($bundle == 'image') {
     // Delete the entity's entry from a fictional table of all entities.
-    db_delete('studio_file_transfers')
-      //->condition('type', $entity->getEntityTypeId())
-      ->condition('id', $entity->id())
-      ->execute();
+    StudioImages::DeleteFileTransfer($entity->id());
   }
 }
 

@@ -1,0 +1,24 @@
+<?php
+
+/**
+ * @file
+ * Contains studiobridge_commons.module..
+ */
+
+use Drupal\Core\Routing\RouteMatchInterface;
+
+/**
+ * Implements hook_help().
+ */
+function studiobridge_commons_help($route_name, RouteMatchInterface $route_match) {
+  switch ($route_name) {
+    // Main module help for the studiobridge_commons module.
+    case 'help.page.studiobridge_commons':
+      $output = '';
+      $output .= '<h3>' . t('About') . '</h3>';
+      $output .= '<p>' . t('This module holds all helper functions required by other studio bridge module.') . '</p>';
+      return $output;
+
+    default:
+  }
+}

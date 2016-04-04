@@ -20,6 +20,8 @@ use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Entity\Element\EntityAutocomplete;
 use Drupal\Core\Routing\TrustedRedirectResponse;
 use Drupal\node\Plugin\migrate\source\d7\Node;
+use Drupal\studiobridge_commons\Sessions;
+use Drupal\studiobridge_commons\Products;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Drupal\Core\Entity;
 use Drupal\file\Entity\File;
@@ -38,7 +40,8 @@ class StudioBridgeLiveShootingForm extends FormBase {
     $uid = $user->id();
 
     // current open session
-    $session_id = studiobridge_store_images_open_session_recent();
+    $session_id = Sessions::openSessionRecent();
+
     // if no session found then redirect to some other page
     if(!$session_id){
       drupal_set_message('No open sessions found','warning');
@@ -55,12 +58,7 @@ class StudioBridgeLiveShootingForm extends FormBase {
     if(!empty($_GET['identifier']) && isset($_GET['reshoot'])){
       $identifier_hidden = $_GET['identifier'];
 
-      $result = \Drupal::entityQuery('node')
-        ->condition('type', array('products','unmapped_products'),'IN')
-        ->sort('created', 'DESC')
-        ->condition('title', $_GET['identifier']) // todo : title will be changed as per response
-        ->range(0, 1)
-        ->execute();
+      $result = Products::getProductByIdentifier($_GET['identifier']);
 
       if($result){
         $new_or_old_product_nid = reset($result);
@@ -71,17 +69,12 @@ class StudioBridgeLiveShootingForm extends FormBase {
 
       if($new_or_old_product_nid){
         \Drupal::state()->set('last_scan_product_nid'.$uid.'_'.$session_id,$new_or_old_product_nid);
-        studiobridge_store_images_update_product_as_open($_GET['identifier']);
+        //studiobridge_store_images_update_product_as_open($_GET['identifier']);
+        Products::updateProductState($_GET['identifier'],'open');
         \Drupal::state()->set('last_scan_product_'.$uid.'_'.$session_id,$_GET['identifier']);
       }
     }else{
-      $result = \Drupal::entityQuery('node')
-        ->condition('type', array('products','unmapped_products'),'IN')
-        ->sort('created', 'DESC')
-        ->condition('title', $identifier_hidden) // todo : title will be changed as per response
-        ->range(0, 1)
-        ->execute();
-
+      $result = Products::getProductByIdentifier($identifier_hidden);
       if($result){
         $new_or_old_product_nid = reset($result);
       }
@@ -120,17 +113,14 @@ class StudioBridgeLiveShootingForm extends FormBase {
     $images = array();
     $pid = \Drupal::state()->get('last_scan_product_nid'.$uid.'_'.$session_id,false);
     if($pid){
-      $images = self::getProductImages($pid);
+      //$images = self::getProductImages($pid);
+      $images = Products::getProductImages($pid);
     }else{
-      $result = \Drupal::entityQuery('node')
-        ->condition('type', array('products','unmapped_products'),'IN')
-        ->sort('created', 'DESC')
-        ->condition('title', $identifier) // todo : title will be changed as per response
-        ->range(0, 1)
-        ->execute();
 
+      $result = Products::getProductByIdentifier($identifier);
       if($result){
-        $images = self::getProductImages(reset($result));
+        //$images = self::getProductImages(reset($result));
+        $images = Products::getProductImages(reset($result));
       }
     }
 // @ashar : seperate this image container so we can apply theme formatting to it
@@ -231,7 +221,7 @@ class StudioBridgeLiveShootingForm extends FormBase {
     $uid = $user->id();
 
     // Get current session
-    $session_id = studiobridge_store_images_open_session_recent();
+    $session_id = Sessions::openSessionRecent();
     // If no session found then redirect to some other page
     if(!$session_id){
       return new RedirectResponse(base_path().'sessions');
@@ -253,27 +243,24 @@ class StudioBridgeLiveShootingForm extends FormBase {
       return $ajax_response;
     }
 
-    // todo : if identifier found in our products then skip importing
-
-    $result = \Drupal::entityQuery('node')
-      ->condition('type', array('products','unmapped_products'),'IN')
-      ->sort('created', 'DESC')
-      ->condition('title', $identifier) // todo : title will be changed as per response
-      ->range(0, 1)
-      ->execute();
+    //if identifier found in our products then skip importing.
+    $result = Products::getProductByIdentifier($identifier);
 
     if (!$result) {
       // Get product from server
-      $product = self::getProductExternal($identifier);
+      //$product = self::getProductExternal($identifier);
+      $product = Products::getProductExternal($identifier);
       $product = json_decode($product);
       // validate product
       if(isset($product->msg)){
         // product not found on the server so save it as unmapped product.
-        studiobridge_store_images_create_unmapped_product(array(),$session_id,$identifier,false);
+        //studiobridge_store_images_create_unmapped_product(array(),$session_id,$identifier,false);
+        Products::createUnmappedProduct(array(),$session_id,$identifier,false);
         $is_unmapped_product = true;
       }else{
-        // import it in our drupal
-        $new_product = self::createNodeProduct($product, $identifier);
+        // import it in our drupal.
+        //$new_product = self::createNodeProduct($product, $identifier);
+        $new_product = Products::createMappedProduct($product, $identifier);
         $new_or_old_product_nid = $new_product->id();
       }
     }
@@ -315,7 +302,8 @@ class StudioBridgeLiveShootingForm extends FormBase {
       }
 
       // update the current product as open status
-      studiobridge_store_images_update_product_as_open($identifier);
+      //studiobridge_store_images_update_product_as_open($identifier);
+      Products::updateProductState($_GET['identifier'],'open');
     }
 
     if($last_scan_product != $identifier){
@@ -325,7 +313,8 @@ class StudioBridgeLiveShootingForm extends FormBase {
 
     // Once product is scanned update it to session
     if(!$is_unmapped_product){
-      studiobridge_store_images_add_product_to_session($session_id, \Drupal\node\Entity\Node::load($new_or_old_product_nid));
+      //studiobridge_store_images_add_product_to_session($session_id, \Drupal\node\Entity\Node::load($new_or_old_product_nid));
+      Products::addProductToSession($session_id, \Drupal\node\Entity\Node::load($new_or_old_product_nid));
     }
 
     \Drupal::state()->set('last_scan_product_'.$uid.'_'.$session_id,$identifier);
@@ -334,7 +323,8 @@ class StudioBridgeLiveShootingForm extends FormBase {
       \Drupal::state()->set('last_scan_product_nid'.$uid.'_'.$session_id,$new_or_old_product_nid);
     }
 
-    $images = self::getProductImages($new_or_old_product_nid);
+    //$images = self::getProductImages($new_or_old_product_nid);
+    $images = Products::getProductImages($new_or_old_product_nid);
 
     $block = '<div id="sortable" class="ui-sortable">';
     //$block = '';
@@ -383,89 +373,6 @@ class StudioBridgeLiveShootingForm extends FormBase {
     $ajax_response->addCommand(new InvokeCommand('#edit-identifier-nid', 'val', array($new_or_old_product_nid)));
     $ajax_response->addCommand(new InvokeCommand('#edit-identifier-hidden', 'change'));
     return $ajax_response;
-  }
-
-  public function randomUsernameCallback(array &$form, FormStateInterface $form_state) {
-    // todo :: need to call external api to get products
-    $all_nodes = entity_load_multiple('node');
-    array_shift($all_nodes);
-    $random_node = $all_nodes[array_rand($all_nodes)];
-    $ajax_response = new AjaxResponse();
-    $ajax_response->addCommand(new InvokeCommand('#edit-user-name', 'val', array(
-      $random_node->get('title')
-        ->getString()
-    )));
-    $ajax_response->addCommand(new InvokeCommand('#edit-user-name', 'change'));
-
-    return $ajax_response;
-  }
-
-  /*
-   * @todo : product should lookup
-   */
-  public function getProductExternal($input) {
-
-    // todo : multiple search, means if product not found with sku_id then look for color variant.
-    // todo : for now external resource is public, but it might be changed to auth.
-    $response = \Drupal::httpClient()
-      ->get("http://staging.dreamcms.me/service/product-data?sku_id=$input"
-        //['auth' => ['username', 'password'],]
-      );
-
-    return (string) $response->getBody();
-  }
-
-  /*
-   * Helper function to create unmapped products.
-   */
-  public function createNodeProduct($product, $identifier) {
-    $user = \Drupal::currentUser();
-    $uid = $user->id();
-    if (is_object($product)) {
-      $values = array(
-        'nid' => NULL,
-        'type' => 'products',
-        'title' => $identifier,
-        'uid' => $uid,
-        'status' => TRUE,
-        'field_base_product_id' => array('value'=>$product->base_product_id),
-        'field_style_family' => array('value'=>$product->style_no),
-        'field_concept_name' => array('value'=> $product->concept),
-        'field_gender' => array('value'=> $product->gender),
-        'field_description' => array('value'=> $product->description),
-        'field_color_variant' => array('value'=> $product->color_variant), // todo: may be multiple
-        'field_color_name' => array('value'=> $product->color_name),  //  todo: may be multiple
-        'field_size_name' => array('value'=> $product->size_name),  // todo: may be multiple
-        'field_size_variant' => array('value'=> $product->size_variant),  // todo: may be multiple
-      );
-      $node = \Drupal::entityManager()->getStorage('node')->create($values);
-      $node->save();
-      // todo : add exceptions
-      return $node;
-    }
-  }
-
-  public function getProductImages($nid){
-
-    $sid = studiobridge_store_images_open_session_recent();
-    $image_uri = array();
-
-    $product = \Drupal\node\Entity\Node::load($nid);
-    if($product){
-      $images = $product->field_images->getValue();
-      if($images){
-        foreach($images as $img){
-          $fid = $img['target_id'];
-          $file = File::load($fid);
-          $file_name = $file->filename->getValue();
-          $file_name = $file_name[0]['value'];
-          $image_uri_value = ImageStyle::load('live_shoot_preview')->buildUrl($file->getFileUri());
-          $image_uri[$fid] = array('uri'=>$image_uri_value,'name'=>$file_name);
-        }
-        return $image_uri;
-      }
-    }
-    return false;
   }
 
 }

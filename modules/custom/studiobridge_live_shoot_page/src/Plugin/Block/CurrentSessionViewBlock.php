@@ -9,6 +9,7 @@ namespace Drupal\studiobridge_live_shoot_page\Plugin\Block;
 
 use Drupal\Core\Block\BlockBase;
 use \Drupal\node\Entity\Node;
+use Drupal\studiobridge_commons\Sessions;
 
 
 /**
@@ -29,7 +30,7 @@ class CurrentSessionViewBlock extends BlockBase {
     $build = [];
     $build['current_session_view_block']['#cache']['max-age'] = 0;
 
-    $session_id = studiobridge_store_images_open_session_recent();
+    $session_id = Sessions::openSessionRecent();
 
     if(!$session_id){
       $build['current_session_view_block']['#markup'] = '--NO session found--' . date('Y m d - H:i:s');

@@ -18,6 +18,7 @@ use Psr\Log\LoggerInterface;
 use Drupal\Core\Render\Markup;
 use Drupal\file\Entity\File;
 use Drupal\image\Entity\ImageStyle;
+use Drupal\studiobridge_commons\Sessions;
 
 /**
  * Provides a resource to get view modes by entity and bundle.
@@ -219,7 +220,7 @@ class StudioLiveImageContainerRestResource extends ResourceBase {
   public function getLastImages($nid,$identifier = null){
 
     // Get session id.
-    $sid = studiobridge_store_images_open_session_recent();
+    $sid = Sessions::openSessionRecent();
     if($sid){
       // Get last scanned file entity id.
       $last_scanned_fid = \Drupal::state()->get('last_img_sent_'.$sid.'_'.$nid,false);
