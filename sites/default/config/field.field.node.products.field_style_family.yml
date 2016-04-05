@@ -1,0 +1,19 @@
+uuid: e96c58b2-287b-46e1-bf09-9fb4ed7e9649
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_style_family
+    - node.type.products
+id: node.products.field_style_family
+field_name: field_style_family
+entity_type: node
+bundle: products
+label: 'Style Family'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: string

@@ -1,0 +1,39 @@
+uuid: c5073989-7644-4cc6-9337-553e1f1c88e0
+langcode: en
+status: true
+dependencies:
+  module:
+    - node
+    - options
+id: node.field_concept
+field_name: field_concept
+entity_type: node
+type: list_string
+settings:
+  allowed_values:
+    -
+      value: babyshop
+      label: BabyShop
+    -
+      value: homecenter
+      label: 'Home center'
+    -
+      value: max
+      label: Max
+    -
+      value: splash
+      label: Splash
+    -
+      value: lifestyle
+      label: Lifestyle
+    -
+      value: shoemart
+      label: Shoemart
+  allowed_values_function: ''
+module: options
+locked: false
+cardinality: 1
+translatable: true
+indexes: {  }
+persist_with_no_fields: false
+custom_storage: false

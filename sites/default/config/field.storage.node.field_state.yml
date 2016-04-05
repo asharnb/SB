@@ -1,0 +1,30 @@
+uuid: 94b487da-f6be-47d8-9a00-b09edf8a9bbc
+langcode: en
+status: true
+dependencies:
+  module:
+    - node
+    - options
+id: node.field_state
+field_name: field_state
+entity_type: node
+type: list_string
+settings:
+  allowed_values:
+    -
+      value: open
+      label: Open
+    -
+      value: dropped
+      label: Dropped
+    -
+      value: completted
+      label: Completted
+  allowed_values_function: ''
+module: options
+locked: false
+cardinality: 1
+translatable: true
+indexes: {  }
+persist_with_no_fields: false
+custom_storage: false

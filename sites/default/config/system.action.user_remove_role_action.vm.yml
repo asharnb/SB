@@ -1,0 +1,14 @@
+uuid: 1d85d3c4-263c-4293-a64d-7753776bc8dd
+langcode: en
+status: true
+dependencies:
+  config:
+    - user.role.vm
+  module:
+    - user
+id: user_remove_role_action.vm
+label: 'Remove the VM role from the selected users'
+type: user
+plugin: user_remove_role_action
+configuration:
+  rid: vm

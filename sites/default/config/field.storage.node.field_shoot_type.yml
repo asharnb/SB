@@ -1,0 +1,27 @@
+uuid: 391cf71e-3c34-433a-a122-34d8f2d8030e
+langcode: en
+status: true
+dependencies:
+  module:
+    - node
+    - options
+id: node.field_shoot_type
+field_name: field_shoot_type
+entity_type: node
+type: list_string
+settings:
+  allowed_values:
+    -
+      value: pre_lunch
+      label: 'PRE LUNCH'
+    -
+      value: post_lunch
+      label: 'POST LUNCH'
+  allowed_values_function: ''
+module: options
+locked: false
+cardinality: 1
+translatable: true
+indexes: {  }
+persist_with_no_fields: false
+custom_storage: false

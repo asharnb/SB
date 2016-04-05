@@ -1,0 +1,34 @@
+uuid: 6015c029-6516-428a-b10a-102a318ec623
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_stylish
+    - node.type.sessions
+id: node.sessions.field_stylish
+field_name: field_stylish
+entity_type: node
+bundle: sessions
+label: Stylish
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: 'default:user'
+  handler_settings:
+    include_anonymous: true
+    filter:
+      type: role
+      role:
+        stylish: stylish
+        administrator: '0'
+        vm: '0'
+        photographer: '0'
+        qc: '0'
+    target_bundles: null
+    sort:
+      field: name
+      direction: ASC
+field_type: entity_reference

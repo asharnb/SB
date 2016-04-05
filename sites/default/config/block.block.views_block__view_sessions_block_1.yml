@@ -1,0 +1,30 @@
+uuid: 4c7d49dd-7a69-4716-a003-3d23b47638d8
+langcode: en
+status: true
+dependencies:
+  config:
+    - views.view.view_sessions
+  module:
+    - system
+    - views
+  theme:
+    - bootstrap
+id: views_block__view_sessions_block_1
+theme: bootstrap
+region: content
+weight: -7
+provider: null
+plugin: 'views_block:view_sessions-block_1'
+settings:
+  id: 'views_block:view_sessions-block_1'
+  label: ''
+  provider: views
+  label_display: '0'
+  views_label: ''
+  items_per_page: none
+visibility:
+  request_path:
+    id: request_path
+    pages: "/session/*\r\n/unmapped/session/*"
+    negate: false
+    context_mapping: {  }

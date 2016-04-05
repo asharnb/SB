@@ -1,0 +1,26 @@
+uuid: 9ac2b014-c0ae-49eb-b720-32ec18d34259
+langcode: en
+status: true
+dependencies:
+  module:
+    - studiobridge_live_shoot_page
+    - system
+  theme:
+    - bootstrap
+id: currentsessionviewblock
+theme: bootstrap
+region: sidebar_second
+weight: null
+provider: null
+plugin: current_session_view_block
+settings:
+  id: current_session_view_block
+  label: Session
+  provider: studiobridge_live_shoot_page
+  label_display: '0'
+visibility:
+  request_path:
+    id: request_path
+    pages: "<front>\r\n/live-shooting-page1"
+    negate: false
+    context_mapping: {  }

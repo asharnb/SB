@@ -1,0 +1,29 @@
+favicon:
+  mimetype: image/vnd.microsoft.icon
+  path: ''
+  url: 'http://studiobridge.local/themes/bootstrap/favicon.ico'
+  use_default: true
+schema: '8000'
+breadcrumb: '0'
+features:
+  comment_user_picture: true
+  comment_user_verification: true
+  favicon: true
+  node_user_picture: true
+logo:
+  path: ''
+  url: ''
+  use_default: true
+cdn_jsdelivr_version: 3.3.6
+cdn_jsdelivr_theme: yeti
+region_wells:
+  navigation: ''
+  sbnavigation: ''
+  navigation_collapsible: ''
+  header: ''
+  highlighted: ''
+  help: ''
+  content: ''
+  sidebar_first: ''
+  sidebar_second: well
+  footer: ''

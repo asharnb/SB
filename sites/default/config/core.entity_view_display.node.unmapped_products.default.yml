@@ -1,0 +1,42 @@
+uuid: 5bcf881c-1f09-40f0-8706-6d79cb543e0f
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.field.node.unmapped_products.field_identifier
+    - field.field.node.unmapped_products.field_images
+    - field.field.node.unmapped_products.field_state
+    - node.type.unmapped_products
+  module:
+    - image
+    - options
+    - user
+id: node.unmapped_products.default
+targetEntityType: node
+bundle: unmapped_products
+mode: default
+content:
+  field_identifier:
+    weight: 103
+    label: above
+    settings:
+      link_to_entity: false
+    third_party_settings: {  }
+    type: string
+  field_images:
+    weight: 101
+    label: above
+    settings:
+      image_style: ''
+      image_link: ''
+    third_party_settings: {  }
+    type: image
+  field_state:
+    weight: 102
+    label: above
+    settings: {  }
+    third_party_settings: {  }
+    type: list_default
+  links:
+    weight: 100
+hidden: {  }

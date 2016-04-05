@@ -1,0 +1,23 @@
+uuid: 70ba920b-d9da-493a-8900-ec95988911d0
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_state
+    - node.type.unmapped_products
+  module:
+    - options
+id: node.unmapped_products.field_state
+field_name: field_state
+entity_type: node
+bundle: unmapped_products
+label: State
+description: ''
+required: false
+translatable: true
+default_value:
+  -
+    value: open
+default_value_callback: ''
+settings: {  }
+field_type: list_string

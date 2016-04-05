@@ -1,0 +1,33 @@
+uuid: 792a9883-e1ee-4aa4-910c-124cf03c2299
+langcode: en
+status: true
+dependencies: {  }
+id: photographer
+label: Photographer
+weight: 4
+is_admin: null
+permissions:
+  - 'view files'
+  - 'restful patch entity:file'
+  - 'restful post entity:file'
+  - 'create products content'
+  - 'edit own products content'
+  - 'create sessions content'
+  - 'edit own sessions content'
+  - 'access live shooting page'
+  - 'restful get studio_live_image_container_rest_resource'
+  - 'restful get individual_session_rest_resource'
+  - 'restful get open_sessions_rest_resource'
+  - 'create test content'
+  - 'delete any test content'
+  - 'delete own test content'
+  - 'edit any test content'
+  - 'edit own test content'
+  - 'restful patch entity:node'
+  - 'restful post entity:node'
+  - 'restful get entity:file'
+  - 'restful get file_name_rest_resource'
+  - 'restful delete entity:file'
+  - 'create unmapped_products content'
+  - 'edit any unmapped_products content'
+  - 'edit own unmapped_products content'

@@ -1,0 +1,14 @@
+uuid: c2e2d0d1-6be8-4046-b800-b489355bd9fa
+langcode: en
+status: true
+dependencies:
+  config:
+    - user.role.qc
+  module:
+    - user
+id: user_remove_role_action.qc
+label: 'Remove the QC role from the selected users'
+type: user
+plugin: user_remove_role_action
+configuration:
+  rid: qc

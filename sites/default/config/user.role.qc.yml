@@ -1,0 +1,20 @@
+uuid: 76ad0188-8bd3-4c1f-8e06-6b8284909d32
+langcode: en
+status: true
+dependencies: {  }
+id: qc
+label: QC
+weight: 6
+is_admin: null
+permissions:
+  - 'view files'
+  - 'restful patch entity:file'
+  - 'restful post entity:file'
+  - 'restful patch entity:node'
+  - 'restful post entity:node'
+  - 'restful get entity:file'
+  - 'restful get file_name_rest_resource'
+  - 'restful delete entity:file'
+  - 'create unmapped_products content'
+  - 'edit any unmapped_products content'
+  - 'edit own unmapped_products content'

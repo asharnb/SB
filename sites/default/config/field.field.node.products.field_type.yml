@@ -1,0 +1,23 @@
+uuid: ad2f1663-3746-44b3-af29-412349645e5a
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_type
+    - node.type.products
+  module:
+    - options
+id: node.products.field_type
+field_name: field_type
+entity_type: node
+bundle: products
+label: TYPE
+description: ''
+required: false
+translatable: false
+default_value:
+  -
+    value: model
+default_value_callback: ''
+settings: {  }
+field_type: list_string

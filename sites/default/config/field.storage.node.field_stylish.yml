@@ -1,0 +1,20 @@
+uuid: 2e8fcdc1-b783-4be1-ac06-6cefb0833794
+langcode: en
+status: true
+dependencies:
+  module:
+    - node
+    - user
+id: node.field_stylish
+field_name: field_stylish
+entity_type: node
+type: entity_reference
+settings:
+  target_type: user
+module: core
+locked: false
+cardinality: 1
+translatable: true
+indexes: {  }
+persist_with_no_fields: false
+custom_storage: false

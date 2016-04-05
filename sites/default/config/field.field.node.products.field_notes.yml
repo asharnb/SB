@@ -1,0 +1,19 @@
+uuid: b56b7ea0-f363-477d-994d-77151a7bf62b
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_notes
+    - node.type.products
+id: node.products.field_notes
+field_name: field_notes
+entity_type: node
+bundle: products
+label: Notes
+description: ''
+required: false
+translatable: true
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: string_long

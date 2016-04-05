@@ -1,0 +1,14 @@
+uuid: 05f69bd0-8602-48cd-a31d-29ff29ea1c67
+langcode: en
+status: true
+dependencies:
+  config:
+    - user.role.vm
+  module:
+    - user
+id: user_add_role_action.vm
+label: 'Add the VM role to the selected users'
+type: user
+plugin: user_add_role_action
+configuration:
+  rid: vm

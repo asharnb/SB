@@ -1,0 +1,19 @@
+uuid: 9982c9df-dae1-4586-8706-06ca71b0a8f7
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_identifier
+    - node.type.unmapped_products
+id: node.unmapped_products.field_identifier
+field_name: field_identifier
+entity_type: node
+bundle: unmapped_products
+label: Identifier
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: string

@@ -1,0 +1,27 @@
+uuid: 51533409-5591-4109-8703-3b7d768864cd
+langcode: en
+status: true
+dependencies:
+  module:
+    - node
+    - options
+id: node.field_shoot_class
+field_name: field_shoot_class
+entity_type: node
+type: list_string
+settings:
+  allowed_values:
+    -
+      value: model_shoot
+      label: 'MODEL SHOOT'
+    -
+      value: mix_shoot
+      label: 'MIX SHOOT'
+  allowed_values_function: ''
+module: options
+locked: false
+cardinality: 1
+translatable: true
+indexes: {  }
+persist_with_no_fields: false
+custom_storage: false

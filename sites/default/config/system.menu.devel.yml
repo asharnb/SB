@@ -1,0 +1,10 @@
+uuid: 4497019c-f81e-4a3c-8f05-5e68250c2bef
+langcode: en
+status: true
+dependencies: {  }
+_core:
+  default_config_hash: Oe-hUZWKhrDlkhNaPdZx5srE63OeNZBa2YgAW0IctCg
+id: devel
+label: Development
+description: 'Links related to Devel module.'
+locked: true

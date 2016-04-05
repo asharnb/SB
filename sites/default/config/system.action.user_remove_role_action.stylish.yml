@@ -1,0 +1,14 @@
+uuid: 9f81ab04-8669-4a76-a304-4fddc9f9a07f
+langcode: en
+status: true
+dependencies:
+  config:
+    - user.role.stylish
+  module:
+    - user
+id: user_remove_role_action.stylish
+label: 'Remove the Stylish role from the selected users'
+type: user
+plugin: user_remove_role_action
+configuration:
+  rid: stylish

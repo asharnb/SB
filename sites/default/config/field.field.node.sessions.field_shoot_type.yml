@@ -1,0 +1,23 @@
+uuid: 85e02926-6f3e-4d22-8e00-be46b95dddb6
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_shoot_type
+    - node.type.sessions
+  module:
+    - options
+id: node.sessions.field_shoot_type
+field_name: field_shoot_type
+entity_type: node
+bundle: sessions
+label: 'Shoot type'
+description: ''
+required: true
+translatable: false
+default_value:
+  -
+    value: pre_lunch
+default_value_callback: ''
+settings: {  }
+field_type: list_string
