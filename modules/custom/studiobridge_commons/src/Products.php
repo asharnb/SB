@@ -7,16 +7,20 @@ use \Drupal\file\Entity\File;
 use \Drupal\studiobridge_commons\Sessions;
 use Drupal\image\Entity\ImageStyle;
 
-Class Products{
+Class Products {
 
   /*
    * Helper function, to get a product by its identifier.
+   *
+   * @param identifier
+   *   Name of the identifier.
    */
-  public static function getProductByIdentifier($identifier){
+  public static function getProductByIdentifier($identifier) {
+
     $result = \Drupal::entityQuery('node')
-      ->condition('type', array('products','unmapped_products'),'IN')
+      ->condition('type', array('products', 'unmapped_products'), 'IN')
       ->sort('created', 'DESC')
-      ->condition('title', $identifier) // todo : title will be changed as per response
+      ->condition('title', $identifier)
       ->range(0, 1)
       ->execute();
 
@@ -25,8 +29,11 @@ Class Products{
 
   /*
    * Helper function, to get a product by its author.
+   *
+   * @param uid
+   *   User entity uid.
    */
-  public static function getProductByUid($uid){
+  public static function getProductByUid($uid) {
     return \Drupal::entityQuery('node')
       ->condition('type', array('products', 'unmapped_products'), 'IN')
       ->sort('created', 'DESC')
@@ -41,30 +48,39 @@ Class Products{
    * Helper function, update product state value.
    *
    * @param identifier
+   *   Name of the identifier.
    * @param state
-   *
-   * todo : remove - Replacement for studiobridge_store_images_update_product_as_open().
+   *   Values like open, close..
    */
-  public static function updateProductState($identifier,$state) {
-
+  public static function updateProductState($identifier, $state) {
+    // Get the node by its identifier.
     $node_id = self::getProductByIdentifier($identifier);
     if (count($node_id)) {
       $node_id = reset($node_id);
+      // Load the node object.
       $product_node = Node::load($node_id);
-      $state = array(
-        'value' => $state
-      );
-
-      $product_node->field_state->setValue($state);
-      $product_node->save();
-
+      if ($product_node) {
+        $state = array(
+          'value' => $state
+        );
+        // Set the field state values.
+        $product_node->field_state->setValue($state);
+        // Save the node.
+        $product_node->save();
+      }
     }
   }
 
   /*
    * Helper function to create unmapped products.
-   *
-   * todo : Remove- studiobridge_store_images_create_unmapped_product().
+   * @param image
+   *   Image values array.
+   * @param session_id
+   *   Session node id.
+   * @param identifier
+   *   Name of the identifier.
+   * @param fid
+   *   File entity fid.
    */
   public static function createUnmappedProduct($image = array(), $session_id, $identifier = 'UnMapped', $fid) {
     // The owner of session will be become owner of unmapped product.
@@ -87,12 +103,12 @@ Class Products{
     // Save unmapped node entity.
     $node->save();
 
+    // Update last scanned product nid of current user state value.
     \Drupal::state()->set('last_scan_product_nid' . $session_uid . '_' . $session_id, $node->id());
-    //\Drupal::state()->set('last_scan_product_nid'.$uid.'_'.$session_id,$new_or_old_product_nid);
 
     // Log transferred image.
     if ($fid) {
-      StudioImages::AddFileTransfer($fid,$node->id(),$session_id);
+      StudioImages::AddFileTransfer($fid, $node->id(), $session_id);
     }
 
     // Update image sequence number.
@@ -111,15 +127,21 @@ Class Products{
     }
 
     // Update product to current session, ie,, session sent by chrome app.
-    //studiobridge_store_images_add_product_to_session($session_id, $node);
     self::addProductToSession($session_id, $node);
   }
 
   /*
-  * Helper function to create unmapped products.
-  */
+   * Helper function to create Mapped products.
+   *
+   * @param product
+   *   Product node object.
+   * @param identifier
+   *   Name of the identifier.
+   */
   public static function createMappedProduct($product, $identifier) {
+    // Get current logged in user.
     $user = \Drupal::currentUser();
+    // Get uid of logged in user.
     $uid = $user->id();
     if (is_object($product)) {
       $values = array(
@@ -128,17 +150,19 @@ Class Products{
         'title' => $identifier,
         'uid' => $uid,
         'status' => TRUE,
-        'field_base_product_id' => array('value'=>$product->base_product_id),
-        'field_style_family' => array('value'=>$product->style_no),
-        'field_concept_name' => array('value'=> $product->concept),
-        'field_gender' => array('value'=> $product->gender),
-        'field_description' => array('value'=> $product->description),
-        'field_color_variant' => array('value'=> $product->color_variant), // todo: may be multiple
-        'field_color_name' => array('value'=> $product->color_name),  //  todo: may be multiple
-        'field_size_name' => array('value'=> $product->size_name),  // todo: may be multiple
-        'field_size_variant' => array('value'=> $product->size_variant),  // todo: may be multiple
+        'field_base_product_id' => array('value' => $product->base_product_id),
+        'field_style_family' => array('value' => $product->style_no),
+        'field_concept_name' => array('value' => $product->concept),
+        'field_gender' => array('value' => $product->gender),
+        'field_description' => array('value' => $product->description),
+        'field_color_variant' => array('value' => $product->color_variant), // todo: may be multiple
+        'field_color_name' => array('value' => $product->color_name), //  todo: may be multiple
+        'field_size_name' => array('value' => $product->size_name), // todo: may be multiple
+        'field_size_variant' => array('value' => $product->size_variant), // todo: may be multiple
       );
+      // Create node object with above values.
       $node = \Drupal::entityManager()->getStorage('node')->create($values);
+      // Finally save the node object.
       $node->save();
       // todo : add exceptions
       return $node;
@@ -147,32 +171,43 @@ Class Products{
 
   /*
    * Helper function to get images in a product.
+   *
+   * @param nid
+   *   Node nid value.
    */
-  public static function getProductImages($nid){
+  public static function getProductImages($nid) {
 
-    $sid = Sessions::openSessionRecent();
     $image_uri = array();
 
-    $product = \Drupal\node\Entity\Node::load($nid);
-    if($product){
+    // Load the node.
+    $product = Node::load($nid);
+
+    if ($product) {
+      // Get available images from the product.
       $images = $product->field_images->getValue();
-      if($images){
-        foreach($images as $img){
+      if ($images) {
+        foreach ($images as $img) {
           $fid = $img['target_id'];
+          // Load the file object.
           $file = File::load($fid);
+          // Get the file name.
           $file_name = $file->filename->getValue();
           $file_name = $file_name[0]['value'];
+          // Get the image of style - Live shoot preview.
           $image_uri_value = ImageStyle::load('live_shoot_preview')->buildUrl($file->getFileUri());
-          $image_uri[$fid] = array('uri'=>$image_uri_value,'name'=>$file_name);
+          $image_uri[$fid] = array('uri' => $image_uri_value, 'name' => $file_name);
         }
         return $image_uri;
       }
     }
-    return false;
+    return FALSE;
   }
 
   /*
-   * @todo : product should lookup
+   * Helper function, to get a product from external resource.
+   *
+   * @param input
+   *   Probably sku_id or color_variant or something else.
    */
   public static function getProductExternal($input) {
 
@@ -187,20 +222,22 @@ Class Products{
   }
 
   /*
-   * Helper function to add product to session.
+   * Helper function, to add product to session.
    *
-   * todo : remove - replace studiobridge_store_images_add_product_to_session().
+   * @param session_id
+   *   Session node nid.
+   * @param node
+   *   Node object.
    */
-  //public static function studiobridge_store_images_add_product_to_session($session_id, $node) {
   public static function addProductToSession($session_id, $node) {
-    // Load session node object
+    // Load session node object.
     $session_node = Node::load($session_id);
-    // Get products
+    // Get products from session node.
     $session_products = $session_node->field_product->getValue();
-    // Get product id
+    // Get product nid.
     $product_nid = $node->id();
 
-    // Check for this product already exist in the current session
+    // Check for this product already exist in the current session.
     // todo : other logs and property settings may come here
     $product_exist = FALSE;
     if (count($session_products)) {
@@ -212,11 +249,13 @@ Class Products{
       }
     }
     if (!$product_exist) {
+      // Prepare product array.
       $product = array(
         array(
           'target_id' => $product_nid
         )
       );
+
       // merge the current product to existing products.
       $products = array_merge($product, $session_products);
 

@@ -190,97 +190,10 @@ function studiobridge_store_images_page_attachments(array &$attachments) {
 }
 
 /*
- * Helper function to create unmapped products.
- */
-function studiobridge_store_images_create_unmapped_product($image = array(), $session_id, $identifier = 'UnMapped', $fid) {
-  // The owner of session will be become owner of unmapped product.
-  // Load session entity
-  $session = Node::load($session_id);
-  // Get owner of session, ie., photographer.
-  $session_uid = $session->getOwnerId();
-
-  // build image property.
-  $values = array(
-    'nid' => NULL,
-    'type' => 'unmapped_products',
-    'title' => $identifier,
-    'uid' => $session_uid,
-    'status' => TRUE,
-    'field_images' => $image
-  );
-  // Create new node entity.
-  $node = \Drupal::entityManager()->getStorage('node')->create($values);
-  // Save unmapped node entity.
-  $node->save();
-
-  // todo : logs
-  //\Drupal::state()->set('last_scan_product_nid' . $session_uid . '_' . $session_id, $node->id());
-
-  // Log transferred image.
-  if ($fid) {
-    StudioImages::AddFileTransfer($fid,$node->id(),$session_id);
-  }
-
-  // Update image sequence number.
-  if ($image) {
-    $file = File::load($image['target_id']);
-    $filemime = $file->filemime->getValue();
-    if ($filemime) {
-      $filemime = $filemime[0]['value'];
-      $filemime = explode('/', $filemime);
-      $filemime = $filemime[1];
-
-      $file->filename->setValue($identifier . '_1' . $filemime);
-      $file->save();
-    }
-
-  }
-
-  // Update product to current session, ie,, session sent by chrome app.
-  //studiobridge_store_images_add_product_to_session($session_id, $node);
-  Products::addProductToSession($session_id, $node);
-}
-
-/*
- * Helper function to add product to session.
- */
-function studiobridge_store_images_add_product_to_session($session_id, $node) {
-  // Load session node object
-  $session_node = Node::load($session_id);
-  // Get products
-  $session_products = $session_node->field_product->getValue();
-  // Get product id
-  $product_nid = $node->id();
-
-  // Check for this product already exist in the current session
-  // todo : other logs and property settings may come here
-  $product_exist = FALSE;
-  if (count($session_products)) {
-    foreach ($session_products as $each) {
-      if ($each['target_id'] == $product_nid) {
-        $product_exist = TRUE;
-        break;
-      }
-    }
-  }
-  if (!$product_exist) {
-    $product = array(
-      array(
-        'target_id' => $product_nid
-      )
-    );
-    // merge the current product to existing products.
-    $products = array_merge($product, $session_products);
-
-    // add the product to field.
-    $session_node->field_product->setValue($products);
-    // save the node.
-    $session_node->save();
-  }
-}
-
-/*
  * Helper function to get product scanned.
+ *
+ * @param session_id
+ *   Session node nid.
  */
 function studiobridge_store_images_get_open_product($session_id) {
   // load session entity.
@@ -308,48 +221,6 @@ function studiobridge_store_images_get_open_product($session_id) {
     }
   }
   return FALSE;
-}
-
-/*
- * Helper function to return open session for current loggedIn photographer.
- */
-function studiobridge_store_images_open_session_recent() {
-  $user = \Drupal::currentUser();
-  $uid = $user->id();
-
-  // Get session by uid.
-  $result = Sessions::getSessionByUid($uid);
-  if (count($result)) {
-    return $node_id = reset($result);
-  }
-  return FALSE;
-}
-
-/*
- * Helper function, to update product as closed state.
- *
- * @param identifier
- */
-function studiobridge_store_images_update_product_as_closed($identifier) {
-
-  $node_id = \Drupal::entityQuery('node')
-    ->condition('title', $identifier)
-    ->sort('created', 'DESC')
-    ->range(0, 1)
-    ->execute();
-
-  if (count($node_id)) {
-    $node_id = reset($node_id);
-    $product_node = Node::load($node_id);
-    $state = array(
-      'value' => 'completted'
-    );
-
-    $product_node->field_state->setValue($state);
-    $product_node->save();
-
-  }
-  // todo exception handling
 }
 
 /*

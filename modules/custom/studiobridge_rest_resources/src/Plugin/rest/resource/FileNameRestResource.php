@@ -90,10 +90,18 @@ class FileNameRestResource extends ResourceBase {
       $container->get('database')
     );
   }
+
   /**
    * Responds to GET requests.
+   * Returns a filename for specified fid file.
    *
-   * Returns a list of bundles for specified entity.
+   * @param fid
+   *   file entity fid.
+   * @param random
+   *   any random number or string.
+   *
+   * @return \Drupal\rest\ResourceResponse
+   *   Array of file name for successful request or exception message.
    *
    * @throws \Symfony\Component\HttpKernel\Exception\HttpException
    *   Throws exception expected.

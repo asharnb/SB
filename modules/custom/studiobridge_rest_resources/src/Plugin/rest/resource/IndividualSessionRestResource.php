@@ -84,8 +84,13 @@ class IndividualSessionRestResource extends ResourceBase {
 
   /**
    * Responds to GET requests.
+   * Returns a node properties for specified nid.
    *
-   * Returns a list of bundles for specified entity.
+   * @param id
+   *   Node nid.
+   *
+   * @return \Drupal\rest\ResourceResponse
+   *   Node object on successful response, or exception.
    *
    * @throws \Symfony\Component\HttpKernel\Exception\HttpException
    *   Throws exception expected.

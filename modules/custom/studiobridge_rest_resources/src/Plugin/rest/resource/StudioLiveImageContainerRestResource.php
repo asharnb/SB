@@ -97,10 +97,18 @@ class StudioLiveImageContainerRestResource extends ResourceBase {
       $container->get('database')
     );
   }
+
   /**
    * Responds to GET requests.
+   * Returns a content which contains about uploaded images & product info.
    *
-   * Returns a list of bundles for specified entity.
+   * @param identifier
+   *   Name of the identifier.
+   * @param random
+   *   random number or string.
+   *
+   * @return \Drupal\rest\ResourceResponse
+   *   Array of content.
    *
    * @throws \Symfony\Component\HttpKernel\Exception\HttpException
    *   Throws exception expected.
@@ -123,6 +131,12 @@ class StudioLiveImageContainerRestResource extends ResourceBase {
     return new ResourceResponse($content);
   }
 
+  /*
+   * Helper function, to get content of product & images.
+   *
+   * @param identifier
+   *   Name of the identifier.
+   */
   public function getBlockData($identifier){
     // todo : if identifier found in db then get the node id of mapped product, else check for unmapped product id
     // todo : if both are failed then ????????
@@ -152,6 +166,8 @@ class StudioLiveImageContainerRestResource extends ResourceBase {
 
   /*
    * Helper function,
+   *
+   * todo : @ashar will move html to twig files.
    */
   public function getBlockData2($nid,$identifier){
 
@@ -215,7 +231,12 @@ class StudioLiveImageContainerRestResource extends ResourceBase {
   }
 
   /*
-   *  Helper function, to get last scanned image in the current open session.
+   * Helper function, to get last scanned image in the current open session.
+   *
+   * @param nid
+   *   node nid.
+   * @param identifier
+   *   Name of the identifier.
    */
   public function getLastImages($nid,$identifier = null){
 

@@ -82,14 +82,19 @@ class OpenSessionsRestResource extends ResourceBase
         );
     }
 
-    /**
-     * Responds to GET requests.
-     *
-     * Returns a list of bundles for specified entity.
-     *
-     * @throws \Symfony\Component\HttpKernel\Exception\HttpException
-     *   Throws exception expected.
-     */
+  /**
+   * Responds to GET requests.
+   * Returns a list of bundles for specified entity.
+   *
+   * @param random
+   *   any random number or string.
+   *
+   * @return \Drupal\rest\ResourceResponse
+   *   Array of session node ids on successful response, or empty array.
+   *
+   * @throws \Symfony\Component\HttpKernel\Exception\HttpException
+   *   Throws exception expected.
+   */
     public function get($random)
     {
         // Get all open sessions.
@@ -98,8 +103,6 @@ class OpenSessionsRestResource extends ResourceBase
             return new ResourceResponse($result);
         }
 
-        // Throw an exception if it is required.
-        // throw new HttpException(t('Throw an exception if it is required.'));
         return new ResourceResponse(array());
     }
 

@@ -113,13 +113,11 @@ class StudioBridgeLiveShootingForm extends FormBase {
     $images = array();
     $pid = \Drupal::state()->get('last_scan_product_nid'.$uid.'_'.$session_id,false);
     if($pid){
-      //$images = self::getProductImages($pid);
       $images = Products::getProductImages($pid);
     }else{
 
       $result = Products::getProductByIdentifier($identifier);
       if($result){
-        //$images = self::getProductImages(reset($result));
         $images = Products::getProductImages(reset($result));
       }
     }
@@ -248,7 +246,6 @@ class StudioBridgeLiveShootingForm extends FormBase {
 
     if (!$result) {
       // Get product from server
-      //$product = self::getProductExternal($identifier);
       $product = Products::getProductExternal($identifier);
       $product = json_decode($product);
       // validate product
@@ -259,7 +256,6 @@ class StudioBridgeLiveShootingForm extends FormBase {
         $is_unmapped_product = true;
       }else{
         // import it in our drupal.
-        //$new_product = self::createNodeProduct($product, $identifier);
         $new_product = Products::createMappedProduct($product, $identifier);
         $new_or_old_product_nid = $new_product->id();
       }
@@ -308,7 +304,7 @@ class StudioBridgeLiveShootingForm extends FormBase {
 
     if($last_scan_product != $identifier){
       // todo : update last product as closed status
-      studiobridge_store_images_update_product_as_closed($last_scan_product);
+      Products::updateProductState($last_scan_product,'completted');
     }
 
     // Once product is scanned update it to session
@@ -323,7 +319,6 @@ class StudioBridgeLiveShootingForm extends FormBase {
       \Drupal::state()->set('last_scan_product_nid'.$uid.'_'.$session_id,$new_or_old_product_nid);
     }
 
-    //$images = self::getProductImages($new_or_old_product_nid);
     $images = Products::getProductImages($new_or_old_product_nid);
 
     $block = '<div id="sortable" class="ui-sortable">';

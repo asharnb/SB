@@ -6,8 +6,15 @@ Class StudioImages {
 
   /*
    * Helper function, to insert log into {studio_file_transfers} table.
+   *
+   * @param fid
+   *   File object fid.
+   * @param pid
+   *   Product node nid.
+   * @param sid
+   *   Session node nid.
    */
-  public static function AddFileTransfer($fid,$pid, $sid){
+  public static function AddFileTransfer($fid, $pid, $sid) {
     db_insert('studio_file_transfers')
       ->fields(array(
         'fid' => $fid,
@@ -18,7 +25,13 @@ Class StudioImages {
       ->execute();
   }
 
-  public static function DeleteFileTransfer($id){
+  /*
+   * Helper function, to delete log from {studio_file_transfers} table.
+   *
+   * @param id
+   *   id of {studio_file_transfers} table row.
+   */
+  public static function DeleteFileTransfer($id) {
     db_delete('studio_file_transfers')
       //->condition('type', $entity->getEntityTypeId())
       ->condition('id', $id)
