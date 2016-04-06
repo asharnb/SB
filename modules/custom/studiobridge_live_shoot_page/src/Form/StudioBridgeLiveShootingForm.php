@@ -147,54 +147,28 @@ class StudioBridgeLiveShootingForm extends FormBase {
     $i = 1;
     foreach($images as $fid => $src){
 
-        $block = '';
-        $block .= '<div class="bulkviewfiles imagefile">';
-        $block .= '<div class="box" style="max-width: 250px;">';
-
-        $block .=  '<div class="ribbon"><span id="seq-'. $fid .'">'.$i.'</span></div>';
-
-        $block .=  '<div class="scancontainer">';
-        $block .=  '<img src="'.$src['uri'].'" class="scanpicture">';
-        $block .=  '</div>';
-        $block .=  '<div class="file-name">';
-        $block .=  '<span class="bkname"><i class="fa fa-camera"></i><b id="seq-img-'. $fid .'">'.$src['name'].'</b></span>';
-        $block .=  '<hr class="simple">';
-
-        $block .= '<div class="row">';
-        $block .= '<div class="col col-sm-6">';
-        $block .= '<span><a class=" dropdown-toggle label label-default dropdown mr-5" data-toggle="dropdown" ><i class="fa fa-cog"></i> <i class="fa fa-caret-down"></i></a>';
-        $block .=	'<ul class="dropdown-menu pull-right"><li><a class="label label-default no-margin" onclick="return false;">Use this as full shot</a></li></ul>';
-        $block .= '<span ><a target ="_blank" href="/file/'.$fid.'" class="label label-info"><i class="glyphicon glyphicon-fullscreen"></i></a>';
-        $block .= '</div>';
-        $block .= '<div class="col col-sm-6">';
-        $block .= '<span><a onclick="return false;" class="label label-danger mr5 pull-right">Delete</a>';
-        $block .= '</div>';
-        $block .= '</div>';
-
-        $block .= '</div>';
-        $block .= '</div>';
-        //$block .= '</div>';
-
-
-      $form['markup_product_details_'.$fid] = array(
-        '#suffix' => "'$block''",
-        '#tree' => TRUE,
-
+      $form['markup_product_details__'.$fid] = array(
+        '#visible' => TRUE,
+        '#theme' => 'sbtheme_image',
+        '#url' => $src['uri'],
+        '#name' => $src['name'],
+        '#fid' => $fid,
+        '#id' => $i,
       );
+
       $form['images['.$fid.']'] = array(
         '#type' => 'hidden',
         '#value' => $fid,
       );
-      $form['markup_product_details__'.$fid] = array(
-        '#suffix' => "</div>",
-      );
+
       $i ++;
+
     }
 
     $form['markup_product_details_second'] = array(
       '#suffix' => '</div></div>',
     );
-
+    $form['#attributes'] = array('class' => 'smart-form');
     $form['#attached']['library'][] = 'core/jquery.ui.sortable';
     //$form['#attached']['library'][] = 'studiobridge_store_images/studio-bridge-view-product';
 
