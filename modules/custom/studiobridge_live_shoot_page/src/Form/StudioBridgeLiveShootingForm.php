@@ -321,7 +321,8 @@ class StudioBridgeLiveShootingForm extends FormBase {
       $block .= '<span ><a target ="_blank" href="/file/'.$fid.'" class="label label-info"><i class="glyphicon glyphicon-fullscreen"></i></a>';
       $block .= '</div>';
       $block .= '<div class="col col-sm-6">';
-      $block .= '<span><a onclick="return false;" class="label label-danger mr5 pull-right">Delete</a>';
+      //$block .= '<span><a onclick="return false;" class="label label-danger mr5 pull-right">Delete</a>';
+      $block .= '<span><label for="del-img-'.$fid.'" class="checkbox"><input type="checkbox" id="del-img-'.$fid.'" class="form-checkbox"><i></i>Tag Image</label></span>';
       $block .= '</div>';
       $block .= '</div>';
 

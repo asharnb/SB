@@ -1,6 +1,6 @@
 (function ($) {
 
-    function getCsrfToken(callback) {
+    function getCsrfTokenForDelete(callback) {
         $
             .get(Drupal.url('rest/session/token'))
             .done(function (data) {
@@ -40,24 +40,17 @@
 
                 // Find its child `input` elements
                 inputs = container.getElementsByTagName('input');
-
-                var inc = 1;
                 for (index = 0; index < inputs.length; ++index) {
                     // deal with inputs[index] element.
-                    if(inputs[index].type == 'hidden'){
-                        //alert(inc + '---' + inputs[index].value);
-                        document.getElementById('seq-'+inputs[index].value).innerHTML = inc;
-                        ++inc;
+                    document.getElementById('seq-'+inputs[index].value).innerHTML = index + 1;
+                    // todo : get img file name
+                    var rand = Math.floor((Math.random() * 1000000) + 1);
+                    var fid =  inputs[index].value;
+                    getFileName(function (filename) {
+                        //console.log(csrfToken);
+                        //document.getElementById('seq-img-'+ fid).innerHTML = filename;
+                    }, fid);
 
-                        // todo : get img file name
-                        var rand = Math.floor((Math.random() * 1000000) + 1);
-                        var fid =  inputs[index].value;
-                        getFileName(function (filename) {
-                            //console.log(csrfToken);
-                            //document.getElementById('seq-img-'+ fid).innerHTML = filename;
-                        }, fid);
-
-                    }
                 }
 
                 setTimeout(function(){
@@ -85,9 +78,7 @@
         for (index = 0; index < inputs.length; ++index) {
             // deal with inputs[index] element.
             //console.log(inputs[index].value);
-            if(inputs[index].type == 'hidden'){
-                imgs.push({"target_id": inputs[index].value});
-            }
+            imgs.push({"target_id": inputs[index].value});
         }
 
         var Node1 = {
@@ -105,7 +96,7 @@
         console.log(Node1);
 
         if(imgs.length){
-            getCsrfToken(function (csrfToken) {
+            getCsrfTokenForDelete(function (csrfToken) {
                 var nid = document.getElementById('edit-identifier-nid').value;
                 if (nid) {
                     patchNode(csrfToken, Node1, nid);
