@@ -3,6 +3,7 @@ studio-bridge-view-product:
   js:
     js/studio-bridge-auto-submit.js: {}
     js/studio-bridge-resquence-images.js: {}
+    js/studio-bridge-delete-images.js: {}
   css:
     theme:
       css/studio-bridge-auto-submit.css: {}

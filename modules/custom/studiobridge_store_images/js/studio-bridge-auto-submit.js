@@ -62,7 +62,8 @@
         container = document.getElementById('sortable');
 
         // Find its child `input` elements
-        inputs = container.getElementsByTagName('input');
+        //inputs = container.getElementsByTagName('input');
+        inputs = container.getElementsByClassName("form-checkbox");
         var seq = inputs.length + 1;
 
 
@@ -71,10 +72,11 @@
         var li = document.createElement("div");
         //li.appendChild(document.createTextNode(100));
         li.setAttribute("class", "bulkviewfiles imagefile ui-sortable-handle"); // added line
+        li.setAttribute('id','warpper-img-' + fid);
 
-        var block = '<div class="bulkviewfiles imagefile">';
-        //var block = '';
-        block += '<div class="box" style="max-width: 250px;">';
+        //var block = '<div class="bulkviewfiles imagefile">';
+        var block = '';
+        //block += '<div class="box" style="max-width: 250px;">';
 
         block +=  '<div class="ribbon"><span id="seq-'+ fid +'">'+ seq +'</span></div>';
 
@@ -87,19 +89,22 @@
         block +=  '<hr class="simple">';
 
         block += '<div class="row">';
-        block += '<div class="col col-sm-6">';
-        block += '<span><a class=" dropdown-toggle label label-default dropdown mr-5" data-toggle="dropdown" ><i class="fa fa-cog"></i> <i class="fa fa-caret-down"></i></a>';
-        block += '<ul class="dropdown-menu pull-right"><li><a class="label label-default no-margin" onclick="return false;">Use this as full shot</a></li></ul>';
-        block += '<span ><a target ="_blank" href="#" class="label label-info"><i class="glyphicon glyphicon-fullscreen"></i></a>';
-        block += '</div>';
-        block += '<div class="col col-sm-6">';
-        block += '<span><a onclick="return false;" class="label label-danger mr5 pull-right">Delete</a>';
+        //block += '<div class="col col-sm-6">';
+        block += '<div class="col col-sm-12">';
+//        block += '<span><a class=" dropdown-toggle label label-default dropdown mr-5" data-toggle="dropdown" ><i class="fa fa-cog"></i> <i class="fa fa-caret-down"></i></a>';
+//        block += '<ul class="dropdown-menu pull-right"><li><a class="label label-default no-margin" onclick="return false;">Use this as full shot</a></li></ul>';
+//        block += '<span ><a target ="_blank" href="#" class="label label-info"><i class="glyphicon glyphicon-fullscreen"></i></a>';
+//        block += '</div>';
+//        block += '<div class="col col-sm-6">';
+//        block += '<span><a onclick="return false;" class="label label-danger mr5 pull-right">Delete</a>';
+        block += '<span><label for="del-img-'+ fid +'" class="checkbox"><input type="checkbox" id="del-img-'+ fid +'" class="form-checkbox" value="'+ fid +'"><i></i>Tag Image</label></span>';
+        block += '<div class="studio-img-weight"><input type="hidden" value="'+ fid +'"></div>';
         block += '</div>';
         block += '</div>';
 
         block += '</div>';
-        block += '</div>';
-        block += '</div>';
+        //block += '</div>';
+        //block += '</div>';
 
         //li.innerHTML = "<input name='image[" + fid + "]' type='hidden' value='" + fid + "'/>";
         //li.innerHTML = "<img src='"+ img +"' /><input name='image[" + fid + "]' type='hidden' value='" + fid + "'/>";

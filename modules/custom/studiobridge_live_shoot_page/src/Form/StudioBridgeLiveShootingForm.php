@@ -127,7 +127,7 @@ class StudioBridgeLiveShootingForm extends FormBase {
       '#type' => 'button',
       '#value' => 'Apply',
       //'#suffix' => '<div id="studio-img-container"></div><div id="js-holder"></div><div id="studio-img-container1">'.$block.'</div>',
-      '#suffix' => '<div id="studio-img-container"></div><div id="js-holder"></div><a id="studio-resequence-bt" class="btn btn-warning">Resequence</a><div id="msg-up"></div>',
+      '#suffix' => '<div id="studio-img-container"></div><div id="js-holder"></div><a id="studio-resequence-bt" class="btn btn-warning">Resequence</a><a id="studio-delete-bt" class="btn btn-danger">Delete</a><div id="msg-up"></div>',
       '#ajax' => array(
         'callback' => 'Drupal\studiobridge_live_shoot_page\Form\StudioBridgeLiveShootingForm::productGetOrUpdateCallback',
         //'callback' => 'Drupal\studiobridge_live_shoot_page\Form\StudioBridgeLiveShootingForm::randomUsernameCallback',
@@ -154,11 +154,6 @@ class StudioBridgeLiveShootingForm extends FormBase {
         '#name' => $src['name'],
         '#fid' => $fid,
         '#id' => $i,
-      );
-
-      $form['images['.$fid.']'] = array(
-        '#type' => 'hidden',
-        '#value' => $fid,
       );
 
       $i ++;
@@ -300,35 +295,32 @@ class StudioBridgeLiveShootingForm extends FormBase {
     $i = 1;
     foreach($images as $fid => $src){
       //$block = '';
-      $block .= '<div class="bulkviewfiles imagefile">';
-      $block .= '<div class="box" style="max-width: 250px;">';
+      $block .= '<div class="bulkviewfiles imagefile ui-sortable-handle" id="warpper-img-'.$fid.'">';
 
       $block .=  '<div class="ribbon"><span id="seq-'. $fid .'">'.$i.'</span></div>';
 
       $block .=  '<div class="scancontainer">';
       $block .=  '<img src="'.$src['uri'].'" class="scanpicture">';
       $block .=  '</div>';
-      $block .=  "<input name='image[" . $fid . "]' type='hidden' value='" . $fid . "'/>";
+      //$block .=  "<input name='image[" . $fid . "]' type='hidden' value='" . $fid . "'/>";
 
       $block .=  '<div class="file-name">';
       $block .=  '<span class="bkname"><i class="fa fa-camera"></i><b id="seq-img-'. $fid .'">'.$src['name'].'</b></span>';
       $block .=  '<hr class="simple">';
 
       $block .= '<div class="row">';
-      $block .= '<div class="col col-sm-6">';
-      $block .= '<span><a class=" dropdown-toggle label label-default dropdown mr-5" data-toggle="dropdown" ><i class="fa fa-cog"></i> <i class="fa fa-caret-down"></i></a>';
-      $block .=	'<ul class="dropdown-menu pull-right"><li><a class="label label-default no-margin" onclick="return false;">Use this as full shot</a></li></ul>';
-      $block .= '<span ><a target ="_blank" href="/file/'.$fid.'" class="label label-info"><i class="glyphicon glyphicon-fullscreen"></i></a>';
-      $block .= '</div>';
-      $block .= '<div class="col col-sm-6">';
-      //$block .= '<span><a onclick="return false;" class="label label-danger mr5 pull-right">Delete</a>';
-      $block .= '<span><label for="del-img-'.$fid.'" class="checkbox"><input type="checkbox" id="del-img-'.$fid.'" class="form-checkbox"><i></i>Tag Image</label></span>';
+
+      $block .= '<div class="col col-sm-12">
+                <span><label for="del-img-'.$fid.'" class="checkbox"><input type="checkbox" id="del-img-'.$fid.'" class="form-checkbox" value="'.$fid.'"><i></i>Tag Image</label></span>
+                <div class="studio-img-weight"><input type="hidden" value="'.$fid.'"></div>
+            </div>';
+
       $block .= '</div>';
       $block .= '</div>';
 
       $block .= '</div>';
-      $block .= '</div>';
-      $block .= '</div>';
+      //$block .= '</div>';
+      //$block .= '</div>';
       $i++;
     }
     $block .= '</div>';
