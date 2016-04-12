@@ -23,6 +23,8 @@ Class StudioImages {
         'created' => REQUEST_TIME,
       ))
       ->execute();
+    \Drupal::logger('StudioImages Logs')->notice('New file log saved - '. $fid);
+
   }
 
   /*
@@ -34,7 +36,7 @@ Class StudioImages {
   public static function DeleteFileTransfer($id) {
     db_delete('studio_file_transfers')
       //->condition('type', $entity->getEntityTypeId())
-      ->condition('id', $id)
+      ->condition('fid', $id)
       ->execute();
   }
 
@@ -48,6 +50,18 @@ Class StudioImages {
       //file_build_uri();
       return file_move($fileObj, $uri, FILE_EXISTS_REPLACE);
     }
+
+  }
+
+  public static function UpdateFileLog($fid,$uri){
+
+    $fields = array(
+      'uri' => $uri,
+    );
+    $query = \Drupal::database()->update('studio_file_transfers')
+      ->fields($fields)
+      ->condition('fid', $fid);
+    $query->execute();
 
   }
 
