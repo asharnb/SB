@@ -1,13 +1,23 @@
+<<<<<<< Updated upstream
 <div class="bulkviewfiles imagefile">
     <div class="ribbon"><span id="seq">{{ id }}</span></div>
+=======
+{% extends "sbtheme_image_container.html.twig" %}
+{% spaceless %}
+    {% block sbimages %}
+        {% for image in images %}
+            <div class="bulkviewfiles imagefile" id="warpper-img-{{ image.fid }}">
+                <div class="ribbon"><span id="seq-{{ image.fid }}">{{ image.id }}</span></div>
+>>>>>>> Stashed changes
 
-    <div class="scancontainer">
-        <img src="{{ url }}" class="scanpicture">
-    </div>
-    <div class="file-name">
-        <span class="bkname"><i class="fa fa-camera"></i><b id="seq-img-{{ fid }}">{{ name }}</b></span>
-        <hr class="simple">
+                <div class="scancontainer">
+                    <img src="{{ image.url }}" class="scanpicture">
+                </div>
+                <div class="file-name">
+                    <span class="bkname"><i class="fa fa-camera"></i><b id="seq-img-{{ image.fid }}">{{ image.name }}</b></span>
+                    <hr class="simple">
 
+<<<<<<< Updated upstream
         <div class="row">
             <div class="col col-sm-6">
 <span><a class=" dropdown-toggle label label-default dropdown mr-5" data-toggle="dropdown"><i class="fa fa-cog"></i> <i
@@ -20,8 +30,20 @@
             </div>
             <div class="col col-sm-6">
 <span><a onclick="return false;" class="label label-danger mr5 pull-right">Delete</a>
-            </div>
-        </div>
+=======
+                    <div class="row">
 
-    </div>
-</div>
+                        <div class="col col-sm-12">
+                            <span><label for="del-img-{{ image.fid }}" class="checkbox"><input type="checkbox"
+                                                                                         id="del-img-{{ image.fid }}"
+                                                                                         class="form-checkbox"><i></i>TagImage</label></span>
+                        </div>
+                    </div>
+
+                </div>
+>>>>>>> Stashed changes
+            </div>
+        {% endfor %}
+    {% endblock sbimages %}
+{% endspaceless %}
+

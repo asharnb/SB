@@ -9,7 +9,7 @@
             triggerit(identifier, rand);
             //document.getElementById('views-exposed-form-individual-project-view-page-1').submit();
 
-        }, 1000);
+        }, 500);
          var rand = Math.floor((Math.random() * 1000000) + 1);
          triggerit(identifier, rand);
 
@@ -23,16 +23,22 @@
                 triggerit(identifier, rand);
              }
 
-         }, 1000);
+         }, 500);
      }
     });
 
     function triggerit(identifier, rand){
         $.get(Drupal.url('live-shoot-image-container/' + identifier + "/"+ rand +"?_format=json"), function(data, status){
             //alert("Data: " + data + "\nStatus: " + status);
+<<<<<<< Updated upstream
             //document.getElementById('studio-img-container').innerHTML = data.content;
             document.getElementById('block-currentsessionviewblock').innerHTML = data.block1;
             document.getElementById('studio-bridge-product-details').innerHTML = data.block2;
+=======
+            document.getElementById('studio-img-container').innerHTML = data.content;
+            //document.getElementById('block-currentsessionviewblock').innerHTML = data.block1;
+            //document.getElementById('studio-bridge-product-details').innerHTML = data.block2;
+>>>>>>> Stashed changes
 
             var a = data.block3;
             console.log(a);

@@ -37,3 +37,6 @@ sites/simpletest
 
 # Ignore PHPStorm .idea folder
 .idea
+
+# Ignore Sites
+sites/*

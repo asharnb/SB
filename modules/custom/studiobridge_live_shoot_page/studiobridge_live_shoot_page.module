@@ -4,6 +4,7 @@ function studiobridge_live_shoot_page_theme() {
   return array(
     'sbtheme_product' => array(
       'variables' => array(
+<<<<<<< Updated upstream
           'concept' => NULL,
           'styleno' => NULL,
           'colorvariant' => NULL,
@@ -11,10 +12,22 @@ function studiobridge_live_shoot_page_theme() {
           'color' => NULL,
           'description' => NULL,
           'identifier' => NULL,
+=======
+          'product' => array(
+              'concept' => NULL,
+              'styleno' => NULL,
+              'colorvariant' => NULL,
+              'gender' => NULL,
+              'color' => NULL,
+              'description' => NULL,
+              'identifier' => NULL,
+          ),
+>>>>>>> Stashed changes
 
       ),
-      'template' => 'sbtheme'
+      'template' => 'sbtheme_page_view'
     ),
+<<<<<<< Updated upstream
       'sbtheme_scan' => array(
           'variables' => array(
               'attributes' => array(),
@@ -40,3 +53,17 @@ function studiobridge_live_shoot_page_theme() {
 
 }
 
+=======
+
+    'sbtheme_page' => array(
+        'form' =>array(),
+      'template' => 'sbtheme_page_view'
+    ),
+
+
+
+
+  );
+
+}
+>>>>>>> Stashed changes

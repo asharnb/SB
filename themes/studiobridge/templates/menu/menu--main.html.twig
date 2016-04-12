@@ -1,0 +1,70 @@
+{#
+/**
+ * @file
+ * Default theme implementation to display a menu.
+ *
+ * Available variables:
+ * - menu_name: The machine name of the menu.
+ * - items: A nested list of menu items. Each menu item contains:
+ *   - attributes: HTML attributes for the menu item.
+ *   - below: The menu item child items.
+ *   - title: The menu link title.
+ *   - url: The menu link url, instance of \Drupal\Core\Url
+ *   - localized_options: Menu link localized options.
+ *
+ * @ingroup templates
+ */
+#}
+{% import _self as menus %}
+
+<aside id="left-panel">
+
+  <!-- User info -->
+  <div class="login-info">
+    <span>
+
+      <a href="javascript:void(0);" id="show-shortcut" data-action="toggleShortcut">
+        <img src="" alt="me" class="busy">
+        <span>
+          Ashar Babar
+        </span>
+      </a>
+
+    </span>
+  </div>
+
+  <nav class="sbnav">
+
+  {{ menus.menu_links(items, attributes, 0, description) }}
+
+  {% macro menu_links(items, attributes, menu_level, description) %}
+    {% import _self as menus %}
+    {% if items %}
+      {% if menu_level == 0 %}
+        <ul>
+      {% endif %}
+      {% for item in items %}
+        {% if menu_level == 0 and item.is_expanded %}
+          <li{{ item.attributes.addClass('open') }}>
+          <a href="{{ item.url }}" class="dropdown-toggle" data-target="#">
+            <i class="fa fa-home"></i>
+            <span class="menu-item-parent">{{ item.title }} </span>
+              <span class="caret"></span></a>
+        {% else %}
+          <li>
+          <a href="{{ item.url }}">
+            <i class="fa fa-home"></i>
+            <span>{{ item.title }} </span>
+            </a>
+        {% endif %}
+        {% if item.below %}
+          {{ menus.menu_links(item.below, attributes.removeClass('nav', 'navbar-nav'), menu_level + 1) }}
+        {% endif %}
+        </li>
+      {% endfor %}
+      </ul>
+    {% endif %}
+  {% endmacro %}
+
+  </nav>
+</aside>

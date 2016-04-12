@@ -1,0 +1,39 @@
+
+{% block sbtheme_scancontainer %}
+    <div id="panel-psa" class="panel panel-default">
+        <div class="panel-heading seperator">
+            <div class="panel-title">Product Scan
+            </div>
+            <div class="panel-controls">
+            </div>
+        </div>
+        <div class="panel-body">
+            <h3>
+                <span class="semi-bold">Scan</span> Product Tag</h3>
+            <div  class="smart-form" >
+
+
+
+                <div class="form-group form-group-default required">
+                    <label>SKU/Barcode/EAN</label>
+                    {% spaceless %}
+                        {%
+                        set classes = [
+                        'form-control',
+                        ]
+                        %}
+                        {% block input %}
+                            <input {{ identifier.attributes }}{{ attributes.addClass(classes) }} />
+
+                        {% endblock %}
+
+                    {% endspaceless %}
+
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+
+{% endblock %}

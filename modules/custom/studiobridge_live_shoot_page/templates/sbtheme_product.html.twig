@@ -1,0 +1,65 @@
+
+{% block sbtheme_product %}
+    <div id="panel-pi" class="panel panel-default">
+        <div class="panel-heading seperator">
+            <div class="panel-title">Product Information
+            </div>
+            <div class="panel-controls">
+                <a class="btn btn-xs btn-default" onclick="return false();">Shoot Guide</a>
+                <a class="btn btn-xs btn-info" onclick="return false();">Attach Model</a>
+            </div>
+        </div>
+        <div class="panel-body">
+            <div class="row">
+                <div class="col-lg-6">
+                    <dl class="dl-horizontal">
+                        <dt>Concept:</dt>
+
+                        {% if concept == 'Unmapped' %}
+                            <dd class="mb-10"><img src="/ca/img/brands/brand_logo_.png" height="20px"></dd>
+                        {% else %}
+                            <dd class="mb-10"><img src="/ca/img/brands/brand_logo_{{ concept|lower }}.png" height="20px"></dd>
+                        {% endif %}
+                    </dl>
+
+                </div>
+                <div class="col-lg-6">
+                    <dl class="dl-horizontal">
+                        <dt>Color Variant:</dt>
+                        <dd><strong><{{ colorvariant }}/strong></dd>
+                    </dl>
+
+                </div>
+            </div>
+            <div class="row">
+
+                <div class="col-lg-6">
+                    <dl class="dl-horizontal">
+                        <dt>Identifier:</dt>
+                        <dd>{{ identifier }}</dd>
+                        <dt>Style No:</dt>
+                        <dd>{{ styleno }}</dd>
+                        <dt>Color Variant:</dt>
+                        <dd><{{ colorvariant }}/dd>
+                        <dt>Season:</dt>
+                        <dd>--</dd>
+                    </dl>
+                </div>
+                <div class="col-lg-6">
+                    <dl class="dl-horizontal">
+                        <dt>Gender:</dt>
+                        <dd><strong>{{ gender }}</strong></dd>
+                        <dt>Color:</dt>
+                        <dd>{{ color }}</dd>
+                        <dt>Size:</dt>
+                        <dd>--</dd>
+                        <dt>Description:</dt>
+                        <dd>{{ description }}</dd>
+                    </dl>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+{% endblock %}

@@ -90,9 +90,9 @@ class StudioBridgeLiveShootingForm extends FormBase {
     $identifier = $identifier_hidden;
 
 
-    $list = '<ul id="sortable"></ul>';
 
     // @ashar : this does not need to be refreshed
+<<<<<<< Updated upstream
 
 
     $form['identifier'] = array(
@@ -124,17 +124,42 @@ class StudioBridgeLiveShootingForm extends FormBase {
         '#description' => $productdetails['description'],
         '#identifier' => $identifier,
         '#visible' => TRUE,
-    );
+=======
+    $list = '<ul id="sortable"></ul>';
 
+    $form['identifier'] = array(
+        //'#theme' => 'sbtheme_product',
+        '#type' => 'textfield',
+        '#description' => $this->t('description will come here'),
+        '#default_value' => $identifier,
+>>>>>>> Stashed changes
+    );
     $form['identifier_hidden'] = array(
       '#type' => 'hidden',
       '#value' => $identifier_hidden,
       '#default_value' => $identifier_hidden,
     );
     $form['identifier_nid'] = array(
+
       '#type' => 'hidden',
       '#value' => $new_or_old_product_nid,
       '#default_value' => $new_or_old_product_nid,
+    );
+
+    $productdetails = Products::getProductInformation($identifier_hidden);
+
+    $form['markup_product_details'] = array(
+
+        '#product' => array(
+          'concept' => $productdetails['concept'],
+          'styleno' => $productdetails['styleno'],
+          'colorvariant' => $productdetails['colorvariant'],
+          'gender' => $productdetails['gender'],
+          'color' => $productdetails['color'],
+          'description' => $productdetails['description'],
+          'identifier' => $identifier,
+        ),
+        '#visible' => TRUE,
     );
 
     $images = array();
@@ -165,6 +190,7 @@ class StudioBridgeLiveShootingForm extends FormBase {
     );
 
 
+<<<<<<< Updated upstream
 
 
     $form['product_container'] = array(
@@ -204,16 +230,51 @@ class StudioBridgeLiveShootingForm extends FormBase {
     
           $i ++;
         }
-
-    $form['markup_product_details_second'] = array(
-      '#suffix' => '</div></div>',
+=======
+    $form['markup_product_details_first'] = array(
+        '#suffix' => '<div id="studio-img-container1"><div id="sortable" class="ui-sortable">',
     );
 
+
+    $array_images = array();
+    $i = 1;
+    foreach($images as $fid => $src){
+
+      $array_images[] = array('url' => $src['uri'],
+          'name' => $src['name'],
+          'fid' => $fid,
+          'id' => $i);
+      $i ++;
+
+
+    }
+>>>>>>> Stashed changes
+
+    $form['markup_product_details__'.$fid] = array(
+         '#theme' => 'sbtheme_image',
+          '#images' => $array_images,
+    );
+
+//    $form['images['.$fid.']'] = array(
+//        '#type' => 'hidden',
+//        '#value' => $fid,
+//    );
+
+
+    $form['markup_product_details_second'] = array(
+        '#suffix' => '</div></div>',
+    );
+<<<<<<< Updated upstream
+
+=======
+    //$form['#attributes'] = array('class' => 'smart-form no-padding no-margin');
+    $form['#theme'][= 'sbtheme_page';
+>>>>>>> Stashed changes
     $form['#attached']['library'][] = 'core/jquery.ui.sortable';
-    //$form['#attached']['library'][] = 'studiobridge_store_images/studio-bridge-view-product';
 
     //$form_state->setRebuild(TRUE);
     return $form;
+
   }
 
   public function submitForm(array &$form, FormStateInterface $form_state) {
