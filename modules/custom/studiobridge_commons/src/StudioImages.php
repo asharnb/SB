@@ -38,4 +38,17 @@ Class StudioImages {
       ->execute();
   }
 
+  /*
+   *
+   */
+  public static function ImagePhysicalName($dir, $filename, &$fileObj){
+    $folder = "public://$dir";
+    if(file_prepare_directory($folder, FILE_CREATE_DIRECTORY)){
+      $uri = $folder.'/'.$filename;
+      //file_build_uri();
+      return file_move($fileObj, $uri, FILE_EXISTS_REPLACE);
+    }
+
+  }
+
 }

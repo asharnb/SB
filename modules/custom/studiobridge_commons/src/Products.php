@@ -190,12 +190,16 @@ Class Products {
           $fid = $img['target_id'];
           // Load the file object.
           $file = File::load($fid);
-          // Get the file name.
-          $file_name = $file->filename->getValue();
-          $file_name = $file_name[0]['value'];
-          // Get the image of style - Live shoot preview.
-          $image_uri_value = ImageStyle::load('live_shoot_preview')->buildUrl($file->getFileUri());
-          $image_uri[$fid] = array('uri' => $image_uri_value, 'name' => $file_name);
+          // Validated file if it is deleted then error will occur.
+          if($file){
+            // Get the file name.
+            $file_name = $file->filename->getValue();
+            $file_name = $file_name[0]['value'];
+            // Get the image of style - Live shoot preview.
+            $image_uri_value = ImageStyle::load('live_shoot_preview')->buildUrl($file->getFileUri());
+            $image_uri[$fid] = array('uri' => $image_uri_value, 'name' => $file_name);
+          }
+
         }
         return $image_uri;
       }
