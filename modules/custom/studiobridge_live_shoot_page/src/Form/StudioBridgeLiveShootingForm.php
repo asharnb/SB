@@ -72,6 +72,9 @@ class StudioBridgeLiveShootingForm extends FormBase {
         //studiobridge_store_images_update_product_as_open($_GET['identifier']);
         Products::updateProductState($_GET['identifier'],'open');
         \Drupal::state()->set('last_scan_product_'.$uid.'_'.$session_id,$_GET['identifier']);
+
+        // Add product to session.
+        Sessions::UpdateLastProductToSession($session_id,\Drupal\node\Entity\Node::load($new_or_old_product_nid));
       }
     }else{
       $result = Products::getProductByIdentifier($identifier_hidden);
@@ -221,8 +224,10 @@ class StudioBridgeLiveShootingForm extends FormBase {
       if(isset($product->msg)){
         // product not found on the server so save it as unmapped product.
         //studiobridge_store_images_create_unmapped_product(array(),$session_id,$identifier,false);
-        Products::createUnmappedProduct(array(),$session_id,$identifier,false);
+        $un_mapped_node = Products::createUnmappedProduct(array(),$session_id,$identifier,false);
         $is_unmapped_product = true;
+        // todo : update product to session.
+        Sessions::UpdateLastProductToSession($session_id,$un_mapped_node);
       }else{
         // import it in our drupal.
         $new_product = Products::createMappedProduct($product, $identifier);
@@ -286,6 +291,8 @@ class StudioBridgeLiveShootingForm extends FormBase {
 
     if($new_or_old_product_nid){
       \Drupal::state()->set('last_scan_product_nid'.$uid.'_'.$session_id,$new_or_old_product_nid);
+      // todo : add product to session.
+      Sessions::UpdateLastProductToSession($session_id,\Drupal\node\Entity\Node::load($new_or_old_product_nid));
     }
 
     $images = Products::getProductImages($new_or_old_product_nid);

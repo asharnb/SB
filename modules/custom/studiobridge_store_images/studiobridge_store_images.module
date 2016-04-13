@@ -129,7 +129,7 @@ function studiobridge_store_images_entity_insert(Drupal\Core\Entity\EntityInterf
     else {
       // Create unmapped product if any image received under no products scanned state.
       //studiobridge_store_images_create_unmapped_product($image, $session_id, 'UnMapped', $entity->id());
-      Products::createUnmappedProduct($image, $session_id, 'UnMapped', $entity->id());
+      $unmapped_node = Products::createUnmappedProduct($image, $session_id, 'UnMapped', $entity->id());
       return;
     }
 
@@ -329,7 +329,7 @@ function studiobridge_store_images_entity_presave(Drupal\Core\Entity\EntityInter
         $color_variant = $product_color_variant[0]['value'];
       }
     }
-    elseif ($product_bundle = 'unmapped_products') {
+    elseif ($product_bundle == 'unmapped_products') {
       $field_identifier = $entity->field_identifier->getValue();
       $title = $entity->title->getValue();
       if ($field_identifier) {

@@ -128,6 +128,8 @@ Class Products {
 
     // Update product to current session, ie,, session sent by chrome app.
     self::addProductToSession($session_id, $node);
+
+    return $node;
   }
 
   /*

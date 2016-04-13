@@ -28,7 +28,7 @@ use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
  *   id = "individual_session_rest_resource",
  *   label = @Translation("[StudioBridge] Individual session information"),
  *   uri_paths = {
- *     "canonical" = "/studio/session/{id}"
+ *     "canonical" = "/studio/session/{id}/{random}"
  *   }
  * )
  */
@@ -95,8 +95,8 @@ class IndividualSessionRestResource extends ResourceBase {
    * @throws \Symfony\Component\HttpKernel\Exception\HttpException
    *   Throws exception expected.
    */
-  public function get($id) {
-      if ($id) {
+  public function get($id, $random) {
+      if ($id && $random) {
           // todo : based on requirement, limit fields to be displayed.
           $node = Node::load($id);
           if (!empty($node)) {
