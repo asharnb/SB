@@ -34,6 +34,7 @@
 
                 // update whole img container
                 var container, inputs, index;
+                var dup_holder = [];
 
                 // Get the container element
                 container = document.getElementById('sortable');
@@ -46,17 +47,20 @@
                     // deal with inputs[index] element.
                     if(inputs[index].type == 'hidden'){
                         //alert(inc + '---' + inputs[index].value);
-                        document.getElementById('seq-'+inputs[index].value).innerHTML = inc;
-                        ++inc;
 
-                        // todo : get img file name
-                        var rand = Math.floor((Math.random() * 1000000) + 1);
-                        var fid =  inputs[index].value;
-                        getFileName(function (filename) {
-                            //console.log(csrfToken);
-                            //document.getElementById('seq-img-'+ fid).innerHTML = filename;
-                        }, fid);
+                        if(dup_holder.indexOf(inputs[index].value) == '-1'){
+                            document.getElementById('seq-'+inputs[index].value).innerHTML = inc;
+                            ++inc;
 
+                            // todo : get img file name
+                            var rand = Math.floor((Math.random() * 1000000) + 1);
+                            var fid =  inputs[index].value;
+                            getFileName(function (filename) {
+                                //console.log(csrfToken);
+                                //document.getElementById('seq-img-'+ fid).innerHTML = filename;
+                            }, fid);
+                        }
+                        dup_holder.push(inputs[index].value);
                     }
                 }
 
@@ -76,6 +80,7 @@
 
         var container, inputs, index;
         var imgs = [];
+        var dup_holder = [];
 
         // Get the container element
         container = document.getElementById('sortable');
@@ -86,7 +91,10 @@
             // deal with inputs[index] element.
             //console.log(inputs[index].value);
             if(inputs[index].type == 'hidden'){
-                imgs.push({"target_id": inputs[index].value});
+                if(dup_holder.indexOf(inputs[index].value) == '-1'){
+                    imgs.push({"target_id": inputs[index].value});
+                }
+                dup_holder.push(inputs[index].value);
             }
         }
 

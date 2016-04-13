@@ -43,9 +43,10 @@ Class StudioImages {
   /*
    *
    */
-  public static function ImagePhysicalName($dir, $filename, &$fileObj){
+  public static function ImagePhysicalName($dir, $filename, $fileObj){
     $folder = "public://$dir";
     if(file_prepare_directory($folder, FILE_CREATE_DIRECTORY)){
+      //\Drupal::logger('GGG')->notice('');
       $uri = $folder.'/'.$filename;
       //file_build_uri();
       return file_move($fileObj, $uri, FILE_EXISTS_REPLACE);
@@ -58,7 +59,7 @@ Class StudioImages {
     $fields = array(
       'uri' => $uri,
     );
-    $query = \Drupal::database()->update('studio_file_transfers')
+    $query = \Drupal::database()->update('file_managed')
       ->fields($fields)
       ->condition('fid', $fid);
     $query->execute();

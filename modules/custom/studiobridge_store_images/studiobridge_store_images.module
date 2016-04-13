@@ -139,16 +139,6 @@ function studiobridge_store_images_entity_insert(Drupal\Core\Entity\EntityInterf
     // add new image to existing
     $images = array_merge($images, $image);
 
-    // Set the image array to image field
-    $node->field_images->setValue($images);
-
-
-    // finally save the node
-    $node->save();
-
-    // Add product to session.
-    //studiobridge_store_images_add_product_to_session($session_id, $node);
-    Products::addProductToSession($session_id, $node);
 
     // Update file name for resequence.
     if ($field_base_product_id) {
@@ -167,6 +157,18 @@ function studiobridge_store_images_entity_insert(Drupal\Core\Entity\EntityInterf
 
       }
     }
+
+
+    // Set the image array to image field
+    $node->field_images->setValue($images);
+
+
+    // finally save the node
+    $node->save();
+
+    // Add product to session.
+    //studiobridge_store_images_add_product_to_session($session_id, $node);
+    Products::addProductToSession($session_id, $node);
 
   }
 
@@ -303,6 +305,10 @@ function studiobridge_store_images_entity_presave(Drupal\Core\Entity\EntityInter
   // check for current bundle is mapped or unmapped product.
   if ($entity->bundle() == 'products' || $entity->bundle() == 'unmapped_products') {
 
+   // \Drupal::logger('GGG')->notice('<pre>'.print_r($entity->field_images->getValue(),true).'</pre>');
+
+    $concept = 'InValidConcept';
+    $color_variant = 'InValidColorVariant';
     $product_bundle = $entity->bundle();
 
     // Get base product id from mapped product.
@@ -312,12 +318,28 @@ function studiobridge_store_images_entity_presave(Drupal\Core\Entity\EntityInter
       if ($field_base_product_id) {
         $field_base_product_id = $field_base_product_id[0]['value'];
       }
+
+      $product_concept = $entity->field_concept_name->getValue();
+      if($product_concept){
+        $concept = $product_concept[0]['value'];
+      }
+
+      $product_color_variant = $entity->field_color_variant->getValue();
+      if($product_color_variant){
+        $color_variant = $product_color_variant[0]['value'];
+      }
     }
     elseif ($product_bundle = 'unmapped_products') {
       $field_identifier = $entity->field_identifier->getValue();
+      $title = $entity->title->getValue();
       if ($field_identifier) {
         $field_base_product_id = $field_identifier[0]['value'];
+      }elseif ($title) {
+        $field_base_product_id = $title[0]['value'];
       }
+
+      $concept = 'Unmapped';
+      $color_variant = $field_base_product_id;
     }
 
     // Get images field from product.
@@ -329,9 +351,14 @@ function studiobridge_store_images_entity_presave(Drupal\Core\Entity\EntityInter
       foreach ($images as $img) {
         // load file entity.
         $file = File::load($img['target_id']);
+        $session_id = $file->field_session->getValue();
+        if($session_id){
+          $session_id = $session_id[0]['target_id'];
+        }
+        //\Drupal::logger('123wer')->notice('<pre>'.print_r($session_id,true).'</pre>');
 
         $filemime = $file->filemime->getValue();
-        if ($filemime) {
+        if ($filemime && $session_id) {
           $filemime = $filemime[0]['value'];
           $filemime = explode('/', $filemime);
           $filemime = $filemime[1];
@@ -341,19 +368,28 @@ function studiobridge_store_images_entity_presave(Drupal\Core\Entity\EntityInter
           // todo : filemime will be wrong
           // change file name as per sequence number and base product_id value.
           $filename = $field_base_product_id . '_' . $i . ".$filemime";
-          $file->filename->setValue($field_base_product_id . '_' . $i . ".$filemime");
-          $file_uri = $file->uri->getValue();
-          $x = 'public://'.'xyz/_krishna_'.time();
+          //$file_uri = $file->uri->getValue();
+          //$x = 'public://'.'xyz/_krishna_'.time();
 
-          $dir = 'Sessions/'.date('H-i-s');
-          if(StudioImages::ImagePhysicalName($dir,$filename,$file)){
-            $folder = "public://$dir";
-            $uri = $folder.'/'.$filename;
-            $file->uri->setValue($uri); //public://fileKVxEHe
-          }
+          //$dir = 'Sessionsx/'.date('H-i-s');
 
+          //$dir = $session_id.'/'.$concept.'/'.$color_variant;
+
+//          if(StudioImages::ImagePhysicalName($dir,$filename,$file)){
+//            $folder = "public://$dir";
+//            $uri = $folder.'/'.$filename;
+//            $file->uri->setValue($uri); //public://fileKVxEHe
+//          }
+          $file->filename->setValue($filename);
           $file->save();
+//
+//          $folder = "public://$dir";
+//          $uri = $folder.'/'.$filename;
+//          StudioImages::UpdateFileLog($file->id(),$uri);
+
           $i++;
+
+           //\Drupal::logger('GGG')->notice('<pre>'.print_r($file,true).'</pre>');
 
           //file_prepare_directory()
         }
