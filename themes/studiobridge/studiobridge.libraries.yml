@@ -1,4 +1,9 @@
 global-styling:
   css:
     theme:
+      css/plugins.min.css: {}
+      css/production.min.css: {}
+      css/bootstrap.min.css: {}
+      css/additionalstyles.css: {}
+      css/font-awesome.min.css: {}
       css/style.css: {}

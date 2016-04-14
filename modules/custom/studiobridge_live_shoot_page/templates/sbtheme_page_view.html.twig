@@ -55,11 +55,10 @@
                 <div class="col-lg-6">
                     <dl class="dl-horizontal">
                         <dt>Concept:</dt>
-
                         {% if form.productdetails.concept == 'Unmapped' %}
                             <dd class="mb-10"><img src="/ca/img/brands/brand_logo_.png" height="20px"></dd>
                         {% else %}
-                            <dd class="mb-10"><img src="/ca/img/brands/brand_logo_{{ product.concept|lower }}.png"
+                            <dd class="mb-10"><img src="/ca/img/brands/brand_logo_{{ form.productdetails.concept|lower }}.png"
                                                    height="20px"></dd>
                         {% endif %}
                     </dl>
@@ -81,8 +80,7 @@
                         <dd id="dd-identifier">{{ form.productdetails.identifier }}</dd>
                         <dt>Style No:</dt>
                         <dd id="dd-styleno">{{ form.productdetails.styleno }}</dd>
-                        <dt>Color Variant:</dt>
-                        <dd id="dd-colorvariant"><{{ form.productdetails.colorvariant }}/dd>
+
                         <dt>Season:</dt>
                         <dd>--</dd>
                     </dl>
@@ -95,10 +93,17 @@
                         <dd id="dd-color">{{ form.productdetails.color }}</dd>
                         <dt>Size:</dt>
                         <dd>--</dd>
-                        <dt>Description:</dt>
-                        <dd id="dd-description">{{ form.productdetails.description }}</dd>
+
                     </dl>
                 </div>
+                <div class="col-lg-12">
+                    <dl class="dl-horizontal">
+                        <dt>Description:</dt>
+                        <dd id="dd-description">{{ form.productdetails.description }}</dd>
+
+                    </dl>
+                </div>
+
             </div>
 
         </div>
@@ -143,11 +148,10 @@
 {% block sidepanel %}
     <div class="sidebard-panel" style="min-height: 100%;">
 
-        <div id="widgettile" data-mode="carousel" data-start-now="true" class="live-tile"
-             data-direction="horizontal" data-delay="3000">
+        <div id="widgettile" >
             <div class="widget blue-bg p-lg text-center">
                 <div class="m-b-md"><i class="fa fa-camera"></i>
-                    <h1 class="m-xs">0</h1>
+                    <h1 class="m-xs no-of-products">0</h1>
                     <h3 class="font-bold no-margins">Products</h3>
                     <small>Total Products</small>
                 </div>

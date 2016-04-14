@@ -91,11 +91,7 @@ class StudioBridgeLiveShootingForm extends FormBase {
         '#type' => 'textfield',
         '#description' => $this->t('description will come here'),
         '#default_value' => $identifier,
-        '#ajax' => array(
-            'callback' => 'Drupal\studiobridge_live_shoot_page\Form\StudioBridgeLiveShootingForm::productGetOrUpdateCallback',
-            'event' => 'enter',
-
-        ),
+        '#title' => t(''),
 
     );
 
@@ -135,8 +131,9 @@ class StudioBridgeLiveShootingForm extends FormBase {
         '#markup' => '<div id="studio-img-container"></div><div id="js-holder"></div><div id="msg-up"></div>',
   );
     $form['random_user'] = array(
-            '#type' => 'button',
-            '#value' => 'Apply',
+        '#type' => 'button',
+        '#value' => 'Apply',
+        '#attributes' => array('class'=>array('hidden')),
         '#ajax' => array(
             'callback' => 'Drupal\studiobridge_live_shoot_page\Form\StudioBridgeLiveShootingForm::productGetOrUpdateCallback',
             'event' => 'click',
@@ -231,6 +228,7 @@ class StudioBridgeLiveShootingForm extends FormBase {
         // product not found on the server so save it as unmapped product.
         //studiobridge_store_images_create_unmapped_product(array(),$session_id,$identifier,false);
         $un_mapped_node = Products::createUnmappedProduct(array(),$session_id,$identifier,false);
+        $new_or_old_product_nid = $un_mapped_node->id();
         $is_unmapped_product = true;
         // todo : update product to session.
         Sessions::UpdateLastProductToSession($session_id,$un_mapped_node);
@@ -349,7 +347,7 @@ class StudioBridgeLiveShootingForm extends FormBase {
     $ajax_response->addCommand(new InvokeCommand('#edit-identifier-hidden', 'change'));
 
 
-    // update in product details section   todo : later remove it
+    // update in product details section   todo : later remove it @ ashar
 
     $productdetails = Products::getProductInformation($identifier);
 

@@ -9,7 +9,7 @@
             triggerit(identifier, rand);
             //document.getElementById('views-exposed-form-individual-project-view-page-1').submit();
 
-        }, 1000);
+        }, 500);
          var rand = Math.floor((Math.random() * 1000000) + 1);
          triggerit(identifier, rand);
 
@@ -23,7 +23,7 @@
                 triggerit(identifier, rand);
              }
 
-         }, 1000);
+         }, 500);
      }
     });
 
@@ -35,7 +35,7 @@
             //document.getElementById('studio-bridge-product-details').innerHTML = data.block2;
 
             var a = data.block3;
-            console.log(a);
+            //console.log(a);
             if(a){
 //                a.forEach(function(img) {
 //                    //console.log(img);

@@ -34,6 +34,7 @@ class StudioAutocompleteController implements ContainerInjectionInterface {
         '#cache' => array('max-age' => 0),
         '#attached' => array(
             'library' =>  array(
+                'core/jquery',
                 'core/jquery.ui.sortable'
             )
         ),
