@@ -272,5 +272,74 @@ Class Products {
     }
   }
 
+  /*
+* Helper function, to get a product by its identifier.
+*
+* @param identifier
+*   Name of the identifier.
+*/
+  public static function getProductInformation($identifier) {
 
+    $node_id = self::getProductByIdentifier($identifier);
+
+    if (count($node_id)) {
+      $node_id = reset($node_id);
+      // Load the node object.
+      $product = Node::load($node_id);
+    }
+
+
+    $bundle = $product->bundle();
+
+
+    if($bundle == 'unmapped_products'){
+      $concept = 'Unmapped';
+
+      $output_array = array("concept" => $concept,
+          "styleno" => '',
+          "colorvariant" => '',
+          "gender" => '',
+          "color" => '',
+          "description" => '');
+
+    }else{
+
+      $product_concept = $product->field_concept_name->getValue();
+      if($product_concept){
+        $concept = $product_concept[0]['value'];
+      }
+
+      $product_style_no = $product->field_style_family->getValue();
+      if($product_style_no){
+        $style_no = $product_style_no[0]['value'];
+      }
+      $product_color_variant = $product->field_color_variant->getValue();
+      if($product_color_variant){
+        $color_variant = $product_color_variant[0]['value'];
+      }
+      $product_gender = $product->field_gender->getValue();
+      if($product_gender){
+        $gender = $product_gender[0]['value'];
+      }
+      $product_color = $product->field_color_name->getValue();
+      if($product_color){
+        $color = $product_color[0]['value'];
+      }
+
+      $product_description = $product->field_description->getValue();
+      if($product_description){
+        $description = $product_description[0]['value'];
+      }
+
+      $output_array = array("concept" => $concept,
+          "styleno" => $style_no,
+          "colorvariant" => $color_variant,
+          "gender" => $gender,
+          "color" => $color,
+          "description" => $description);
+
+    }
+    $output = $output_array;
+    return $output;
+  }
 }

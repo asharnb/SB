@@ -72,9 +72,6 @@ class StudioBridgeLiveShootingForm extends FormBase {
         //studiobridge_store_images_update_product_as_open($_GET['identifier']);
         Products::updateProductState($_GET['identifier'],'open');
         \Drupal::state()->set('last_scan_product_'.$uid.'_'.$session_id,$_GET['identifier']);
-
-        // Add product to session.
-        Sessions::UpdateLastProductToSession($session_id,\Drupal\node\Entity\Node::load($new_or_old_product_nid));
       }
     }else{
       $result = Products::getProductByIdentifier($identifier_hidden);
@@ -86,82 +83,112 @@ class StudioBridgeLiveShootingForm extends FormBase {
     $identifier = $identifier_hidden;
 
 
-    $list = '<ul id="sortable"></ul>';
+    $form['sortable'] = array(
+        '#markup' => '<ul id="sortable"></ul>',
+    );
 
-    // @ashar : this does not need to be refreshed
 
     $form['markup_product_details'] = array(
-      '#suffix' => '<div id="studio-bridge-product-details"></div>',
+        '#suffix' => '<div id="studio-bridge-product-details"></div>',
     );
     // @ashar : add the ajax call back to the identifier
 
     $form['identifier'] = array(
-      '#type' => 'textfield',
-      '#title' => 'Scan product',
-      '#description' => $this->t('description will come here'),
-      '#default_value' => $identifier,
+        '#type' => 'textfield',
+        '#description' => $this->t('description will come here'),
+        '#default_value' => $identifier,
+
     );
 
     $form['identifier_hidden'] = array(
-      '#type' => 'hidden',
-      '#value' => $identifier_hidden,
-      '#default_value' => $identifier_hidden,
+        '#type' => 'hidden',
+        '#value' => $identifier_hidden,
+        '#default_value' => $identifier_hidden,
     );
     $form['identifier_nid'] = array(
-      '#type' => 'hidden',
-      '#value' => $new_or_old_product_nid,
-      '#default_value' => $new_or_old_product_nid,
+        '#type' => 'hidden',
+        '#value' => $new_or_old_product_nid,
+        '#default_value' => $new_or_old_product_nid,
     );
 
     $images = array();
     $pid = \Drupal::state()->get('last_scan_product_nid'.$uid.'_'.$session_id,false);
     if($pid){
+      //$images = self::getProductImages($pid);
       $images = Products::getProductImages($pid);
     }else{
 
       $result = Products::getProductByIdentifier($identifier);
       if($result){
+        //$images = self::getProductImages(reset($result));
         $images = Products::getProductImages(reset($result));
       }
     }
 // @ashar : seperate this image container so we can apply theme formatting to it
 
+    $form['resequence'] = array(
+        '#markup' => '<a id="studio-resequence-bt" class="btn btn-xs btn-info">Resequence</a>',
+    );
+    $form['delete'] = array(
+        '#markup' => '<a id="studio-delete-bt" class="btn btn-xs btn-danger">Delete</a>',
+    );
     $form['random_user'] = array(
-      '#type' => 'button',
-      '#value' => 'Apply',
+            '#type' => 'button',
+            '#value' => 'Apply',
       //'#suffix' => '<div id="studio-img-container"></div><div id="js-holder"></div><div id="studio-img-container1">'.$block.'</div>',
-      '#suffix' => '<div id="studio-img-container"></div><div id="js-holder"></div><a id="studio-resequence-bt" class="btn btn-warning">Resequence</a><a id="studio-delete-bt" class="btn btn-danger">Delete</a><div id="msg-up"></div>',
-      '#ajax' => array(
-        'callback' => 'Drupal\studiobridge_live_shoot_page\Form\StudioBridgeLiveShootingForm::productGetOrUpdateCallback',
-        //'callback' => 'Drupal\studiobridge_live_shoot_page\Form\StudioBridgeLiveShootingForm::randomUsernameCallback',
-        'event' => 'click',
-        'progress' => array(
-          'type' => 'throbber',
-          //'type' => 'bar',
-          'message' => 'Getting Product',
+
+      '#suffix' => '<div id="studio-img-container"></div><div id="js-holder"></div><div id="msg-up"></div>',
+        '#ajax' => array(
+            'callback' => 'Drupal\studiobridge_live_shoot_page\Form\StudioBridgeLiveShootingForm::productGetOrUpdateCallback',
+          //'callback' => 'Drupal\studiobridge_live_shoot_page\Form\StudioBridgeLiveShootingForm::randomUsernameCallback',
+            'event' => 'click',
+            'progress' => array(
+                'type' => 'throbber',
+              //'type' => 'bar',
+                'message' => 'Getting Product',
+            ),
+
         ),
-      ),
+    );
+
+    $productdetails = Products::getProductInformation($identifier_hidden);
+
+    $form['productdetails'] = array(
+            'concept' => $productdetails['concept'],
+            'styleno' => $productdetails['styleno'],
+            'colorvariant' => $productdetails['colorvariant'],
+            'gender' => $productdetails['gender'],
+            'color' => $productdetails['color'],
+            'description' => $productdetails['description'],
+            'identifier' => $identifier,
+        '#visible' => TRUE,
     );
 
     $form['markup_product_details_first'] = array(
       '#suffix' => '<div id="studio-img-container1"><div id="sortable" class="ui-sortable">',
     );
 
+
+    $array_images = array();
     $i = 1;
     foreach($images as $fid => $src){
 
-      $form['markup_product_details__'.$fid] = array(
-        '#visible' => TRUE,
-        '#theme' => 'sbtheme_image',
-        '#url' => $src['uri'],
-        '#name' => $src['name'],
-        '#fid' => $fid,
-        '#id' => $i,
-      );
-
+      $array_images[] = array('url' => $src['uri'],
+          'name' => $src['name'],
+          'fid' => $fid,
+          'id' => $i);
       $i ++;
 
+
     }
+    $form['images'] = array(
+        'images' => $array_images,
+
+    );
+    $form['markup_product_details__'.$fid] = array(
+        '#theme' => 'sbtheme_image',
+        '#images' => $array_images,
+    );
 
     $form['markup_product_details_second'] = array(
       '#suffix' => '</div></div>',

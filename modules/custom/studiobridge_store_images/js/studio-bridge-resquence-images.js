@@ -37,7 +37,7 @@
                 var dup_holder = [];
 
                 // Get the container element
-                container = document.getElementById('sortable');
+                container = document.getElementById('imagecontainer');
 
                 // Find its child `input` elements
                 inputs = container.getElementsByTagName('input');
@@ -83,7 +83,7 @@
         var dup_holder = [];
 
         // Get the container element
-        container = document.getElementById('sortable');
+        container = document.getElementById('imagecontainer');
 
         // Find its child `input` elements
         inputs = container.getElementsByTagName('input');

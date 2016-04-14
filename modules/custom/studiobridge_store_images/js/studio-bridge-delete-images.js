@@ -36,7 +36,7 @@
                 var container, inputs, index, index2;
 
                 // Get the container element
-                container = document.getElementById('sortable');
+                container = document.getElementById('imagecontainer');
 
                 // Find its child `input` elements
                 inputs = container.getElementsByClassName("form-checkbox");
@@ -47,17 +47,17 @@
                     // deal with inputs[index] element.
                     if(inputs[index].checked){
                         //document.getElementById("warpper-img-"+inputs[index].value).remove();
-                        //alert(inputs[index].value);
+                        console.log(inputs[index].value);
                         del.push("warpper-img-"+inputs[index].value);
                     }
                 }
                 del.forEach(function(entry) {
-                    //console.log(entry);
+                    console.log(entry);
                     document.getElementById(entry).remove();
                 });
 
                 // Update image wrappers.
-                container = document.getElementById('sortable');
+                container = document.getElementById('imagecontainer');
                 var inputs2 = container.getElementsByClassName("form-checkbox");
                 for (index2 = 0; index2 < inputs2.length; ++index2) {
                     // deal with inputs[index] element.
@@ -92,7 +92,7 @@
         var imgs = [];
 
         // Get the container element
-        container = document.getElementById('sortable');
+        container = document.getElementById('imagecontainer');
 
         // Find its child `input` elements
         inputs = container.getElementsByClassName("form-checkbox");

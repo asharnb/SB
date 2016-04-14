@@ -1,0 +1,233 @@
+{% extends 'sbtheme_page.html.twig' %}
+
+
+{% block sbtheme_scancontainer %}
+    <div id="panel-psa" class="panel panel-default">
+        <div class="panel-heading seperator">
+            <div class="panel-title">Product Scan
+            </div>
+            <div class="panel-controls">
+            </div>
+        </div>
+        <div class="panel-body">
+            <h3>
+                <span class="semi-bold">Scan</span> Product Tag</h3>
+            <div  class="smart-form" >
+
+
+
+                <div class="form-group form-group-default required">
+                    <label>SKU/Barcode/EAN</label>
+
+                    {{ form.identifier }}
+
+                    {{ form.identifier_hidden }}
+                    {{ form.identifier_nid }}
+
+                </div>
+                {{ form.random_user }}
+            </div>
+        </div>
+    </div>
+
+
+{% endblock %}
+
+
+{% block sbtheme_product %}
+
+    <div id="panel-pi" class="panel panel-default">
+        <div class="panel-heading seperator">
+            <div class="panel-title">Product Information
+            </div>
+            <div class="panel-controls">
+                <a class="btn btn-xs btn-default" onclick="return false();">Shoot Guide</a>
+                <a class="btn btn-xs btn-info" onclick="return false();">Attach Model</a>
+            </div>
+        </div>
+        <div class="panel-body">
+            <div class="row">
+                <div class="col-lg-6">
+                    <dl class="dl-horizontal">
+                        <dt>Concept:</dt>
+
+                        {% if form.productdetails.concept == 'Unmapped' %}
+                            <dd class="mb-10"><img src="/ca/img/brands/brand_logo_.png" height="20px"></dd>
+                        {% else %}
+                            <dd class="mb-10"><img src="/ca/img/brands/brand_logo_{{ product.concept|lower }}.png" height="20px"></dd>
+                        {% endif %}
+                    </dl>
+
+                </div>
+                <div class="col-lg-6">
+                    <dl class="dl-horizontal">
+                        <dt>Color Variant:</dt>
+                        <dd><strong><{{ form.productdetails.colorvariant }}/strong></dd>
+                    </dl>
+
+                </div>
+            </div>
+            <div class="row">
+
+                <div class="col-lg-6">
+                    <dl class="dl-horizontal">
+                        <dt>Identifier:</dt>
+                        <dd>{{ form.productdetails.identifier }}</dd>
+                        <dt>Style No:</dt>
+                        <dd>{{ form.productdetails.styleno }}</dd>
+                        <dt>Color Variant:</dt>
+                        <dd><{{ form.productdetails.colorvariant }}/dd>
+                        <dt>Season:</dt>
+                        <dd>--</dd>
+                    </dl>
+                </div>
+                <div class="col-lg-6">
+                    <dl class="dl-horizontal">
+                        <dt>Gender:</dt>
+                        <dd><strong>{{ form.productdetails.gender }}</strong></dd>
+                        <dt>Color:</dt>
+                        <dd>{{ form.productdetails.color }}</dd>
+                        <dt>Size:</dt>
+                        <dd>--</dd>
+                        <dt>Description:</dt>
+                        <dd>{{ form.productdetails.description }}</dd>
+                    </dl>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+{% endblock %}
+
+{% spaceless %}
+    {% block sbimages %}
+
+        {% for image in form.images.images %}
+            {% if not image.fid == '' %}
+                <div class="bulkviewfiles imagefile" id="warpper-img-{{ image.fid }}">
+                    <div class="ribbon"><span id="seq-{{ image.fid }}">{{ image.id }}</span></div>
+
+                    <div class="scancontainer">
+                        <img src="{{ image.url }}" class="scanpicture">
+                    </div>
+                    <div class="file-name">
+                        <span class="bkname"><i class="fa fa-camera"></i><b id="seq-img-{{ image.fid }}">{{ image.name }}</b></span>
+                        <hr class="simple">
+
+                        <div class="row">
+
+                            <div class="col col-sm-12">
+                            <span><label for="del-img-{{ image.fid }}" class="checkbox"><input type="checkbox"
+                                                                                               id="del-img-{{ image.fid }}"
+                                                                                               class="form-checkbox" value="{{ image.fid }}"><i></i>Delete</label></span>
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="studio-img-weight"><input type="hidden" value="{{ image.fid }}"></div>
+                </div>
+            {% endif %}
+        {% endfor %}
+    {% endblock sbimages %}
+{% endspaceless %}
+
+{% block sidepanel %}
+    <div class="sidebard-panel" style="min-height: 100%;">
+
+        <div id="widgettile" data-mode="carousel" data-start-now="true" class="live-tile"
+             data-direction="horizontal" data-delay="3000">
+            <div class="widget blue-bg p-lg text-center">
+                <div class="m-b-md"><i class="fa fa-camera"></i>
+                    <h1 class="m-xs">0</h1>
+                    <h3 class="font-bold no-margins">Products</h3>
+                    <small>Total Products</small>
+                </div>
+            </div>
+        </div>
+
+        <div class="m-t-md">
+            <h4>Listener App</h4>
+            <div class=" m-t-sm gray-bkground text-center">
+											<span class="text-center">
+												<div id="appstatus"></div>
+											</span></div>
+        </div>
+
+        <div class="m-t-md">
+            <h4>For Help</h4>
+            <div class=" m-t-sm gray-bkground text-center">
+												<span class="text-center">
+													Call 050-8744200
+												</span></div>
+        </div>
+
+    </div>
+    <div class="m-t-md">
+        <h4>Session</h4>
+        <h3 class="text-center"><strong></strong></h3>
+        <div class="m-t-sm gray-bkground">
+            <div class="row">
+                <div class="col-md-6">
+                    &nbsp; <span><i class="fa fa-circle text-success"></i> Open</span>
+                </div>
+                <div class="col-md-6">
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <div class="m-t-md">
+        <h4>Current Session</h4>
+        <div>
+            <ul class="list-group">
+
+                <li class="list-group-item ">
+                    <span class="label label-default pull-right">0</span>
+                    Total Products
+                </li>
+                <li class="list-group-item ">
+                    <span class="label label-success pull-right">0</span>
+                    Approved
+                </li>
+                <li class="list-group-item ">
+                    <span class="label label-danger pull-right">0</span>
+                    Rejected
+                </li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="m-t-md">
+        <h4>Current Product</h4>
+        <div>
+            <ul class="list-group">
+                <li class="list-group-item">
+                    <span class="label label-default pull-right">New </span>
+                    Product Status
+                </li>
+                <li class="list-group-item">
+                    <span class="label label-warning pull-right">0:00:00</span>
+                    Time Elapsed
+                </li>
+                <li class="list-group-item">
+                    <span class="label label-success pull-right">0</span>
+                    Images Shot
+                </li>
+                <li class="list-group-item">
+                    <span class="label label-danger pull-right">0</span>
+                    Images Deleted
+                </li>
+                <li class="list-group-item">
+                    <span class="label label-warning pull-right">No</span>
+                    In Sequence
+                </li>
+                <li class="list-group-item">
+                    <span class="label label-warning pull-right">No</span>
+                    Has Tag Image?
+                </li>
+            </ul>
+        </div>
+    </div>
+{% endblock sidepanel %}

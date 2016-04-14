@@ -14,38 +14,28 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 
-/**
- * Returns autocomplete responses for scanning products.
- */
-class StudioAutocompleteController implements ContainerInjectionInterface {
 
+class StudioAutocompleteController implements ContainerInjectionInterface {
   /**
    * {@inheritdoc}
    */
   public static function create(ContainerInterface $container) {
     // todo : create service class for this
     return new static(
-      $container->get('plugin.manager.block')
+        $container->get('plugin.manager.block')
     );
   }
-
-  /**
-   * Retrieves suggestions for products autocompletion.
-   *
-   * @param \Symfony\Component\HttpFoundation\Request $request
-   *   The current request.
-   *
-   * @return \Symfony\Component\HttpFoundation\JsonResponse
-   *   A JSON response containing autocomplete suggestions.
-   */
-  public function autocomplete(Request $request) {
-    // todo : ask external resource to get products.
-    $input = $request->query->get('q');
-    $matches = array();
-
-    $matches[] = array('value' => 'value1', 'label' => Html::escape('Value1'));
-    $matches[] = array('value' => 'value12', 'label' => Html::escape('Value2'));
-    return new JsonResponse($matches);
+  public function content() {
+    $form = \Drupal::formBuilder()->getForm('Drupal\studiobridge_live_shoot_page\Form\StudioBridgeLiveShootingForm');
+    //$aa = drupal_render($form);
+    return array(
+        '#theme' => 'sbtheme_page',
+        '#form' => $form,
+        '#attached' => array(
+            'library' =>  array(
+                'core/jquery.ui.sortable'
+            )
+        ),
+    );
   }
-
 }

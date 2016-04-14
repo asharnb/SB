@@ -37,3 +37,5 @@ sites/simpletest
 
 # Ignore PHPStorm .idea folder
 .idea
+
+.htaccess
