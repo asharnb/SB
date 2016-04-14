@@ -72,6 +72,10 @@ class StudioBridgeLiveShootingForm extends FormBase {
         //studiobridge_store_images_update_product_as_open($_GET['identifier']);
         Products::updateProductState($_GET['identifier'],'open');
         \Drupal::state()->set('last_scan_product_'.$uid.'_'.$session_id,$_GET['identifier']);
+
+
+        // Add product to session.
+        Sessions::UpdateLastProductToSession($session_id,\Drupal\node\Entity\Node::load($new_or_old_product_nid));
       }
     }else{
       $result = Products::getProductByIdentifier($identifier_hidden);
@@ -297,8 +301,8 @@ class StudioBridgeLiveShootingForm extends FormBase {
 
     $images = Products::getProductImages($new_or_old_product_nid);
 
-    $block = '<div id="sortable" class="ui-sortable">';
-    //$block = '';
+    //$block = '<div id="sortable" class="ui-sortable">';
+    $block = '<div id="imagecontainer" name="imagecontainer" class="ui-sortable">';
     $i = 1;
     foreach($images as $fid => $src){
       //$block = '';
@@ -332,9 +336,9 @@ class StudioBridgeLiveShootingForm extends FormBase {
     }
     $block .= '</div>';
 
-    $sort_js = '<script>!function(e){e(function(){e("#sortable").sortable(),e("#sortable").disableSelection()})}(jQuery);</script>';
+    $sort_js = '<script>!function(e){e(function(){e("#imagecontainer").sortable(),e("#imagecontainer").disableSelection()})}(jQuery);</script>';
 
-    $ajax_response->addCommand(new HtmlCommand('#studio-img-container1', $block));
+    $ajax_response->addCommand(new HtmlCommand('#imagecontainer-wrapper', $block));
     $ajax_response->addCommand(new HtmlCommand('#studio-img-container', ''));
     $ajax_response->addCommand(new HtmlCommand('#js-holder', $sort_js));
     //$ajax_response->addCommand(new HtmlCommand('#sortable', $block));

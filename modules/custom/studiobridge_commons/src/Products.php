@@ -286,7 +286,7 @@ Class Products {
       $node_id = reset($node_id);
       // Load the node object.
       $product = Node::load($node_id);
-    }
+
 
 
     $bundle = $product->bundle();
@@ -341,5 +341,6 @@ Class Products {
     }
     $output = $output_array;
     return $output;
+  }
   }
 }
