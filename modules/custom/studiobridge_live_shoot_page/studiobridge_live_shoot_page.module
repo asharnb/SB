@@ -2,41 +2,23 @@
 
 function studiobridge_live_shoot_page_theme() {
   return array(
-      'sbtheme_product' => array(
-          'variables' => array(
-                  'concept' => NULL,
-                  'styleno' => NULL,
-                  'colorvariant' => NULL,
-                  'gender' => NULL,
-                  'color' => NULL,
-                  'description' => NULL,
-                  'identifier' => NULL,
-
-      ),
-      'template' => 'sbtheme'
-    ),
-    'sbtheme_scan' => array(
-      'variables' => array(
-        'attributes' => array(),
-      ),
-      'template' => 'sbtheme_scan'
-    ),
     'sbtheme_page' => array(
         'variables' => array(
             'form' => array(),
-            'product' => array(
-                'concept' => NULL,
-                'styleno' => NULL,
-                'colorvariant' => NULL,
-                'gender' => NULL,
-                'color' => NULL,
-                'description' => NULL,
-                'identifier' => NULL,
-            )
+
         ),
       'template' => 'sbtheme_page_view'
 
     ),
+
+      'sbtheme_page_test' => array(
+          'variables' => array(
+              'form' => array(),
+
+          ),
+          'template' => 'sbtheme_test'
+
+      ),
 
   );
 

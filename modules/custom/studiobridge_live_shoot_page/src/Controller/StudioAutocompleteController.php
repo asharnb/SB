@@ -31,11 +31,13 @@ class StudioAutocompleteController implements ContainerInjectionInterface {
     return array(
         '#theme' => 'sbtheme_page',
         '#form' => $form,
+        '#cache' => array('max-age' => 0),
         '#attached' => array(
             'library' =>  array(
                 'core/jquery.ui.sortable'
             )
         ),
+
     );
   }
 }

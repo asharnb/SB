@@ -83,20 +83,15 @@ class StudioBridgeLiveShootingForm extends FormBase {
     $identifier = $identifier_hidden;
 
 
-    $form['sortable'] = array(
-        '#markup' => '<ul id="sortable"></ul>',
-    );
-
-
-    $form['markup_product_details'] = array(
-        '#suffix' => '<div id="studio-bridge-product-details"></div>',
-    );
-    // @ashar : add the ajax call back to the identifier
-
     $form['identifier'] = array(
         '#type' => 'textfield',
         '#description' => $this->t('description will come here'),
         '#default_value' => $identifier,
+        '#ajax' => array(
+            'callback' => 'Drupal\studiobridge_live_shoot_page\Form\StudioBridgeLiveShootingForm::productGetOrUpdateCallback',
+            'event' => 'enter',
+
+        ),
 
     );
 
@@ -132,21 +127,15 @@ class StudioBridgeLiveShootingForm extends FormBase {
     $form['delete'] = array(
         '#markup' => '<a id="studio-delete-bt" class="btn btn-xs btn-danger">Delete</a>',
     );
+    $form['misc'] = array(
+        '#markup' => '<div id="studio-img-container"></div><div id="js-holder"></div><div id="msg-up"></div>',
+  );
     $form['random_user'] = array(
             '#type' => 'button',
             '#value' => 'Apply',
-      //'#suffix' => '<div id="studio-img-container"></div><div id="js-holder"></div><div id="studio-img-container1">'.$block.'</div>',
-
-      '#suffix' => '<div id="studio-img-container"></div><div id="js-holder"></div><div id="msg-up"></div>',
         '#ajax' => array(
             'callback' => 'Drupal\studiobridge_live_shoot_page\Form\StudioBridgeLiveShootingForm::productGetOrUpdateCallback',
-          //'callback' => 'Drupal\studiobridge_live_shoot_page\Form\StudioBridgeLiveShootingForm::randomUsernameCallback',
             'event' => 'click',
-            'progress' => array(
-                'type' => 'throbber',
-              //'type' => 'bar',
-                'message' => 'Getting Product',
-            ),
 
         ),
     );
@@ -161,11 +150,6 @@ class StudioBridgeLiveShootingForm extends FormBase {
             'color' => $productdetails['color'],
             'description' => $productdetails['description'],
             'identifier' => $identifier,
-        '#visible' => TRUE,
-    );
-
-    $form['markup_product_details_first'] = array(
-      '#suffix' => '<div id="studio-img-container1"><div id="sortable" class="ui-sortable">',
     );
 
 
@@ -185,19 +169,8 @@ class StudioBridgeLiveShootingForm extends FormBase {
         'images' => $array_images,
 
     );
-    $form['markup_product_details__'.$fid] = array(
-        '#theme' => 'sbtheme_image',
-        '#images' => $array_images,
-    );
+    $form['#attributes'] = array();
 
-    $form['markup_product_details_second'] = array(
-      '#suffix' => '</div></div>',
-    );
-    $form['#attributes'] = array('class' => 'smart-form');
-    $form['#attached']['library'][] = 'core/jquery.ui.sortable';
-    //$form['#attached']['library'][] = 'studiobridge_store_images/studio-bridge-view-product';
-
-    //$form_state->setRebuild(TRUE);
     return $form;
   }
 
