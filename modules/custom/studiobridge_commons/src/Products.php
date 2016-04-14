@@ -286,10 +286,16 @@ Class Products {
       $node_id = reset($node_id);
       // Load the node object.
       $product = Node::load($node_id);
-
+      $images = $product->field_images->getValue();
 
 
     $bundle = $product->bundle();
+    $concept = '';
+      $style_no = '';
+      $color_variant = '';
+      $gender = '';
+      $color = '';
+      $description = '';
 
 
     if($bundle == 'unmapped_products'){
@@ -300,7 +306,9 @@ Class Products {
           "colorvariant" => '',
           "gender" => '',
           "color" => '',
-          "description" => '');
+          "description" => '',
+          "image_count" => count($images)
+      );
 
     }else{
 
@@ -336,11 +344,16 @@ Class Products {
           "colorvariant" => $color_variant,
           "gender" => $gender,
           "color" => $color,
-          "description" => $description);
+          "description" => $description,
+          "image_count" => count($images)
+      );
 
     }
     $output = $output_array;
     return $output;
-  }
+  }else{
+      return false;
+    }
+
   }
 }

@@ -146,16 +146,18 @@ class StudioBridgeLiveShootingForm extends FormBase {
 
     $productdetails = Products::getProductInformation($identifier_hidden);
 
-    $form['productdetails'] = array(
-            'concept' => $productdetails['concept'],
-            'styleno' => $productdetails['styleno'],
-            'colorvariant' => $productdetails['colorvariant'],
-            'gender' => $productdetails['gender'],
-            'color' => $productdetails['color'],
-            'description' => $productdetails['description'],
-            'identifier' => $identifier,
-    );
-
+    if($productdetails){
+      $form['productdetails'] = array(
+        'concept' => $productdetails['concept'],
+        'styleno' => $productdetails['styleno'],
+        'colorvariant' => $productdetails['colorvariant'],
+        'gender' => $productdetails['gender'],
+        'color' => $productdetails['color'],
+        'description' => $productdetails['description'],
+        'identifier' => $identifier,
+        'image_count' => $productdetails['image_count']
+      );
+    }
 
     $array_images = array();
     $i = 1;
@@ -345,6 +347,25 @@ class StudioBridgeLiveShootingForm extends FormBase {
     $ajax_response->addCommand(new InvokeCommand('#edit-identifier-hidden', 'val', array($identifier)));
     $ajax_response->addCommand(new InvokeCommand('#edit-identifier-nid', 'val', array($new_or_old_product_nid)));
     $ajax_response->addCommand(new InvokeCommand('#edit-identifier-hidden', 'change'));
+
+
+    // update in product details section   todo : later remove it
+
+    $productdetails = Products::getProductInformation($identifier);
+
+    if($productdetails){
+
+      $ajax_response->addCommand(new HtmlCommand('#dd-identifier', $identifier));
+      $ajax_response->addCommand(new HtmlCommand('#dd-styleno', $productdetails['styleno']));
+      $ajax_response->addCommand(new HtmlCommand('#dd-colorvariant', $productdetails['colorvariant']));
+      $ajax_response->addCommand(new HtmlCommand('#dd-gender', $productdetails['gender']));
+      $ajax_response->addCommand(new HtmlCommand('#dd-color', $productdetails['color']));
+      $ajax_response->addCommand(new HtmlCommand('#dd-description', $productdetails['description']));
+      $ajax_response->addCommand(new HtmlCommand('#product-img-count', $productdetails['image_count']));
+
+    }
+
+
     return $ajax_response;
   }
 

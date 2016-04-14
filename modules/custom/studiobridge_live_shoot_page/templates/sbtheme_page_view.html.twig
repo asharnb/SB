@@ -78,11 +78,11 @@
                 <div class="col-lg-6">
                     <dl class="dl-horizontal">
                         <dt>Identifier:</dt>
-                        <dd>{{ form.productdetails.identifier }}</dd>
+                        <dd id="dd-identifier">{{ form.productdetails.identifier }}</dd>
                         <dt>Style No:</dt>
-                        <dd>{{ form.productdetails.styleno }}</dd>
+                        <dd id="dd-styleno">{{ form.productdetails.styleno }}</dd>
                         <dt>Color Variant:</dt>
-                        <dd><{{ form.productdetails.colorvariant }}/dd>
+                        <dd id="dd-colorvariant"><{{ form.productdetails.colorvariant }}/dd>
                         <dt>Season:</dt>
                         <dd>--</dd>
                     </dl>
@@ -90,13 +90,13 @@
                 <div class="col-lg-6">
                     <dl class="dl-horizontal">
                         <dt>Gender:</dt>
-                        <dd><strong>{{ form.productdetails.gender }}</strong></dd>
+                        <dd><strong id="dd-gender">{{ form.productdetails.gender }}</strong></dd>
                         <dt>Color:</dt>
-                        <dd>{{ form.productdetails.color }}</dd>
+                        <dd id="dd-color">{{ form.productdetails.color }}</dd>
                         <dt>Size:</dt>
                         <dd>--</dd>
                         <dt>Description:</dt>
-                        <dd>{{ form.productdetails.description }}</dd>
+                        <dd id="dd-description">{{ form.productdetails.description }}</dd>
                     </dl>
                 </div>
             </div>
@@ -220,7 +220,7 @@
                     Time Elapsed
                 </li>
                 <li class="list-group-item">
-                    <span class="label label-success pull-right">0</span>
+                    <span class="label label-success pull-right" id="product-img-count">{{ form.productdetails.image_count }}</span>
                     Images Shot
                 </li>
                 <li class="list-group-item">
