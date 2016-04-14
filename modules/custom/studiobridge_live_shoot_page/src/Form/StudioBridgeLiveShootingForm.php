@@ -90,12 +90,20 @@ class StudioBridgeLiveShootingForm extends FormBase {
     $identifier = $identifier_hidden;
 
 
+<<<<<<< Updated upstream
 
     // @ashar : this does not need to be refreshed
 <<<<<<< Updated upstream
+=======
+    $form['sortable'] = array(
+        '#markup' => '<ul id="sortable"></ul>',
+    );
+
+>>>>>>> Stashed changes
 
 
     $form['identifier'] = array(
+<<<<<<< Updated upstream
         '#theme' => 'sbtheme_scan',
         '#type' => 'textfield',
         '#description' => $this->t('description will come here'),
@@ -110,6 +118,12 @@ class StudioBridgeLiveShootingForm extends FormBase {
                 'message' => 'Getting Product',
             ),
         ),
+=======
+      '#type' => 'textfield',
+      '#description' => $this->t('description will come here'),
+      '#default_value' => $identifier,
+
+>>>>>>> Stashed changes
     );
 
     $productdetails =$this->getProductData($new_or_old_product_nid);
@@ -180,13 +194,46 @@ class StudioBridgeLiveShootingForm extends FormBase {
     }
 // @ashar : seperate this image container so we can apply theme formatting to it
 
+    $form['resequence'] = array(
+      '#markup' => '<a id="studio-resequence-bt" class="btn btn-xs btn-info">Resequence</a>',
+    );
+    $form['delete'] = array(
+        '#markup' => '<a id="studio-delete-bt" class="btn btn-xs btn-danger">Delete</a>',
+    );
     $form['random_user'] = array(
       '#type' => 'button',
       '#value' => 'Apply',
       '#visible' => FALSE,
       //'#suffix' => '<div id="studio-img-container"></div><div id="js-holder"></div><div id="studio-img-container1">'.$block.'</div>',
+<<<<<<< Updated upstream
       //'#suffix' => '<div id="studio-img-container"></div><div id="js-holder"></div><a id="studio-resequence-bt" class="btn btn-warning">Resequence</a><div id="msg-up"></div>',
 
+=======
+      '#suffix' => '<div id="studio-img-container"></div><div id="js-holder"></div><div id="msg-up"></div>',
+        '#ajax' => array(
+            'callback' => 'Drupal\studiobridge_live_shoot_page\Form\StudioBridgeLiveShootingForm::productGetOrUpdateCallback',
+          //'callback' => 'Drupal\studiobridge_live_shoot_page\Form\StudioBridgeLiveShootingForm::randomUsernameCallback',
+            'event' => 'enter',
+            'progress' => array(
+                'type' => 'throbber',
+              //'type' => 'bar',
+                'message' => 'Getting Product',
+            ),
+        ),
+    );
+
+    $productdetails = Products::getProductInformation($identifier_hidden);
+
+    $form['productdetails'] = array(
+            'concept' => $productdetails['concept'],
+            'styleno' => $productdetails['styleno'],
+            'colorvariant' => $productdetails['colorvariant'],
+            'gender' => $productdetails['gender'],
+            'color' => $productdetails['color'],
+            'description' => $productdetails['description'],
+            'identifier' => $identifier,
+        '#visible' => TRUE,
+>>>>>>> Stashed changes
     );
 
 
@@ -235,7 +282,10 @@ class StudioBridgeLiveShootingForm extends FormBase {
         '#suffix' => '<div id="studio-img-container1"><div id="sortable" class="ui-sortable">',
     );
 
+<<<<<<< Updated upstream
 
+=======
+>>>>>>> Stashed changes
     $array_images = array();
     $i = 1;
     foreach($images as $fid => $src){
@@ -248,6 +298,7 @@ class StudioBridgeLiveShootingForm extends FormBase {
 
 
     }
+<<<<<<< Updated upstream
 >>>>>>> Stashed changes
 
     $form['markup_product_details__'.$fid] = array(
@@ -260,6 +311,16 @@ class StudioBridgeLiveShootingForm extends FormBase {
 //        '#value' => $fid,
 //    );
 
+=======
+    $form['images'] = array(
+        'images' => $array_images,
+
+    );
+    $form['markup_product_details__'.$fid] = array(
+        '#theme' => 'sbtheme_image',
+        '#images' => $array_images,
+    );
+>>>>>>> Stashed changes
 
     $form['markup_product_details_second'] = array(
         '#suffix' => '</div></div>',

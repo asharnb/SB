@@ -32,10 +32,15 @@
             //alert("Data: " + data + "\nStatus: " + status);
 <<<<<<< Updated upstream
             //document.getElementById('studio-img-container').innerHTML = data.content;
+<<<<<<< Updated upstream
             document.getElementById('block-currentsessionviewblock').innerHTML = data.block1;
             document.getElementById('studio-bridge-product-details').innerHTML = data.block2;
 =======
             document.getElementById('studio-img-container').innerHTML = data.content;
+            //document.getElementById('block-currentsessionviewblock').innerHTML = data.block1;
+            //document.getElementById('studio-bridge-product-details').innerHTML = data.block2;
+>>>>>>> Stashed changes
+=======
             //document.getElementById('block-currentsessionviewblock').innerHTML = data.block1;
             //document.getElementById('studio-bridge-product-details').innerHTML = data.block2;
 >>>>>>> Stashed changes
@@ -65,7 +70,7 @@
         var container, inputs, index;
 
         // Get the container element
-        container = document.getElementById('sortable');
+        container = document.getElementById('imagecontainer');
 
         // Find its child `input` elements
         inputs = container.getElementsByTagName('input');
@@ -73,7 +78,7 @@
 
 
 
-        var ul = document.getElementById("sortable");
+        var ul = document.getElementById("imagecontainer");
         var li = document.createElement("div");
         //li.appendChild(document.createTextNode(100));
         li.setAttribute("class", "bulkviewfiles imagefile ui-sortable-handle"); // added line
@@ -114,7 +119,7 @@
     }
 
     $(function() {
-        $("#sortable").sortable({
+        $("#imagecontainer").sortable({
             tolerance: 'pointer',
             start: function(event, ui){
                 ui.placeholder.html("<div class='bulkviewfiles file gray-bkground' style='width: 250px; height: 250px; background: #D2D2D2;'></div>");
@@ -125,7 +130,7 @@
         });
 
 
-        $( "#sortable" ).disableSelection();
+        $( "#imagecontainer" ).disableSelection();
     });
 
 

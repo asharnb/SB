@@ -177,9 +177,15 @@ AddEncoding gzip svgz
       # Force proxies to cache gzipped & non-gzipped css/js files separately.
       Header append Vary Accept-Encoding
     </FilesMatch>
+<<<<<<< Updated upstream
         Header set Access-Control-Allow-Origin "*"
         Header set Access-Control-Allow-Methods "POST, GET, OPTIONS"
         Header set Access-Control-Allow-Headers "Authorization, Content-Type, X-CSRF-
+=======
+    Header set Access-Control-Allow-Origin "*"
+    Header set Access-Control-Allow-Methods "POST, GET, OPTIONS"
+    Header set Access-Control-Allow-Headers "Authorization, Content-Type, X-CSRF-Token"
+>>>>>>> Stashed changes
   </IfModule>
 </IfModule>
 

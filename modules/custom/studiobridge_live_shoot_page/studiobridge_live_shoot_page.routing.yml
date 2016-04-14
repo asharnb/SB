@@ -1,13 +1,19 @@
+#studiobridge_live_shoot_page.form:
+#    path: '/live-shooting-page1'
+#    defaults:
+#        _form: 'Drupal\studiobridge_live_shoot_page\Form\StudioBridgeLiveShootingForm'
+#        _title: 'Live shooting page'
+#    requirements:
+#        _permission: 'access live shooting page'
+#studiobridge_live_shoot_page.autocomplete:
+#  path: '/studiobridge-live-shoot-page/autocomplete'
+#  defaults:
+#    _controller: '\Drupal\studiobridge_live_shoot_page\Controller\StudioAutocompleteController::autocomplete'
+#  requirements:
+#    _permission: 'access content'
 studiobridge_live_shoot_page.form:
-    path: '/live-shooting-page1'
-    defaults:
-        _form: 'Drupal\studiobridge_live_shoot_page\Form\StudioBridgeLiveShootingForm'
-        _title: 'Live shooting page'
-    requirements:
-        _permission: 'access live shooting page'
-studiobridge_live_shoot_page.autocomplete:
-  path: '/studiobridge-live-shoot-page/autocomplete'
+  path: '/live-shooting-page1'
   defaults:
-    _controller: '\Drupal\studiobridge_live_shoot_page\Controller\StudioAutocompleteController::autocomplete'
+    _controller: '\Drupal\studiobridge_live_shoot_page\Controller\StudioAutocompleteController::content'
   requirements:
     _permission: 'access content'

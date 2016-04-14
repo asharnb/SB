@@ -34,6 +34,7 @@ function studiobridge_live_shoot_page_theme() {
           ),
           'template' => 'sbtheme_scan'
       ),
+<<<<<<< Updated upstream
       'sbtheme_image' => array(
           'variables' => array(
               'url' => NULL,
@@ -63,6 +64,27 @@ function studiobridge_live_shoot_page_theme() {
 
 
 
+=======
+      'template' => 'sbtheme_scan'
+    ),
+    'sbtheme_page' => array(
+        'variables' => array(
+            'form' => array(),
+            'product' => array(
+                'concept' => NULL,
+                'styleno' => NULL,
+                'colorvariant' => NULL,
+                'gender' => NULL,
+                'color' => NULL,
+                'description' => NULL,
+                'identifier' => NULL,
+            )
+        ),
+      'template' => 'sbtheme_page_view'
+
+    ),
+
+>>>>>>> Stashed changes
   );
 
 }

@@ -267,11 +267,19 @@ Class Products {
   }
 
   /*
+<<<<<<< Updated upstream
  * Helper function, to get a product by its identifier.
  *
  * @param identifier
  *   Name of the identifier.
  */
+=======
+* Helper function, to get a product by its identifier.
+*
+* @param identifier
+*   Name of the identifier.
+*/
+>>>>>>> Stashed changes
   public static function getProductInformation($identifier) {
 
     $node_id = self::getProductByIdentifier($identifier);
