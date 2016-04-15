@@ -19,7 +19,7 @@ use Drupal\Core\Form\FormBase;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Entity\Element\EntityAutocomplete;
 use Drupal\Core\Routing\TrustedRedirectResponse;
-use Drupal\node\Plugin\migrate\source\d7\Node;
+use \Drupal\node\Entity\Node;
 use Drupal\studiobridge_commons\Sessions;
 use Drupal\studiobridge_commons\Products;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -75,7 +75,7 @@ class StudioBridgeLiveShootingForm extends FormBase {
 
 
         // Add product to session.
-        Sessions::UpdateLastProductToSession($session_id,\Drupal\node\Entity\Node::load($new_or_old_product_nid));
+        Sessions::UpdateLastProductToSession($session_id,Node::load($new_or_old_product_nid));
       }
     }else{
       $result = Products::getProductByIdentifier($identifier_hidden);
@@ -144,6 +144,8 @@ class StudioBridgeLiveShootingForm extends FormBase {
     $productdetails = Products::getProductInformation($identifier_hidden);
 
     if($productdetails){
+      $session = Node::load($session_id);
+      $session_products = $session->field_product->getValue();
       $form['productdetails'] = array(
         'concept' => $productdetails['concept'],
         'styleno' => $productdetails['styleno'],
@@ -152,7 +154,8 @@ class StudioBridgeLiveShootingForm extends FormBase {
         'color' => $productdetails['color'],
         'description' => $productdetails['description'],
         'identifier' => $identifier,
-        'image_count' => $productdetails['image_count']
+        'image_count' => $productdetails['image_count'],
+        'total_products' => count($session_products),
       );
     }
 
@@ -288,7 +291,7 @@ class StudioBridgeLiveShootingForm extends FormBase {
     // Once product is scanned update it to session
     if(!$is_unmapped_product){
       //studiobridge_store_images_add_product_to_session($session_id, \Drupal\node\Entity\Node::load($new_or_old_product_nid));
-      Products::addProductToSession($session_id, \Drupal\node\Entity\Node::load($new_or_old_product_nid));
+      Products::addProductToSession($session_id, Node::load($new_or_old_product_nid));
     }
 
     \Drupal::state()->set('last_scan_product_'.$uid.'_'.$session_id,$identifier);
@@ -296,7 +299,7 @@ class StudioBridgeLiveShootingForm extends FormBase {
     if($new_or_old_product_nid){
       \Drupal::state()->set('last_scan_product_nid'.$uid.'_'.$session_id,$new_or_old_product_nid);
       // todo : add product to session.
-      Sessions::UpdateLastProductToSession($session_id,\Drupal\node\Entity\Node::load($new_or_old_product_nid));
+      Sessions::UpdateLastProductToSession($session_id,Node::load($new_or_old_product_nid));
     }
 
     $images = Products::getProductImages($new_or_old_product_nid);
@@ -352,6 +355,9 @@ class StudioBridgeLiveShootingForm extends FormBase {
     $productdetails = Products::getProductInformation($identifier);
 
     if($productdetails){
+      $session = Node::load($session_id);
+      $session_products = $session->field_product->getValue();
+
 
       $ajax_response->addCommand(new HtmlCommand('#dd-identifier', $identifier));
       $ajax_response->addCommand(new HtmlCommand('#dd-styleno', $productdetails['styleno']));
@@ -360,6 +366,7 @@ class StudioBridgeLiveShootingForm extends FormBase {
       $ajax_response->addCommand(new HtmlCommand('#dd-color', $productdetails['color']));
       $ajax_response->addCommand(new HtmlCommand('#dd-description', $productdetails['description']));
       $ajax_response->addCommand(new HtmlCommand('#product-img-count', $productdetails['image_count']));
+      $ajax_response->addCommand(new HtmlCommand('#session-total-products', count($session_products)));
 
     }
 
