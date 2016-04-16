@@ -151,7 +151,7 @@
         <div id="widgettile" >
             <div class="widget blue-bg p-lg text-center">
                 <div class="m-b-md"><i class="fa fa-camera"></i>
-                    <h1 class="m-xs no-of-products">0</h1>
+                    <h1 class="m-xs no-of-products">{{ form.productdetails.total_products }}</h1>
                     <h3 class="font-bold no-margins">Products</h3>
                     <small>Total Products</small>
                 </div>
@@ -166,13 +166,6 @@
 											</span></div>
         </div>
 
-        <div class="m-t-md">
-            <h4>For Help</h4>
-            <div class=" m-t-sm gray-bkground text-center">
-												<span class="text-center">
-													Call 050-8744200
-												</span></div>
-        </div>
 
     </div>
     <div class="m-t-md">
@@ -191,18 +184,9 @@
     </div>
 
     <div class="m-t-md">
-        <h4>Current Session</h4>
+        <h4>QC Status</h4>
         <div>
             <ul class="list-group">
-
-                <li class="list-group-item ">
-                    <span class="label label-default pull-right" id="session-total-products">{{ form.productdetails.total_products }}</span>
-                    Total Products
-                </li>
-                <li class="list-group-item ">
-                    <span class="label label-success pull-right">0</span>
-                    Approved
-                </li>
                 <li class="list-group-item ">
                     <span class="label label-danger pull-right">0</span>
                     Rejected
@@ -216,7 +200,7 @@
         <div>
             <ul class="list-group">
                 <li class="list-group-item">
-                    <span class="label label-default pull-right">New </span>
+                    <span class="label label-default pull-right">-- </span>
                     Product Status
                 </li>
                 <li class="list-group-item">
