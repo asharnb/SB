@@ -118,22 +118,24 @@
         {% for image in form.images.images %}
             {% if not image.fid == '' %}
                 <div class="bulkviewfiles imagefile" id="warpper-img-{{ image.fid }}">
-                    <div class="ribbon"><span id="seq-{{ image.fid }}">{{ image.id }}</span></div>
+                    <div class="ribbon" id="ribboncontainer"><span class="for-tag" id="seq-{{ image.fid }}">{{ image.id }}</span></div>
 
                     <div class="scancontainer">
                         <img src="{{ image.url }}" class="scanpicture">
 
                     </div>
                     <div class="file-name">
-                        <div id="seq-img-{{ image.fid }}" type="hidden"></div>
+                        <div id="tag-seq-img-{{ image.fid }}" type="hidden"></div>
 
                         <div class="row">
 
                             <div class="col col-sm-6">
-                            <span><label for="del-img-{{ image.fid }}" class="checkbox"><input type="checkbox"
+                                <span id="{{ image.fid }}">
+                            <label for="del-img-{{ image.fid }}" class="checkbox"><input type="checkbox"
                                                                                                id="del-img-{{ image.fid }}"
                                                                                                class="form-checkbox"
-                                                                                               value="{{ image.fid }}"><i></i><b class="fa fa-trash"></b></label></span>
+                                                                                               value="{{ image.fid }}"><i></i><b class="fa fa-trash"></b></label>
+                            </span>
                             </div>
 
                         </div>

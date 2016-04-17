@@ -79,3 +79,13 @@
     -webkit-transition-delay: .2s;
     transition-delay: .2s;
 }
+
+.tag-deleted{
+    background: #f44a52 !important
+}
+.tag-tag{
+    background: red !important;
+}
+.tag-fullshot{
+    background: red !important;
+}

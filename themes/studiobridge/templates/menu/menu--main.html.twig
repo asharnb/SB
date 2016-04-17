@@ -73,7 +73,7 @@
   {#</nav>#}
 {#</aside>#}
 
-
+{% set dashboard = '<i class="fa fa-home"></i>' %}
 {% import _self as menus %}
 
 <aside id="left-panel">
@@ -106,11 +106,11 @@
           {% if menu_level == 0 and item.is_expanded %}
           <li{{ item.attributes.addClass('open') }}>
             {% if item.below %}
-            <a class="dropdown-toggle" data-target="#">
+               <a class="dropdown-toggle" data-target="#">
               {% else %}
                 <a href="{{ item.url }}"  data-target="#">
               {% endif %}
-              <i class="{{item.description}}"></i>
+               <i class="fa fa-lg fa-fw fa-home"></i>
               <span class="menu-item-parent">{{ item.title }} </span>
               <span class="caret"></span></a>
           {% else %}
@@ -118,8 +118,10 @@
             {{ link(item.title, item.url) }}
           {% endif %}
           {% if item.below %}
+            <ul class="children" style="display: block;">
             {{ menus.menu_links(item.below, attributes.removeClass('nav', 'navbar-nav'), menu_level + 1) }}
-          {% endif %}
+            </ul>
+              {% endif %}
           </li>
         {% endfor %}
         </ul>
