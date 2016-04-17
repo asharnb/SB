@@ -554,52 +554,35 @@ body.mini-navbar.fixed-sidebar .profile-element, .block {
     }
     .ribbon {
         position: absolute;
-        left: -5px; top: -5px;
-        z-index: 1;
-        overflow: hidden;
-        width: 75px; height: 75px;
-        text-align: right;
+        top: 15px;
+
+
+        z-index: 5;
+        top: -18px;
+        left: 15px;
+
+        padding-top: 1em;
+        padding-bottom: 1em;
+
+
     }
     .ribbon span {
-        font-size: 14px;
+        font-size: 20px;
         font-weight: bold;
         color: #FFF;
         text-transform: uppercase;
         text-align: center;
         line-height: 20px;
-        transform: rotate(-45deg);
-        -webkit-transform: rotate(-45deg);
-        width: 100px;
+
+
         display: block;
         background: #22262E;
         /* background: linear-gradient(#2FF648 0%, #40991E 100%); */
-        box shadow: 0 3px 10px -5px rgba(0, 0, 0, 1);
+        padding: .5em 1em;
         position: absolute;
-        top: 19px;
-        left: -21px;
+
     }
-    .ribbon span::before {
-        content: "";
-        position: absolute;
-        left: 0px;
-        top: 100%;
-        z-index: -1;
-        border-left: 3px solid #626262;
-        border-right: 3px solid transparent;
-        border-bottom: 3px solid transparent;
-        border-top: 3px solid #414141;
-    }
-    .ribbon span::after {
-        content: "";
-        position: absolute;
-        right: 0px;
-        top: 100%;
-        z-index: -1;
-        border-left: 3px solid transparent;
-        border-right: 3px solid #646464;
-        border-bottom: 3px solid transparent;
-        border-top: 3px solid #2A2A2A;
-    }
+
 
     .ribbon2 {
         position: absolute;
@@ -866,7 +849,7 @@ body.mini-navbar.fixed-sidebar .profile-element, .block {
 
     .fixed-navigation .sbnav {
         -webkit-overflow-scrolling: touch;
-         overflow-y: auto;
-         height: 100%;
-         padding-bottom: 49px;
+        overflow-y: auto;
+        height: 100%;
+        padding-bottom: 49px;
     }

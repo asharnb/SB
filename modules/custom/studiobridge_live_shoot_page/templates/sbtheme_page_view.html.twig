@@ -15,21 +15,21 @@
                 <span class="semi-bold">Scan</span> Product Tag</h3>
             {#<div class="smart-form">#}
 
-                {#<form>#}
+            {#<form>#}
 
-                    {#<div class="form-group form-group-default required">#}
-                        {#<label>SKU/Barcode/EAN</label>#}
+            {#<div class="form-group form-group-default required">#}
+            {#<label>SKU/Barcode/EAN</label>#}
 
-                        {#{{ form.identifier }}#}
+            {#{{ form.identifier }}#}
 
 
 
-                    {#</div>#}
-                {#</form>#}
-                {#{{ form.identifier_hidden }}#}
-                {#{{ form.identifier_nid }}#}
-                {#{{ form.random_user }}#}
-                {#{{ form.misc }}#}
+            {#</div>#}
+            {#</form>#}
+            {#{{ form.identifier_hidden }}#}
+            {#{{ form.identifier_nid }}#}
+            {#{{ form.random_user }}#}
+            {#{{ form.misc }}#}
             {#</div>#}
             {{ form|without('delete',"resequence") }}
         </div>
@@ -58,8 +58,9 @@
                         {% if form.productdetails.concept == 'Unmapped' %}
                             <dd class="mb-10"><img src="/ca/img/brands/brand_logo_.png" height="20px"></dd>
                         {% else %}
-                            <dd class="mb-10"><img src="/ca/img/brands/brand_logo_{{ form.productdetails.concept|lower }}.png"
-                                                   height="20px"></dd>
+                            <dd class="mb-10"><img
+                                        src="/ca/img/brands/brand_logo_{{ form.productdetails.concept|lower }}.png"
+                                        height="20px"></dd>
                         {% endif %}
                     </dl>
 
@@ -121,20 +122,20 @@
 
                     <div class="scancontainer">
                         <img src="{{ image.url }}" class="scanpicture">
+
                     </div>
                     <div class="file-name">
-                        <span class="bkname"><i class="fa fa-camera"></i><b
-                                    id="seq-img-{{ image.fid }}">{{ image.name }}</b></span>
-                        <hr class="simple">
+                        <div id="seq-img-{{ image.fid }}" type="hidden"></div>
 
                         <div class="row">
 
-                            <div class="col col-sm-12">
+                            <div class="col col-sm-6">
                             <span><label for="del-img-{{ image.fid }}" class="checkbox"><input type="checkbox"
                                                                                                id="del-img-{{ image.fid }}"
                                                                                                class="form-checkbox"
-                                                                                               value="{{ image.fid }}"><i></i>Delete</label></span>
+                                                                                               value="{{ image.fid }}"><i></i><b class="fa fa-trash"></b></label></span>
                             </div>
+
                         </div>
 
                     </div>
@@ -148,7 +149,7 @@
 {% block sidepanel %}
     <div class="sidebard-panel" style="min-height: 100%;">
 
-        <div id="widgettile" >
+        <div id="widgettile">
             <div class="widget blue-bg p-lg text-center">
                 <div class="m-b-md"><i class="fa fa-camera"></i>
                     <h1 class="m-xs no-of-products">{{ form.productdetails.total_products }}</h1>
@@ -208,7 +209,8 @@
                     Time Elapsed
                 </li>
                 <li class="list-group-item">
-                    <span class="label label-success pull-right" id="product-img-count">{{ form.productdetails.image_count }}</span>
+                    <span class="label label-success pull-right"
+                          id="product-img-count">{{ form.productdetails.image_count }}</span>
                     Images Shot
                 </li>
                 <li class="list-group-item">
