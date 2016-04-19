@@ -5,3 +5,11 @@
  *
  * Place your custom PHP code in this file.
  */
+function studiobridge_theme(&$existing, $type, $theme, $path) {
+    $hooks = array();
+    $hooks['user_login_form'] = array(
+        'render element' => 'form',
+        'template' => 'user-login-form',
+    );
+    return $hooks;
+}

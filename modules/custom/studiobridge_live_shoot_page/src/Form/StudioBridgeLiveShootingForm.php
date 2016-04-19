@@ -342,7 +342,15 @@ class StudioBridgeLiveShootingForm extends FormBase
         }
         $block .= '</div>';
 
-        $sort_js = '<script>!function(e){e(function(){e("#imagecontainer").sortable(),e("#imagecontainer").disableSelection()})}(jQuery);</script>';
+        $sort_js = '<script>!function(e){e(function(){e("#imagecontainer").sortable(({
+            tolerance: \'pointer\',
+            start: function(event, ui){
+                ui.placeholder.html("<div class=\'bulkviewfiles file gray-bkground\' style=\'width: 250px; height: 250px; background: #D2D2D2;\'></div>");
+            },
+            stop: function(event, ui){
+                ui.placeholder.html("");
+            }
+        })),e("#imagecontainer").disableSelection()})}(jQuery);</script>';
 
         $ajax_response->addCommand(new HtmlCommand('#imagecontainer-wrapper', $block));
         $ajax_response->addCommand(new HtmlCommand('#studio-img-container', ''));
