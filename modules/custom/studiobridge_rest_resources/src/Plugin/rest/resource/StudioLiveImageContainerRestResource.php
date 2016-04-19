@@ -267,6 +267,7 @@ class StudioLiveImageContainerRestResource extends ResourceBase {
       if ($record) {
         // Build the return data.
         $image_uri = array();
+        $fid = 0;
         foreach ($record as $img) {
           $fid = $img->fid;
           // Load the file entity by its fid.
@@ -279,7 +280,9 @@ class StudioLiveImageContainerRestResource extends ResourceBase {
 
         }
         // Set last scanned image with its fid.
-        \Drupal::state()->set('last_img_sent_'.$sid.'_'.$nid,$fid);
+        if($fid){
+          \Drupal::state()->set('last_img_sent_'.$sid.'_'.$nid,$fid);
+        }
         return $image_uri;
       }
     }

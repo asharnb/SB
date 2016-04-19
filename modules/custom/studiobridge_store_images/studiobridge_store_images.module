@@ -54,10 +54,10 @@ function studiobridge_store_images_entity_insert(Drupal\Core\Entity\EntityInterf
     // todo : attach width, height and other image properties
     $image = array(
       'target_id' => $values['fid'][0]['value'],
-      'alt' => $values['field_image_alt_text'][0]['value'],
-      'title' => $values['field_image_title_text'][0]['value'],
-      //'width' => '283',
-      //'height' => '266',
+      //'alt' => $values['field_image_alt_text'][0]['value'],
+      //'title' => $values['field_image_title_text'][0]['value'],
+      //'width' => '',
+      //'height' => '',
       //'url' => '/file/43',
     );
 
@@ -78,6 +78,7 @@ function studiobridge_store_images_entity_insert(Drupal\Core\Entity\EntityInterf
 
     // validate based on last scanned product id and product last updated.
     if ($scanned_product_nid) {
+      Drupal::logger('unique-xxx')->notice('scanned product nid');
       // Load product entity.
       $node = Node::load($scanned_product_nid);
       // check for mapped or un mapped product.
@@ -102,6 +103,7 @@ function studiobridge_store_images_entity_insert(Drupal\Core\Entity\EntityInterf
 
     }
     elseif ($product_last_updated) {
+      Drupal::logger('unique-xxx')->notice('product_last_updated');
       $node = $product_last_updated;
 
       // Log file transfer into {studio_file_transfers} table.
@@ -127,6 +129,7 @@ function studiobridge_store_images_entity_insert(Drupal\Core\Entity\EntityInterf
 
     }
     else {
+      Drupal::logger('unique-xxx')->notice('else last block');
       // Create unmapped product if any image received under no products scanned state.
       //studiobridge_store_images_create_unmapped_product($image, $session_id, 'UnMapped', $entity->id());
       $unmapped_node = Products::createUnmappedProduct($image, $session_id, 'UnMapped', $entity->id());
@@ -137,8 +140,16 @@ function studiobridge_store_images_entity_insert(Drupal\Core\Entity\EntityInterf
     $images = $node->field_images->getValue();
 
     // add new image to existing
-    $images = array_merge($images, $image);
+    if(count($images)){
+      $images = array_merge($images, array($image));
+    }else{
+      $image = array(0=>$image);
+      $images = array_merge($images, $image);
+      //$images = array_push($images,$image);
+    }
 
+
+    \Drupal::logger('Img count')->notice('<pre>'.print_r($images,true).'<pre>');
 
     // Update file name for resequence.
     if ($field_base_product_id) {

@@ -329,7 +329,7 @@ class StudioBridgeLiveShootingForm extends FormBase
 
             $block .= '<div class="col col-sm-12">
                 <span><label for="del-img-' . $fid . '" class="checkbox"><input type="checkbox" id="del-img-' . $fid . '" class="form-checkbox" value="' . $fid . '"><i></i><b class="fa fa-trash"></b></label></span>
-                <div class="studio-img-weight"><input type="hidden" value="' . $fid . '"></div>
+                <div class="studio-img-weight"><input id="fid-hidden" type="hidden" value="' . $fid . '"></div>
             </div>';
 
             $block .= '</div>';

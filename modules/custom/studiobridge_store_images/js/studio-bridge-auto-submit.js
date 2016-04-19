@@ -83,10 +83,10 @@
         block +=  '<div class="scancontainer">';
         block +=  '<img src="'+ img.uri +'" class="scanpicture">';
         block +=  '</div>';
-        block +=  "<input name='image[" + fid + "]' type='hidden' value='" + fid + "'/>";
+        //block +=  "<input name='image[" + fid + "]' type='hidden' value='" + fid + "'/>";
         block +=  '<div class="file-name">';
-        block +=  '<span class="bkname"><i class="fa fa-camera"></i><b id="seq-img-' + fid + '">'+img.name+'</b></span>';
-        block +=  '<hr class="simple">';
+//        block +=  '<span class="bkname"><i class="fa fa-camera"></i><b id="seq-img-' + fid + '">'+img.name+'</b></span>';
+//        block +=  '<hr class="simple">';
 
         block += '<div class="row">';
         //block += '<div class="col col-sm-6">';
@@ -97,8 +97,11 @@
 //        block += '</div>';
 //        block += '<div class="col col-sm-6">';
 //        block += '<span><a onclick="return false;" class="label label-danger mr5 pull-right">Delete</a>';
-        block += '<span><label for="del-img-'+ fid +'" class="checkbox"><input type="checkbox" id="del-img-'+ fid +'" class="form-checkbox" value="'+ fid +'"><i></i>Tag Image</label></span>';
-        block += '<div class="studio-img-weight"><input type="hidden" value="'+ fid +'"></div>';
+//        block += '<span><label for="del-img-'+ fid +'" class="checkbox"><input type="checkbox" id="del-img-'+ fid +'" class="form-checkbox" value="'+ fid +'"><i></i>Tag Image</label></span>';
+//        block += '<div class="studio-img-weight"><input type="hidden" value="'+ fid +'"></div>';
+
+        block += '<span><label for="del-img-'+ fid +'" class="checkbox"><input type="checkbox" id="del-img-'+ fid +'" class="form-checkbox" value="'+ fid +'"><i></i><b class="fa fa-trash"></b></label></span> <div class="studio-img-weight"><input id="fid-hidden" type="hidden" value="'+ fid +'"></div>';
+
         block += '</div>';
         block += '</div>';
 
