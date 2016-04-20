@@ -89,3 +89,7 @@
 .tag-fullshot{
     background: red !important;
 }
+
+.bg-login {
+    background-color: #1D1D1D;
+}

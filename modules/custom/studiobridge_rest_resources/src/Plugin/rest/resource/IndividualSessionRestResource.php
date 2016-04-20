@@ -95,18 +95,32 @@ class IndividualSessionRestResource extends ResourceBase {
    * @throws \Symfony\Component\HttpKernel\Exception\HttpException
    *   Throws exception expected.
    */
-  public function get($id, $random) {
-      if ($id && $random) {
-          // todo : based on requirement, limit fields to be displayed.
-          $node = Node::load($id);
-          if (!empty($node)) {
-              return new ResourceResponse($node);
-          }
+    public function get($id, $random) {
+        if ($id && $random) {
+            // todo : based on requirement, limit fields to be displayed.
+            $node = Node::load($id);
+            if ($node) {
+                $concept = '';
+                $color = '';
 
-          throw new NotFoundHttpException(t('Session entry with ID @id was not found', array('@id' => $id)));
-      }
+                $concept = $node->field_concept_name->getValue();
+                if ($concept) {
+                    $concept = $concept[0]['value'];
+                }
+                $color = $node->field_color_variant->getValue();
+                if ($color) {
+                    $color = $color[0]['value'];
+                }
+                if (!empty($node)) {
+                    $resp = array('id' => $id, 'concept' => $concept, 'color' => $color);
+                    return new ResourceResponse($resp);
+                }
+            }
 
-      throw new BadRequestHttpException(t('No Session entry ID was provided'));
-  }
+            throw new NotFoundHttpException(t('Session entry with ID @id was not found', array('@id' => $id)));
+        }
+
+        throw new BadRequestHttpException(t('No Session entry ID was provided'));
+    }
 
 }
