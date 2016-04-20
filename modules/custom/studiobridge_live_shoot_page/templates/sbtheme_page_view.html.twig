@@ -54,9 +54,9 @@
             <div class="row">
                 <div class="col-lg-6">
                     <dl class="dl-horizontal">
-                        <dt>Concept:</dt>
+                        <dt>Concept: </dt>
                         {% if form.productdetails.concept == 'Unmapped' %}
-                            <dd class="mb-10"><img src="/ca/img/brands/brand_logo_.png" height="20px"></dd>
+                            <dd><span class="bold">Unmapped</span></dd>
                         {% else %}
                             <dd class="mb-10"><img
                                         src="/ca/img/brands/brand_logo_{{ form.productdetails.concept|lower }}.png"
@@ -131,9 +131,9 @@
 
                             <div class="col col-sm-6">
 
-                                <a href="" class="label label-info"><i class="fa fa-arrows-alt"></i></a>
-                                <a href="" class="label label-warning"><i class="fa fa-tag"></i></a>
-                                <a href="" class="label label-success"><i class="fa fa-copy"></i></a>
+                                <a href="" class="label label-info"><i class="fa fa-lg fa-fw fa-arrows-alt"></i></a>
+                                <a href="" class="label label-warning"><i class="fa fa-lg fa-fw fa-tag"></i></a>
+                                <a href="" class="label label-success"><i class="fa fa-lg fa-fw fa-copy"></i></a>
 
 
                             </div>

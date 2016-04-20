@@ -248,7 +248,7 @@
 .onoffswitch2 .onoffswitch-inner::after {
     -moz-box-sizing: border-box;
     -webkit-box-sizing: border-box;
-    background-color: #69AD0D;
+    background-color: #999;
     box-sizing: border-box;
     color: #999999;
     color: #fff;
@@ -282,4 +282,49 @@
     -o-transition: all 0.3s ease-in;
     -ms-transition: all 0.3s ease-in;
     transition: all 0.3s ease-in;
+}
+.userlogged {
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    display: block;
+    margin-bottom: 0;
+    margin: 0;
+    padding: 5px 10px 0 10px;
+    zoom: 0.9;
+}
+.userlogged > i {
+    float: left;
+    font-size: 60px;
+    margin-bottom: -21px;
+    padding-right: 12px;
+}
+
+.userlogged img {width: 70px;height: auto;display: inline-block;vertical-align: middle;margin-top: 1px;margin-right: 5px;margin-left: 0;margin-bottom: -15px;border-radius: 50%;float: left;z-index: -50;}
+.user-details {
+    float: left;
+    padding-left: 5px;
+    text-align: left;
+}
+
+.user-details h4 {
+    color: #e2e2e2;
+    margin-bottom: 5px;
+    overflow: hidden;
+    padding-left: 3px;
+    text-align: left;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    width: 137px;
+}
+
+.user-login {
+    display: inline-block;
+    float: none;
+    margin-left: 0;
+    margin-top: 0;
+    margin: auto;
+    text-align: center;
+}
+
+.user-details .user-login .btn {
+    margin-right: 0;
 }
