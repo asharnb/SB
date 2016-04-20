@@ -13,24 +13,6 @@
         <div class="panel-body">
             <h3>
                 <span class="semi-bold">Scan</span> Product Tag</h3>
-            {#<div class="smart-form">#}
-
-            {#<form>#}
-
-            {#<div class="form-group form-group-default required">#}
-            {#<label>SKU/Barcode/EAN</label>#}
-
-            {#{{ form.identifier }}#}
-
-
-
-            {#</div>#}
-            {#</form>#}
-            {#{{ form.identifier_hidden }}#}
-            {#{{ form.identifier_nid }}#}
-            {#{{ form.random_user }}#}
-            {#{{ form.misc }}#}
-            {#</div>#}
             {{ form|without('delete',"resequence") }}
         </div>
     </div>
@@ -129,7 +111,7 @@
 
                         <div class="row">
 
-                            <div class="col col-sm-6">
+                            <div class="col col-sm-8">
 
                                 <a href="" class="label label-info"><i class="fa fa-lg fa-fw fa-arrows-alt"></i></a>
                                 <a href="" class="label label-warning"><i class="fa fa-lg fa-fw fa-tag"></i></a>
@@ -137,7 +119,7 @@
 
 
                             </div>
-                            <div class="col col-sm-6">
+                            <div class="col col-sm-4">
                                 <div class="onoffswitch2 pull-right">
                                     <span id="{{ image.fid }}">
                                         <input type="checkbox" name="onoffswitch" class="onoffswitch-checkbox" id="del-img-{{ image.fid }}">

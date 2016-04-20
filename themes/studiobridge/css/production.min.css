@@ -630,11 +630,7 @@ body.mini-navbar.fixed-sidebar .profile-element, .block {
         border-top: 3px solid #2A2A2A;
     }
 
-    .scancontainer{
-
-        max-width: 250px;max-height: 300px;
-        overflow: hidden;/* height: 300px; */
-        text-align: center;margin: auto;}
+    .scancontainer{max-width: 200px;max-height: 250px;overflow: hidden;/* height: 300px; */text-align: center;margin: auto;}
 
     .scancontainer img{
         z-index: -1;width: 250px;
