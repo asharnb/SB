@@ -118,7 +118,7 @@
         {% for image in form.images.images %}
             {% if not image.fid == '' %}
                 <div class="bulkviewfiles imagefile" id="warpper-img-{{ image.fid }}">
-                    <div class="ribbon" id="ribboncontainer"><span class="for-tag" id="seq-{{ image.fid }}">{{ image.id }}</span></div>
+                    <div class="ribbon" id="ribboncontainer"><span class="for-tag" id="seq-{{ image.fid }}" name="{{ image.id }}">{{ image.id }}</span></div>
 
                     <div class="scancontainer">
                         <img src="{{ image.url }}" class="scanpicture">
@@ -130,12 +130,23 @@
                         <div class="row">
 
                             <div class="col col-sm-6">
-                                <span id="{{ image.fid }}">
-                            <label for="del-img-{{ image.fid }}" class="checkbox"><input type="checkbox"
-                                                                                               id="del-img-{{ image.fid }}"
-                                                                                               class="form-checkbox"
-                                                                                               value="{{ image.fid }}"><i></i><b class="fa fa-trash"></b></label>
-                            </span>
+
+                                <a href="" class="label label-info"><i class="fa fa-arrows-alt"></i></a>
+                                <a href="" class="label label-warning"><i class="fa fa-tag"></i></a>
+                                <a href="" class="label label-success"><i class="fa fa-copy"></i></a>
+
+
+                            </div>
+                            <div class="col col-sm-6">
+                                <div class="onoffswitch2 pull-right">
+                                    <span id="{{ image.fid }}">
+                                        <input type="checkbox" name="onoffswitch" class="onoffswitch-checkbox" id="del-img-{{ image.fid }}">
+                                            <label class="onoffswitch-label" for="del-img-{{ image.fid }}">
+                                                <span class="onoffswitch-inner"></span>
+                                                <span class="onoffswitch-switch"></span>
+                                            </label>
+                                    </span>
+                                </div>
                             </div>
 
                         </div>
