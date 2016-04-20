@@ -78,58 +78,58 @@ function studiobridge_store_images_entity_insert(Drupal\Core\Entity\EntityInterf
 
     // validate based on last scanned product id and product last updated.
     if ($scanned_product_nid) {
-      Drupal::logger('unique-xxx')->notice('scanned product nid');
+      //Drupal::logger('unique-xxx')->notice('scanned product nid');
       // Load product entity.
       $node = Node::load($scanned_product_nid);
       // check for mapped or un mapped product.
-      $product_bundle = $node->bundle();
+//      $product_bundle = $node->bundle();
 
       // Get base product id from mapped product.
       // Get identifier from unmapped product.
-      if ($product_bundle == 'products') {
-        $field_base_product_id = $node->field_base_product_id->getValue();
-        if ($field_base_product_id) {
-          $field_base_product_id = $field_base_product_id[0]['value'];
-        }
-      }
-      elseif ($product_bundle = 'unmapped_products') {
-        $field_identifier = $node->field_identifier->getValue();
-        if ($field_identifier) {
-          $field_base_product_id = $field_identifier[0]['value'];
-        }
-      }
+//      if ($product_bundle == 'products') {
+//        $field_base_product_id = $node->field_base_product_id->getValue();
+//        if ($field_base_product_id) {
+//          $field_base_product_id = $field_base_product_id[0]['value'];
+//        }
+//      }
+//      elseif ($product_bundle = 'unmapped_products') {
+//        $field_identifier = $node->field_identifier->getValue();
+//        if ($field_identifier) {
+//          $field_base_product_id = $field_identifier[0]['value'];
+//        }
+//      }
       // Log file transfer into {studio_file_transfers} table.
       StudioImages::AddFileTransfer($entity->id(), $scanned_product_nid,$session_id);
 
     }
     elseif ($product_last_updated) {
-      Drupal::logger('unique-xxx')->notice('product_last_updated');
-      $node = $product_last_updated;
+      //Drupal::logger('unique-xxx')->notice('product_last_updated');
+      $node = Node::load($product_last_updated);
 
       // Log file transfer into {studio_file_transfers} table.
       StudioImages::AddFileTransfer($entity->id(), $node->id(),$session_id);
 
       // check for mapped or un mapped product.
-      $product_bundle = $node->bundle();
+//      $product_bundle = $node->bundle();
 
       // Get base product id from mapped product.
       // Get identifier from unmapped product.
-      if ($product_bundle == 'products') {
-        $field_base_product_id = $node->field_base_product_id->getValue();
-        if ($field_base_product_id) {
-          $field_base_product_id = $field_base_product_id[0]['value'];
-        }
-      }
-      elseif ($product_bundle = 'unmapped_products') {
-        $field_identifier = $node->field_identifier->getValue();
-        if ($field_identifier) {
-          $field_base_product_id = $field_identifier[0]['value'];
-        }
-      }
+//      if ($product_bundle == 'products') {
+//        $field_base_product_id = $node->field_base_product_id->getValue();
+//        if ($field_base_product_id) {
+//          $field_base_product_id = $field_base_product_id[0]['value'];
+//        }
+//      }
+//      elseif ($product_bundle = 'unmapped_products') {
+//        $field_identifier = $node->field_identifier->getValue();
+//        if ($field_identifier) {
+//          $field_base_product_id = $field_identifier[0]['value'];
+//        }
+//      }
 
     }
     else {
-      Drupal::logger('unique-xxx')->notice('else last block');
+      //Drupal::logger('unique-xxx')->notice('else last block');
       // Create unmapped product if any image received under no products scanned state.
       //studiobridge_store_images_create_unmapped_product($image, $session_id, 'UnMapped', $entity->id());
       $unmapped_node = Products::createUnmappedProduct($image, $session_id, 'UnMapped', $entity->id());
@@ -152,22 +152,22 @@ function studiobridge_store_images_entity_insert(Drupal\Core\Entity\EntityInterf
     \Drupal::logger('Img count')->notice('<pre>'.print_r($images,true).'<pre>');
 
     // Update file name for resequence.
-    if ($field_base_product_id) {
-
-      $filemime = $entity->filemime->getValue();
-      if ($filemime) {
-        $filemime = $filemime[0]['value'];
-        $filemime = explode('/', $filemime);
-        $filemime = $filemime[1];
-        if ($filemime = 'octet-stream') {
-          $filemime = 'jpeg';
-        }
-
-        $entity->filename->setValue($field_base_product_id . '_' . count($node->field_images->getValue()) . ".$filemime");
-        $entity->save();
-
-      }
-    }
+//    if ($field_base_product_id) {
+//
+//      $filemime = $entity->filemime->getValue();
+//      if ($filemime) {
+//        $filemime = $filemime[0]['value'];
+//        $filemime = explode('/', $filemime);
+//        $filemime = $filemime[1];
+//        if ($filemime = 'octet-stream') {
+//          $filemime = 'jpeg';
+//        }
+//
+//        $entity->filename->setValue($field_base_product_id . '_' . count($node->field_images->getValue()) . ".$filemime");
+//        $entity->save();
+//
+//      }
+//    }
 
 
     // Set the image array to image field
@@ -179,7 +179,7 @@ function studiobridge_store_images_entity_insert(Drupal\Core\Entity\EntityInterf
 
     // Add product to session.
     //studiobridge_store_images_add_product_to_session($session_id, $node);
-    Products::addProductToSession($session_id, $node);
+    //Products::addProductToSession($session_id, $node);
 
   }
 
@@ -221,14 +221,14 @@ function studiobridge_store_images_get_open_product($session_id) {
   $node_id = Products::getProductByUid($session_uid);
 
   if (count($node_id)) {
-    $node_id = reset($node_id);
-    return $node = Node::load($node_id);
+    return $node_id = reset($node_id);
+    //return $node = Node::load($node_id);
   }
   else {
     $node_id_unmapped = Products::getProductByUid($session_uid);
     if (count($node_id_unmapped)) {
-      $node_id_unmapped = array_values($node_id_unmapped);
-      return $node = Node::load($node_id_unmapped[0]);
+      return $node_id_unmapped = array_values($node_id_unmapped);
+      //return $node = Node::load($node_id_unmapped[0]);
     }
     else {
       // todo : check this line *

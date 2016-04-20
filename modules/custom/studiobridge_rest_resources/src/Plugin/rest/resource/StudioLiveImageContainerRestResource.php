@@ -117,14 +117,14 @@ class StudioLiveImageContainerRestResource extends ResourceBase {
     $this->getBlockData($identifier);
     //$content = array('content' =>$this->content);
 
-    $block1 = \Drupal\block\Entity\Block::load('currentsessionviewblock');
-    $block_content1 = \Drupal::entityManager()
-      ->getViewBuilder('block')
-      ->view($block1);
+//    $block1 = \Drupal\block\Entity\Block::load('currentsessionviewblock');
+//    $block_content1 = \Drupal::entityManager()
+//      ->getViewBuilder('block')
+//      ->view($block1);
 
-    $content['block1'] = \Drupal::service('renderer')->renderPlain($block_content1);
+    //$content['block1'] = \Drupal::service('renderer')->renderPlain($block_content1);
 
-    $content['block2'] = $this->content2;
+    //$content['block2'] = $this->content2;
 
     $content['block3'] = $this->getLastImages($this->pnid,$identifier);
 
@@ -156,7 +156,7 @@ class StudioLiveImageContainerRestResource extends ResourceBase {
 
       //product_by_nid
       //$block = \Drupal::service('renderer')->renderPlain(views_embed_view('product_by_nid', 'block_1',$node_id),false);
-      $this->content2 = $this->getBlockData2($node_id,$identifier);
+      //$this->content2 = $this->getBlockData2($node_id,$identifier);
 
     }else{
       $block = '<span color="red">No product scanned</span>';
@@ -273,10 +273,11 @@ class StudioLiveImageContainerRestResource extends ResourceBase {
           // Load the file entity by its fid.
           $file = File::load($fid);
 
-          $file_name = $file->filename->getValue();
-          $file_name = $file_name[0]['value'];
+//          $file_name = $file->filename->getValue();
+//          $file_name = $file_name[0]['value'];
           $image_uri_value = ImageStyle::load('live_shoot_preview')->buildUrl($file->getFileUri());
-          $image_uri[$fid] = array('uri'=>$image_uri_value,'name'=>$file_name);
+//          $image_uri[$fid] = array('uri'=>$image_uri_value,'name'=>$file_name);
+          $image_uri[$fid] = array('uri'=>$image_uri_value);
 
         }
         // Set last scanned image with its fid.
