@@ -1,10 +1,5 @@
 <?php
 
-/**
- * @file
- * Contains \Drupal\Tests\migrate\Kernel\MigrateEventsTest.
- */
-
 namespace Drupal\Tests\migrate\Kernel;
 
 use Drupal\migrate\Event\MigrateImportEvent;
@@ -15,7 +10,6 @@ use Drupal\migrate\Event\MigratePreRowSaveEvent;
 use Drupal\migrate\MigrateMessage;
 use Drupal\migrate\Event\MigrateEvents;
 use Drupal\migrate\MigrateExecutable;
-use Drupal\migrate\Plugin\Migration;
 use Drupal\KernelTests\KernelTestBase;
 
 /**
@@ -80,7 +74,7 @@ class MigrateEventsTest extends KernelTestBase {
       'destination' => ['plugin' => 'dummy'],
     ];
 
-    $migration = new Migration([], uniqid(), $definition);
+    $migration = \Drupal::service('plugin.manager.migration')->createStubMigration($definition);
 
     $executable = new MigrateExecutable($migration, new MigrateMessage());
     // As the import runs, events will be dispatched, recording the received

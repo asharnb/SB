@@ -1,10 +1,5 @@
 <?php
 
-/**
- * @file
- * Contains \Drupal\migrate_drupal_ui\MigrateUpgradeRunBatch.
- */
-
 namespace Drupal\migrate_drupal_ui;
 
 use Drupal\Core\Link;
@@ -112,7 +107,7 @@ class MigrateUpgradeRunBatch {
     $migration = \Drupal::service('plugin.manager.migration')->createInstance($migration_id);
 
     // @TODO, remove this in https://www.drupal.org/node/2681869.
-    $destination = $migration->get('destination');
+    $destination = $migration->getDestinationConfiguration();
     if ($destination['plugin'] === 'entity:file') {
       // Make sure we have a single trailing slash.
       $source_base_path = rtrim($config['source_base_path'], '/') . '/';

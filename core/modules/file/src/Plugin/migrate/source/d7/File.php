@@ -1,10 +1,5 @@
 <?php
 
-/**
- * @file
- * Contains \Drupal\file\Plugin\migrate\source\d7\File.
- */
-
 namespace Drupal\file\Plugin\migrate\source\d7;
 
 use Drupal\Core\Database\Query\Condition;
@@ -91,7 +86,7 @@ class File extends DrupalSqlBase {
     // the source_base_path in order to make them all relative.
     // @todo https://www.drupal.org/node/2577871 Don't depend on destination
     //   configuration and figure out if this is even needed at all?
-    $path = str_replace($this->migration->get('destination')['source_base_path'], NULL, $path);
+    $path = str_replace($this->migration->getDestinationConfiguration()['source_base_path'], NULL, $path);
     $row->setSourceProperty('filepath', $path);
     return parent::prepareRow($row);
   }

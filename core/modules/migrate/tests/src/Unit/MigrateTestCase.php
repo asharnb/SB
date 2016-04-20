@@ -1,10 +1,5 @@
 <?php
 
-/**
- * @file
- * Contains \Drupal\Tests\migrate\Unit\MigrateTestCase.
- */
-
 namespace Drupal\Tests\migrate\Unit;
 
 use Drupal\Core\Database\Driver\sqlite\Connection;
@@ -83,9 +78,9 @@ abstract class MigrateTestCase extends UnitTestCase {
 
     $configuration = &$this->migrationConfiguration;
 
-    $migration->method('get')
-      ->willReturnCallback(function ($argument) use (&$configuration) {
-        return isset($configuration[$argument]) ? $configuration[$argument] : '';
+    $migration->method('getHighWaterProperty')
+      ->willReturnCallback(function () use ($configuration) {
+        return isset($configuration['highWaterProperty']) ? $configuration['highWaterProperty'] : '';
       });
 
     $migration->method('set')

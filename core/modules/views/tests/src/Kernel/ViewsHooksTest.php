@@ -1,14 +1,8 @@
 <?php
 
-/**
- * @file
- * Contains \Drupal\Tests\views\Kernel\ViewsHooksTest.
- */
-
 namespace Drupal\Tests\views\Kernel;
 
 use Drupal\Core\Render\RenderContext;
-use Drupal\Tests\views\Kernel\ViewsKernelTestBase;
 use Drupal\views\Views;
 
 /**

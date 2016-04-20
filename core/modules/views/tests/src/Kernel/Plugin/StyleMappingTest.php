@@ -1,13 +1,7 @@
 <?php
 
-/**
- * @file
- * Contains \Drupal\Tests\views\Kernel\Plugin\StyleMappingTest.
- */
-
 namespace Drupal\Tests\views\Kernel\Plugin;
 
-use Drupal\Tests\views\Kernel\Plugin\StyleTestBase;
 use Drupal\views\Views;
 
 /**

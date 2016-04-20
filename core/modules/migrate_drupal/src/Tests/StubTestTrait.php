@@ -1,12 +1,7 @@
 <?php
 
-/**
- * @file
- * Contains \Drupal\migrate_drupal\Tests\StubTestTrait.
- */
-
 namespace Drupal\migrate_drupal\Tests;
-use Drupal\migrate\Plugin\Migration;
+
 use Drupal\migrate\Row;
 
 /**
@@ -51,7 +46,7 @@ trait StubTestTrait {
       'process' => [],
       'destination' => ['plugin' => 'entity:' . $entity_type_id],
     ];
-    $migration = new Migration([], uniqid(), $definition);
+    $migration = \Drupal::service('plugin.manager.migration')->createStubMigration($definition);
     $destination_plugin = $migration->getDestinationPlugin(TRUE);
     $stub_row = new Row([], [], TRUE);
     $destination_ids = $destination_plugin->import($stub_row);

@@ -1,13 +1,7 @@
 <?php
 
-/**
- * @file
- * Contains \Drupal\Tests\views\Kernel\Plugin\RelationshipJoinTestBase.
- */
-
 namespace Drupal\Tests\views\Kernel\Plugin;
 
-use Drupal\Tests\views\Kernel\Plugin\PluginKernelTestBase;
 use Drupal\user\Entity\User;
 use Drupal\views\Views;
 

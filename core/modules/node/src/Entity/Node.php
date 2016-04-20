@@ -1,10 +1,5 @@
 <?php
 
-/**
- * @file
- * Contains \Drupal\node\Entity\Node.
- */
-
 namespace Drupal\node\Entity;
 
 use Drupal\Core\Entity\ContentEntityBase;
@@ -22,6 +17,12 @@ use Drupal\user\UserInterface;
  * @ContentEntityType(
  *   id = "node",
  *   label = @Translation("Content"),
+ *   label_singular = @Translation("content item"),
+ *   label_plural = @Translation("content items"),
+ *   label_count = @PluralTranslation(
+ *     singular = "@count content item",
+ *     plural = "@count content items"
+ *   ),
  *   bundle_label = @Translation("Content type"),
  *   handlers = {
  *     "storage" = "Drupal\node\NodeStorage",

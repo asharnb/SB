@@ -1,13 +1,7 @@
 <?php
 
-/**
- * @file
- * Contains \Drupal\Tests\taxonomy\Kernel\Migrate\MigrateTaxonomyTermStubTest.
- */
-
 namespace Drupal\Tests\taxonomy\Kernel\Migrate;
 
-use Drupal\migrate\Plugin\Migration;
 use Drupal\migrate\MigrateExecutable;
 use Drupal\Tests\migrate_drupal\Kernel\MigrateDrupalTestBase;
 use Drupal\migrate_drupal\Tests\StubTestTrait;
@@ -69,7 +63,7 @@ class MigrateTaxonomyTermStubTest extends MigrateDrupalTestBase {
       ],
       'destination' => ['plugin' => 'entity:taxonomy_vocabulary'],
     ];
-    $vocabulary_migration = new Migration([], uniqid(), $definition);
+    $vocabulary_migration = \Drupal::service('plugin.manager.migration')->createStubMigration($definition);
     $vocabulary_executable = new MigrateExecutable($vocabulary_migration, $this);
     $vocabulary_executable->import();
 

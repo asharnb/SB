@@ -1,10 +1,5 @@
 <?php
 
-/**
- * @file
- * Contains \Drupal\Tests\user\Kernel\Migrate\d6\MigrateUserPictureFileTest.
- */
-
 namespace Drupal\Tests\user\Kernel\Migrate\d6;
 
 use Drupal\file\Entity\File;
@@ -27,7 +22,7 @@ class MigrateUserPictureFileTest extends MigrateDrupal6TestBase {
 
     /** @var \Drupal\migrate\Plugin\MigrationInterface $migration */
     $migration = $this->getMigration('d6_user_picture_file');
-    $source = $migration->get('source');
+    $source = $migration->getSourceConfiguration();
     $source['site_path'] = 'core/modules/simpletest';
     $migration->set('source', $source);
     $this->executeMigration($migration);

@@ -1,10 +1,5 @@
 <?php
 
-/**
- * @file
- * Contains \Drupal\migrate\Plugin\MigrationDeriverTrait.
- */
-
 namespace Drupal\migrate\Plugin;
 
 /**
@@ -31,7 +26,7 @@ trait MigrationDeriverTrait {
         'plugin' => 'null',
       ],
     ];
-    return (new Migration([], uniqid(), $definition))->getSourcePlugin();
+    return \Drupal::service('plugin.manager.migration')->createStubMigration($definition)->getSourcePlugin();
   }
 
 }

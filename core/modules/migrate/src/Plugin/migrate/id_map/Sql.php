@@ -1,10 +1,5 @@
 <?php
 
-/**
- * @file
- * Contains \Drupal\migrate\Plugin\migrate\id_map\Sql.
- */
-
 namespace Drupal\migrate\Plugin\migrate\id_map;
 
 use Drupal\Component\Utility\Unicode;
@@ -570,7 +565,7 @@ class Sql extends PluginBase implements MigrateIdMapInterface, ContainerFactoryP
       $this->message->display(t('Could not save to map table due to missing destination id values'), 'error');
       return;
     }
-    if ($this->migration->get('trackLastImported')) {
+    if ($this->migration->getTrackLastImported()) {
       $fields['last_imported'] = time();
     }
     $keys = [static::SOURCE_IDS_HASH => $this->getSourceIDsHash($source_id_values)];

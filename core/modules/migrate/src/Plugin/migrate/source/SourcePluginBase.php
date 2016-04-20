@@ -1,10 +1,5 @@
 <?php
 
-/**
- * @file
- * Contains \Drupal\migrate\Plugin\migrate\source\SourcePluginBase.
- */
-
 namespace Drupal\migrate\Plugin\migrate\source;
 
 use Drupal\Core\Plugin\PluginBase;
@@ -153,7 +148,7 @@ abstract class SourcePluginBase extends PluginBase implements MigrateSourceInter
     $this->idMap = $this->migration->getIdMap();
 
     // Pull out the current highwater mark if we have a highwater property.
-    if ($this->highWaterProperty = $this->migration->get('highWaterProperty')) {
+    if ($this->highWaterProperty = $this->migration->getHighWaterProperty()) {
       $this->originalHighWater = $this->migration->getHighWater();
     }
 
@@ -300,7 +295,7 @@ abstract class SourcePluginBase extends PluginBase implements MigrateSourceInter
 
       $row_data = $this->getIterator()->current() + $this->configuration;
       $this->getIterator()->next();
-      $row = new Row($row_data, $this->migration->getSourcePlugin()->getIds(), $this->migration->get('destinationIds'));
+      $row = new Row($row_data, $this->migration->getSourcePlugin()->getIds(), $this->migration->getDestinationIds());
 
       // Populate the source key for this row.
       $this->currentSourceIds = $row->getSourceIdValues();

@@ -1,10 +1,5 @@
 <?php
 
-/**
- * @file
- * Contains \Drupal\views\ViewExecutable.
- */
-
 namespace Drupal\views;
 
 use Drupal\Component\Utility\Html;
@@ -1896,10 +1891,6 @@ class ViewExecutable implements \Serializable {
       return $this->override_url;
     }
 
-    if (!isset($path)) {
-      $path = $this->getPath();
-    }
-
     $display_handler = $this->displayHandlers->get($display_id ?: $this->current_display)->getRoutedDisplay();
     if (!$display_handler instanceof DisplayRouterInterface) {
       throw new \InvalidArgumentException('You cannot create a URL to a display without routes.');
@@ -1919,6 +1910,9 @@ class ViewExecutable implements \Serializable {
         }
       }
     }
+
+    $path = $this->getPath();
+
     // Don't bother working if there's nothing to do:
     if (empty($path) || (empty($args) && strpos($path, '%') === FALSE)) {
       return $display_handler->getUrlInfo();

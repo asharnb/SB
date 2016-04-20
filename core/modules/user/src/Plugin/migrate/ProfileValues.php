@@ -1,10 +1,5 @@
 <?php
 
-/**
- * @file
- * Contains \Drupal\user\Plugin\migrate\ProfileValues.
- */
-
 namespace Drupal\user\Plugin\migrate;
 
 use Drupal\migrate\Exception\RequirementsException;
@@ -34,7 +29,7 @@ class ProfileValues extends Migration {
       ] + $this->source;
       $definition['destination']['plugin'] = 'null';
       try {
-        $profile_field_migration = new Migration([], uniqid(), $definition);
+        $profile_field_migration = $this->migrationPluginManager->createStubMigration($definition);
         $source_plugin = $profile_field_migration->getSourcePlugin();
         $source_plugin->checkRequirements();
         foreach ($source_plugin as $row) {

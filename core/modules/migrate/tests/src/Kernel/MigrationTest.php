@@ -1,14 +1,8 @@
 <?php
 
-/**
- * @file
- * Contains \Drupal\Tests\migrate\Kernel\MigrationTest.
- */
-
 namespace Drupal\Tests\migrate\Kernel;
 
 use Drupal\KernelTests\KernelTestBase;
-use Drupal\migrate\Plugin\Migration;
 
 /**
  * Tests the migration plugin.
@@ -32,7 +26,7 @@ class MigrationTest extends KernelTestBase {
    * @covers ::set
    */
   public function testSetInvalidation() {
-    $migration = new Migration([], uniqid(), [
+    $migration = \Drupal::service('plugin.manager.migration')->createStubMigration([
       'source' => ['plugin' => 'empty'],
       'destination' => ['plugin' => 'entity:entity_view_mode'],
     ]);

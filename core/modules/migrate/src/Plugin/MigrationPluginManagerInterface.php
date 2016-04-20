@@ -1,10 +1,5 @@
 <?php
 
-/**
- * @file
- * Contains \Drupal\migrate\Plugin\MigrationPluginManagerInterface.
- */
-
 namespace Drupal\migrate\Plugin;
 
 use Drupal\Component\Plugin\PluginManagerInterface;
@@ -32,5 +27,17 @@ interface MigrationPluginManagerInterface extends PluginManagerInterface {
    *   If an instance cannot be created, such as if the ID is invalid.
    */
   public function createInstances($id, array $configuration = array());
+
+  /**
+   * Creates a stub migration plugin from a definition array.
+   *
+   * @param array $definition
+   *   The migration definition. If an 'id' key is set then this will be used as
+   *   the migration ID, if not a random ID will be assigned.
+   *
+   * @return \Drupal\migrate\Plugin\Migration
+   *   The stub migration.
+   */
+  public function createStubMigration(array $definition);
 
 }

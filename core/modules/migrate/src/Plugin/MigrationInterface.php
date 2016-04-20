@@ -1,10 +1,5 @@
 <?php
 
-/**
- * @file
- * Contains \Drupal\migrate\Plugin\MigrationInterface.
- */
-
 namespace Drupal\migrate\Plugin;
 
 use Drupal\Component\Plugin\DerivativeInspectionInterface;
@@ -142,7 +137,7 @@ interface MigrationInterface extends PluginInspectionInterface, DerivativeInspec
    * Returns the initialized destination plugin.
    *
    * @param bool $stub_being_requested
-   *  TRUE to indicate that this destination will be asked to construct a stub.
+   *   TRUE to indicate that this destination will be asked to construct a stub.
    *
    * @return \Drupal\migrate\Plugin\MigrateDestinationInterface
    *   The destination plugin.
@@ -276,10 +271,10 @@ interface MigrationInterface extends PluginInspectionInterface, DerivativeInspec
    *
    * @param string $property
    *   The property of which to merge the passed in process pipeline
-   * configuration.
+   *   configuration.
    * @param array $process_of_property
    *   The process pipeline configuration to be merged with the existing process
-   * pipeline configuration.
+   *   pipeline configuration.
    *
    * @return $this
    *   The migration entity.
@@ -331,5 +326,52 @@ interface MigrationInterface extends PluginInspectionInterface, DerivativeInspec
    *   The dependencies for this migrations.
    */
   public function getMigrationDependencies();
+
+  /**
+   * Get the destination configuration, with at least a 'plugin' key.
+   *
+   * @return array
+   *   The destination configuration.
+   */
+  public function getDestinationConfiguration();
+
+  /**
+   * Get the source configuration, with at least a 'plugin' key.
+   *
+   * @return array
+   *   The source configuration.
+   */
+  public function getSourceConfiguration();
+
+  /**
+   * Get information on the property used as the high watermark.
+   *
+   * Array of 'name' & (optional) db 'alias' properties used for high watermark.
+   *
+   * @see Drupal\migrate\Plugin\migrate\source\SqlBase::initializeIterator()
+   *
+   * @return array
+   *   The property used as the high watermark.
+   */
+  public function getHighWaterProperty();
+
+  /**
+   * If true, track time of last import.
+   *
+   * @return bool
+   *   Flag to determine desire of tracking time of last import.
+   */
+  public function getTrackLastImported();
+
+  /**
+   * The destination identifiers.
+   *
+   * An array of destination identifiers: the keys are the name of the
+   * properties, the values are dependent on the ID map plugin.
+   *
+   * @return array
+   *   Destination identifiers.
+   */
+  public function getDestinationIds();
 
 }
