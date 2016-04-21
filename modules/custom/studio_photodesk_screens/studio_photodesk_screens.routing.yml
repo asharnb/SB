@@ -1,0 +1,34 @@
+
+# In order to to create pages it is necessary to define routes for them.
+# A route maps a URL path to a controller. It defines with what function
+# or method will be called when a URL is accessed.
+# If the user accesses http://drupal8.dev/view-session/{session}, the routing
+# system will look for a route with that path. In this case it will find a
+# match, and execute the _controller callback. In this case the callback is
+# defined as a classname
+# ("\Drupal\studio_photodesk_screens\Controller\ViewSessionController")
+# and a method ("content").
+studio_photodesk_screens.view_session_controller_content:
+  path: 'view-session/{session}'
+  defaults:
+    _controller: '\Drupal\studio_photodesk_screens\Controller\ViewSessionController::content'
+    _title: 'Content'
+  requirements:
+    _permission: 'access content'
+
+# In order to to create pages it is necessary to define routes for them.
+# A route maps a URL path to a controller. It defines with what function
+# or method will be called when a URL is accessed.
+# If the user accesses http://drupal8.dev/view-product/{product}, the routing
+# system will look for a route with that path. In this case it will find a
+# match, and execute the _controller callback. In this case the callback is
+# defined as a classname
+# ("\Drupal\studio_photodesk_screens\Controller\ViewProductController")
+# and a method ("content").
+studio_photodesk_screens.view_product_controller_content:
+  path: 'view-product/{product}'
+  defaults:
+    _controller: '\Drupal\studio_photodesk_screens\Controller\ViewProductController::content'
+    _title: 'Product details'
+  requirements:
+    _permission: 'access content'
