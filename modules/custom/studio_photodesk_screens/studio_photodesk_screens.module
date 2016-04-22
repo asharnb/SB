@@ -26,12 +26,18 @@ function studio_photodesk_screens_help($route_name, RouteMatchInterface $route_m
 /*
  * Implements hook_theme().
  */
-function studio_photodesk_screens_theme($existing, $type, $theme, $path){
+function studio_photodesk_screens_theme($existing, $type, $theme, $path) {
   return array(
     'view_session' => array(
-      'variables' => array('session' => NULL,'mapped_products'=> NULL, 'unmapped_products'=> NULL, 'grouped_concepts' => NULL),
+      'variables' => array(
+        'session' => NULL,
+        'mapped_products' => NULL,
+        'unmapped_products' => NULL,
+        'grouped_concepts' => NULL,
+        'session_users' => NULL,
+        'total_images' => NULL
+      ),
     ),
-
     'view_product' => array(
       'variables' => array('product' => NULL),
     ),

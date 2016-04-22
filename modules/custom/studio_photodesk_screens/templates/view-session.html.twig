@@ -14,6 +14,18 @@
 
 <h1>krishna kanth</h1>
 
-<p>test_var: {{ session.uuid.0.value }}</p>
-<p>Data1*: {{ session.nid.0.value }}</p>
-<p>Data1*: {{ session.nid.0.value }}</p>
+<p>Session uuid: {{ session.uuid.0.value }}</p>
+<p>Session Ni: {{ session.nid.0.value }}</p>
+<p>Created Date: {{ session.create.0.value|date("m/d/Y") }}</p>
+
+<p>Total images: {{ total_images }}</p>
+
+
+
+{# How to loop values #}
+
+{% for item in grouped_concepts %}
+    {#<li><a href="{{ item.href }}">{{ item.caption }}</a></li>#}
+    <h2>{{ item.concept }}</h2>
+    <h2>No.of Product {{ mapped_products|length }}</h2>
+{% endfor %}
