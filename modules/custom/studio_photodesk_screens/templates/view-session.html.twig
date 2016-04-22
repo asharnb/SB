@@ -5,8 +5,48 @@
 *
 * Available variables:
 * - session: Session node array
+<<<<<<< HEAD
 *   -  session.title.0.value: node title
 * todo yet to add
+=======
+*   -  title: node title  -  {{ session.title.0.value }}
+*   -  field_stauts: Status of session  -  {{ session.field_stauts.0.value }}
+*   -  field_product: array of product ids, use like this to get count of total products - {{ ITEM.field_product|length }}
+*   -  field_shoot_type: Type of session. -  {{ session.field_shoot_type.0.value }}
+*   -  field_shoot_class: Class of session. - {{ session.field_shoot_class.0.value }}
+*   -  created: Timestamp session created - {{ session.create.0.value|date("m/d/Y") }}
+*  todo : check for missing values
+*
+* - grouped_concepts: array contain concept & count of its products
+*   -  concept: Name of the concept  -  {{ ITEM.concept }}
+*   -  product_count: Count of products under this concept -  {{ ITEM.product_count }}
+*
+* - unmapped_products: array contains all properties of unmapped products
+*   -  title: Title/Identifier of unmapped product   -  {{ ITEM.title.0.value }}
+*   -  field_images: To get count of image, use like -  {{ ITEM.field_images|length }}
+*   -  field_state: Product status/stage.  -  {{ ITEM.field_state.0.value }}
+*   -  created: Timestamp product created - {{ ITEM.create.0.value|date("m/d/Y") }}
+*  todo : check for missing values
+*
+* - mapped_products: array contains all properties of mapped products
+*   -  title: Title/Identifier of mapped product  -  {{ ITEM.title.0.value }}
+*   -  field_images: To get count of image, use like -  {{ ITEM.field_images|length }}
+*   -  field_state: Product status/stage. -  {{ ITEM.field_state.0.value }}
+*   -  created: Timestamp product created - {{ ITEM.session.create.0.value|date("m/d/Y") }}
+*   -  field_concept_name: Name of concept - {{ ITEM.field_concept_name.0.value }}
+*   -  field_style_family: Name of style family - {{ ITEM.field_style_family.0.value }}
+*   -  field_sku_id: SKU_ID value - {{ ITEM.field_sku_id.0.value }}
+*  todo : check for missing values
+*
+* - session_users: array contains names of vm, photographer and stylist
+*   - photographer: Name of photographer   -  {{ session_users.photographer }}
+*   - stylist: Name of stylist - {{ session_users.stylist }}
+*   - vm: Name of vm   -  {{ session_users.vm }}
+*
+* - total_images: Total no.of images in this session - {{ total_images }}
+*
+*
+>>>>>>> photodesk-screens
 * @ingroup themeable
 */
 #}
@@ -19,6 +59,7 @@
 <p>Created Date: {{ session.create.0.value|date("m/d/Y") }}</p>
 
 <p>Total images: {{ total_images }}</p>
+
 
 
 {# How to loop values #}
@@ -218,3 +259,28 @@
     </div>
 </div>
 </div>
+
+
+{# How to loop values #}
+
+{#{% for item in grouped_concepts %}#}
+    {#&#123;&#35;<li><a href="{{ item.href }}">{{ item.caption }}</a></li>&#35;&#125;#}
+    {#<h2>{{ item.concept }}</h2>#}
+    {#<h2>No.of Product {{ mapped_products|length }}</h2>#}
+{#{% endfor %}#}
+
+{#{% for item in unmapped_products %}#}
+    {#<h2>Product {{ item.title.0.value }}</h2>#}
+    {#<h2>No.of images in this Product {{ item.field_images|length }}</h2>#}
+{#{% endfor %}#}
+
+
+
+<ul>
+{% for item in unmapped_products %}
+    <li> Product {{ item.title.0.value }} </li>
+    {#<h2>No.of images in this Product {{ item.field_images|length }}</h2>#}
+{% endfor %}
+
+</ul>
+

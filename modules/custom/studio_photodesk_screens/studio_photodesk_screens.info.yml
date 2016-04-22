@@ -1,0 +1,5 @@
+name: Studio PhotoDesk Screens
+type: module
+description: Module holds all screens which are required for PhotoDesk operations.
+core: 8.x
+package: StudioBridge

@@ -1,0 +1,46 @@
+<?php
+
+/**
+ * @file
+ * Contains studio_photodesk_screens.module..
+ */
+
+use Drupal\Core\Routing\RouteMatchInterface;
+
+/**
+ * Implements hook_help().
+ */
+function studio_photodesk_screens_help($route_name, RouteMatchInterface $route_match) {
+  switch ($route_name) {
+    // Main module help for the studio_photodesk_screens module.
+    case 'help.page.studio_photodesk_screens':
+      $output = '';
+      $output .= '<h3>' . t('About') . '</h3>';
+      $output .= '<p>' . t('Module holds all screens which are required for PhotoDesk operations.') . '</p>';
+      return $output;
+
+    default:
+  }
+}
+
+/*
+ * Implements hook_theme().
+ */
+function studio_photodesk_screens_theme($existing, $type, $theme, $path) {
+  return array(
+    'view_session' => array(
+      'variables' => array(
+        'session' => NULL,
+        'mapped_products' => NULL,
+        'unmapped_products' => NULL,
+        'grouped_concepts' => NULL,
+        'session_users' => NULL,
+        'total_images' => NULL
+      ),
+    ),
+    'view_product' => array(
+      'variables' => array('product' => NULL),
+    ),
+
+  );
+}
