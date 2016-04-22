@@ -12,7 +12,6 @@ studio_photodesk_screens.view_session_controller_content:
   path: 'view-session/{nid}'
   defaults:
     _controller: '\Drupal\studio_photodesk_screens\Controller\ViewSessionController::content'
-    _title: 'Content'
   requirements:
     _permission: 'access content'
 

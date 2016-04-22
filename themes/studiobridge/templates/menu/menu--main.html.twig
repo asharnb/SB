@@ -106,7 +106,8 @@
               {% endif %}
                <i class="fa fa-lg fa-fw fa-home"></i>
               <span class="menu-item-parent">{{ item.title }} </span>
-              <span class="caret"></span></a>
+                  <b class="collapse-sign"><em class="fa fa-plus-square-o"></em></b>
+                </a>
           {% else %}
             <li{{ item.attributes }}>
             {{ link(item.title, item.url) }}
