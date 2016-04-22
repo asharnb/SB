@@ -102,7 +102,7 @@ class ViewSessionController extends ControllerBase {
     foreach($products_ids as $product){
 
       $current_product = $this->nodeStorage->load($product['target_id']);
-      $products[] = $current_product;
+      //$products[] = $current_product;
 
       // Get product type; mapped or unmapped
       $bundle = $current_product->bundle();

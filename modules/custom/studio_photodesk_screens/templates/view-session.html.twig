@@ -59,13 +59,23 @@
 
 {# How to loop values #}
 
-{% for item in grouped_concepts %}
-    {#<li><a href="{{ item.href }}">{{ item.caption }}</a></li>#}
-    <h2>{{ item.concept }}</h2>
-    <h2>No.of Product {{ mapped_products|length }}</h2>
+{#{% for item in grouped_concepts %}#}
+    {#&#123;&#35;<li><a href="{{ item.href }}">{{ item.caption }}</a></li>&#35;&#125;#}
+    {#<h2>{{ item.concept }}</h2>#}
+    {#<h2>No.of Product {{ mapped_products|length }}</h2>#}
+{#{% endfor %}#}
+
+{#{% for item in unmapped_products %}#}
+    {#<h2>Product {{ item.title.0.value }}</h2>#}
+    {#<h2>No.of images in this Product {{ item.field_images|length }}</h2>#}
+{#{% endfor %}#}
+
+
+
+<ul>
+{% for item in unmapped_products %}
+    <li> Product {{ item.title.0.value }} </li>
+    {#<h2>No.of images in this Product {{ item.field_images|length }}</h2>#}
 {% endfor %}
 
-{% for item in unmapped_products %}
-    <h2>Product {{ item.title.0.value }}</h2>
-    <h2>No.of images in this Product {{ item.field_images|length }}</h2>
-{% endfor %}
+</ul>
