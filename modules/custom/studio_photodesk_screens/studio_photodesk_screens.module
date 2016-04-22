@@ -29,7 +29,7 @@ function studio_photodesk_screens_help($route_name, RouteMatchInterface $route_m
 function studio_photodesk_screens_theme($existing, $type, $theme, $path){
   return array(
     'view_session' => array(
-      'variables' => array('session' => NULL),
+      'variables' => array('session' => NULL,'mapped_products'=> NULL, 'unmapped_products'=> NULL, 'grouped_concepts' => NULL),
     ),
 
     'view_product' => array(

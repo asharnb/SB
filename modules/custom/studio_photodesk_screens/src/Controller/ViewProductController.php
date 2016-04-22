@@ -56,11 +56,11 @@ class ViewProductController extends ControllerBase {
    * @return string
    *   Return Hello string.
    */
-  public function content($product) {
+  public function content($nid) {
     // build the variables here.
 
     //$this->database->query('');
-    $product = $this->nodeStorage->load($product);
+    $product = $this->nodeStorage->load($nid);
     //$title = $product->title->getValue();
     $values = $product->toArray();
     $values['nid'] = 123456;

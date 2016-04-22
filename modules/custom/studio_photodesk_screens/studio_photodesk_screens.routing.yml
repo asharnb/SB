@@ -9,7 +9,7 @@
 # ("\Drupal\studio_photodesk_screens\Controller\ViewSessionController")
 # and a method ("content").
 studio_photodesk_screens.view_session_controller_content:
-  path: 'view-session/{session}'
+  path: 'view-session/{nid}'
   defaults:
     _controller: '\Drupal\studio_photodesk_screens\Controller\ViewSessionController::content'
     _title: 'Content'
@@ -26,7 +26,7 @@ studio_photodesk_screens.view_session_controller_content:
 # ("\Drupal\studio_photodesk_screens\Controller\ViewProductController")
 # and a method ("content").
 studio_photodesk_screens.view_product_controller_content:
-  path: 'view-product/{product}'
+  path: 'view-product/{nid}'
   defaults:
     _controller: '\Drupal\studio_photodesk_screens\Controller\ViewProductController::content'
     _title: 'Product details'
