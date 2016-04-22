@@ -1,24 +1,38 @@
 {#
 /**
 * @file
-* Default theme implementation to display the product details page.
+* Default theme implementation to display the Session details page.
 *
 * Available variables:
-* - product: Product node array
-*   -  product.title.0.value: node title
-*   -  product.field_base_product_id.0.value
-* todo yet to add
+* - product_type: Mapped or unmapped product; based on this in this file we can make conditions for product details.
+*
+* - images: array of image url & its name 
+*   -  uri: Image style uri, to display image  -  {{ ITEM.uri }}
+*   -  name: Name of the image -  {{ ITEM.name }}
+*
+* - product: array contains all properties of unmapped/Mapped products
+*   -  title: Title/Identifier of unmapped/Mapped product   -  {{ ITEM.title.0.value }}
+*   -  field_images: To get count of image, use like -  {{ ITEM.field_images|length }}
+*   -  field_state: Product status/stage.  -  {{ ITEM.field_state.0.value }}
+*   -  created: Timestamp product created - {{ ITEM.create.0.value|date("m/d/Y") }}
+*
+*     -----  NOTE : following this values valid for mapped product --------
+*
+*   -  field_concept_name: Name of concept - {{ ITEM.field_concept_name.0.value }}
+*   -  field_style_family: Name of style family - {{ ITEM.field_style_family.0.value }}
+*   -  field_sku_id: SKU_ID value - {{ ITEM.field_sku_id.0.value }}
+*  todo : check for missing values
+*
+*
 * @ingroup themeable
 */
 #}
 
-
-<h1>Product details</h1>
-
-<p>test_var: {{ product.nid }}</p>
-<p>test_var: {{ product.title.0.value }}</p>
-
-{{ product.field_base_product_id.0.value }}
-
+<ul>
+{% for item in images %}
+    {#<h2>Product {{ item.title.0.value }}</h2>#}
+    <li>{{ item.name }}<img src="{{ item.uri }}"></li>
+{% endfor %}
+</ul>
 
 

@@ -63,9 +63,10 @@ class ViewSessionController extends ControllerBase {
 
     // Load session node object
     $session = $this->nodeStorage->load($nid);
+    $is_session = $session->bundle();
 
     // on invalid session, redirect user to somewhere & notify him.
-    if (!$session) {
+    if (!$session || $is_session !='sessions') {
       drupal_set_message('Invalid session id '.$nid, 'warning');
       return new RedirectResponse(base_path() . 'view-sessions');
     }

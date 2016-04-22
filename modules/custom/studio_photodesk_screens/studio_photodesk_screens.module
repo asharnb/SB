@@ -39,7 +39,7 @@ function studio_photodesk_screens_theme($existing, $type, $theme, $path) {
       ),
     ),
     'view_product' => array(
-      'variables' => array('product' => NULL),
+      'variables' => array('product' => NULL, 'images'=> NULL),
     ),
 
   );
