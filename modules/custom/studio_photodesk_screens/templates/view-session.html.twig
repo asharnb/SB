@@ -5,10 +5,6 @@
 *
 * Available variables:
 * - session: Session node array
-<<<<<<< HEAD
-*   -  session.title.0.value: node title
-* todo yet to add
-=======
 *   -  title: node title  -  {{ session.title.0.value }}
 *   -  field_stauts: Status of session  -  {{ session.field_stauts.0.value }}
 *   -  field_product: array of product ids, use like this to get count of total products - {{ ITEM.field_product|length }}
@@ -46,241 +42,276 @@
 * - total_images: Total no.of images in this session - {{ total_images }}
 *
 *
->>>>>>> photodesk-screens
 * @ingroup themeable
 */
 #}
 
 
-<h1>krishna kanth</h1>
+{#
+/**
+* @file
+* Default theme implementation to display the Session details page.
+*
+* Available variables:
+* - session: Session node array
+*   -  session.title.0.value: node title
+* todo yet to add
+* @ingroup themeable
+*/
+#}
 
-<p>Session uuid: {{ session.uuid.0.value }}</p>
-<p>Session Ni: {{ session.nid.0.value }}</p>
-<p>Created Date: {{ session.create.0.value|date("m/d/Y") }}</p>
-
-<p>Total images: {{ total_images }}</p>
-
-
-
-{# How to loop values #}
-
-{% for item in grouped_concepts %}
-    {#<li><a href="{{ item.href }}">{{ item.caption }}</a></li>#}
-    <h2>{{ item.concept }}</h2>
-    <h2>No.of Product {{ mapped_products|length }}</h2>
-{% endfor %}
 
 <div class="row">
-    {{ kint(session) }}
     <div class="col-lg-9">
-        <div class="wrapper wrapper-content animated fadeInUp">
-            <div class="ibox">
-                <div class="ibox-content">
+        <div class="panel panel-default">
 
 
-                    <div class="row">
+            <div class="row">
 
-                        <div class="col-sm-4">
+                <div class="col-sm-4">
 
-                            <h1><strong>SESSION-{{ session.nid.0.value }}</strong></h1>
-                        </div>
+                    <h3><strong>  SESSION-{{ session.nid.0.value }}</strong></h3>
+                </div>
 
-                        <div class="col-sm-8 text-align-right">
+                <div class="col-sm-8 text-align-right">
 
-                        </div>
+                </div>
 
-                    </div>
+            </div>
 
 
-                    <hr class="simple">
-                    <div class="row">
-                        <div class="col-lg-12">
-                            <div class="row">
-                                <div class="col-lg-5">
-                                    <dl class="dl-horizontal">
-                                        <dt>Class:</dt>
-                                        <dd class="mb-10"><span
-                                                    class="label label-default"><?php echo $session['class'];?></span>
-                                        </dd>
-                                    </dl>
-
-                                </div>
-                                <div class="col-lg-5">
-                                    <dl class="dl-horizontal">
-                                        <dt>Status:</dt>
-                                        <dd><span><i class="fa fa-circle text-success"></i> {{ session.field_status.0.value }}</span>
-                                        </dd>
-                                    </dl>
-
-                                </div>
-                            </div>
-
-                        </div>
-                    </div>
+            <hr class="simple">
+            <div class="row">
+                <div class="col-lg-12">
                     <div class="row">
                         <div class="col-lg-5">
                             <dl class="dl-horizontal">
-                                <dt>Created by:</dt>
-                                <dd><?php echo $session['createdby'];?></dd>
-                                <dt>Total Products:</dt>
-                                <dd> <?php echo $sessionmappedcount['count']+$sessionunmappedcount['count']?></dd>
-                                <dt>Unmapped Products:</dt>
-                                <dd><span class="text-warning"> <?php echo $sessionunmappedcount['count'];?></span></dd>
-                                <dt>Total Images:</dt>
-                                <dd> <?php echo $sessioncount['count'];?></dd>
-                                <dt>Rejects:</dt>
-                                <dd><span class="text-danger"><?php echo $session['rejects'];?></span></dd>
+                                <dt>Class:</dt>
+                                <dd class="mb-10"><span
+                                            class="label label-default">{{ session.field_shoot_class.0.value }}</span>
+                                </dd>
                             </dl>
+
                         </div>
-                        <div class="col-lg-7" id="cluster_info">
+                        <div class="col-lg-5">
                             <dl class="dl-horizontal">
-                                <dt>Create Date:</dt>
-                                <dd> <?php echo $session['shootdate'];?> </dd>
-                                <dt>Photographer:</dt>
-                                <dd><?php echo $session['photographer'];?></dd>
-                                <dt>VM:</dt>
-                                <dd> <?php echo $session['vm'];?> </dd>
-                                <dt>Stylist:</dt>
-                                <dd> <?php echo $session['stylist'];?> </dd>
-                                <dt>Type:</dt>
-                                <dd> <?php echo $session['type'];?> </dd>
+                                <dt>Status:</dt>
+                                <dd>
+                                    <span><i class="fa fa-circle text-success"></i> {{ session.field_status.0.value }}</span>
+                                </dd>
                             </dl>
+
                         </div>
                     </div>
-                    <div class="row m-t-sm">
-                        <div class="col-lg-12">
-                            <div class="panel blank-panel">
-                                <div class="panel-heading">
-                                    <div class="panel-options">
-                                        <ul class="nav nav-tabs">
+
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-5">
+                    <dl class="dl-horizontal">
+                        <dt>Created by:</dt>
+                        <dd></dd>
+                        <dt>Total Products:</dt>
+                        <dd> <?php echo $sessionmappedcount['count']+$sessionunmappedcount['count']?></dd>
+                        <dt>Unmapped Products:</dt>
+                        <dd><span class="text-warning"> <?php echo $sessionunmappedcount['count'];?></span></dd>
+                        <dt>Total Images:</dt>
+                        <dd> {{ total_images }}</dd>
+                        <dt>Rejects:</dt>
+                        <dd><span class="text-danger"><?php echo $session['rejects'];?></span></dd>
+                    </dl>
+                </div>
+                <div class="col-lg-7" id="cluster_info">
+                    <dl class="dl-horizontal">
+                        <dt>Create Date:</dt>
+                        <dd> {{ session.create.0.value|date("m/d/Y") }} </dd>
+                        <dt>Photographer:</dt>
+                        <dd>{{ session_users.photographer }}</dd>
+                        <dt>VM:</dt>
+                        <dd>{{ session_users.vm }}</dd>
+                        <dt>Stylist:</dt>
+                        <dd> {{ session_users.stylist }} </dd>
+                        <dt>Type:</dt>
+                        <dd> {{ session.field_shoot_type.0.value }} </dd>
+                    </dl>
+                </div>
+            </div>
+            <div class="row m-t-sm">
+                <div class="col-lg-12">
+                    <div class="panel blank-panel">
+                        <div class="panel-heading">
+                            <div class="panel-options">
+                                <ul class="nav nav-tabs">
 
 
-                                            <li class="active"><a href="#tab-2" data-toggle="tab" aria-expanded="false">Mapped
-                                                    Products ()</a>
-                                            </li>
-                                            <li class=""><a href="#tab-3" data-toggle="tab" aria-expanded="false">Unmapped
-                                                    Products ()</a>
-                                            </li>
-                                            <li class=""><a href="#tab-4" data-toggle="tab"
-                                                            aria-expanded="false">Models</a></li>
-                                            <li class=""><a href="#tab-5" data-toggle="tab" aria-expanded="false">Agencies</a>
-                                            </li>
-                                            <li class=""><a href="#tab-6" data-toggle="tab" aria-expanded="false">Report(s)</a>
-                                            </li>
-                                            <li class=""><a href="#tab-1" data-toggle="tab" aria-expanded="true">Activity
-                                                    Log</a></li>
-                                        </ul>
-                                    </div>
-                                </div>
-                                <div class="panel-body">
-                                    <div class="tab-content">
-
-
-                                    </div>
-                                    <!-- End Pane for Log -->
-
-                                </div>
+                                    <li class="active"><a href="#tab-mapped" data-toggle="tab" aria-expanded="false">Mapped
+                                            Products ({{ mapped_products|length }})</a>
+                                    </li>
+                                    <li class=""><a href="#tab-unmapped" data-toggle="tab" aria-expanded="false">Unmapped
+                                            Products ({{ unmapped_products|length }})</a>
+                                    </li>
+                                    </li>
+                                    <li class=""><a href="#tab-reports" data-toggle="tab" aria-expanded="false">Report(s)</a>
+                                    </li>
+                                    <li class=""><a href="#tab-log" data-toggle="tab" aria-expanded="true">Activity
+                                            Log</a></li>
+                                </ul>
                             </div>
                         </div>
+                        <div class="panel-body">
+                            <div class="tab-content">
+                                <div class="tab-pane active" id="tab-mapped">
 
+                                    <table class="table table-striped">
+                                        <thead>
+                                        <tr>
+                                            <th>Concept</th>
+                                            <th>Style Family</th>
+                                            <th>Color Variant</th>
+                                            <th>QC Done</th>
+                                            <th>QC Status</th>
+                                            <th>Raw Count</th>
+                                            <th>View</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+
+                                        {% for item in mapped_products %}
+
+
+
+                                            <tr>
+                                                <td><img src="/sb/{{ directory }}/images/brands/brand_logo_{{ item.field_concept_name.0.value|lower }}.png"  height="20px"></td>
+                                                <td>{{ item.field_style_family.0.value }}</td>
+                                                <td>{{ item.title.0.value }}</td>
+                                                <td><span class="label label-warning">Pending</span></td>
+                                                <td><span class="label label-warning">Pending</span></td>
+                                                <td>{{ item.field_images|length }}</td>
+
+                                                <td><a target="_blank" class="btn btn-primary" href="viewfolder.php?s='.$sessionunmapped['id'].'">View</a></td>
+                                            </tr>
+
+                                        {% endfor %}
+
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <div class="tab-pane" id="tab-unmapped">
+
+                                    <table class="table table-striped">
+                                        <thead>
+                                        <tr>
+                                            <th>Concept</th>
+                                            <th>Identifier</th>
+                                            <th>Raw Count</th>
+                                            <th>View</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+
+                                        {% for item in unmapped_products %}
+
+
+
+                                            <tr>
+                                                <td><img src="/sb/{{ directory }}/images/brands/brand_logo_.png"  height="20px"></td>
+                                                <td>{{ item.title.0.value }}</td>
+
+                                                <td>{{ item.field_images|length }}</td>
+
+                                                <td><a target="_blank" class="btn btn-primary" href="viewfolder.php?s='.$sessionunmapped['id'].'">View</a></td>
+                                            </tr>
+
+                                        {% endfor %}
+
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+
+
+                        </div>
                     </div>
                 </div>
+
             </div>
+
         </div>
     </div>
-</div>
-<div class="col-lg-3">
+
+    <div class="col-lg-3">
 
 
-    <div class="panel panel-default">
-        <div class="panel-heading separator">
-            <div class="panel-title">Session Details
-            </div>
-        </div>
-        <div class="ibox-content ibox-heading">
-            <h3>
-                <small>Stage:</small>
-                <span id="textstage"><?php echo $session['stage'];?></span></h3>
-            <small>
-                <div class="progress progress-striped active">
-                    <div style="width: <?php echo $pwidth; ?>" class="<?php echo $pclass; ?>"></div>
+        <div class="panel panel-default">
+            <div class="panel-heading separator">
+                <div class="panel-title">Session Details
                 </div>
-            </small>
+            </div>
+            <div class="ibox-content ibox-heading">
+                <h3>
+                    <small>Stage:</small>
+                    <span id="textstage"><?php echo $session['stage'];?></span></h3>
+                <small>
+                    <div class="progress progress-striped active">
+                        <div style="width: <?php echo $pwidth; ?>" class="<?php echo $pclass; ?>"></div>
+                    </div>
+                </small>
 
-        </div>
-        <div class="panel-body">
+            </div>
+            <div class="panel-body">
 
-            {% for item in grouped_concepts %}
+                {% for item in grouped_concepts %}
 
-                <div class="company-stat-boxes">
-                    <div data-index="" class="company-stat-box m-t-15 active padding-20 bg-master-lightest">
+                    <div class="company-stat-boxes">
+                        <div data-index="" class="company-stat-box m-t-15 active padding-20 bg-master-lightest">
 
-                        <div>
-                            <button type="button" class="close" data-dismiss="modal">
-                                <i class="pg-close fs-12"></i>
+                            <div>
+                                <button type="button" class="close" data-dismiss="modal">
+                                    <i class="pg-close fs-12"></i>
 
-                            </button>
+                                </button>
 
-                            <p class="company-name pull-left text-uppercase bold no-margin">
-                                {#<img src="/ca/img/brands/brand_logo_'.strtolower($value).'.png" height="15px">#}
-                                {{ item.concept }}
-                            <div class="pull-right">
+                                <p class="company-name pull-left text-uppercase bold no-margin">
+                                    <img src="/sb/{{ directory }}/images/brands/brand_logo_{{ item.concept|lower }}.png" height="15px">
+                                <div class="pull-right">
                                 <span class=" label label-primary p-t-5 m-l-5 p-b-5 inline fs-12">{{ mapped_products|length }}
                                     Products</span>
 
+                                </div>
+
+                                </p>
+
+                                <div class="clearfix"></div>
+
                             </div>
 
-                            </p>
-
-                            <div class="clearfix"></div>
-
-                        </div>
-
-                        {#<div class="m-t-10">#}
+                            {#<div class="m-t-10">#}
                             {#<p class="pull-left hint-text small no-margin p-t-5">Total Images</p>#}
 
                             {#<div class="pull-right">#}
-                                {#<span class=" label label-info p-t-5 m-l-5 p-b-5 inline fs-12"> Images</span>#}
+                            {#<span class=" label label-info p-t-5 m-l-5 p-b-5 inline fs-12"> Images</span>#}
 
                             {#</div>#}
 
 
                             {#<div class="clearfix"></div>#}
 
-                        {#</div>#}
+                            {#</div>#}
+
+                        </div>
 
                     </div>
+                {% endfor %}
+            </div>
 
-                </div>
-            {% endfor %}
+
         </div>
-
-
     </div>
 </div>
-</div>
 
-
-{# How to loop values #}
-
-{#{% for item in grouped_concepts %}#}
-    {#&#123;&#35;<li><a href="{{ item.href }}">{{ item.caption }}</a></li>&#35;&#125;#}
-    {#<h2>{{ item.concept }}</h2>#}
-    {#<h2>No.of Product {{ mapped_products|length }}</h2>#}
-{#{% endfor %}#}
 
 {#{% for item in unmapped_products %}#}
     {#<h2>Product {{ item.title.0.value }}</h2>#}
     {#<h2>No.of images in this Product {{ item.field_images|length }}</h2>#}
 {#{% endfor %}#}
-
-
-
-<ul>
-{% for item in unmapped_products %}
-    <li> Product {{ item.title.0.value }} </li>
-    {#<h2>No.of images in this Product {{ item.field_images|length }}</h2>#}
-{% endfor %}
-
-</ul>
 
