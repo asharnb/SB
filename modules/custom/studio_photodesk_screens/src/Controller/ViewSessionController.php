@@ -121,14 +121,17 @@ class ViewSessionController extends ControllerBase {
           $concept = $concept[0]['value'];
 
           if(array_key_exists($concept,$grouped_concepts)){
-            $c = count($grouped_concepts[$concept]) + 1;
+            $count = count($grouped_concepts[$concept]) + 1;
             $grouped_concepts[$concept][] = array('nid'=>$current_product->id());
-            $grouped_concepts_count[$concept] =  array('concept'=> $concept, 'product_count'=> $c);
+            $grouped_concepts_count[$concept] =  array('concept'=> $concept, 'product_count'=> $count);
 
           }else{
-            $c = count($grouped_concepts[$concept]);
+            $count = 0;
+            if(isset($grouped_concepts[$concept])){
+              $count = count($grouped_concepts[$concept]);
+            }
             $grouped_concepts[$concept][] = array('nid'=>$current_product->id());
-            $grouped_concepts_count[$concept] =  array('concept'=> $concept, 'product_count'=> $c);
+            $grouped_concepts_count[$concept] =  array('concept'=> $concept, 'product_count'=> $count);
           }
 
         }
@@ -144,7 +147,6 @@ class ViewSessionController extends ControllerBase {
     }
 
     unset($concept);
-    $a =1;
 
     return [
       '#theme' => 'view_session',
