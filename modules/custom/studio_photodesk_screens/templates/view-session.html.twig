@@ -188,7 +188,7 @@
                                                 <td><span class="label label-warning">Pending</span></td>
                                                 <td>{{ item.field_images|length }}</td>
 
-                                                <td><a target="_blank" class="btn btn-primary" href="viewfolder.php?s='.$sessionunmapped['id'].'">View</a></td>
+                                                <td><a target="_blank" class="btn btn-primary" href="/sb/view-product/{{item.nid.0.value }}">View</a></td>
                                             </tr>
 
                                         {% endfor %}
@@ -219,7 +219,7 @@
 
                                                 <td>{{ item.field_images|length }}</td>
 
-                                                <td><a target="_blank" class="btn btn-primary" href="viewfolder.php?s='.$sessionunmapped['id'].'">View</a></td>
+                                                <td><a target="_blank" class="btn btn-primary"  href="/sb/view-product/{{item.nid.0.value }}">View</a></td>
                                             </tr>
 
                                         {% endfor %}
