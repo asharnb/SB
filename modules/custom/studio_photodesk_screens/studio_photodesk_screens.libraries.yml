@@ -1,11 +1,13 @@
 studiobridge-sessions:
   version: VERSION
+  css:
+    theme:
+      css/dataTables/datatables.min.css: {}
   js:
     js/bootstrap/bootstrap.min.js: {}
-    js/datatables/jquery.dataTables.min.js: {}
+    js/datatables/dataTables.min.js: {}
     js/datatables/dataTables.colVis.min.js: {}
     js/datatables/dataTables.tableTools.min.js: {}
-    js/datatables/dataTables.bootstrap.min.js: {}
     js/datatable-responsive/datatables.responsive.min.js: {}
     js/scripts.js: {}
   dependencies:

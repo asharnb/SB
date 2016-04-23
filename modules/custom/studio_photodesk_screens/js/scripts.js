@@ -16,6 +16,13 @@
                 "order": [[1, 'asc']],
 
             } );
+            $('#dt_mapped').DataTable( {
+                "bSort": false,
+                "bDestroy": true,
+                "iDisplayLength": 15,
+                "order": [[1, 'asc']],
+
+            } );
         }
 
     };
