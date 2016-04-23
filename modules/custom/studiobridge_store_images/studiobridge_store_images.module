@@ -312,7 +312,6 @@ function studiobridge_store_images_entity_presave(Drupal\Core\Entity\EntityInter
 
   //\Drupal\Core\Cache\Cache::invalidateTags(array('node:202'));
 
-
   // check for current bundle is mapped or unmapped product.
   if ($entity->bundle() == 'products' || $entity->bundle() == 'unmapped_products') {
 
@@ -409,6 +408,28 @@ function studiobridge_store_images_entity_presave(Drupal\Core\Entity\EntityInter
   }
 }
 
+
+/**
+ * Respond to updates to an entity.
+ *
+ * This hook runs once the entity storage has been updated. Note that hook
+ * implementations may not alter the stored entity data.
+ *
+ * @param \Drupal\Core\Entity\EntityInterface $entity
+ *   The entity object.
+ *
+ * @ingroup entity_crud
+ * @see hook_ENTITY_TYPE_update()
+ */
+function studiobridge_store_images_entity_update(Drupal\Core\Entity\EntityInterface $entity) {
+
+  $bundle = $entity->bundle();
+  $values = $entity->toArray();
+  if($entity->bundle() == 'image'){
+    drupal_set_message('After image updated');
+  }
+
+}
 
 
 // ---- Testing code  -------
