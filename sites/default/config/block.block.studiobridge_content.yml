@@ -1,0 +1,22 @@
+uuid: 5bd6778a-4a85-4608-9940-b9b6f8e63832
+langcode: en
+status: true
+dependencies:
+  module:
+    - system
+  theme:
+    - studiobridge
+_core:
+  default_config_hash: fNNLN48MSGSLiqwIFywCuxH2Dk_IxDbaP0kYhg_IPrg
+id: studiobridge_content
+theme: studiobridge
+region: content
+weight: -6
+provider: null
+plugin: system_main_block
+settings:
+  id: system_main_block
+  label: 'Main page content'
+  provider: system
+  label_display: '0'
+visibility: {  }

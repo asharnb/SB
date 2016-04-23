@@ -1,0 +1,22 @@
+uuid: a8f3318a-46d6-4a58-bb6b-d36a9c176808
+langcode: en
+status: true
+dependencies:
+  module:
+    - help
+  theme:
+    - studiobridge
+_core:
+  default_config_hash: MhtNdV__HKRTab0ZPjkPNfYL4Ng4UPBucDLoC7Rg5Eo
+id: studiobridge_help
+theme: studiobridge
+region: help
+weight: -7
+provider: null
+plugin: help_block
+settings:
+  id: help_block
+  label: Help
+  provider: help
+  label_display: '0'
+visibility: {  }

@@ -6,6 +6,7 @@ dependencies:
     - field.field.file.image.field_image_alt_text
     - field.field.file.image.field_image_title_text
     - field.field.file.image.field_session
+    - field.field.file.image.field_tag
     - file_entity.type.image
 _core:
   default_config_hash: HYzof_QiEoo7449yRhD_uJoLXMEAmSafqexxGS9OmjQ
@@ -36,6 +37,12 @@ content:
       placeholder: ''
     third_party_settings: {  }
     type: entity_reference_autocomplete
+  field_tag:
+    weight: 2
+    settings:
+      display_label: false
+    third_party_settings: {  }
+    type: boolean_checkbox
   filename:
     type: string_textfield
     weight: -5

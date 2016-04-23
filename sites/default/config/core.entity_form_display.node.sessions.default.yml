@@ -3,6 +3,8 @@ langcode: en
 status: true
 dependencies:
   config:
+    - field.field.node.sessions.field_color_variant
+    - field.field.node.sessions.field_concept_name
     - field.field.node.sessions.field_notes
     - field.field.node.sessions.field_photographer
     - field.field.node.sessions.field_product
@@ -103,4 +105,6 @@ content:
       placeholder: ''
     third_party_settings: {  }
 hidden:
+  field_color_variant: true
+  field_concept_name: true
   field_product: true

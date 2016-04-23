@@ -2007,7 +2007,7 @@ display:
           table: node__field_product
           field: field_product
           relationship: none
-          group_type: group
+          group_type: count
           admin_label: ''
           label: 'PRODUCTS SHOT'
           exclude: false
@@ -2118,6 +2118,7 @@ display:
         fields: false
         header: false
         arguments: false
+        group_by: false
       header:
         area:
           id: area
@@ -2169,6 +2170,7 @@ display:
           entity_type: node
           entity_field: uid
           plugin_id: numeric
+      group_by: true
     cache_metadata:
       max-age: 0
       contexts:
@@ -2181,7 +2183,6 @@ display:
         - user.roles
       tags:
         - 'config:field.storage.node.field_photographer'
-        - 'config:field.storage.node.field_product'
         - 'config:field.storage.node.field_shoot_type'
         - 'config:field.storage.node.field_status'
         - 'config:field.storage.node.field_stylish'

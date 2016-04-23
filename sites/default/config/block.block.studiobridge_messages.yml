@@ -1,0 +1,22 @@
+uuid: 8aa46101-28d2-4ea4-9d3c-eb198d7dda2d
+langcode: en
+status: true
+dependencies:
+  module:
+    - system
+  theme:
+    - studiobridge
+_core:
+  default_config_hash: 9RnnTUBcn0WRWXfrGOnId2H0Q31uQUeu_F5TnDxl2yg
+id: studiobridge_messages
+theme: studiobridge
+region: header
+weight: -7
+provider: null
+plugin: system_messages_block
+settings:
+  id: system_messages_block
+  label: 'Status messages'
+  provider: system
+  label_display: '0'
+visibility: {  }

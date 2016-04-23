@@ -1,0 +1,19 @@
+uuid: d55fe0cf-2091-482e-9718-5d521eb77ce9
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_color_variant
+    - node.type.sessions
+id: node.sessions.field_color_variant
+field_name: field_color_variant
+entity_type: node
+bundle: sessions
+label: 'Color Variant'
+description: ''
+required: false
+translatable: true
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: string

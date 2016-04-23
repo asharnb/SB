@@ -6,6 +6,7 @@ dependencies:
     - field.field.file.image.field_image_alt_text
     - field.field.file.image.field_image_title_text
     - field.field.file.image.field_session
+    - field.field.file.image.field_tag
     - file_entity.type.image
   module:
     - user
@@ -37,6 +38,15 @@ content:
     settings:
       link: true
     third_party_settings: {  }
+  field_tag:
+    weight: 8
+    label: above
+    settings:
+      format: default
+      format_custom_false: ''
+      format_custom_true: ''
+    third_party_settings: {  }
+    type: boolean
   filemime:
     type: string
     weight: 6

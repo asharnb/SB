@@ -1,0 +1,18 @@
+uuid: 968f8206-cf9f-473d-b03b-c03cd34bab46
+langcode: en
+status: true
+dependencies:
+  module:
+    - file
+id: file.field_tag
+field_name: field_tag
+entity_type: file
+type: boolean
+settings: {  }
+module: core
+locked: false
+cardinality: 1
+translatable: true
+indexes: {  }
+persist_with_no_fields: false
+custom_storage: false

@@ -1,0 +1,20 @@
+uuid: d4bda4dc-83b2-431c-a68b-4548fb74167d
+langcode: en
+status: true
+dependencies:
+  theme:
+    - studiobridge
+_core:
+  default_config_hash: ffxthelqQF8xcr4GTG4HlaNNsluiHftN0pujmQpW0bQ
+id: studiobridge_local_actions
+theme: studiobridge
+region: header
+weight: -7
+provider: null
+plugin: local_actions_block
+settings:
+  id: local_actions_block
+  label: 'Primary admin actions'
+  provider: core
+  label_display: '0'
+visibility: {  }
