@@ -69,8 +69,7 @@ class ViewProductController extends ControllerBase {
     return [
       '#theme' => 'view_product',
       '#cache' => ['max-age' => 0],
-      '#product' => $values
-     ,
+      '#product' => $values,
     ];
   }
 

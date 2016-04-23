@@ -1,0 +1,17 @@
+studiobridge-sessions:
+  version: VERSION
+  js:
+    js/bootstrap/bootstrap.min.js: {}
+    js/datatables/jquery.dataTables.min.js: {}
+    js/datatables/dataTables.colVis.min.js: {}
+    js/datatables/dataTables.tableTools.min.js: {}
+    js/datatables/dataTables.bootstrap.min.js: {}
+    js/datatable-responsive/datatables.responsive.min.js: {}
+    js/scripts.js: {}
+  dependencies:
+    - core/jquery
+    - core/drupal.ajax
+    - core/drupal
+    - core/drupalSettings
+    - core/jquery.once
+    - core/jquery.ui.sortable

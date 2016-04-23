@@ -41,7 +41,7 @@
                             <dd><span class="bold">Unmapped</span></dd>
                         {% else %}
                             <dd class="mb-10"><img
-                                        src="/ca/img/brands/brand_logo_{{ form.productdetails.concept|lower }}.png"
+                                        src="/sb/{{ directory }}/images/brands/brand_logo_{{ form.productdetails.concept|lower }}.png"
                                         height="20px"></dd>
                         {% endif %}
                     </dl>
@@ -146,10 +146,10 @@
 
         <div id="widgettile">
             <div class="widget blue-bg p-lg text-center">
-                <div class="m-b-md"><i class="fa fa-camera"></i>
+                <div class="m-b-md">
                     <h1 class="m-xs no-of-products">{{ form.productdetails.total_products }}</h1>
                     <h3 class="font-bold no-margins">Products</h3>
-                    <small>Total Products</small>
+                    <small>Unmapped: 0</small>
                 </div>
             </div>
         </div>
@@ -200,10 +200,6 @@
                     Product Status
                 </li>
                 <li class="list-group-item">
-                    <span class="label label-warning pull-right">0:00:00</span>
-                    Time Elapsed
-                </li>
-                <li class="list-group-item">
                     <span class="label label-success pull-right"
                           id="product-img-count">{{ form.productdetails.image_count }}</span>
                     Images Shot
@@ -212,8 +208,21 @@
                     <span class="label label-danger pull-right">0</span>
                     Images Deleted
                 </li>
+
+            </ul>
+        </div>
+    </div>
+
+    <div class="m-t-md">
+        <h4>Product Checks</h4>
+        <div>
+            <ul class="list-group">
                 <li class="list-group-item">
                     <span class="label label-warning pull-right">No</span>
+                    Is complete?
+                </li>
+                <li class="list-group-item">
+                    <span class="label label-success pull-right">Ok</span>
                     In Sequence
                 </li>
                 <li class="list-group-item">

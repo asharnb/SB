@@ -60,7 +60,7 @@
 */
 #}
 
-<div class="row">
+<div class="row p-t-10">
     <div class="col-lg-9">
         <div class="panel panel-default">
             <div class="panel-heading seperator">
@@ -135,7 +135,6 @@
                                             <th>Concept</th>
                                             <th>Style Family</th>
                                             <th>Color Variant</th>
-                                            <th>QC Done</th>
                                             <th>QC Status</th>
                                             <th>Raw Count</th>
                                             <th>View</th>
@@ -145,8 +144,13 @@
 
                                         {% for item in mapped_products %}
 
-
-
+                                            {% if item.field_images|length == 0 %}
+                                                {% set image_count_class = 'text-align-center bold text-danger' %}
+                                            {% elseif item.field_images|length >= 7 %}
+                                                {% set image_count_class = 'text-align-center bold text-warning' %}
+                                            {% else %}
+                                                {% set image_count_class = 'text-align-center bold text-success' %}
+                                            {% endif %}
                                             <tr>
                                                 <td>
                                                     <img src="/sb/{{ directory }}/images/brands/brand_logo_{{ item.field_concept_name.0.value|lower }}.png"
@@ -154,8 +158,7 @@
                                                 <td>{{ item.field_style_family.0.value }}</td>
                                                 <td>{{ item.title.0.value }}</td>
                                                 <td><span class="label label-warning">Pending</span></td>
-                                                <td><span class="label label-warning">Pending</span></td>
-                                                <td>{{ item.field_images|length }}</td>
+                                                <td class="{{ image_count_class }}">{{ item.field_images|length }}</td>
 
                                                 <td><a target="_blank" class="btn btn-primary"
                                                        href="viewfolder.php?s='.$sessionunmapped['id'].'">View</a></td>
@@ -180,14 +183,18 @@
                                         <tbody>
 
                                         {% for item in unmapped_products %}
-
-
-
+                                            {% if item.field_images|length == 0 %}
+                                                {% set image_count_class = 'text-align-center bold text-danger' %}
+                                            {% elseif item.field_images|length >= 7 %}
+                                                {% set image_count_class = 'text-align-center bold text-warning' %}
+                                            {% else %}
+                                                {% set image_count_class = 'text-align-center bold text-success' %}
+                                            {% endif %}
                                             <tr>
                                                 <td><img src="/sb/{{ directory }}/images/brands/brand_logo_.png"
                                                          height="20px"></td>
                                                 <td>{{ item.title.0.value }}</td>
-                                                <td>{{ item.field_images|length }}</td>
+                                                <td class="{{ image_count_class }}">{{ item.field_images|length }}</td>
 
                                                 <td><a target="_blank" class="btn btn-primary"
                                                        href="viewfolder.php?s='.$sessionunmapped['id'].'">View</a></td>
@@ -253,7 +260,7 @@
             {% for item in grouped_concepts %}
 
                 <div class="company-stat-boxes">
-                    <div data-index="" class="company-stat-box  active padding-10 bg-master-lightest">
+                    <div data-index="" class="company-stat-box mb-10  active padding-10 bg-master-lightest">
 
 
 
@@ -261,7 +268,7 @@
                                 <img src="/sb/{{ directory }}/images/brands/brand_logo_{{ item.concept|lower }}.png"
                                      height="15px">
                             <div class="pull-right">
-                                <span class=" label label-primary p-t-5 m-l-5 p-b-5 inline fs-12">{{ mapped_products|length }}
+                                <span class=" label label-primary p-t-5 m-l-5 p-b-5 inline fs-12">{{ item.product_count }}
                                     </span>
 
                             </div>
@@ -276,8 +283,31 @@
 
                 </div>
             {% endfor %}
+    {% if unmapped_products|length > 0 %}
+            <div class="company-stat-boxes">
+                <div data-index="" class="company-stat-box mb-10  active padding-10 bg-master-lightest">
 
 
+
+                    <p class="company-name pull-left text-uppercase bold no-margin">
+                        <img src="/sb/{{ directory }}/images/brands/brand_logo_.png"
+                             height="15px">
+                    <div class="pull-right">
+                                <span class=" label label-primary p-t-5 m-l-5 p-b-5 inline fs-12">{{ unmapped_products|length }}
+                                    </span>
+
+                    </div>
+
+                    </p>
+
+                    <div class="clearfix"></div>
+
+
+
+                </div>
+
+            </div>
+    {% endif %}
         </div>
 
     </div>
