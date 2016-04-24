@@ -135,6 +135,7 @@
                                             <th>Concept</th>
                                             <th>Style Family</th>
                                             <th>Color Variant</th>
+                                            <th>State</th>
                                             <th>QC Status</th>
                                             <th>Raw Count</th>
                                             <th>View</th>
@@ -157,6 +158,7 @@
                                                          height="20px"></td>
                                                 <td>{{ item.field_style_family.0.value }}</td>
                                                 <td>{{ item.title.0.value }}</td>
+                                                <td>New</td>
                                                 <td><span class="label label-warning">Pending</span></td>
                                                 <td class="{{ image_count_class }}">{{ item.field_images|length }}</td>
 
@@ -225,29 +227,27 @@
                 <div class="widget blue-bg p-lg text-center">
                     <div class="m-b-md">
                         <h1 class="m-xs no-of-products">PD-{{ session.nid.0.value }}</h1>
-                        <h4 class="semi-bold no-margins">Session ID</h4>
-                    </div>
-                </div>
-            </div>
-
-            <div class="m-t-md">
-
-                    <div class="row">
                         {% if session.field_status.0.value == 'open' %}
                             {% set status_class = 'fa fa-circle text-success' %}
                         {% else %}
                             {% set status_class = 'fa fa-circle text-danger' %}
                         {% endif %}
-                        <div class="col-md-6 center">
+                        {% if session.field_shoot_class.0.value == 'model_shoot' %}
+                            {% set shoot_class = 'fa fa-user' %}
+                        {% else %}
+                            {% set shoot_class = 'fa fa-cubes' %}
+                        {% endif %}
+                        <br>
+                        <div class="col-md-4">
                             &nbsp; <span><i class="{{ status_class }}"></i> {{ session.field_status.0.value|title }}</span>
                         </div>
-                        <div class="col-md-6 center">
-                            <span class="label label-info">{{ session.field_shoot_class.0.value|title|replace({'_': ' '}) }}</span>
+                        <div class="col-md-8">
+                            <span><i class="{{ shoot_class }}"></i> {{ session.field_shoot_class.0.value|title|replace({'_': ' '}) }}</span>
                         </div>
                     </div>
-
-
+                </div>
             </div>
+<hr class=simple">
             <div class="m-t-md">
                 <h3>
                     <small>Stage:</small>
