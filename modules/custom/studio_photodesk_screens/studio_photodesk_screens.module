@@ -41,6 +41,8 @@ function studio_photodesk_screens_theme($existing, $type, $theme, $path) {
     'view_product' => array(
       'variables' => array('product' => NULL),
     ),
-
+      'view_all_sessions' => array(
+          'variables' => array('results' => NULL),
+      ),
   );
 }

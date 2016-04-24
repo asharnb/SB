@@ -48,8 +48,8 @@ class ViewSessionController extends ControllerBase
         $this->database = $database;
         //$this->formBuilder = $form_builder;
         //$this->userStorage = $this->entityManager()->getStorage('user');
-        $this->nodeStorage = $this->entityManager()->getStorage('node');
-        $this->userStorage = $this->entityManager()->getStorage('user');
+        $this->nodeStorage = $this->entityTypeManager()->getStorage('node');
+        $this->userStorage = $this->entityTypeManager()->getStorage('user');
     }
 
 

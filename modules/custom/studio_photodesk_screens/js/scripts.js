@@ -23,6 +23,13 @@
                 "order": [[1, 'asc']],
 
             } );
+            $('#dt_viewsessions').DataTable( {
+                "bSort": false,
+                "bDestroy": true,
+                "iDisplayLength": 15,
+                "order": [[1, 'asc']],
+
+            } );
         }
 
     };
