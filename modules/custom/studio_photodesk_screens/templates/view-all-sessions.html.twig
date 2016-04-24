@@ -1,7 +1,6 @@
 
 {#{% for result in results %}#}
     {#<p>{{ dump(result) }}</p>#}
-    {#<p>{{ result.field_concept_name.value }}</p>#}
 {#{% endfor %}#}
 
 <div class="row">
@@ -13,16 +12,16 @@
                 <div class="panel-title">View Sessions
                 </div>
                 <div class="panel-controls">
-                    <a class="btn btn-primary btn-cons" href="addsession.php"><i class="fa fa-plus mr5"></i>Add Session</a>
+                    <a class="btn btn-primary btn-cons" href="/sb/node/add/sessions"><i class="fa fa-plus mr5"></i>Add Session</a>
                 </div>
 
             </div>
             <div class="panel-body">
-                <table id="dt_viewsessions" class="table table-striped table-bordered table-hover" width="100%">
+                <table id="dt_viewsessions" class="table table-responsive table-striped table-bordered table-hover" width="100%">
 
                     <thead>
                     <th>ID</th>
-                    <th>Session Name</th>
+                    <th>Name</th>
                     <th>Status</th>
                     <th>Stage</th>
                     <th>Concept(s)</th>
@@ -37,19 +36,27 @@
 
                     </thead><tbody>
                     {% for result in results %}
+                        {% if result.status.value == 1  %}
+                            {% set status_class = '<span><i class="fa fa-circle text-success"></i> Open</span>' %}
+                        {% elseif result.status.value == 3  %}
+                            {% set status_class = '<span><i class="fa fa-circle text-warning"></i> Paused</span>' %}
+                        {% else %}
+                            {% set status_class = '<span><i class="fa fa-circle text-danger"></i> Closed</span>' %}
+                        {% endif %}
                         <tr>
-                            <td>{{ result.field_concept_name.value }}</td>
-                            <td>{{ result.field_concept_name.value }}</td>
-                            <td>{{ result.field_concept_name.value }}</td>
-                            <td>{{ result.field_concept_name.value }}</td>
-                            <td>{{ result.field_concept_name.value }}</td>
-                            <td>{{ result.field_concept_name.value }}</td>
-                            <td>{{ result.field_concept_name.value }}</td>
-                            <td>{{ result.field_concept_name.value }}</td>
-                            <td>{{ result.field_concept_name.value }}</td>
-                            <td>{{ result.field_concept_name.value }}</td>
-                            <td>{{ result.field_concept_name.value }}</td>
-                            <td>{{ result.field_concept_name.value }}</td>
+
+                            <td>{{ result.nid.value }}</td>
+                            <td>TBA</td>
+                            <td>{{ status_class|raw }}</td>
+                            <td>Shoot</td>
+                            <td><img class="brand_logo shortened-20" src="/sb/{{ directory }}/images/brands/brand_logo_{{ result.field_concept_name.value|lower }}.png" style="padding-top: 5px;"></td>
+                            <td>{{ result.field_photographer.target_id }}</td>
+                            <td>{{ result.field_vm.target_id }}</td>
+                            <td>{{ result.field_stylish.target_id }}</td>
+                            <td>{{ result.field_shoot_class.value|title|replace({'_': ' '}) }}</td>
+                            <td>{{ result.created.value|date('Y-m-d') }}</td>
+                            <td>0</td>
+                            <td>View</td>
                         </tr>
 
                     {% endfor %}
