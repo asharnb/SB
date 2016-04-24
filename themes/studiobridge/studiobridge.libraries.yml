@@ -9,5 +9,9 @@ global-styling:
       css/style.css: {}
   js:
     js/bootstrap/bootstrap.min.js: {}
+    js/app.min.js: {}
+    js/app.config.js: {}
   dependencies:
     - core/jquery
+    - core/jquery.ui
+    - core/drupal

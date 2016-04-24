@@ -1,5 +1,5 @@
 
-	$.root_ = $('body');	
+	$.root_ = $('body');
 /*
  * APP CONFIGURATION (HTML/AJAX/PHP Versions ONLY)
  * Description: Enable / disable certain theme features here

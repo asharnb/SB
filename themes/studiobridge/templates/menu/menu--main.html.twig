@@ -112,18 +112,15 @@
 
           {% endif %}
 
-
-
-
-
-
           {% if menu_level == 0 and item.is_expanded %}
           <li{{ item.attributes.addClass('open') }}>
+
             {% if item.below %}
                <a class="dropdown-toggle" data-target="#">
               {% else %}
                 <a href="{{ item.url }}"  data-target="#">
               {% endif %}
+
                <i class="{{ icon_class }}"></i>
               <span class="menu-item-parent">{{ item.title }} </span>
                   <b class="collapse-sign"><em class="fa fa-plus-square-o"></em></b>
