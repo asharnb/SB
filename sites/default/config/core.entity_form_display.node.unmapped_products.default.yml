@@ -3,6 +3,7 @@ langcode: en
 status: true
 dependencies:
   config:
+    - field.field.node.unmapped_products.field_draft
     - field.field.node.unmapped_products.field_identifier
     - field.field.node.unmapped_products.field_images
     - field.field.node.unmapped_products.field_state
@@ -20,6 +21,12 @@ content:
     weight: 10
     settings: {  }
     third_party_settings: {  }
+  field_draft:
+    weight: 34
+    settings:
+      display_label: false
+    third_party_settings: {  }
+    type: boolean_checkbox
   field_identifier:
     weight: 33
     settings:

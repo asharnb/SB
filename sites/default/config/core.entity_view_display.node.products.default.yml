@@ -10,6 +10,7 @@ dependencies:
     - field.field.node.products.field_concept
     - field.field.node.products.field_concept_name
     - field.field.node.products.field_description
+    - field.field.node.products.field_draft
     - field.field.node.products.field_ean_code
     - field.field.node.products.field_gender
     - field.field.node.products.field_images
@@ -78,6 +79,15 @@ content:
     settings: {  }
     third_party_settings: {  }
     type: basic_string
+  field_draft:
+    weight: 117
+    label: above
+    settings:
+      format: default
+      format_custom_false: ''
+      format_custom_true: ''
+    third_party_settings: {  }
+    type: boolean
   field_ean_code:
     weight: 106
     label: above

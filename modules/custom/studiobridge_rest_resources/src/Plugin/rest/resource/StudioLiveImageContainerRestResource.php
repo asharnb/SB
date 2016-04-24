@@ -277,7 +277,23 @@ class StudioLiveImageContainerRestResource extends ResourceBase {
 //          $file_name = $file_name[0]['value'];
           $image_uri_value = ImageStyle::load('live_shoot_preview')->buildUrl($file->getFileUri());
 //          $image_uri[$fid] = array('uri'=>$image_uri_value,'name'=>$file_name);
-          $image_uri[$fid] = array('uri'=>$image_uri_value);
+          $image_uri[$fid] = array('uri'=>$image_uri_value,'fullshoot'=>0,'tagged'=>0);
+
+          $field_full_shoot = $file->field_full_shoot->getValue();
+
+          if($field_full_shoot){
+            if($field_full_shoot[0]['value']){
+              $image_uri[$fid]['fullshoot'] = 1;
+            }
+          }
+
+          $file_tagged = $file->field_tag->getValue();
+
+          if($file_tagged){
+            if($file_tagged[0]['value']){
+              $image_uri[$fid]['tagged'] = 1;
+            }
+          }
 
         }
         // Set last scanned image with its fid.

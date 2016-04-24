@@ -43,25 +43,31 @@
      *
      */
     function update_image(tag) {
+        // todo get file name here
+        var fid = document.getElementById('edit-identifier-fid').value;
 
-        var Node_imgs = {
+        var identifier = document.getElementById('edit-identifier-hidden').value;
+
+
+        var img = {
             _links: {
                 type: {
                     href: Drupal.url.toAbsolute(drupalSettings.path.baseUrl + 'rest/type/file/image')
                 }
             },
-//            type: {
-//                target_id: 'products'
-//            },
             field_tag: {
-                value:tag
+                value: tag
+            },
+            filename: {
+
+                value: identifier + "_Tag.jpeg"
+
             }
         };
 
         getCsrfTokenForTagImage(function (csrfToken) {
-            var nid = document.getElementById('edit-identifier-nid').value;
-            if (nid) {
-                patchImageTag(csrfToken, Node_imgs, nid);
+            if (fid) {
+                patchImageTag(csrfToken, img, fid);
             }else{
                 alert('Node product found, pls refresh the page.');
             }

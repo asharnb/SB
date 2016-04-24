@@ -3,7 +3,7 @@ langcode: en
 status: true
 dependencies: {  }
 id: stylish
-label: Stylish
+label: Stylisht
 weight: 5
 is_admin: null
 permissions:
@@ -18,3 +18,7 @@ permissions:
   - 'create unmapped_products content'
   - 'edit any unmapped_products content'
   - 'edit own unmapped_products content'
+  - 'edit any document files'
+  - 'edit own document files'
+  - 'edit any image files'
+  - 'edit own image files'

@@ -1,0 +1,18 @@
+uuid: 99111bb0-a329-4665-b628-dd8bd08b68cd
+langcode: en
+status: true
+dependencies:
+  module:
+    - file
+id: file.field_full_shoot
+field_name: field_full_shoot
+entity_type: file
+type: boolean
+settings: {  }
+module: core
+locked: false
+cardinality: 1
+translatable: true
+indexes: {  }
+persist_with_no_fields: false
+custom_storage: false

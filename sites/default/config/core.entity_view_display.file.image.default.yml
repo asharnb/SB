@@ -3,6 +3,7 @@ langcode: en
 status: true
 dependencies:
   config:
+    - field.field.file.image.field_full_shoot
     - field.field.file.image.field_image_alt_text
     - field.field.file.image.field_image_title_text
     - field.field.file.image.field_session
@@ -17,6 +18,15 @@ targetEntityType: file
 bundle: image
 mode: default
 content:
+  field_full_shoot:
+    weight: 9
+    label: above
+    settings:
+      format: default
+      format_custom_false: ''
+      format_custom_true: ''
+    third_party_settings: {  }
+    type: boolean
   field_image_alt_text:
     type: string
     weight: 4

@@ -426,7 +426,46 @@ function studiobridge_store_images_entity_update(Drupal\Core\Entity\EntityInterf
   $bundle = $entity->bundle();
   $values = $entity->toArray();
   if($entity->bundle() == 'image'){
-    drupal_set_message('After image updated');
+
+    //drupal_set_message('After image updated');
+    //\Drupal::logger('Img entity update')->notice('Img updated '. $entity->id());
+
+    $full_shot = $entity->field_full_shoot->getValue();
+    $tag = $entity->field_tag->getValue();
+
+    //\Drupal::logger('Img entity update YYY')->notice('<pre>'.print_r($values,true).'<pre>');
+
+    if($full_shot){
+      // Get current session
+      $session_id = Sessions::openSessionRecent();
+      $full_shot_img = \Drupal::state()->get('full_shot' . '_' . $session_id,false);
+      if($full_shot[0]['value'] && $entity->id() != $full_shot_img){
+
+//        $user = \Drupal::currentUser();
+//        $uid = $user->id();
+        \Drupal::state()->set('full_shot' . '_' . $session_id, $entity->id());
+
+        //\Drupal::logger('Img entity update xxx')->notice('<pre>'.print_r($full_shot,true).'<pre>');
+
+      }
+    }
+
+    if($tag){
+      // Get current session
+      $session_id = Sessions::openSessionRecent();
+      $old_tag_img = \Drupal::state()->get('Image_tag' . '_' . $session_id,false);
+      if($tag[0]['value'] && $entity->id() != $old_tag_img){
+
+        \Drupal::state()->set('Image_tag' . '_' . $session_id, $entity->id());
+        if($old_tag_img){
+          StudioImages::TagImage($old_tag_img,0, $session_id);
+        }
+
+        //\Drupal::logger('Img entity update YYY')->notice('<pre>'.print_r($tag,true).'<pre>');
+
+      }
+    }
+
   }
 
 }

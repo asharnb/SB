@@ -22,6 +22,7 @@ use Drupal\Core\Routing\TrustedRedirectResponse;
 use \Drupal\node\Entity\Node;
 use Drupal\studiobridge_commons\Sessions;
 use Drupal\studiobridge_commons\Products;
+use Drupal\studiobridge_commons\StudioImages;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Drupal\Core\Entity;
 use Drupal\file\Entity\File;
@@ -214,7 +215,7 @@ class StudioBridgeLiveShootingForm extends FormBase
         $reshoot = false;
         $is_unmapped_product = false;
 
-        $identifier = $form_state->getValue('identifier');
+      $identifier = $form_state->getValue('identifier');
         $identifier_old = $form_state->getValue('identifier_hidden');  // @note : this will be the recent product.
 
         $last_scan_product = \Drupal::state()->get('last_scan_product_' . $uid . '_' . $session_id, false);
@@ -302,10 +303,20 @@ class StudioBridgeLiveShootingForm extends FormBase
         \Drupal::state()->set('last_scan_product_' . $uid . '_' . $session_id, $identifier);
 
         if ($new_or_old_product_nid) {
+
+          $product_node = Node::load($new_or_old_product_nid);
+
             \Drupal::state()->set('last_scan_product_nid' . $uid . '_' . $session_id, $new_or_old_product_nid);
             // todo : add product to session.
-            Sessions::UpdateLastProductToSession($session_id, Node::load($new_or_old_product_nid));
+            Sessions::UpdateLastProductToSession($session_id, $product_node);
+
+          // Add fullshot image to next product; if not exist
+          $full_shot_img_fid = \Drupal::state()->get('full_shot' . '_' . $session_id,false);
+          if($full_shot_img_fid){
+            StudioImages::FullShootImage($product_node,$full_shot_img_fid);
+          }
         }
+
 
         $images = Products::getProductImages($new_or_old_product_nid);
 

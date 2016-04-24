@@ -18,3 +18,5 @@ permissions:
   - 'create unmapped_products content'
   - 'edit any unmapped_products content'
   - 'edit own unmapped_products content'
+  - 'edit any image files'
+  - 'edit own image files'

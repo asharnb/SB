@@ -1,0 +1,23 @@
+uuid: 56f9df54-00da-4285-81d4-181a026a4171
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.file.field_full_shoot
+    - file_entity.type.image
+id: file.image.field_full_shoot
+field_name: field_full_shoot
+entity_type: file
+bundle: image
+label: 'Full Shoot'
+description: ''
+required: false
+translatable: false
+default_value:
+  -
+    value: 0
+default_value_callback: ''
+settings:
+  on_label: 'Yes'
+  off_label: 'No'
+field_type: boolean

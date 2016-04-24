@@ -1,0 +1,23 @@
+uuid: 23d1e466-90e6-4eb5-932a-4ae4a19ba978
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_draft
+    - node.type.products
+id: node.products.field_draft
+field_name: field_draft
+entity_type: node
+bundle: products
+label: Draft
+description: ''
+required: false
+translatable: false
+default_value:
+  -
+    value: 0
+default_value_callback: ''
+settings:
+  on_label: 'Yes'
+  off_label: 'No'
+field_type: boolean
