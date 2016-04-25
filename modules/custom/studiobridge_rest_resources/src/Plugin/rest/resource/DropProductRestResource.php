@@ -1,6 +1,6 @@
 <?php
 
-namespace Drupal\ccms_rest\Plugin\rest\resource;
+namespace Drupal\studiobridge_rest_resources\Plugin\rest\resource;
 
 use Drupal\Core\Session\AccountProxyInterface;
 use Drupal\node\Entity\Node;
@@ -14,16 +14,16 @@ use Psr\Log\LoggerInterface;
  * Provides a resource to get view modes by entity and bundle.
  *
  * @RestResource(
- *   id = "site_bundle_post",
- *   label = @Translation("Site bundle post"),
+ *   id = "drop_product_post",
+ *   label = @Translation("[Studio] Drop product post"),
  *   serialization_class = "Drupal\node\Entity\Node",
  *   uri_paths = {
- *     "canonical" = "/api/ccms",
- *     "https://www.drupal.org/link-relations/create" = "/api/ccms/{node_type}/post"
+ *     "canonical" = "/studio/product",
+ *     "https://www.drupal.org/link-relations/create" = "/studio/product/{node_type}/post"
  *   }
  * )
  */
-class SiteBundlePost extends ResourceBase {
+class DropProductRestResource extends ResourceBase {
   /**
    * A current user instance.
    *

@@ -20,3 +20,4 @@ permissions:
   - 'edit own unmapped_products content'
   - 'edit any image files'
   - 'edit own image files'
+  - 'restful post site_bundle_post'
