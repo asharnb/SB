@@ -1,7 +1,11 @@
 studiobridge-form:
   version: VERSION
+  css:
+    theme:
+      js/sweetalert/sweetalert2.css: {}
   js:
     js/scripts.js: {}
+    js/sweetalert/sweetalert2.min.js: {}
   dependencies:
     - core/jquery
     - core/drupal.ajax

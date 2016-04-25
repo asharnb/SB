@@ -328,3 +328,15 @@
 .user-details .user-login .btn {
     margin-right: 0;
 }
+
+.message-avatar {
+    height: 48px;
+    width: 48px;
+    border: 1px solid #e7eaec;
+    border-radius: 4px;
+    margin-top: 1px;
+    float: left;
+    margin-right: 10px;
+    vertical-align: middle;
+}
+
