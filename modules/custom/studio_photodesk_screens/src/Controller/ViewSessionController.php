@@ -17,7 +17,8 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
  *
  * @package Drupal\studio_photodesk_screens\Controller
  */
-class ViewSessionController extends ControllerBase {
+class ViewSessionController extends ControllerBase
+{
 
   /**
    * The database service.
@@ -33,7 +34,8 @@ class ViewSessionController extends ControllerBase {
   /*
    * {@inheritdoc}
    */
-  public static function create(ContainerInterface $container) {
+  public static function create(ContainerInterface $container)
+  {
     //$entity_manager = $container->get('entity.manager');
     return new static(
       $container->get('database')
@@ -41,12 +43,13 @@ class ViewSessionController extends ControllerBase {
     );
   }
 
-  public function __construct(Connection $database) {
+  public function __construct(Connection $database)
+  {
     $this->database = $database;
     //$this->formBuilder = $form_builder;
     //$this->userStorage = $this->entityManager()->getStorage('user');
-    $this->nodeStorage = $this->entityManager()->getStorage('node');
-    $this->userStorage = $this->entityManager()->getStorage('user');
+    $this->nodeStorage = $this->entityTypeManager()->getStorage('node');
+    $this->userStorage = $this->entityTypeManager()->getStorage('user');
   }
 
 
@@ -58,16 +61,16 @@ class ViewSessionController extends ControllerBase {
    * @return array
    *   Return session data.
    */
-  public function content($nid) {
+  public function content($nid)
+  {
     // build the variables here.
 
     // Load session node object
     $session = $this->nodeStorage->load($nid);
-    $is_session = $session->bundle();
 
     // on invalid session, redirect user to somewhere & notify him.
-    if (!$session || $is_session !='sessions') {
-      drupal_set_message('Invalid session id '.$nid, 'warning');
+    if (!$session) {
+      drupal_set_message('Invalid session id ' . $nid, 'warning');
       return new RedirectResponse(base_path() . 'view-sessions');
     }
 
@@ -82,15 +85,15 @@ class ViewSessionController extends ControllerBase {
     $created_by = $photographer = $this->userStorage->load($uid)->label();
 
     // stylist
-    if(!empty($values['field_stylish'][0]['target_id'])){
+    if (!empty($values['field_stylish'][0]['target_id'])) {
       $stylist = $this->userStorage->load($values['field_stylish'][0]['target_id'])->label();
     }
     // vm
-    if(!empty($values['field_vm'][0]['target_id'])){
+    if (!empty($values['field_vm'][0]['target_id'])) {
       $vm = $this->userStorage->load($values['field_vm'][0]['target_id'])->label();
     }
 
-    $session_users = array('photographer'=>$photographer, 'stylist'=>$stylist, 'vm' => $vm);
+    $session_users = array('photographer' => $photographer, 'stylist' => $stylist, 'vm' => $vm);
 
     $products_ids = $session->field_product->getValue();
     $products = [];
@@ -100,7 +103,7 @@ class ViewSessionController extends ControllerBase {
     $total_images = 0;
 
     // Build unmapped & mapped products
-    foreach($products_ids as $product){
+    foreach ($products_ids as $product) {
 
       $current_product = $this->nodeStorage->load($product['target_id']);
       //$products[] = $current_product;
@@ -110,7 +113,7 @@ class ViewSessionController extends ControllerBase {
 
 
       // Map unmapped & mapped products
-      if($bundle == 'products'){
+      if ($bundle == 'products') {
         $cp = $current_product->toArray();
         $products[] = $cp;
 
@@ -118,27 +121,27 @@ class ViewSessionController extends ControllerBase {
 
         // Get Concept
         $concept = $current_product->field_concept_name->getValue();
-        if($concept){
+        if ($concept) {
           $concept = $concept[0]['value'];
 
-          if(array_key_exists($concept,$grouped_concepts)){
-            $count = count($grouped_concepts[$concept]) + 1;
-            $grouped_concepts[$concept][] = array('nid'=>$current_product->id());
-            $grouped_concepts_count[$concept] =  array('concept'=> $concept, 'product_count'=> $count);
+          if (array_key_exists($concept, $grouped_concepts)) {
 
-          }else{
-            $count = 0;
-            if(isset($grouped_concepts[$concept])){
+            $count = count($grouped_concepts[$concept]) + 1;
+            $grouped_concepts[$concept][] = array('nid' => $current_product->id());
+            $grouped_concepts_count[$concept] = array('concept' => $concept, 'product_count' => $count);
+
+          } else {
+            $count = 1;
+            if (isset($grouped_concepts[$concept])) {
               $count = count($grouped_concepts[$concept]);
             }
-            $grouped_concepts[$concept][] = array('nid'=>$current_product->id());
-            $grouped_concepts_count[$concept] =  array('concept'=> $concept, 'product_count'=> $count);
+            $grouped_concepts[$concept][] = array('nid' => $current_product->id());
+            $grouped_concepts_count[$concept] = array('concept' => $concept, 'product_count' => $count);
           }
 
         }
 
-      }
-      elseif($bundle == 'unmapped_products'){
+      } elseif ($bundle == 'unmapped_products') {
         $cpu = $current_product->toArray();
         $unmapped_products[] = $cpu;
 
@@ -158,6 +161,12 @@ class ViewSessionController extends ControllerBase {
       '#mapped_products' => $products,
       '#session_users' => $session_users,
       '#total_images' => $total_images,
+      '#attached' => array(
+        'library' => array(
+          'studio_photodesk_screens/studiobridge-sessions'
+        )
+      ),
+
     ];
   }
 

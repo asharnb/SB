@@ -60,7 +60,7 @@
 */
 #}
 
-<div class="row">
+<div class="row p-t-10">
     <div class="col-lg-9">
         <div class="panel panel-default">
             <div class="panel-heading seperator">
@@ -129,13 +129,13 @@
                             <div class="tab-content">
                                 <div class="tab-pane active" id="tab-mapped">
 
-                                    <table id="dt_mapped" class="table table-striped table-bordered table-hover" width="100%">
+                                    <table id="dt_mapped" class="table table-responsive table-striped table-bordered table-hover" width="100%">
                                         <thead>
                                         <tr>
                                             <th>Concept</th>
                                             <th>Style Family</th>
                                             <th>Color Variant</th>
-                                            <th>QC Done</th>
+                                            <th>State</th>
                                             <th>QC Status</th>
                                             <th>Raw Count</th>
                                             <th>View</th>
@@ -145,17 +145,22 @@
 
                                         {% for item in mapped_products %}
 
-
-
+                                            {% if item.field_images|length == 0 %}
+                                                {% set image_count_class = 'text-align-center bold text-danger' %}
+                                            {% elseif item.field_images|length >= 7 %}
+                                                {% set image_count_class = 'text-align-center bold text-warning' %}
+                                            {% else %}
+                                                {% set image_count_class = 'text-align-center bold text-success' %}
+                                            {% endif %}
                                             <tr>
                                                 <td>
                                                     <img src="/sb/{{ directory }}/images/brands/brand_logo_{{ item.field_concept_name.0.value|lower }}.png"
                                                          height="20px"></td>
                                                 <td>{{ item.field_style_family.0.value }}</td>
                                                 <td>{{ item.title.0.value }}</td>
+                                                <td>New</td>
                                                 <td><span class="label label-warning">Pending</span></td>
-                                                <td><span class="label label-warning">Pending</span></td>
-                                                <td>{{ item.field_images|length }}</td>
+                                                <td class="{{ image_count_class }}">{{ item.field_images|length }}</td>
 
 <<<<<<< HEAD
                                                 <td><a target="_blank" class="btn btn-primary" href="/sb/view-product/{{item.nid.0.value }}">View</a></td>
@@ -184,14 +189,18 @@
                                         <tbody>
 
                                         {% for item in unmapped_products %}
-
-
-
+                                            {% if item.field_images|length == 0 %}
+                                                {% set image_count_class = 'text-align-center bold text-danger' %}
+                                            {% elseif item.field_images|length >= 7 %}
+                                                {% set image_count_class = 'text-align-center bold text-warning' %}
+                                            {% else %}
+                                                {% set image_count_class = 'text-align-center bold text-success' %}
+                                            {% endif %}
                                             <tr>
                                                 <td><img src="/sb/{{ directory }}/images/brands/brand_logo_.png"
                                                          height="20px"></td>
                                                 <td>{{ item.title.0.value }}</td>
-                                                <td>{{ item.field_images|length }}</td>
+                                                <td class="{{ image_count_class }}">{{ item.field_images|length }}</td>
 
 <<<<<<< HEAD
                                                 <td><a target="_blank" class="btn btn-primary"  href="/sb/view-product/{{item.nid.0.value }}">View</a></td>
@@ -226,29 +235,27 @@
                 <div class="widget blue-bg p-lg text-center">
                     <div class="m-b-md">
                         <h1 class="m-xs no-of-products">PD-{{ session.nid.0.value }}</h1>
-                        <h4 class="semi-bold no-margins">Session ID</h4>
-                    </div>
-                </div>
-            </div>
-
-            <div class="m-t-md">
-
-                    <div class="row">
                         {% if session.field_status.0.value == 'open' %}
                             {% set status_class = 'fa fa-circle text-success' %}
                         {% else %}
                             {% set status_class = 'fa fa-circle text-danger' %}
                         {% endif %}
-                        <div class="col-md-6 center">
+                        {% if session.field_shoot_class.0.value == 'model_shoot' %}
+                            {% set shoot_class = 'fa fa-user' %}
+                        {% else %}
+                            {% set shoot_class = 'fa fa-cubes' %}
+                        {% endif %}
+                        <br>
+                        <div class="col-md-4">
                             &nbsp; <span><i class="{{ status_class }}"></i> {{ session.field_status.0.value|title }}</span>
                         </div>
-                        <div class="col-md-6 center">
-                            <span class="label label-info">{{ session.field_shoot_class.0.value|title|replace({'_': ' '}) }}</span>
+                        <div class="col-md-8">
+                            <span><i class="{{ shoot_class }}"></i> {{ session.field_shoot_class.0.value|title|replace({'_': ' '}) }}</span>
                         </div>
                     </div>
-
-
+                </div>
             </div>
+<hr class=simple">
             <div class="m-t-md">
                 <h3>
                     <small>Stage:</small>
@@ -261,7 +268,7 @@
             {% for item in grouped_concepts %}
 
                 <div class="company-stat-boxes">
-                    <div data-index="" class="company-stat-box  active padding-10 bg-master-lightest">
+                    <div data-index="" class="company-stat-box mb-10  active padding-10 bg-master-lightest">
 
 
 
@@ -269,7 +276,7 @@
                                 <img src="/sb/{{ directory }}/images/brands/brand_logo_{{ item.concept|lower }}.png"
                                      height="15px">
                             <div class="pull-right">
-                                <span class=" label label-primary p-t-5 m-l-5 p-b-5 inline fs-12">{{ mapped_products|length }}
+                                <span class=" label label-primary p-t-5 m-l-5 p-b-5 inline fs-12">{{ item.product_count }}
                                     </span>
 
                             </div>
@@ -284,8 +291,31 @@
 
                 </div>
             {% endfor %}
+    {% if unmapped_products|length > 0 %}
+            <div class="company-stat-boxes">
+                <div data-index="" class="company-stat-box mb-10  active padding-10 bg-master-lightest">
 
 
+
+                    <p class="company-name pull-left text-uppercase bold no-margin">
+                        <img src="/sb/{{ directory }}/images/brands/brand_logo_.png"
+                             height="15px">
+                    <div class="pull-right">
+                                <span class=" label label-primary p-t-5 m-l-5 p-b-5 inline fs-12">{{ unmapped_products|length }}
+                                    </span>
+
+                    </div>
+
+                    </p>
+
+                    <div class="clearfix"></div>
+
+
+
+                </div>
+
+            </div>
+    {% endif %}
         </div>
 
     </div>

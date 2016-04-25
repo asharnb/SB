@@ -97,19 +97,37 @@
           <ul>
         {% endif %}
         {% for item in items %}
+
+          {% if item.title|lower == 'dashboard' %}
+
+              {% set icon_class = 'fa fa-lg fa-fw fa-home' %}
+
+            {% elseif item.title|lower == 'photo desk' %}
+
+              {% set icon_class = 'fa fa-lg fa-fw fa-camera' %}
+
+            {% else %}
+
+              {% set icon_class = '' %}
+
+          {% endif %}
+
           {% if menu_level == 0 and item.is_expanded %}
           <li{{ item.attributes.addClass('open') }}>
+
             {% if item.below %}
                <a class="dropdown-toggle" data-target="#">
               {% else %}
                 <a href="{{ item.url }}"  data-target="#">
               {% endif %}
-               <i class="fa fa-lg fa-fw fa-home"></i>
+
+               <i class="{{ icon_class }}"></i>
               <span class="menu-item-parent">{{ item.title }} </span>
                   <b class="collapse-sign"><em class="fa fa-plus-square-o"></em></b>
                 </a>
           {% else %}
             <li{{ item.attributes }}>
+
             {{ link(item.title, item.url) }}
           {% endif %}
           {% if item.below %}
