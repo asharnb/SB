@@ -1,0 +1,7 @@
+demo.form:
+  path: '/sq'
+  defaults:
+    _form: '\Drupal\studio_queues\Form\StudioQueueForm'
+    _title: 'Studio Queues'
+  requirements:
+    _permission: 'administer site configuration'

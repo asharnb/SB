@@ -1,0 +1,18 @@
+<?php
+
+/*
+ * Implements hook_schema().
+ */
+function studio_session_operations_schema() {
+  $schema['studio_dropped_products'] = array(
+    'fields' => array(
+      'id' => array('type' => 'serial', 'not null' => TRUE,),
+      'product' => array('type' => 'varchar', 'length' => 250, 'not null' => TRUE,),
+      'sid' => array('type' => 'varchar', 'length' => 250, 'not null' => TRUE,),
+      'uid' => array('type' => 'varchar', 'length' => 250, 'not null' => TRUE,),
+      'dropped'   => array('type' => 'int', 'not null' => TRUE, 'default' => 0),
+    ),
+    'primary key' => array('id'),
+  );
+  return $schema;
+}

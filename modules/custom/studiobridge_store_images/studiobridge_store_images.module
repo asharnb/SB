@@ -297,6 +297,14 @@ function studiobridge_store_images_entity_delete(Drupal\Core\Entity\EntityInterf
     // Delete the entity's entry from a fictional table of all entities.
     StudioImages::DeleteFileTransfer($entity->id());
   }
+
+  if($bundle == 'unmapped_products' || $bundle == 'products'){
+    $title = $entity->title->getValue();
+    $sid = Sessions::openSessionRecent();
+    Products::DeleteProductLog($title[0]['value'], $sid,1);
+  }
+
+
 }
 
 /**
@@ -373,7 +381,7 @@ function studiobridge_store_images_entity_presave(Drupal\Core\Entity\EntityInter
           $filemime = explode('/', $filemime);
           $filemime = $filemime[1];
           if ($filemime == 'octet-stream') {
-            $filemime = 'jpeg';
+            $filemime = 'jpg';
           }
           // todo : filemime will be wrong
           // change file name as per sequence number and base product_id value.
