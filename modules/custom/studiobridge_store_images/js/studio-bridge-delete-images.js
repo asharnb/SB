@@ -37,7 +37,8 @@
                     showCancelButton: false,
                     confirmButtonColor: "#DD6B55",
                     confirmButtonText: "OK",
-                    closeOnConfirm: true
+                    closeOnConfirm: true,
+                    timer: 1500
                 });
 
                 // update whole img container
@@ -138,7 +139,15 @@
             });
         }
         else{
-            alert('No images selected to delete');
+            swal({
+                title: "Delete Error",
+                text: "No images were selected to be deleted",
+                type: "error",
+                showCancelButton: false,
+                confirmButtonColor: "#DD6B55",
+                confirmButtonText: "OK",
+                closeOnConfirm: true
+            });
 
         }
     }

@@ -13,3 +13,11 @@ global-styling:
     - core/jquery
     - core/jquery.ui
     - core/drupal
+    - core/jquery.once
+
+smart-alert:
+
+  js:
+    js/notification/SmartNotification.min.js: {}
+  dependencies:
+    - core/jquery

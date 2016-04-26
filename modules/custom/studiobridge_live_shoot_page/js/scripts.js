@@ -7,6 +7,8 @@
     Drupal.behaviors.tagfordelete = {
         attach: function(context, settings) {
 
+
+
             $('input:checkbox').change(function(){
                 var closeelement = document.getElementById( "ribboncontainer" );
                 if($(this).is(":checked")) {
@@ -25,6 +27,6 @@
         
         
     };
-    
+
 
 }(jQuery));

@@ -4,8 +4,10 @@ studiobridge-form:
     theme:
       js/sweetalert/sweetalert2.css: {}
   js:
-    js/scripts.js: {}
     js/sweetalert/sweetalert2.min.js: {}
+    js/noty/jquery.noty.js: {}
+    js/noty/promise.js: {}
+    js/scripts.js: {}
   dependencies:
     - core/jquery
     - core/drupal.ajax

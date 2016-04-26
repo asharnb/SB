@@ -24,13 +24,14 @@
             success: function (node) {
                 //console.log(node);
                 swal({
-                    title: "Drop Product",
+                    title: "Product Dropped",
                     text: "This product has been marked as dropped, it will be dropped when the session is closed.",
                     type: "success",
                     showCancelButton: false,
                     confirmButtonColor: "#DD6B55",
                     confirmButtonText: "OK",
-                    closeOnConfirm: true
+                    closeOnConfirm: true,
+                    timer: 1500
                 });
             },
             error: function(){
@@ -77,7 +78,17 @@
     }
 
     $(".studio-product-drop").click(function () {
-        update_product(1);
+        swal({
+            title: "Confirm Drop",
+            text: "Are you sure you want to drop this product from this session?",
+            type: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#DD6B55",
+            confirmButtonText: "Drop It",
+            closeOnConfirm: false
+        },function () {
+            update_product(1);
+            });
     });
 
 })(jQuery);

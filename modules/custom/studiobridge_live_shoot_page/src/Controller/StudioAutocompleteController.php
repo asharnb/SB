@@ -35,6 +35,7 @@ class StudioAutocompleteController implements ContainerInjectionInterface {
         '#attached' => array(
             'library' =>  array(
                 'studiobridge_live_shoot_page/studiobridge-form'
+
             )
         ),
 

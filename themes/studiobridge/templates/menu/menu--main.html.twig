@@ -73,12 +73,11 @@
   {#</nav>#}
 {#</aside>#}
 
-{% set dashboard = '<i class="fa fa-home"></i>' %}
 {% import _self as menus %}
 
 <aside id="left-panel">
   <div class="userlogged clearfix">
-    <img src="/sb/{{ directory }}/images/cameraman.png" alt="me" class="busy">
+    <img src="/sbtest/{{ directory }}/images/cameraman.png" alt="me" class="busy">
     <div class="user-details">
       <h4>Ashar Babar</h4>
 
@@ -122,7 +121,7 @@
               {% endif %}
 
                <i class="{{ icon_class }}"></i>
-              <span class="menu-item-parent">{{ item.title }} </span>
+              <span class="menu-item-parent">{{ item.title }}</span>
                   <b class="collapse-sign"><em class="fa fa-plus-square-o"></em></b>
                 </a>
           {% else %}
@@ -130,6 +129,7 @@
 
             {{ link(item.title, item.url) }}
           {% endif %}
+
           {% if item.below %}
             <ul class="children" style="display: block;">
             {{ menus.menu_links(item.below, attributes.removeClass('nav', 'navbar-nav'), menu_level + 1) }}

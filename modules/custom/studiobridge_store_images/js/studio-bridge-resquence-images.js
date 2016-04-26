@@ -30,8 +30,15 @@
             data: JSON.stringify(node),
             success: function (node) {
                 //console.log(node);
-                document.getElementById('msg-up').innerHTML = 'Updated!';
-
+                //document.getElementById('msg-up').innerHTML = 'Updated!';
+                swal({
+                    title: "Resequence Successful",
+                    text: "Images have have been resequenced",
+                    type: "success",
+                    showCancelButton: false,
+                    closeOnConfirm: true,
+                    timer: 1500
+                });
                 // update whole img container
                 var container, inputs, index;
                 var dup_holder = [];
@@ -121,7 +128,15 @@
             });
         }
         else{
-            alert('No images found');
+            swal({
+                title: "Resequence Error",
+                text: "No images were selected to be resequenced",
+                type: "error",
+                showCancelButton: false,
+                confirmButtonColor: "#DD6B55",
+                confirmButtonText: "OK",
+                closeOnConfirm: true
+            });
 
         }
     }
