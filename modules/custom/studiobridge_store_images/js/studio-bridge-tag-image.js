@@ -23,10 +23,28 @@
             data: JSON.stringify(file),
             success: function (file) {
                 //console.log(node);
-                document.getElementById('msg-up').innerHTML = 'Image Tagged!';
+                document.getElementById('msg-up').innerHTML = 'Image Tagged!';                swal({
+                    title: "Tag Shot",
+                    text: "Tag shot has been selected",
+                    type: "success",
+                    showCancelButton: false,
+                    confirmButtonColor: "#DD6B55",
+                    confirmButtonText: "OK",
+                    closeOnConfirm: true
+                });
+
+                
             },
             error: function(){
-                alert('Failed! Try after sometime or Refresh the page.');
+                swal({
+                    title: "Tag Shot",
+                    text: "There was an error, please try again.",
+                    type: "error",
+                    showCancelButton: false,
+                    confirmButtonColor: "#DD6B55",
+                    confirmButtonText: "OK",
+                    closeOnConfirm: true
+                });
             }
 
         });
@@ -42,11 +60,11 @@
      *  tag value 0 means undo tag
      *
      */
-    function update_image(tag) {
+    function update_image(tag,fidinput) {
         // todo get file name here
-        var fid = document.getElementById('edit-identifier-fid').value;
+        var fid = fidinput;
 
-        var identifier = document.getElementById('edit-identifier-hidden').value;
+        // var identifier = document.getElementById('edit-identifier-hidden').value;
 
 
         var img = {
@@ -60,7 +78,7 @@
             },
             filename: {
 
-                value: identifier + "_Tag.jpeg"
+                value: "tag.jpg"
 
             }
         };
@@ -74,8 +92,11 @@
         });
     }
 
-    $("#studio-img-tag").click(function () {
-        update_image(1);
+    $(".studio-img-tag").click(function () {
+
+        var id = $(this).parents('span').attr('id');
+        console.log('fullshot'+id);
+        update_image(1,id);
     });
 
 })(jQuery);

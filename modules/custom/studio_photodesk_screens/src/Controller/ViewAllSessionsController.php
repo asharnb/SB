@@ -67,7 +67,7 @@ class ViewAllSessionsController extends ControllerBase
         //get all nodes of session type
         $result = \Drupal::entityQuery('node')
             ->condition('type', 'sessions')
-            //->condition('uid', $uid)
+            ->condition('uid', $uid)
             ->sort('created', 'DESC')
             ->range(0, 10000)
             ->execute();

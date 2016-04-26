@@ -6,6 +6,7 @@ studio-bridge-view-product:
     js/studio-bridge-delete-images.js: {}
     js/studio-bridge-drop-product.js: {}
     js/studio-bridge-tag-image.js: {}
+    js/studio-bridge-fullshot-image.js: {}
   css:
     theme:
       css/studio-bridge-auto-submit.css: {}

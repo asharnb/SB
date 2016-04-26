@@ -49,14 +49,14 @@
                             <td>TBA</td>
                             <td>{{ status_class|raw }}</td>
                             <td>Shoot</td>
-                            <td><img class="brand_logo shortened-20" src="/sb/{{ directory }}/images/brands/brand_logo_{{ result.field_concept_name.value|lower }}.png" style="padding-top: 5px;"></td>
+                            <td><img class="brand_logo shortened-20" src="/sbtest/{{ directory }}/images/brands/brand_logo_{{ result.field_concept_name.value|lower }}.png" style="padding-top: 5px;"></td>
                             <td>{{ result.field_photographer.target_id }}</td>
                             <td>{{ result.field_vm.target_id }}</td>
                             <td>{{ result.field_stylish.target_id }}</td>
                             <td>{{ result.field_shoot_class.value|title|replace({'_': ' '}) }}</td>
                             <td>{{ result.created.value|date('Y-m-d') }}</td>
                             <td>0</td>
-                            <td>View</td>
+                            <td><a href="/sbtest/view-session/{{ result.nid.value }}">View</a></td>
                         </tr>
 
                     {% endfor %}

@@ -9,8 +9,6 @@ global-styling:
       css/style.css: {}
   js:
     js/bootstrap/bootstrap.min.js: {}
-    js/app.config.js: {}
-    js/app.min.js: {}
   dependencies:
     - core/jquery
     - core/jquery.ui

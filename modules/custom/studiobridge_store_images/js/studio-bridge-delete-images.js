@@ -30,7 +30,15 @@
             data: JSON.stringify(node),
             success: function (node) {
                 //console.log(node);
-                document.getElementById('msg-up').innerHTML = 'Deleted!';
+                swal({
+                    title: "Images Deleted",
+                    text: "Your selected images have been deleted",
+                    type: "success",
+                    showCancelButton: false,
+                    confirmButtonColor: "#DD6B55",
+                    confirmButtonText: "OK",
+                    closeOnConfirm: true
+                });
 
                 // update whole img container
                 var container, inputs, index, index2;
@@ -74,10 +82,6 @@
 
                 }
 
-
-                setTimeout(function(){
-                    document.getElementById('msg-up').innerHTML = '';
-                }, 3300);
             },
             error: function(){
                 alert('Failed!');
