@@ -314,6 +314,7 @@ class StudioBridgeLiveShootingForm extends FormBase
           $full_shot_img_fid = \Drupal::state()->get('full_shot' . '_' . $session_id,false);
           if($full_shot_img_fid){
             StudioImages::FullShootImage($product_node,$full_shot_img_fid);
+            \Drupal::state()->set('full_shot' . '_' . $session_id, false);
           }
         }
 
