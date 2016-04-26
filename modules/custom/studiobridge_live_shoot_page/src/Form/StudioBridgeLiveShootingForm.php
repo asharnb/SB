@@ -232,6 +232,8 @@ class StudioBridgeLiveShootingForm extends FormBase
         //if identifier found in our products then skip importing.
         $result = Products::getProductByIdentifier($identifier);
 
+      \Drupal::state()->set('productscan_' . $session_id, true);
+
         if (!$result) {
             // Get product from server
             $product = Products::getProductExternal($identifier);
@@ -397,7 +399,7 @@ class StudioBridgeLiveShootingForm extends FormBase
 
         }
 
-
+      \Drupal::state()->set('productscan_' . $session_id, false);
         return $ajax_response;
     }
 

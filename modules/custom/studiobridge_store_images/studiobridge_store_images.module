@@ -438,8 +438,9 @@ function studiobridge_store_images_entity_update(Drupal\Core\Entity\EntityInterf
     if($full_shot){
       // Get current session
       $session_id = Sessions::openSessionRecent();
+      $product_scan = \Drupal::state()->get('productscan_' . $session_id, true);
       $full_shot_img = \Drupal::state()->get('full_shot' . '_' . $session_id,false);
-      if($full_shot[0]['value'] && $entity->id() != $full_shot_img){
+      if($full_shot[0]['value'] && $entity->id() != $full_shot_img && !$product_scan){
 
 //        $user = \Drupal::currentUser();
 //        $uid = $user->id();
