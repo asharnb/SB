@@ -23,7 +23,15 @@
             data: JSON.stringify(node),
             success: function (node) {
                 //console.log(node);
-                document.getElementById('msg-up').innerHTML = 'Product marked as droped!';
+                swal({
+                    title: "Drop Product",
+                    text: "This product has been marked as dropped, it will be dropped when the session is closed.",
+                    type: "success",
+                    showCancelButton: false,
+                    confirmButtonColor: "#DD6B55",
+                    confirmButtonText: "OK",
+                    closeOnConfirm: true
+                });
             },
             error: function(){
                 alert('Failed! Try after sometime or Refresh the page.');
@@ -43,7 +51,6 @@
      *
      */
     function update_product(draft) {
-
         var Node_imgs = {
             _links: {
                 type: {
@@ -60,6 +67,7 @@
 
         getCsrfTokenForProductDrop(function (csrfToken) {
             var nid = document.getElementById('edit-identifier-nid').value;
+            console.log(nid);
             if (nid) {
                 patchNodeDrop(csrfToken, Node_imgs, nid);
             }else{
@@ -68,7 +76,7 @@
         });
     }
 
-    $("#studio-product-drop").click(function () {
+    $(".studio-product-drop").click(function () {
         update_product(1);
     });
 

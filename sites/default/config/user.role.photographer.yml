@@ -35,3 +35,4 @@ permissions:
   - 'edit own document files'
   - 'edit any image files'
   - 'edit own image files'
+  - 'restful post site_bundle_post'

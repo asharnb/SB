@@ -190,6 +190,7 @@ Class Products {
       if ($images) {
         foreach ($images as $img) {
           $fid = $img['target_id'];
+
           // Load the file object.
           $file = File::load($fid);
           // Validated file if it is deleted then error will occur.
@@ -197,9 +198,13 @@ Class Products {
             // Get the file name.
             $file_name = $file->filename->getValue();
             $file_name = $file_name[0]['value'];
+            // Get if image has been tagged
+            $image_tag = $file->field_tag->getValue();
+            $image_tag = $image_tag[0]['value'];
             // Get the image of style - Live shoot preview.
             $image_uri_value = ImageStyle::load('live_shoot_preview')->buildUrl($file->getFileUri());
-            $image_uri[$fid] = array('uri' => $image_uri_value, 'name' => $file_name);
+            $image_uri[$fid] = array('uri' => $image_uri_value, 'name' => $file_name, 'tag' => $image_tag);
+
           }
 
         }

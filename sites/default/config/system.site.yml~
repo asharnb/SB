@@ -1,0 +1,14 @@
+uuid: f8dd1aba-e34e-4ac0-9c6b-0600c898330b
+name: 'Studio Bridge'
+mail: info@studiobridge.local.com
+slogan: ''
+page:
+  403: ''
+  404: ''
+  front: /user
+admin_compact_mode: false
+weight_select_max: 100
+langcode: en
+default_langcode: en
+_core:
+  default_config_hash: yXadRE77Va-G6dxhd2kPYapAvbnSvTF6hO4oXiOEynI
