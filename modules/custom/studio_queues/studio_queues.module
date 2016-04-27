@@ -1,47 +1,46 @@
 <?php
-
-use Drupal\Core\Entity\EntityInterface;
-use Drupal\Core\Queue\QueueFactory;
-use Drupal\Core\Queue\QueueInterface;
-use Drupal\studiobridge_commons;
-/**
- * Implements hook_entity_insert().
- */
-function studio_queues_entity_insert(EntityInterface $entity) {
-
-  drupal_set_message('fasfasfasdfasdfasdfsadfsda');
-
-  //die('im exists!');
-
-  // todo: save logs here
-  //\Drupal::logger('test_module')->notice('New file received');
-
-  // Get the bundle & Field values of current entity.
-  $bundle = $entity->bundle();
-  $values = $entity->toArray();
-
-  // When new image is received by server, assign it to Current open product of particular session.
-  if ($bundle == 'image' && isset($values['field_session'][0]['target_id'])) {
-
-
-  }
-
-//  if ($entity->getEntityTypeId() !== 'node') {
-//    return;
+//
+//use Drupal\Core\Entity\EntityInterface;
+//use Drupal\Core\Queue\QueueFactory;
+//use Drupal\Core\Queue\QueueInterface;
+//use Drupal\studiobridge_commons;
+///**
+// * Implements hook_entity_insert().
+// */
+//function studio_queues_entity_insert(EntityInterface $entity) {
+//
+//
+//  //die('im exists!');
+//
+//  // todo: save logs here
+//  //\Drupal::logger('test_module')->notice('New file received');
+//
+//  // Get the bundle & Field values of current entity.
+//  $bundle = $entity->bundle();
+//  $values = $entity->toArray();
+//
+//  // When new image is received by server, assign it to Current open product of particular session.
+//  if ($bundle == 'image' && isset($values['field_session'][0]['target_id'])) {
+//
+//
 //  }
 //
-//  if ($entity->isPublished()) {
-//    return;
-//  }
-
-  /** @var QueueFactory $queue_factory */
-//  $queue_factory = \Drupal::service('queue');
-//  /** @var QueueInterface $queue */
-//  $queue = $queue_factory->get('studio_img_queue');
-//  $item = new \stdClass();
-//  $item->nid = $entity->id();
-//  $queue->createItem($item);
-
-  //studiobridge_commons\Queues::CreateQueue(260,$entity->id());
-
-}
+////  if ($entity->getEntityTypeId() !== 'node') {
+////    return;
+////  }
+////
+////  if ($entity->isPublished()) {
+////    return;
+////  }
+//
+//  /** @var QueueFactory $queue_factory */
+////  $queue_factory = \Drupal::service('queue');
+////  /** @var QueueInterface $queue */
+////  $queue = $queue_factory->get('studio_img_queue');
+////  $item = new \stdClass();
+////  $item->nid = $entity->id();
+////  $queue->createItem($item);
+//
+//  //studiobridge_commons\Queues::CreateQueue(260,$entity->id());
+//
+//}

@@ -51,7 +51,7 @@ class CloseSessionOperations extends ControllerBase {
 
   protected $operations = array();
 
-  protected $session;
+  protected $session_node;
 
   protected $products;
 
@@ -98,14 +98,14 @@ class CloseSessionOperations extends ControllerBase {
 
     $this->sid = $sid;
 
-    $this->session = $this->nodeStorage->load($sid);
+    $this->session_node = $this->nodeStorage->load($sid);
 
     // on invalid product, redirect user to somewhere & notify him.
-    if (!$this->session) {
+    if (!$this->session_node) {
       drupal_set_message('Invalid Session id '.$sid, 'warning');
       return new RedirectResponse(base_path() . 'view-sessions2');
     }
-    elseif(!in_array($bundle = $this->session->bundle(),array('sessions'))){
+    elseif(!in_array($bundle = $this->session_node->bundle(),array('sessions'))){
       drupal_set_message('Invalid Session id '.$sid, 'warning');
       return new RedirectResponse(base_path() . 'view-sessions2');
     }
@@ -170,15 +170,16 @@ class CloseSessionOperations extends ControllerBase {
 
     // Create shootlist
 
+
     // Images physical naming & folder structure
     $this->ImageNameOperations();
 
     // Automated emails
-
+    $this->operations[] = array(array(get_class($this), 'NodeCovert'), array($this->sid));
     //
 
 
-    $this->operations[] = array(array(get_class($this), 'AutomaticEmails'), array($this->sid));
+    $this->operations[] = array(array(get_class($this), 'AutomaticEmails'), array($this->sid, $this->session_node));
   }
 
   /*
@@ -223,13 +224,49 @@ class CloseSessionOperations extends ControllerBase {
     }
   }
 
-  public function AutomaticEmails($sid){
+  public function AutomaticEmails($sid, $session){
+    //Queues::RunMappingQueues($sid);
+
+
+    $title = $session->title->getValue();
+    if ($title) {
+      $title = $title[0]['value'];
+    }
+
+    $mailManager = \Drupal::service('plugin.manager.mail');
+
+    $module = 'studio_session_operations';
+    $key = 'shootlist';
+    //$to = \Drupal::currentUser()->getEmail();
+    $to = 'krknth@gmail.com';
+
+    $link = 'shoot list link comes here';
+
+    $params['message'] = 'Message comes here ' . $link;
+    $params['node_title'] = $title;
+    $langcode = \Drupal::currentUser()->getPreferredLangcode();
+    $send = true;
+
+    $result = $mailManager->mail($module, $key, $to, $langcode, $params, NULL, $send);
+
+    if ($result['result'] !== true) {
+      drupal_set_message(t('There was a problem sending your message and it was not sent.'), 'error');
+    }
+    else {
+      drupal_set_message(t('Your message has been sent.'));
+    }
+
+  }
+
+  // RunQueues
+  public function RunQueues($sid){
     Queues::RunMappingQueues($sid);
   }
 
+
   public function getDraftProducts(){
 
-    $product_nids = $this->session->field_product->getValue();
+    $product_nids = $this->session_node->field_product->getValue();
     foreach($product_nids as $target){
        $this->pids[] = $target['target_id'];
     }

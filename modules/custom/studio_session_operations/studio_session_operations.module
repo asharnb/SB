@@ -22,3 +22,23 @@ function studio_session_operations_help($route_name, RouteMatchInterface $route_
     default:
   }
 }
+
+
+
+/**
+ * Implements hook_mail().
+ */
+function studio_session_operations_mail($key, &$message, $params) {
+  $options = array(
+    'langcode' => $message['langcode'],
+  );
+
+  switch ($key) {
+    case 'shootlist':
+      $message['from'] = \Drupal::config('system.site')->get('mail');
+//      $message['subject'] = t('Article created: @title', array('@title' => $params['node_title']), $options);
+      $message['subject'] = t('Session closed: @title', array('@title' => $params['node_title']), $options);
+      $message['body'][] = $params['message'];
+      break;
+  }
+}
