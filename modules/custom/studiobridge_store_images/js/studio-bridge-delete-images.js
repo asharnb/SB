@@ -34,10 +34,7 @@
                     title: "Images Deleted",
                     text: "Your selected images have been deleted",
                     type: "success",
-                    showCancelButton: false,
-                    confirmButtonColor: "#DD6B55",
-                    confirmButtonText: "OK",
-                    closeOnConfirm: true,
+                    showConfirmButton: false,
                     timer: 1500
                 });
 
@@ -130,7 +127,7 @@
         console.log(Node_imgs);
 
         if(unchecked){
-            document.getElementById('msg-up').innerHTML = 'Deleting selected images....';
+            //document.getElementById('msg-up').innerHTML = 'Deleting selected images....';
             getCsrfTokenForDelete(function (csrfToken) {
                 var nid = document.getElementById('edit-identifier-nid').value;
                 if (nid) {

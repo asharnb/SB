@@ -11,7 +11,7 @@
 
     function patchNodeDrop(csrfToken, node, nid) {
 
-        document.getElementById('msg-up').innerHTML = 'Dropping product ....';
+        //document.getElementById('msg-up').innerHTML = 'Dropping product ....';
 
         $.ajax({
             url: Drupal.url('node/' + nid + '?_format=hal_json'),
@@ -25,7 +25,7 @@
                 //console.log(node);
                 swal({
                     title: "Product Dropped",
-                    text: "This product has been marked as dropped, it will be dropped when the session is closed.",
+                    text: "This product has been marked as dropped, you can undrop this product until the session is closed.",
                     type: "success",
                     showCancelButton: false,
                     confirmButtonColor: "#DD6B55",

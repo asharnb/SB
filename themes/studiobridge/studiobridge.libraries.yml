@@ -9,6 +9,9 @@ global-styling:
       css/style.css: {}
   js:
     js/bootstrap/bootstrap.min.js: {}
+    js/app.config.js: {}
+    js/app.min.js: {}
+    js/jarvis/jarvis.min.js: {}
   dependencies:
     - core/jquery
     - core/jquery.ui
@@ -16,7 +19,6 @@ global-styling:
     - core/jquery.once
 
 smart-alert:
-
   js:
     js/notification/SmartNotification.min.js: {}
   dependencies:

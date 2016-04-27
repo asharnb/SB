@@ -27,10 +27,11 @@
                     title: "Tag Shot",
                     text: "Tag shot has been selected",
                     type: "success",
-                    showCancelButton: false,
+                    showConfirmButton: false,
                     confirmButtonColor: "#DD6B55",
                     confirmButtonText: "OK",
-                    closeOnConfirm: true
+                    closeOnConfirm: true,
+                    timer:1500
                 });
 
                 

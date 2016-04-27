@@ -14,8 +14,7 @@ jQuery(document).ready(function($) {
 	$.sound_on = true;
 	/*
 	 * SAVE INSTANCE REFERENCE (DO NOT CHANGE)
-	 * Save a reference to the global object (window in the browser)
-	 */
+	 * Save a reference to the glob
 	var root = this,
 	/*
 	 * DEBUGGING MODE
@@ -32,8 +31,7 @@ jQuery(document).ready(function($) {
 	/*
 	 * Impacts the responce rate of some of the responsive elements (lower
 	 * value affects CPU but improves speed)
-	 */
-		throttle_delay = 350,
+	 */ throttle_delay = 350,
 	/*
 	 * The rate at which the menu expands revealing child elements on click
 	 */

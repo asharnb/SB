@@ -35,7 +35,7 @@
                     title: "Resequence Successful",
                     text: "Images have have been resequenced",
                     type: "success",
-                    showCancelButton: false,
+                    showConfirmButton: false,
                     closeOnConfirm: true,
                     timer: 1500
                 });
