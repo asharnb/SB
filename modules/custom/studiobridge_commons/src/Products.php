@@ -361,4 +361,28 @@ Class Products {
     }
 
   }
+
+  /*
+  * Helper function, to insert log into {studio_file_transfers} table.
+  *
+  * @param fid
+  *   File object fid.
+  * @param pid
+  *   Product node nid.
+  * @param sid
+  *   Session node nid.
+  */
+  public static function DeleteProductLog($identifier, $sid, $uid) {
+    db_insert('studio_dropped_products')
+      ->fields(array(
+        'product' => $identifier,
+        'sid' => $sid,
+        'uid' => $uid,
+        'dropped' => REQUEST_TIME,
+      ))
+      ->execute();
+    \Drupal::logger('Studio')->notice('Product deleted - '. $identifier);
+
+  }
+
 }

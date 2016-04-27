@@ -297,6 +297,14 @@ function studiobridge_store_images_entity_delete(Drupal\Core\Entity\EntityInterf
     // Delete the entity's entry from a fictional table of all entities.
     StudioImages::DeleteFileTransfer($entity->id());
   }
+
+  if($bundle == 'unmapped_products' || $bundle == 'products'){
+    $title = $entity->title->getValue();
+    $sid = Sessions::openSessionRecent();
+    Products::DeleteProductLog($title[0]['value'], $sid,1);
+  }
+
+
 }
 
 /**
@@ -373,7 +381,7 @@ function studiobridge_store_images_entity_presave(Drupal\Core\Entity\EntityInter
           $filemime = explode('/', $filemime);
           $filemime = $filemime[1];
           if ($filemime == 'octet-stream') {
-            $filemime = 'jpeg';
+            $filemime = 'jpg';
           }
           // todo : filemime will be wrong
           // change file name as per sequence number and base product_id value.
@@ -438,8 +446,9 @@ function studiobridge_store_images_entity_update(Drupal\Core\Entity\EntityInterf
     if($full_shot){
       // Get current session
       $session_id = Sessions::openSessionRecent();
+      $product_scan = \Drupal::state()->get('productscan_' . $session_id, true);
       $full_shot_img = \Drupal::state()->get('full_shot' . '_' . $session_id,false);
-      if($full_shot[0]['value'] && $entity->id() != $full_shot_img){
+      if($full_shot[0]['value'] && $entity->id() != $full_shot_img && !$product_scan){
 
 //        $user = \Drupal::currentUser();
 //        $uid = $user->id();

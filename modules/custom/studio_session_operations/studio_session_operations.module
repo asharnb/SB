@@ -1,0 +1,24 @@
+<?php
+
+/**
+ * @file
+ * Contains studio_session_operations.module..
+ */
+
+use Drupal\Core\Routing\RouteMatchInterface;
+
+/**
+ * Implements hook_help().
+ */
+function studio_session_operations_help($route_name, RouteMatchInterface $route_match) {
+  switch ($route_name) {
+    // Main module help for the studio_session_operations module.
+    case 'help.page.studio_session_operations':
+      $output = '';
+      $output .= '<h3>' . t('About') . '</h3>';
+      $output .= '<p>' . t('Module contains operations required for closing session.') . '</p>';
+      return $output;
+
+    default:
+  }
+}

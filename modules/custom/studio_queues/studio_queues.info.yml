@@ -1,0 +1,4 @@
+name: Studio Queues
+description: Module queues image transactions.
+core: 8.x
+type: module

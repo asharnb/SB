@@ -108,6 +108,8 @@ class ViewSessionController extends ControllerBase
       $current_product = $this->nodeStorage->load($product['target_id']);
       //$products[] = $current_product;
 
+      if(!$current_product) continue;
+
       // Get product type; mapped or unmapped
       $bundle = $current_product->bundle();
 

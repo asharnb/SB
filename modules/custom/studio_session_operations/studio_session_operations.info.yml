@@ -1,0 +1,5 @@
+name: Studio session operations
+type: module
+description: Module contains operations required for closing session.
+core: 8.x
+package: StudioBridge
