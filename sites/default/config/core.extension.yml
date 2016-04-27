@@ -36,6 +36,8 @@ module:
   serialization: 0
   studio_bridge_schemas: 0
   studio_photodesk_screens: 0
+  studio_queues: 0
+  studio_session_operations: 0
   studiobridge_commons: 0
   studiobridge_live_shoot_page: 0
   studiobridge_rest_resources: 0
