@@ -117,15 +117,6 @@ class CloseSessionOperations extends ControllerBase {
 
     $this->buildOperations();
 
-
-    $total = 10;
-    $sleep = (1000000 / $total) * 2;
-
-    $operations = array();
-    for ($i = 1; $i <= $total; $i++) {
-      $operations[] = array(array(get_class($this), '__callback_1'), array($i, $sleep));
-    }
-
     $batch = array(
       'title' => t('Batch Process'),
       'operations' => $this->operations,
@@ -206,17 +197,28 @@ class CloseSessionOperations extends ControllerBase {
    *
    */
   public function MapUnmappedProductsOperations() {
-
+    $identifier = false;
     if($this->unmapped_products){
       foreach($this->unmapped_products as $product){
-        $this->operations[] = array(array(get_class($this), 'NodeCovert'), array($product));
 
         $title = $product->title->getValue();
         if ($title) {
           $identifier = $title[0]['value'];
         }
 
-        Queues::CreateQueueProductMapping($this->sid, $identifier, $product->id());
+        if($identifier){
+
+          $server_product = Products::getProductExternal($identifier);
+          $server_product = json_decode($server_product);
+          if (!isset($server_product->msg)){
+
+            if (is_object($server_product)) {
+              $this->operations[] = array(array(get_class($this), 'NodeCovert'), array($product,$server_product));
+              Queues::CreateQueueProductMapping($this->sid, $server_product, $product->id());
+            }
+
+          }
+        }
       }
     }
   }
@@ -258,70 +260,11 @@ class CloseSessionOperations extends ControllerBase {
   /*
    *
    */
-  public function NodeCovert($unmappedProduct){
-    $identifier = false;
-
-    $title = $unmappedProduct->title->getValue();
-    if ($title) {
-      $identifier = $title[0]['value'];
-    }
-    $uid = $unmappedProduct->uid->getValue();
-    $uid = $uid[0]['target_id'];
-    $nid = $unmappedProduct->id();
-
-
-    if($identifier){
-
-      $product = Products::getProductExternal($identifier);
-      $product = json_decode($product);
-      if (!isset($product->msg)){
-        // Get current logged in user.
-        $user = \Drupal::currentUser();
-        // Get uid of logged in user.
-        $uid = $user->id();
-        if (is_object($product)) {
-          $values = array(
-            'nid' => $nid,
-            'type' => 'products',
-            'title' => 'sdfs',
-            'uid' => $uid,
-            'status' => TRUE,
-            'field_base_product_id' => array('value' => $product->base_product_id),
-            'field_style_family' => array('value' => $product->style_no),
-            'field_concept_name' => array('value' => $product->concept),
-            'field_gender' => array('value' => $product->gender),
-            'field_description' => array('value' => $product->description),
-            'field_color_variant' => array('value' => $product->color_variant), // todo: may be multiple
-            'field_color_name' => array('value' => $product->color_name), //  todo: may be multiple
-            'field_size_name' => array('value' => $product->size_name), // todo: may be multiple
-            'field_size_variant' => array('value' => $product->size_variant), // todo: may be multiple
-          );
-
-          $unmappedProduct->type->setValue('products');
-
-          // todo MAP FIELDS
-
-          //$unmappedProduct->field_base_product_id->setValue(array('value' => $product->base_product_id));
-          //$id = $unmappedProduct->id();
-          $unmappedProduct->save();
-
-
-          //\Drupal\Core\Cache\Cache::invalidateTags(array('node:'.$id));
-          //\Drupal::cache()->delete('node:'.$id);
-//
-//          drupal_flush_all_caches();
-//          $xx = Node::load($id);
-//          $a = 1;
-
-          // Create node object with above values.
-          //$node = \Drupal::entityManager()->getStorage('node')->save($values);
-          //$unmappedProduct->
-          // Finally save the node object.
-          //$node->save();
-        }
+  public function NodeCovert($unmappedProduct,$server_product){
+      if (is_object($server_product)) {
+        $unmappedProduct->type->setValue('products');
+        $unmappedProduct->save();
       }
-    }
-
   }
 
   public function ImageNameOperations(){

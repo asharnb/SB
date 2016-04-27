@@ -46,36 +46,27 @@ abstract class ImageQueueBase extends QueueWorkerBase implements ContainerFactor
   }
 
   /**
-   * Publishes a node.
-   *
-   * @param NodeInterface $node
-   * @return int
-   */
-  protected function publishNode($node) {
-    $node->setPublished(TRUE);
-    return $node->save();
-  }
-
-  /**
    * {@inheritdoc}
    */
   public function processItem($data, $fids = array()) {
-    /** @var NodeInterface $node */
-//    $node = $this->nodeStorage->load($data->nid);
-//    if (!$node->isPublished() && $node instanceof NodeInterface) {
-//      return $this->publishNode($node);
-//    }
-
     //    $item->item = array('sid' => $sid,'server_product'=>$server_product, $pid);
-    $this->ConvertNode($data->sid,$data->server_product,$data->pid);
-
+    $this->ConvertNode($data->item['sid'],$data->item['server_product'],$data->item['pid']);
     drupal_set_message('Yes called here in queue base.');
-
   }
 
   public function ConvertNode($sid, $server_product, $pid){
-    $node = $this->nodeStorage->load(462);
-    $node->field_base_product_id->setValue(array('value' => date("H:i:s")));
+    $node = $this->nodeStorage->load($pid);
+
+    $node->field_base_product_id->setValue(array('value' => $server_product->base_product_id));
+    $node->field_style_family->setValue(array('value' => $server_product->style_no));
+    $node->field_concept_name->setValue(array('value' => $server_product->concept));
+    $node->field_gender->setValue(array('value' => $server_product->gender));
+    $node->field_description->setValue(array('value' => $server_product->description));
+    $node->field_color_variant->setValue(array('value' => $server_product->color_variant));
+    $node->field_color_name->setValue(array('value' => $server_product->color_name));
+    $node->field_size_name->setValue(array('value' => $server_product->size_name));
+    $node->field_size_variant->setValue(array('value' => $server_product->size_variant));
+
     $node->save();
   }
 
