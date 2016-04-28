@@ -459,21 +459,21 @@ function studiobridge_store_images_entity_update(Drupal\Core\Entity\EntityInterf
       }
     }
 
-    if($tag){
-      // Get current session
-      $session_id = Sessions::openSessionRecent();
-      $old_tag_img = \Drupal::state()->get('Image_tag' . '_' . $session_id,false);
-      if($tag[0]['value'] && $entity->id() != $old_tag_img){
-
-        \Drupal::state()->set('Image_tag' . '_' . $session_id, $entity->id());
-        if($old_tag_img){
-          StudioImages::TagImage($old_tag_img,0, $session_id);
-        }
-
-        //\Drupal::logger('Img entity update YYY')->notice('<pre>'.print_r($tag,true).'<pre>');
-
-      }
-    }
+//    if($tag){
+//      // Get current session
+//      $session_id = Sessions::openSessionRecent();
+//      $old_tag_img = \Drupal::state()->get('Image_tag' . '_' . $session_id,false);
+//      if($tag[0]['value'] && $entity->id() != $old_tag_img){
+//
+//        \Drupal::state()->set('Image_tag' . '_' . $session_id, $entity->id());
+//        if($old_tag_img){
+//          StudioImages::TagImage($old_tag_img,0, $session_id);
+//        }
+//
+//        //\Drupal::logger('Img entity update YYY')->notice('<pre>'.print_r($tag,true).'<pre>');
+//
+//      }
+//    }
 
   }
 

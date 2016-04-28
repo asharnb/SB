@@ -78,6 +78,9 @@ class CloseSessionOperations extends ControllerBase {
     );
   }
 
+  /*
+   * constructor function.
+   */
   public function __construct(Connection $database) {
     $this->database = $database;
     //$this->formBuilder = $form_builder;
@@ -88,9 +91,12 @@ class CloseSessionOperations extends ControllerBase {
   }
 
   /**
-   * Hello.
+   * Initial runner for controller.
    *
    * @param $sid
+   *  session nid
+   * @param $confirm
+   *  1 for confirm, 0 for not.
    * @return object
    *    Redirect
    */
@@ -115,6 +121,15 @@ class CloseSessionOperations extends ControllerBase {
       return new RedirectResponse(base_path() . 'view-sessions2');
     }
 
+    $status = $this->session_node->field_status->getValue();
+    $status = isset($status[0]['value']) ? $status[0]['value'] : '';
+
+    if($status == 'closed'){
+      drupal_set_message('Session already closed, this operation can\'t be performed.', 'warning');
+      return new RedirectResponse(base_path() . 'view-session/'.$sid);
+    }
+
+    // Build required operations for batch process.
     $this->buildOperations();
 
     $batch = array(
@@ -123,23 +138,16 @@ class CloseSessionOperations extends ControllerBase {
       'finished' => array(get_class($this), 'finishBatch'),
     );
 
+    // Set the batch.
     batch_set($batch);
-    drupal_set_message("confirm - $confirm");
+//    drupal_set_message("confirm - $confirm");
     return batch_process('view-session/' . $sid);
   }
 
-  public function __callback_1($id, $sleep, &$context) {
 
-    //die($sleep);
-    // No-op, but ensure the batch take a couple iterations.
-    // Batch needs time to run for the test, so sleep a bit.
-    usleep($sleep);
-    // Track execution, and store some result for post-processing in the
-    // 'finished' callback.
-    //batch_test_stack("op 1 id $id");
-    $context['results'][] = $id;
-  }
-
+  /*
+   * Function will run after batch finished.
+   */
   public function finishBatch($success, $results, $operations) {
     // The 'success' parameter means no fatal PHP errors were detected. All
     // other error management should be handled using 'results'.
@@ -158,7 +166,7 @@ class CloseSessionOperations extends ControllerBase {
   }
 
   /*
-   *
+   *  Build required batch operations.
    */
   public function buildOperations(){
     // Dropping products
@@ -167,19 +175,20 @@ class CloseSessionOperations extends ControllerBase {
     // Mapping of UnMapped Products
     $this->MapUnmappedProductsOperations();
 
-
-    // Create shootlist
-
-
     // Images physical naming & folder structure
-    $this->ImageNameOperations();
+    $this->ImageNameOperations($this->sid);
 
-    // Automated emails
-    $this->operations[] = array(array(get_class($this), 'NodeCovert'), array($this->sid));
-    //
-
-
+    // Automated emails  // Create shootlist
     $this->operations[] = array(array(get_class($this), 'AutomaticEmails'), array($this->sid, $this->session_node));
+
+
+    $this->operations[] = array(array(get_class($this), 'closeSession'), array($this->session_node));
+
+  }
+
+  public function closeSession($session){
+    $session->field_status->setValue(array('value' => 'closed'));
+    $session->save();
   }
 
   /*
@@ -239,10 +248,11 @@ class CloseSessionOperations extends ControllerBase {
     $key = 'shootlist';
     //$to = \Drupal::currentUser()->getEmail();
     $to = 'krknth@gmail.com';
+    global $base_insecure_url;
+    $link = $base_insecure_url."/shootlist/$sid/download.csv";
 
-    $link = 'shoot list link comes here';
 
-    $params['message'] = 'Message comes here ' . $link;
+    $params['message'] = 'Download the shootlist csve file here ' . $link;
     $params['node_title'] = $title;
     $langcode = \Drupal::currentUser()->getPreferredLangcode();
     $send = true;
@@ -290,8 +300,6 @@ class CloseSessionOperations extends ControllerBase {
       }
     }
 
-    $a =1;
-
   }
 
   /*
@@ -304,16 +312,16 @@ class CloseSessionOperations extends ControllerBase {
       }
   }
 
-  public function ImageNameOperations(){
+  public function ImageNameOperations($sid){
     foreach($this->products as $product){
-      $this->operations[] = array(array(get_class($this), 'PhysicalImageName'), array($product));
+      $this->operations[] = array(array(get_class($this), 'PhysicalImageName'), array($product, $sid));
     }
   }
 
   /*
    *
    */
-  public function PhysicalImageName($product){
+  public function PhysicalImageName($product, $sid){
 
 
     $concept = 'InValidConcept';
@@ -336,6 +344,8 @@ class CloseSessionOperations extends ControllerBase {
       $product_color_variant = $product->field_color_variant->getValue();
       if($product_color_variant){
         $color_variant = $product_color_variant[0]['value'];
+      }else{
+        $color_variant = $field_base_product_id;
       }
     }
     elseif ($product_bundle == 'unmapped_products') {
@@ -354,58 +364,46 @@ class CloseSessionOperations extends ControllerBase {
     // Get images field from product.
     $images = $product->field_images->getValue();
 
+    // push to last in row.
+    $tag_img = \Drupal::state()->get('Image_tag' . '_' . $sid,false);
+
     // make sure both values are set.
     if ($field_base_product_id && $images) {
       $i = 1;
       foreach ($images as $img) {
         // load file entity.
         $file = File::load($img['target_id']);
-        $session_id = $file->field_session->getValue();
-        if($session_id){
-          $session_id = $session_id[0]['target_id'];
-        }
-        //\Drupal::logger('123wer')->notice('<pre>'.print_r($session_id,true).'</pre>');
 
-        $filemime = $file->filemime->getValue();
-        if ($filemime && $session_id) {
-          $filemime = $filemime[0]['value'];
-          $filemime = explode('/', $filemime);
-          $filemime = $filemime[1];
-          if ($filemime == 'octet-stream') {
-            $filemime = 'jpg';
+        $session_id = $sid;
+
+        if ($file && $session_id) {
+
+          $tag = $file->field_tag->getValue();
+          $tagged = $tag[0]['value'];
+
+          //$file_name = $file->filename->getValue();
+          if($tagged){
+            StudioImages::ImgUpdate($file, $sid,$field_base_product_id,$i,$concept, $color_variant, true);
+            continue;
+          }else{
+            StudioImages::ImgUpdate($file, $session_id,$field_base_product_id,$i,$concept, $color_variant,false);
+            $i++;
           }
-          // todo : filemime will be wrong
-          // change file name as per sequence number and base product_id value.
-          $filename = $field_base_product_id . '_' . $i . ".$filemime";
-          //$file_uri = $file->uri->getValue();
-          //$x = 'public://'.'xyz/_krishna_'.time();
 
-          //$dir = 'Sessionsx/'.date('H-i-s');
-
-          $dir = $session_id.'/'.$concept.'/'.$color_variant;
-
-          if(StudioImages::ImagePhysicalName($dir,$filename,$file)){
-            $folder = "public://$dir";
-            $uri = $folder.'/'.$filename;
-            $file->uri->setValue($uri); //public://fileKVxEHe
-          }
-          $file->filename->setValue($filename);
-          $file->save();
-          //
-          $folder = "public://$dir";
-          $uri = $folder.'/'.$filename;
-          StudioImages::UpdateFileLog($file->id(),$uri);
-
-          $i++;
-
-          //\Drupal::logger('GGG')->notice('<pre>'.print_r($file,true).'</pre>');
-
-          //file_prepare_directory()
         }
       }
+
+//      // update tag image to last.
+      $a =1;
+//      if($tag_img){
+//        StudioImages::ImgUpdate(File::load($tag_img), $sid,$field_base_product_id,$i,$concept, $color_variant, true);
+//      }
+
     }
 
 
   }
+
+
 
 }
