@@ -198,8 +198,7 @@ class CloseSessionOperations extends ControllerBase {
    *
    */
   public function DeleteProducts($product, &$context) {
-    //$product->delete();
-    $a = 1;
+    $product->delete();
     $context['results'][] = $product->id();
   }
 
