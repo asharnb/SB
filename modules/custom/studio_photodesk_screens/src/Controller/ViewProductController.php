@@ -67,7 +67,7 @@ class ViewProductController extends ControllerBase {
     // on invalid product, redirect user to somewhere & notify him.
     if (!$product) {
       drupal_set_message('Invalid product id '.$nid, 'warning');
-      return new RedirectResponse(base_path() . 'view-sessions');
+      return new RedirectResponse(base_path() . 'view-sessions2');
     }
     elseif(!in_array($bundle = $product->bundle(),array('products','unmapped_products'))){
       drupal_set_message('Invalid product id '.$nid, 'warning');

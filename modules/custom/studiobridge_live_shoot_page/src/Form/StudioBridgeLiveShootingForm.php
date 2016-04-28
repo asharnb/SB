@@ -49,7 +49,7 @@ class StudioBridgeLiveShootingForm extends FormBase
         // if no session found then redirect to some other page
         if (!$session_id) {
             drupal_set_message('No open sessions found', 'warning');
-            return new RedirectResponse(base_path() . 'view-sessions');
+            return new RedirectResponse(base_path() . 'view-sessions2');
         }
 
         $new_or_old_product_nid = 0;
@@ -77,10 +77,16 @@ class StudioBridgeLiveShootingForm extends FormBase
                 Products::updateProductState($_GET['identifier'], 'open');
                 \Drupal::state()->set('last_scan_product_' . $uid . '_' . $session_id, $_GET['identifier']);
 
+                $product_obj = Node::load($new_or_old_product_nid);
 
                 // Add product to session.
-                Sessions::UpdateLastProductToSession($session_id, Node::load($new_or_old_product_nid));
+                Sessions::UpdateLastProductToSession($session_id, $product_obj);
+
+                // Add reshoot product to session.
+                Sessions::addReshootProductToSession($session_id,$product_obj);
             }
+
+
         } else {
             $result = Products::getProductByIdentifier($identifier_hidden);
             if ($result) {
@@ -273,7 +279,7 @@ class StudioBridgeLiveShootingForm extends FormBase
                 }
             }
             // If current product is reshoot then prompt user to confirm
-            if ($reshoot && !isset($_GET['reshoot'])) {
+            if ($reshoot && $_GET['identifier'] !== $identifier) {
                 $inject_script = '<script>
         var result = confirm("Do you want to reshoot this product ?")
         if (result) {

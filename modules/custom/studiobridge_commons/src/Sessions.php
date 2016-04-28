@@ -121,4 +121,50 @@ Class Sessions {
 
   }
 
+
+  /*
+ * Helper function, to add reshot product to session.
+ *
+ * @param session_id
+ *   Session node nid.
+ * @param node
+ *   Node object.
+ */
+  public static function addReshootProductToSession($session_id, $node) {
+    // Load session node object.
+    $session_node = Node::load($session_id);
+    // Get products from session node.
+    $session_products = $session_node->field_reshoot_product->getValue();
+    // Get product nid.
+    $product_nid = $node->id();
+
+    // Check for this product already exist in the current session.
+    // todo : other logs and property settings may come here
+    $product_exist = FALSE;
+    if (count($session_products)) {
+      foreach ($session_products as $each) {
+        if ($each['target_id'] == $product_nid) {
+          $product_exist = TRUE;
+          break;
+        }
+      }
+    }
+    if (!$product_exist) {
+      // Prepare product array.
+      $product = array(
+        array(
+          'target_id' => $product_nid
+        )
+      );
+
+      // merge the current product to existing products.
+      $products = array_merge($product, $session_products);
+
+      // add the product to field.
+      $session_node->field_reshoot_product->setValue($products);
+      // save the node.
+      $session_node->save();
+    }
+  }
+
 }

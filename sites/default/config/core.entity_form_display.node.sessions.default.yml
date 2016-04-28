@@ -8,6 +8,7 @@ dependencies:
     - field.field.node.sessions.field_notes
     - field.field.node.sessions.field_photographer
     - field.field.node.sessions.field_product
+    - field.field.node.sessions.field_reshoot_product
     - field.field.node.sessions.field_shoot_class
     - field.field.node.sessions.field_shoot_type
     - field.field.node.sessions.field_status
@@ -51,11 +52,6 @@ content:
     settings: {  }
     third_party_settings: {  }
     type: options_buttons
-  field_status:
-    type: options_select
-    weight: 12
-    settings: {  }
-    third_party_settings: {  }
   field_stylish:
     weight: 8
     settings:
@@ -108,3 +104,5 @@ hidden:
   field_color_variant: true
   field_concept_name: true
   field_product: true
+  field_reshoot_product: true
+  field_status: true

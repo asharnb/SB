@@ -254,7 +254,7 @@ function studiobridge_store_images_form_alter(&$form, \Drupal\Core\Form\FormStat
     $result = Sessions::getSessionByUid($uid);
     if (count($result)) {
       // redirect to sessions page.
-      $response = new Symfony\Component\HttpFoundation\RedirectResponse(base_path() . 'view-sessions');
+      $response = new Symfony\Component\HttpFoundation\RedirectResponse(base_path() . 'view-sessions2');
       drupal_set_message('There is a open session, please close it to add new session', 'warning');
       $response->send();
       exit;
