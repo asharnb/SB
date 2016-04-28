@@ -30,8 +30,29 @@
                 "order": [[1, 'asc']],
 
             } );
+
+
         }
 
+    };
+
+    Drupal.behaviors.closesession = {
+        attach: function(context) {
+            $("#close-session", context).click(function () {
+
+                swal({
+                    title: "Close Session?",
+                    text: "Are you sure you want to close this session?",
+                    type: "warning",
+                    showCancelButton: true,
+                    confirmButtonColor: "#DD6B55",
+                    confirmButtonText: "Close Session",
+                    closeOnConfirm: true
+                }, function () {
+                    console.log('dropped');
+                });
+            });
+        }
     };
 
 

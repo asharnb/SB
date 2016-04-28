@@ -8,10 +8,10 @@ global-styling:
       css/font-awesome.min.css: {}
       css/style.css: {}
   js:
-    js/bootstrap/bootstrap.min.js: {}
     js/app.config.js: {}
+    js/bootstrap/bootstrap.min.js: {}
+    js/smartwidgets/jarvis.widget.min.js: {}
     js/app.min.js: {}
-    js/jarvis/jarvis.min.js: {}
   dependencies:
     - core/jquery
     - core/jquery.ui
@@ -21,5 +21,14 @@ global-styling:
 smart-alert:
   js:
     js/notification/SmartNotification.min.js: {}
+  dependencies:
+    - core/jquery
+
+sweet-alert:
+  css:
+    theme:
+      js/sweetalert/sweetalert2.css: {}
+  js:
+    js/sweetalert/sweetalert2.min.js: {}
   dependencies:
     - core/jquery
