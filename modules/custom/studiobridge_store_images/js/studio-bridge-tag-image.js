@@ -79,7 +79,7 @@
             },
             filename: {
 
-                value: "tag.jpg"
+                value: "Tag.jpg"
 
             }
         };

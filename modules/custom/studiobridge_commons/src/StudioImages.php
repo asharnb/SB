@@ -125,4 +125,36 @@ Class StudioImages {
     $file->save();
   }
 
+
+  public static function ImgUpdate($file, $session_id,$field_base_product_id,$i,$concept, $color_variant, $tag = false){
+//    $filemime = $filemime[0]['value'];
+//    $filemime = explode('/', $filemime);
+//    $filemime = $filemime[1];
+//    if ($filemime == 'octet-stream') {
+    $filemime = 'jpg';
+//    }
+    // todo : filemime will be wrong
+    // change file name as per sequence number and base product_id value.
+    if($tag){
+      $filename = 'Tag.jpg';
+    }else{
+      $filename = $field_base_product_id . '_' . $i . ".$filemime";
+    }
+
+    $dir = $session_id.'/'.$concept.'/'.$color_variant;
+
+    if(StudioImages::ImagePhysicalName($dir,$filename,$file)){
+      $folder = "public://$dir";
+      $uri = $folder.'/'.$filename;
+      $file->uri->setValue($uri); //public://fileKVxEHe
+    }
+    $file->filename->setValue($filename);
+    $file->save();
+    //
+    $folder = "public://$dir";
+    $uri = $folder.'/'.$filename;
+    StudioImages::UpdateFileLog($file->id(),$uri);
+
+  }
+
 }

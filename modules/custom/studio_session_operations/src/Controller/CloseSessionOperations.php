@@ -51,7 +51,7 @@ class CloseSessionOperations extends ControllerBase {
 
   protected $operations = array();
 
-  protected $session;
+  protected $session_node;
 
   protected $products;
 
@@ -78,6 +78,9 @@ class CloseSessionOperations extends ControllerBase {
     );
   }
 
+  /*
+   * constructor function.
+   */
   public function __construct(Connection $database) {
     $this->database = $database;
     //$this->formBuilder = $form_builder;
@@ -88,9 +91,12 @@ class CloseSessionOperations extends ControllerBase {
   }
 
   /**
-   * Hello.
+   * Initial runner for controller.
    *
    * @param $sid
+   *  session nid
+   * @param $confirm
+   *  1 for confirm, 0 for not.
    * @return object
    *    Redirect
    */
@@ -98,14 +104,14 @@ class CloseSessionOperations extends ControllerBase {
 
     $this->sid = $sid;
 
-    $this->session = $this->nodeStorage->load($sid);
+    $this->session_node = $this->nodeStorage->load($sid);
 
     // on invalid product, redirect user to somewhere & notify him.
-    if (!$this->session) {
+    if (!$this->session_node) {
       drupal_set_message('Invalid Session id '.$sid, 'warning');
       return new RedirectResponse(base_path() . 'view-sessions2');
     }
-    elseif(!in_array($bundle = $this->session->bundle(),array('sessions'))){
+    elseif(!in_array($bundle = $this->session_node->bundle(),array('sessions'))){
       drupal_set_message('Invalid Session id '.$sid, 'warning');
       return new RedirectResponse(base_path() . 'view-sessions2');
     }
@@ -115,16 +121,16 @@ class CloseSessionOperations extends ControllerBase {
       return new RedirectResponse(base_path() . 'view-sessions2');
     }
 
-    $this->buildOperations();
+    $status = $this->session_node->field_status->getValue();
+    $status = isset($status[0]['value']) ? $status[0]['value'] : '';
 
-
-    $total = 10;
-    $sleep = (1000000 / $total) * 2;
-
-    $operations = array();
-    for ($i = 1; $i <= $total; $i++) {
-      $operations[] = array(array(get_class($this), '__callback_1'), array($i, $sleep));
+    if($status == 'closed'){
+      drupal_set_message('Session already closed, this operation can\'t be performed.', 'warning');
+      return new RedirectResponse(base_path() . 'view-session/'.$sid);
     }
+
+    // Build required operations for batch process.
+    $this->buildOperations();
 
     $batch = array(
       'title' => t('Batch Process'),
@@ -132,23 +138,16 @@ class CloseSessionOperations extends ControllerBase {
       'finished' => array(get_class($this), 'finishBatch'),
     );
 
+    // Set the batch.
     batch_set($batch);
-    drupal_set_message("confirm - $confirm");
+//    drupal_set_message("confirm - $confirm");
     return batch_process('view-session/' . $sid);
   }
 
-  public function __callback_1($id, $sleep, &$context) {
 
-    //die($sleep);
-    // No-op, but ensure the batch take a couple iterations.
-    // Batch needs time to run for the test, so sleep a bit.
-    usleep($sleep);
-    // Track execution, and store some result for post-processing in the
-    // 'finished' callback.
-    //batch_test_stack("op 1 id $id");
-    $context['results'][] = $id;
-  }
-
+  /*
+   * Function will run after batch finished.
+   */
   public function finishBatch($success, $results, $operations) {
     // The 'success' parameter means no fatal PHP errors were detected. All
     // other error management should be handled using 'results'.
@@ -167,7 +166,7 @@ class CloseSessionOperations extends ControllerBase {
   }
 
   /*
-   *
+   *  Build required batch operations.
    */
   public function buildOperations(){
     // Dropping products
@@ -176,18 +175,20 @@ class CloseSessionOperations extends ControllerBase {
     // Mapping of UnMapped Products
     $this->MapUnmappedProductsOperations();
 
-
-    // Create shootlist
-
     // Images physical naming & folder structure
-    $this->ImageNameOperations();
+    $this->ImageNameOperations($this->sid);
 
-    // Automated emails
+    // Automated emails  // Create shootlist
+    $this->operations[] = array(array(get_class($this), 'AutomaticEmails'), array($this->sid, $this->session_node));
 
-    //
 
+    $this->operations[] = array(array(get_class($this), 'closeSession'), array($this->session_node));
 
-    $this->operations[] = array(array(get_class($this), 'AutomaticEmails'), array($this->sid));
+  }
+
+  public function closeSession($session){
+    $session->field_status->setValue(array('value' => 'closed'));
+    $session->save();
   }
 
   /*
@@ -197,8 +198,7 @@ class CloseSessionOperations extends ControllerBase {
    *
    */
   public function DeleteProducts($product, &$context) {
-    //$product->delete();
-    $a = 1;
+    $product->delete();
     $context['results'][] = $product->id();
   }
 
@@ -206,28 +206,76 @@ class CloseSessionOperations extends ControllerBase {
    *
    */
   public function MapUnmappedProductsOperations() {
-
+    $identifier = false;
     if($this->unmapped_products){
       foreach($this->unmapped_products as $product){
-        $this->operations[] = array(array(get_class($this), 'NodeCovert'), array($product));
 
         $title = $product->title->getValue();
         if ($title) {
           $identifier = $title[0]['value'];
         }
 
-        Queues::CreateQueueProductMapping($this->sid, $identifier, $product->id());
+        if($identifier){
+
+          $server_product = Products::getProductExternal($identifier);
+          $server_product = json_decode($server_product);
+          if (!isset($server_product->msg)){
+
+            if (is_object($server_product)) {
+              $this->operations[] = array(array(get_class($this), 'NodeCovert'), array($product,$server_product));
+              Queues::CreateQueueProductMapping($this->sid, $server_product, $product->id());
+            }
+
+          }
+        }
       }
     }
   }
 
-  public function AutomaticEmails($sid){
+  public function AutomaticEmails($sid, $session){
+    //Queues::RunMappingQueues($sid);
+
+
+    $title = $session->title->getValue();
+    if ($title) {
+      $title = $title[0]['value'];
+    }
+
+    $mailManager = \Drupal::service('plugin.manager.mail');
+
+    $module = 'studio_session_operations';
+    $key = 'shootlist';
+    //$to = \Drupal::currentUser()->getEmail();
+    $to = 'krknth@gmail.com';
+    global $base_insecure_url;
+    $link = $base_insecure_url."/shootlist/$sid/download.csv";
+
+
+    $params['message'] = 'Download the shootlist csve file here ' . $link;
+    $params['node_title'] = $title;
+    $langcode = \Drupal::currentUser()->getPreferredLangcode();
+    $send = true;
+
+    $result = $mailManager->mail($module, $key, $to, $langcode, $params, NULL, $send);
+
+    if ($result['result'] !== true) {
+      drupal_set_message(t('There was a problem sending your message and it was not sent.'), 'error');
+    }
+    else {
+      drupal_set_message(t('Your message has been sent.'));
+    }
+
+  }
+
+  // RunQueues
+  public function RunQueues($sid){
     Queues::RunMappingQueues($sid);
   }
 
+
   public function getDraftProducts(){
 
-    $product_nids = $this->session->field_product->getValue();
+    $product_nids = $this->session_node->field_product->getValue();
     foreach($product_nids as $target){
        $this->pids[] = $target['target_id'];
     }
@@ -251,89 +299,28 @@ class CloseSessionOperations extends ControllerBase {
       }
     }
 
-    $a =1;
-
   }
 
   /*
    *
    */
-  public function NodeCovert($unmappedProduct){
-    $identifier = false;
-
-    $title = $unmappedProduct->title->getValue();
-    if ($title) {
-      $identifier = $title[0]['value'];
-    }
-    $uid = $unmappedProduct->uid->getValue();
-    $uid = $uid[0]['target_id'];
-    $nid = $unmappedProduct->id();
-
-
-    if($identifier){
-
-      $product = Products::getProductExternal($identifier);
-      $product = json_decode($product);
-      if (!isset($product->msg)){
-        // Get current logged in user.
-        $user = \Drupal::currentUser();
-        // Get uid of logged in user.
-        $uid = $user->id();
-        if (is_object($product)) {
-          $values = array(
-            'nid' => $nid,
-            'type' => 'products',
-            'title' => 'sdfs',
-            'uid' => $uid,
-            'status' => TRUE,
-            'field_base_product_id' => array('value' => $product->base_product_id),
-            'field_style_family' => array('value' => $product->style_no),
-            'field_concept_name' => array('value' => $product->concept),
-            'field_gender' => array('value' => $product->gender),
-            'field_description' => array('value' => $product->description),
-            'field_color_variant' => array('value' => $product->color_variant), // todo: may be multiple
-            'field_color_name' => array('value' => $product->color_name), //  todo: may be multiple
-            'field_size_name' => array('value' => $product->size_name), // todo: may be multiple
-            'field_size_variant' => array('value' => $product->size_variant), // todo: may be multiple
-          );
-
-          $unmappedProduct->type->setValue('products');
-
-          // todo MAP FIELDS
-
-          //$unmappedProduct->field_base_product_id->setValue(array('value' => $product->base_product_id));
-          //$id = $unmappedProduct->id();
-          $unmappedProduct->save();
-
-
-          //\Drupal\Core\Cache\Cache::invalidateTags(array('node:'.$id));
-          //\Drupal::cache()->delete('node:'.$id);
-//
-//          drupal_flush_all_caches();
-//          $xx = Node::load($id);
-//          $a = 1;
-
-          // Create node object with above values.
-          //$node = \Drupal::entityManager()->getStorage('node')->save($values);
-          //$unmappedProduct->
-          // Finally save the node object.
-          //$node->save();
-        }
+  public function NodeCovert($unmappedProduct,$server_product){
+      if (is_object($server_product)) {
+        $unmappedProduct->type->setValue('products');
+        $unmappedProduct->save();
       }
-    }
-
   }
 
-  public function ImageNameOperations(){
+  public function ImageNameOperations($sid){
     foreach($this->products as $product){
-      $this->operations[] = array(array(get_class($this), 'PhysicalImageName'), array($product));
+      $this->operations[] = array(array(get_class($this), 'PhysicalImageName'), array($product, $sid));
     }
   }
 
   /*
    *
    */
-  public function PhysicalImageName($product){
+  public function PhysicalImageName($product, $sid){
 
 
     $concept = 'InValidConcept';
@@ -356,6 +343,8 @@ class CloseSessionOperations extends ControllerBase {
       $product_color_variant = $product->field_color_variant->getValue();
       if($product_color_variant){
         $color_variant = $product_color_variant[0]['value'];
+      }else{
+        $color_variant = $field_base_product_id;
       }
     }
     elseif ($product_bundle == 'unmapped_products') {
@@ -374,58 +363,46 @@ class CloseSessionOperations extends ControllerBase {
     // Get images field from product.
     $images = $product->field_images->getValue();
 
+    // push to last in row.
+    $tag_img = \Drupal::state()->get('Image_tag' . '_' . $sid,false);
+
     // make sure both values are set.
     if ($field_base_product_id && $images) {
       $i = 1;
       foreach ($images as $img) {
         // load file entity.
         $file = File::load($img['target_id']);
-        $session_id = $file->field_session->getValue();
-        if($session_id){
-          $session_id = $session_id[0]['target_id'];
-        }
-        //\Drupal::logger('123wer')->notice('<pre>'.print_r($session_id,true).'</pre>');
 
-        $filemime = $file->filemime->getValue();
-        if ($filemime && $session_id) {
-          $filemime = $filemime[0]['value'];
-          $filemime = explode('/', $filemime);
-          $filemime = $filemime[1];
-          if ($filemime == 'octet-stream') {
-            $filemime = 'jpg';
+        $session_id = $sid;
+
+        if ($file && $session_id) {
+
+          $tag = $file->field_tag->getValue();
+          $tagged = $tag[0]['value'];
+
+          //$file_name = $file->filename->getValue();
+          if($tagged){
+            StudioImages::ImgUpdate($file, $sid,$field_base_product_id,$i,$concept, $color_variant, true);
+            continue;
+          }else{
+            StudioImages::ImgUpdate($file, $session_id,$field_base_product_id,$i,$concept, $color_variant,false);
+            $i++;
           }
-          // todo : filemime will be wrong
-          // change file name as per sequence number and base product_id value.
-          $filename = $field_base_product_id . '_' . $i . ".$filemime";
-          //$file_uri = $file->uri->getValue();
-          //$x = 'public://'.'xyz/_krishna_'.time();
 
-          //$dir = 'Sessionsx/'.date('H-i-s');
-
-          $dir = $session_id.'/'.$concept.'/'.$color_variant;
-
-          if(StudioImages::ImagePhysicalName($dir,$filename,$file)){
-            $folder = "public://$dir";
-            $uri = $folder.'/'.$filename;
-            $file->uri->setValue($uri); //public://fileKVxEHe
-          }
-          $file->filename->setValue($filename);
-          $file->save();
-          //
-          $folder = "public://$dir";
-          $uri = $folder.'/'.$filename;
-          StudioImages::UpdateFileLog($file->id(),$uri);
-
-          $i++;
-
-          //\Drupal::logger('GGG')->notice('<pre>'.print_r($file,true).'</pre>');
-
-          //file_prepare_directory()
         }
       }
+
+//      // update tag image to last.
+      $a =1;
+//      if($tag_img){
+//        StudioImages::ImgUpdate(File::load($tag_img), $sid,$field_base_product_id,$i,$concept, $color_variant, true);
+//      }
+
     }
 
 
   }
+
+
 
 }

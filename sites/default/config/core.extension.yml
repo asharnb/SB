@@ -10,6 +10,7 @@ module:
   config_update: 0
   contextual: 0
   cors: 0
+  csv_serialization: 0
   datetime: 0
   dblog: 0
   devel: 0
@@ -36,6 +37,8 @@ module:
   serialization: 0
   studio_bridge_schemas: 0
   studio_photodesk_screens: 0
+  studio_queues: 0
+  studio_session_operations: 0
   studiobridge_commons: 0
   studiobridge_live_shoot_page: 0
   studiobridge_rest_resources: 0
@@ -46,6 +49,7 @@ module:
   toolbar: 0
   update: 0
   user: 0
+  views_data_export: 0
   views_ui: 0
   menu_link_content: 1
   views: 10

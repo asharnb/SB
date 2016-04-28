@@ -1,0 +1,30 @@
+uuid: 263fa676-1c9b-4ddf-ba1e-531f4381cf0f
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_reshoot_product
+    - node.type.products
+    - node.type.sessions
+    - node.type.unmapped_products
+id: node.sessions.field_reshoot_product
+field_name: field_reshoot_product
+entity_type: node
+bundle: sessions
+label: 'Reshoot Product'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: 'default:node'
+  handler_settings:
+    target_bundles:
+      products: products
+      unmapped_products: unmapped_products
+    sort:
+      field: _none
+    auto_create: false
+    auto_create_bundle: products
+field_type: entity_reference

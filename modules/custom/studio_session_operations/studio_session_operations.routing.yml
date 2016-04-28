@@ -15,3 +15,20 @@ studio_session_operations.close_session_operations_hello:
     _title: 'Close Session'
   requirements:
     _permission: 'access content'
+
+# In order to to create pages it is necessary to define routes for them.
+# A route maps a URL path to a controller. It defines with what function
+# or method will be called when a URL is accessed.
+# If the user accesses http://drupal8.dev/session-shootlist/{id}, the routing
+# system will look for a route with that path. In this case it will find a
+# match, and execute the _controller callback. In this case the callback is
+# defined as a classname
+# ("\Drupal\studio_session_operations\Controller\CsvMakerController")
+# and a method ("hello").
+studio_session_operations.csv_maker_controller_hello:
+  path: 'session-shootlist/{id}'
+  defaults:
+    _controller: '\Drupal\studio_session_operations\Controller\CsvMakerController::hello'
+    _title: 'download'
+  requirements:
+    _permission: 'access content'
