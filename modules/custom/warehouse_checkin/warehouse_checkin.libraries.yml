@@ -1,0 +1,9 @@
+checkin-form:
+  version: VERSION
+  css:
+    theme:
+      css/capture.css: {}
+  js:
+    js/script.js: {}
+  dependencies:
+    - core/jquery

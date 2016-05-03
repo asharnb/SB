@@ -6,6 +6,7 @@ global-styling:
       css/bootstrap.min.css: {}
       css/additionalstyles.css: {}
       css/font-awesome.min.css: {}
+      css/simple-line-icons.css: {}
       css/style.css: {}
   js:
     js/app.config.js: {}
@@ -32,3 +33,21 @@ sweet-alert:
     js/sweetalert/sweetalert2.min.js: {}
   dependencies:
     - core/jquery
+
+#chart-js:
+#  version: 1.x
+#  header: true
+#  js:
+#    js/chartjs/moment.min.js: {}
+#    js/chartjs/chart.min.js: {}
+#    js/chartjs/functions.js: {}
+#  dependencies:
+#    - core/jquery
+
+flot-charts:
+    js:
+      js/flot/jquery.flot.js: {}
+      js/flot/jquery.flot.spline.js: {}
+      js/flot/jquery.flot.tooltip.min.js: {}
+      js/flot/jquery.flot.resize.js: {}
+      js/flot/jquery.flot.time.js: {}

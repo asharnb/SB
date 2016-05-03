@@ -1,0 +1,209 @@
+{% set container = theme.settings.fluid_container ? 'container-fluid' : 'container' %}
+
+{{ attach_library('studiobridge/flot-charts') }}
+
+{#Check if user is logged in, if not only show login page, no default page#}
+{% if user.isAnonymous==true %}
+    {% block logincontainer %}
+        {{ page.content }}
+
+    {% endblock %}
+
+{% else %}
+
+    <header id="header">
+        <div id="logo-group">
+
+            <!-- PLACE YOUR LOGO HERE -->
+            <span id="logo"> <img src="/sbtest/{{ directory }}/images/Drawing.png" alt="Studio Bridge"> </span>
+            <!-- END LOGO PLACEHOLDER -->
+
+        </div>
+
+        <div class=" pull-right">
+
+            <div class="visible-lg visible-md m-t-10">
+                <div class="pull-left p-r-10 p-t-10 fs-16 font-heading">
+                    <span class="semi-bold">Ashar</span> <span class="text-master">Babar</span>
+                </div>
+                <div class="dropdown pull-right">
+                    <button class="profile-dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true"
+                            aria-expanded="false">
+<span class="thumbnail-wrapper d32  inline ">
+<img src="/sbtest/{{ directory }}/images/cameraman.png" alt="" width="32" height="32">
+</span>
+                    </button>
+                    <ul class="dropdown-menu profile-dropdown" role="menu">
+                        <li><a href="/sbtest/user/" data-drupal-link-system-path="user/"><i class="fa-lg sl-user"></i> My Profile</a>
+                        </li>
+                        <li class="bg-master-lighter">
+                            <a href="/sbtest/user/logout" data-drupal-link-system-path="user/logout" class="clearfix">
+
+                                <span class="pull-left">Logout</span>
+                                <span class="pull-right"><i class="fa-lg sl-power"></i></span>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+        </div>
+
+    </header>
+    <!-- END HEADER -->
+    {# Navbar #}
+    {% if page.navigation or page.navigation_collapsible %}
+        {% block navbar %}
+            {{ page.navigation_collapsible }}
+        {% endblock %}
+    {% endif %}
+
+    {# Main #}
+    {% block main %}
+        <div id="main" role="main">
+
+
+            <div id="ribbon">
+
+
+                <!-- breadcrumb -->
+                <ol class="breadcrumb">
+                    <li>Dash<strong>Board</strong></li>
+                </ol>
+
+            </div>
+
+
+            <div id="content">
+                <div class="row">
+                    <div class="col-sm-9 m-b-10">
+                        <div class="ar-2-1">
+
+                            <div class="widget-4 panel no-border  no-margin widget-loader-bar">
+                                <div class="container-sm-height full-height">
+                                    <div class="row-sm-height">
+                                        <div class="col-sm-height col-top">
+                                            <div class="panel-heading ">
+                                                <div class="panel-title text-black hint-text">
+<span class="font-montserrat fs-11 all-caps">
+Your Shoot Trend <i class="fa fa-chevron-right"></i>
+</span>
+                                                </div>
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row-sm-height">
+                                        <div class="col-sm-height col-top">
+                                            <div class="p-l-20 p-r-20">
+                                                <h5 class="no-margin p-b-5 pull-left hint-text">Shoot Trends</h5>
+                                                <p class="pull-right no-margin bold hint-text">3050</p>
+                                                <div class="clearfix"></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row-sm-height">
+                                        <div class="col-sm-height col-bottom ">
+                                          <div class="flot-chart">
+                                              <div class="flot-chart-content" id="flot-dashboard-chart" style="height:300px;"></div>
+                                          </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                    <div class="col-md-3 col-lg-3 col-xlg-3">
+
+                        <div class="row">
+                            <div class="col-md-12">
+
+                                <div class="panel no-border bg-white no-margin widget-loader-bar">
+                                    <div class="panel-heading top-left top-right ">
+                                        <div class="panel-title text-black hint-text">
+<span class="font-montserrat fs-11 all-caps">Todays Shoot
+</span>
+                                        </div>
+                                        <div class="panel-controls">
+                                            <ul>
+                                                <li><a data-toggle="refresh" class="portlet-refresh text-black"
+                                                       href="#"><i class="fa fa-refresh"></i></a>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                    <div class="panel-body p-t-40">
+                                        <div class="row">
+                                            <div class="col-sm-12">
+                                                <h4 class="no-margin p-b-5 text-success semi-bold">605</h4>
+                                                <div class="pull-left small">
+                                                    <span>NEW</span>
+<span class=" text-success font-montserrat">
+<i class="fa fa-caret-up m-l-10"></i> 605
+</span>
+                                                </div>
+                                                <div class="pull-left m-l-20 small">
+                                                    <span>RESHOT</span>
+<span class=" text-danger font-montserrat">
+<i class="fa fa-caret-up m-l-10"></i> 0
+</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3 col-lg-3 col-xlg-3 m-t-5">
+
+                        <div class="row">
+                            <div class="col-md-12">
+
+                                <div class="panel  bg-white no-border no-margin widget-loader-bar">
+                                    <div class="panel-heading top-left top-right ">
+                                        <div class="panel-title text-black hint-text">
+<span class="font-montserrat fs-11 all-caps text-danger">Rejected Products
+</span>
+                                        </div>
+
+                                    </div>
+                                    <div class="panel-body p-t-40">
+                                        <div class="row">
+                                            <div class="col-sm-12">
+                                                <h4 class="no-margin p-b-5 text-danger semi-bold">2</h4>
+                                                <div class="pull-left small">
+                                                    <span>NEW</span>
+<span class=" text-success font-montserrat">
+<i class="fa fa-caret-up m-l-10"></i> 605
+</span>
+                                                </div>
+                                                <div class="pull-left m-l-20 small">
+                                                    <span>RESHOT</span>
+<span class=" text-danger font-montserrat">
+<i class="fa fa-caret-up m-l-10"></i> 0
+</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3 col-lg-3 col-xlg-3 m-t-5">
+
+
+                    </div>
+                    <div class="clearfix"></div>
+                </div>
+
+            </div>
+        </div>
+    {% endblock %}
+
+
+{% endif %}

@@ -1,0 +1,5 @@
+name: Warehouse Checkin
+type: module
+description: Module handles all warehouse checkin operations
+core: 8.x
+package: StudioBridge

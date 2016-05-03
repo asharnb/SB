@@ -132,7 +132,7 @@ class StudioBridgeLiveShootingForm extends FormBase
 // @ashar : seperate this image container so we can apply theme formatting to it
 
         $form['resequence'] = array(
-            '#markup' => '<a id="studio-resequence-bt" class="btn btn-xs btn-info">Resequence</a>',
+            '#markup' => '<a id="studio-resequence-bt" class="btn btn-xs btn-complete">Resequence</a>',
         );
         $form['delete'] = array(
             '#markup' => '<a id="studio-delete-bt" class="btn btn-xs btn-danger">Delete</a>',

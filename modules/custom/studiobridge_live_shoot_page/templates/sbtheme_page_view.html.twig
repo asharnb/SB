@@ -28,7 +28,6 @@
             </div>
             <div class="panel-controls">
               <span id ="{{ form.identifier_nid['#value'] }}">
-                <a class="btn btn-xs btn-info" onclick="return false();">Attach Model</a>
                 <a class="btn btn-xs btn-danger studio-product-drop">Drop Product</a>
                </span>
             </div>
@@ -51,7 +50,7 @@
                 <div class="col-lg-6">
                     <dl class="dl-horizontal">
                         <dt>Color Variant:</dt>
-                        <dd><strong><{{ form.productdetails.colorvariant }}/strong></dd>
+                        <dd><strong><{{ form.productdetails.colorvariant|raw }}/strong></dd>
                     </dl>
 
                 </div>

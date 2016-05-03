@@ -18,79 +18,73 @@
 {% import _self as menus %}
 
 <aside id="left-panel">
-    <div class="userlogged clearfix">
-        <img src="/sbtest/{{ directory }}/images/cameraman.png" alt="me" class="busy">
-        <div class="user-details">
-            <h4>Ashar Babar</h4>
+    {#<div class="userlogged clearfix">#}
+        {#<img src="/sbtest/{{ directory }}/images/cameraman.png" alt="me" class="busy">#}
+        {#<div class="user-details">#}
+            {#<h4>Ashar Babar</h4>#}
 
 
-            <span>Project Lead</span>
+            {#<span>Project Lead</span>#}
 
-        </div>
-    </div>
+        {#</div>#}
+    {#</div>#}
 
 
     <nav class="sbnav">
-
+    <ul>
         {{ menus.menu_links(items, attributes, 0) }}
-
         {% macro menu_links(items, attributes, menu_level) %}
             {% import _self as menus %}
 
             {% if items %}
-
-                {% if menu_level == 0 %}
-                <ul>
-                {% endif %}
 
 
                 {% for item in items %}
 
                     {% if item.title|lower == 'dashboard' %}
 
-                        {% set icon_class = 'fa fa-lg fa-fw fa-home' %}
+                        {% set icon_class = 'fa-lg sl-screen-desktop' %}
 
                     {% elseif item.title|lower == 'photo desk' %}
 
-                        {% set icon_class = 'fa fa-lg fa-fw fa-camera' %}
+                        {% set icon_class = 'fa-lg sl-camera' %}
+                    {% elseif item.title|lower == 'warehouse desk' %}
 
+                        {% set icon_class = 'fa-lg sl-social-dropbox' %}
                     {% else %}
 
                         {% set icon_class = '' %}
 
                     {% endif %}
 
-                    {% if item.below and item.is_expanded %}
-                    <li{{ item.attributes }}>
-                        <a href="{{ item.url }}" data-target="#{{ item.title|replace({' ': '_'}) }}-children" data-toggle="dropdown">
+                    {% if item.below|length > 0 %} {#has children#}
+                    <li{{ item.attributes }} {% if item.in_active_trail %} class="active" {% endif %}>
+                        <a href="#">
 
                             <i class="{{ icon_class }}"></i>
-                            <span class="menu-item-parent">{{ item.title }} ABC</span>
-                            <b class="collapse-sign"><em class="fa fa-plus-square-o"></em></b>
+                            <span class="menu-item-parent">{{ item.title }}</span>
+                            {#<b class="collapse-sign"><em class="sl-arrow-left"></em></b>#}
                         </a>
-                    {% elseif item.below %}
-                        <li>
+                    {% elseif item.in_active_trail %}
+                        <li class="active">
 
-                        <a href="{{ item.url }}" data-target="#{{ item.title }}-children" data-toggle="dropdown">
-
+                        <a href="{{ item.url }}">
                             <i class="{{ icon_class }}"></i>
-                            <span class="menu-item-parent">{{ item.title }} CDE</span>
-                            <span>{{ item.title }}</span>
-                            <b class="collapse-sign"><em class="fa fa-plus-square-o"></em></b>
+                           <span>{{ item.title }}</span>
 
                         </a>
                     {% else %}
-                        <li{{ item.attributes }}>
-                        <a href="{{ item.url }}" data-target="#" data-toggle="dropdown">
+                        <li{{ item.attributes }} {% if item.in_active_trail %} class="active" {% endif %}>
+                        <a href="{{ item.url }}" >
 
                             <i class="{{ icon_class }}"></i>
-                            <span class="menu-item-parent">{{ item.title }} FGH</span>
+                            <span class="menu-item-parent">{{ item.title }}</span>
 
                         </a>
                     {% endif %}
 
                     {% if item.below %}
-                        <ul id="{{ item.title|replace({' ': '_'}) }}-children" class="children" >
+                        <ul class="children" >
                             {{ menus.menu_links(item.below, attributes.removeClass('nav', 'navbar-nav'), menu_level + 1) }}
                         </ul>
                     {% endif %}
@@ -98,10 +92,9 @@
 
                 {% endfor %}
 
-                </ul>
             {% endif %} {#end if items#}
 
         {% endmacro %}
-
+    </ul>
     </nav>
 </aside>

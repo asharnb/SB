@@ -9,7 +9,7 @@
 # ("\Drupal\studio_photodesk_screens\Controller\ViewSessionController")
 # and a method ("content").
 studio_photodesk_screens.view_session_controller_content:
-  path: 'view-session/{nid}'
+  path: '/view-session/{nid}'
   defaults:
     _controller: '\Drupal\studio_photodesk_screens\Controller\ViewSessionController::content'
   requirements:
@@ -25,7 +25,7 @@ studio_photodesk_screens.view_session_controller_content:
 # ("\Drupal\studio_photodesk_screens\Controller\ViewProductController")
 # and a method ("content").
 studio_photodesk_screens.view_product_controller_content:
-  path: 'view-product/{nid}'
+  path: '/view-product/{nid}'
   defaults:
     _controller: '\Drupal\studio_photodesk_screens\Controller\ViewProductController::content'
   requirements:
@@ -42,7 +42,7 @@ studio_photodesk_screens.view_product_controller_content:
 # ("\Drupal\studio_photodesk_screens\Controller\ViewSessionController")
 # and a method ("content").
 studio_photodesk_screens.view_all_sessions_controller_content:
-  path: 'view-sessions2'
+  path: '/view-sessions2'
   defaults:
     _controller: '\Drupal\studio_photodesk_screens\Controller\ViewAllSessionsController::content'
   requirements:

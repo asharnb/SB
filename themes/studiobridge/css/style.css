@@ -243,6 +243,7 @@
     line-height: 24px;
     padding: 0;
     padding-left: 8px;
+    text-align: center;
     width: 50%;
 }
 .onoffswitch2 .onoffswitch-inner::after {
@@ -261,12 +262,12 @@
     height: 24px;
     line-height: 24px;
     padding: 0;
-    padding-right: 8px;
-    text-align: right;
+    /* padding-right: 8px; */
+    text-align: center;
     width: 50%;
 }
 .onoffswitch2 .onoffswitch-switch {
-    background: #fff;
+    /* background: #fff; */
     border-radius: 3px;
     border: 2px solid #FFFFF;
     bottom: 0;
@@ -341,3 +342,8 @@
 }
 
 .lockscreen{height:250px;left:50%;margin-left:-239px;margin-top:-185px;position:absolute;top:50%;width:478px}.lockscreen .logo{padding: 10px 0;display:block}.lockscreen .logo+div{background:#FFF;box-shadow:-31px 32px 53px rgba(0,0,0,.2);overflow:hidden;padding:13px;position:relative}.lockscreen .logo>:first-child{margin:0}.lockscreen .logo img{width: 180px;margin-top:-4px;margin-right:-2px}.lockscreen .logo+div>img{float:left}.lockscreen .logo+div>img+div{float:right;width:318px}.lockscreen .logo+div>img+div>:first-child{margin-top:0}.lockscreen .logo+div>img+div>:first-child>:first-child{opacity:.1;padding:15px}.lockscreen .logo+div>img+div>:first-child>small{display:block;padding-top:5px}.lockscreen .logo+div>img+div>:first-child+p{margin-bottom:12px}#lock-page #main{position:static}@media (max-width:767px){.lockscreen .logo+div>img{float:none!important}.lockscreen{height:auto;left:5%;margin-left:0;margin-top:0;position:absolute;top:0;width:90%;text-align:center}.lockscreen .logo+div>img+div{float:none;width:100%;height:auto}}
+
+.flot-chart-content {
+    width: 100%;
+    height: 100%;
+}

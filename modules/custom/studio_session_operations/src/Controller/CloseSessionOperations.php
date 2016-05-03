@@ -246,7 +246,7 @@ class CloseSessionOperations extends ControllerBase {
     $module = 'studio_session_operations';
     $key = 'shootlist';
     //$to = \Drupal::currentUser()->getEmail();
-    $to = 'krknth@gmail.com';
+    $to = 'ashar.babar@landmarkgroup.com';
     global $base_insecure_url;
     $link = $base_insecure_url."/shootlist/$sid/download.csv";
 

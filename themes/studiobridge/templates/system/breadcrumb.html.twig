@@ -9,9 +9,11 @@
  * @ingroup templates
  */
 #}
-{% if studiobridge_breadcrumb %}
+{% if breadcrumb %}
+<div id="ribbon">
   <ol class="breadcrumb">
-    {% for item in studiobridge_breadcrumb %}
+    <li>Studio<strong>Bridge</strong></li>
+    {% for item in breadcrumb %}
       <li {{ item.attributes }}>
         {% if item.url %}
           <a href="{{ item.url }}">{{ item.text }}</a>
@@ -21,4 +23,5 @@
       </li>
     {% endfor %}
   </ol>
+</div>
 {% endif %}

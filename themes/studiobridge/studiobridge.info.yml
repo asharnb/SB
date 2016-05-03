@@ -21,5 +21,4 @@ regions:
 
 libraries:
   - 'studiobridge/global-styling'
-  - 'studiobridge/smart-alert'
   - 'studiobridge/sweet-alert'

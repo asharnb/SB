@@ -14,7 +14,7 @@
          triggerit(identifier, rand);
 
      }else{
-         document.getElementById('studio-img-container').innerHTML = '--------No product scanned or no recent open product in this session :( ----------';
+         document.getElementById('studio-img-container').innerHTML = 'No Product Scanned';
          setInterval(function() {
 
              var identifier = document.getElementById('edit-identifier-hidden').value;

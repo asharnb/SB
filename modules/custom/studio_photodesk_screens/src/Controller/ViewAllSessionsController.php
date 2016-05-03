@@ -12,6 +12,7 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 use Drupal\Core\Database\Connection;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 
+
 /**
  * Class ViewSessionController.
  *
@@ -30,7 +31,6 @@ class ViewAllSessionsController extends ControllerBase
     protected $nodeStorage;
 
     protected $userStorage;
-
     /*
      * {@inheritdoc}
      */
@@ -39,6 +39,7 @@ class ViewAllSessionsController extends ControllerBase
         //$entity_manager = $container->get('entity.manager');
         return new static(
             $container->get('database')
+
         //$entity_manager->getStorage('node')
         );
     }
@@ -50,6 +51,7 @@ class ViewAllSessionsController extends ControllerBase
         //$this->userStorage = $this->entityManager()->getStorage('user');
         $this->nodeStorage = $this->entityTypeManager()->getStorage('node');
         $this->userStorage = $this->entityTypeManager()->getStorage('user');
+
     }
 
 
@@ -73,11 +75,31 @@ class ViewAllSessionsController extends ControllerBase
             ->execute();
 
         //load all the nodes from the result
-        $products = $this->nodeStorage->loadMultiple($result);
+        $sessions = $this->nodeStorage->loadMultiple($result);
 
 
-        $uid = $products['uid'][0]['target_id'];
+        //if results are not empty load each node and get info
+        if (!empty($sessions)) {
+            foreach ($sessions as $session) {
 
+                //get concepts
+
+                //get users
+
+
+                //set values into array
+                $session_data[] = array(  'id' => $session->id(),
+                                        'name' => $session->title->getValue(),
+                                        'stage' => $session->field_status->getValue(),
+                                        'shootdate' => $session->created->getValue(),
+                                        'type' => $session->field_shoot_type->getValue(),
+                                        'concepts' => $session->field_concept_name->getValue(),
+                                        'photographer' => $this->userStorage->load($session->field_photographer->get(0)->target_id)->label(),
+                                        'vm' => $this->userStorage->load($session->field_vm->get(0)->target_id)->label(),
+                                        'stylist' => $this->userStorage->load($session->field_stylish->get(0)->target_id)->label(),
+                                     );
+            }
+        }
 
 
 
@@ -85,7 +107,7 @@ class ViewAllSessionsController extends ControllerBase
         return [
             '#theme' => 'view_all_sessions',
             '#cache' => ['max-age' => 0],
-            '#results' => $products,
+            '#results' => $session_data,
             '#attached' => array(
                 'library' => array(
                     'studio_photodesk_screens/studiobridge-sessions'

@@ -1,0 +1,34 @@
+<?php
+
+/**
+ * @file
+ * Contains studio_photodesk_screens.module..
+ */
+
+use Drupal\Core\Routing\RouteMatchInterface;
+
+/**
+ * Implements hook_help().
+ */
+function warehouse_checkin_help($route_name, RouteMatchInterface $route_match) {
+  switch ($route_name) {
+    // Main module help for the studio_photodesk_screens module.
+    case 'help.page.warehouse_checkin':
+      $output = '';
+      $output .= '<h3>' . t('About') . '</h3>';
+      $output .= '<p>' . t('Module holds all screens which are required for warehouse operations.') . '</p>';
+      return $output;
+
+    default:
+  }
+}
+
+
+function warehouse_checkin_theme($existing, $type, $theme, $path) {
+  return array(
+
+      'checkin' => array(
+          'variables' => array(),
+      ),
+  );
+}

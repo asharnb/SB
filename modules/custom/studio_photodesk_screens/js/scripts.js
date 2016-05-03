@@ -9,20 +9,6 @@
 
     Drupal.behaviors.datatables = {
         attach: function(context, settings) {
-            $('#dt_unmapped').DataTable( {
-                "bSort": false,
-                "bDestroy": true,
-                "iDisplayLength": 15,
-                "order": [[1, 'asc']],
-
-            } );
-            $('#dt_mapped').DataTable( {
-                "bSort": false,
-                "bDestroy": true,
-                "iDisplayLength": 15,
-                "order": [[1, 'asc']],
-
-            } );
             $('#dt_viewsessions').DataTable( {
                 "bSort": false,
                 "bDestroy": true,
@@ -39,17 +25,17 @@
     Drupal.behaviors.closesession = {
         attach: function(context) {
             $("#close-session", context).click(function () {
-
+                var id = $("#close-session").attr('data-id');
                 swal({
                     title: "Close Session?",
                     text: "Are you sure you want to close this session?",
-                    type: "warning",
+                    type: "question",
                     showCancelButton: true,
                     confirmButtonColor: "#DD6B55",
                     confirmButtonText: "Close Session",
                     closeOnConfirm: true
                 }, function () {
-                    console.log('dropped');
+                    window.location = "/sbtest/close-session/"+id+"/1";
                 });
             });
         }
