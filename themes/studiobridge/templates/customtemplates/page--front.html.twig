@@ -1,6 +1,7 @@
 {% set container = theme.settings.fluid_container ? 'container-fluid' : 'container' %}
 
 {{ attach_library('studiobridge/flot-charts') }}
+{{ attach_library('studiobridge/dashboard') }}
 
 {#Check if user is logged in, if not only show login page, no default page#}
 {% if user.isAnonymous==true %}
@@ -23,9 +24,9 @@
         <div class=" pull-right">
 
             <div class="visible-lg visible-md m-t-10">
-                <div class="pull-left p-r-10 p-t-10 fs-16 font-heading">
-                    <span class="semi-bold">Ashar</span> <span class="text-master">Babar</span>
-                </div>
+              <div class="pull-left p-r-10 p-t-10 fs-16 font-heading">
+                  <span class="semi-bold">{{user.account.name}}</span> <span class="text-master">Photographer</span>
+              </div>
                 <div class="dropdown pull-right">
                     <button class="profile-dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true"
                             aria-expanded="false">

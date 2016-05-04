@@ -80,7 +80,7 @@
                 <div class="panel-controls">
                     {% if session.field_status.0.value == 'open' %}
                     <a  data-id="{{ session.nid.0.value }}" class="btn btn-xs btn-danger pull-right mr-5" id="close-session"> Close Session </a>
-                    <a href="/sb/live-shooting-page1" class="btn btn-xs btn-complete pull-right mr-5"> Import Products </a>
+                    <a href="/sbtest/live-shooting-page1" class="btn btn-xs btn-complete pull-right mr-5"> Import Products </a>
                     {% else %}
                     <a href="#" class="btn btn-xs btn-complete pull-right mr-5"> Export Shootlist </a>
                         <a href="#" class="btn btn-xs btn-warning pull-right mr-5"> Request to Reopen </a>
@@ -340,4 +340,3 @@
     {#<h2>Product {{ item.title.0.value }}</h2>#}
     {#<h2>No.of images in this Product {{ item.field_images|length }}</h2>#}
 {#{% endfor %}#}
-

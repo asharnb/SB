@@ -85,20 +85,22 @@
         <div class=" pull-right">
 
             <div class="visible-lg visible-md m-t-10">
-                <div class="pull-left p-r-10 p-t-10 fs-16 font-heading">
-                    <span class="semi-bold">Ashar</span> <span class="text-master">Babar</span>
-                </div>
+              <div class="pull-left p-r-10 p-t-10 fs-16 font-heading">
+                  <span class="semi-bold">{{user.account.name}}</span> <span class="text-master">Photographer</span>
+              </div>
                 <div class="dropdown pull-right">
-                    <button class="profile-dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    <button class="profile-dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true"
+                            aria-expanded="false">
 <span class="thumbnail-wrapper d32  inline ">
-<img src="/sbtest/{{ directory }}/images/cameraman.png"  alt="" width="32" height="32">
+<img src="/sbtest/{{ directory }}/images/cameraman.png" alt="" width="32" height="32">
 </span>
                     </button>
                     <ul class="dropdown-menu profile-dropdown" role="menu">
-                        <li><a href="#"><i class="fa-lg sl-user"></i> My Profile</a>
+                        <li><a href="/sbtest/user/" data-drupal-link-system-path="user/"><i class="fa-lg sl-user"></i> My Profile</a>
                         </li>
                         <li class="bg-master-lighter">
-                            <a href="#" class="clearfix">
+                            <a href="/sbtest/user/logout" data-drupal-link-system-path="user/logout" class="clearfix">
+
                                 <span class="pull-left">Logout</span>
                                 <span class="pull-right"><i class="fa-lg sl-power"></i></span>
                             </a>

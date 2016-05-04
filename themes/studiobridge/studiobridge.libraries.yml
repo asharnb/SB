@@ -45,9 +45,13 @@ sweet-alert:
 #    - core/jquery
 
 flot-charts:
-    js:
-      js/flot/jquery.flot.js: {}
-      js/flot/jquery.flot.spline.js: {}
-      js/flot/jquery.flot.tooltip.min.js: {}
-      js/flot/jquery.flot.resize.js: {}
-      js/flot/jquery.flot.time.js: {}
+  js:
+    js/flot/jquery.flot.js: {}
+    js/flot/jquery.flot.spline.js: {}
+    js/flot/jquery.flot.tooltip.min.js: {}
+    js/flot/jquery.flot.resize.js: {}
+    js/flot/jquery.flot.time.js: {}
+
+dashboard:
+  js:
+    js/dashboard.js: {}
