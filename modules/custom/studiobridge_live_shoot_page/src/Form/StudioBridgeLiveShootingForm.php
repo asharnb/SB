@@ -59,7 +59,7 @@ class StudioBridgeLiveShootingForm extends FormBase
 
         // todo : identifier might available in query
         // todo : get default product (current open product last)
-        if (!empty($_GET['identifier']) && isset($_GET['reshoot'])) {
+        if (!empty($_GET['identifier']) && isset($_GET['reshoot'])  &&  ($identifier_hidden != $_GET['identifier'])) {
             $identifier_hidden = $_GET['identifier'];
 
             $result = Products::getProductByIdentifier($_GET['identifier']);
@@ -72,6 +72,11 @@ class StudioBridgeLiveShootingForm extends FormBase
             }
 
             if ($new_or_old_product_nid) {
+
+              $last_scan_product = \Drupal::state()->get('last_scan_product_' . $uid . '_' . $session_id, false);
+              Products::AddEndTimeToProduct($session_id,false,$last_scan_product);
+
+
                 \Drupal::state()->set('last_scan_product_nid' . $uid . '_' . $session_id, $new_or_old_product_nid);
                 //studiobridge_store_images_update_product_as_open($_GET['identifier']);
                 Products::updateProductState($_GET['identifier'], 'open');
@@ -84,13 +89,19 @@ class StudioBridgeLiveShootingForm extends FormBase
 
                 // Add reshoot product to session.
                 Sessions::addReshootProductToSession($session_id,$product_obj);
+
+                Products::AddStartTimeToProduct($session_id, $new_or_old_product_nid);
+
+                // todo test all functions are
+                return new RedirectResponse(base_path() . 'live-shooting-page1');
+
             }
 
 
         } else {
             $result = Products::getProductByIdentifier($identifier_hidden);
             if ($result) {
-                $new_or_old_product_nid = reset($result);
+              $new_or_old_product_nid = reset($result);
             }
         }
 
@@ -224,7 +235,7 @@ class StudioBridgeLiveShootingForm extends FormBase
         $reshoot = false;
         $is_unmapped_product = false;
 
-      $identifier = $form_state->getValue('identifier');
+        $identifier = $form_state->getValue('identifier');
         $identifier_old = $form_state->getValue('identifier_hidden');  // @note : this will be the recent product.
 
         $last_scan_product = \Drupal::state()->get('last_scan_product_' . $uid . '_' . $session_id, false);
@@ -235,10 +246,17 @@ class StudioBridgeLiveShootingForm extends FormBase
             return $ajax_response;
         }
 
+        if($last_scan_product == $identifier){
+          $same_identifier = '<script>alert("Same identifier")</script>';
+          // return ajax here.
+          $ajax_response->addCommand(new HtmlCommand('#js-holder', $same_identifier));
+          return $ajax_response;
+        }
+
         //if identifier found in our products then skip importing.
         $result = Products::getProductByIdentifier($identifier);
 
-      \Drupal::state()->set('productscan_' . $session_id, true);
+        \Drupal::state()->set('productscan_' . $session_id, true);
 
         if (!$result) {
             // Get product from server
@@ -298,6 +316,8 @@ class StudioBridgeLiveShootingForm extends FormBase
             // update the current product as open status
             //studiobridge_store_images_update_product_as_open($identifier);
             Products::updateProductState($_GET['identifier'], 'open');
+
+            Products::AddStartTimeToProduct($session_id, $new_or_old_product_nid);
         }
 
         if ($last_scan_product != $identifier) {

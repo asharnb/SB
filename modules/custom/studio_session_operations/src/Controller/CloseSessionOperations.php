@@ -184,11 +184,20 @@ class CloseSessionOperations extends ControllerBase {
 
     $this->operations[] = array(array(get_class($this), 'closeSession'), array($this->session_node));
 
+    // Update end time to last scanned product.
+    // todo: if last scanned product marked as draft ??
+    $last_scan_product = \Drupal::state()->get('last_scan_product_' . $this->session_node->getOwnerId() . '_' . $this->sid, false);
+    $this->operations[] = array(array(get_class($this), 'ProductEndTime'), array($this->sid,$last_scan_product));
+
   }
 
   public function closeSession($session){
     $session->field_status->setValue(array('value' => 'closed'));
     $session->save();
+  }
+
+  public function ProductEndTime($sid, $identifier){
+    Products::AddEndTimeToProduct($sid,false,$identifier);
   }
 
   /*

@@ -413,9 +413,13 @@ Class Products {
 */
   public static function AddEndTimeToProduct($sid, $pid, $identifier=null) {
 
-    if(!$pid){
+    if(!$pid && $identifier){
       $pid = Products::getProductByIdentifier($identifier);
       $pid = reset($pid);
+    }
+
+    if(!$pid){
+      return false;
     }
 
 
@@ -428,15 +432,33 @@ Class Products {
       ->condition('sid',$sid)
       ->condition('pid', $pid)
       ->execute();
-
   }
 
   /*
    * @param pid
    *   Product node nid.
    */
-  public static function CalculateProductPeriod($pid){
-    return 10;
+  public static function CalculateProductPeriod($pid,$sid){
+    $secs = 0;
+    $result = db_select('studio_product_shoot_period','spsp')
+      ->fields('spsp',array('start','end'))
+      ->condition('spsp.pid',$pid)
+      ->condition('spsp.sid',$sid)
+      ->range(0, 1000);
+    //->orderRandom();
+    $product_period = $result->execute()->fetchAll();
+    if($product_period){
+      foreach($product_period as $period){
+        // check still product closed or not. ie., end time 0 or timestamp
+        if($period->end){
+          $diff = $period->end - $period->start;
+          $secs += $diff;
+        }
+      }
+    }
+    return $secs;
   }
+
+
 
 }
