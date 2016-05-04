@@ -34,3 +34,23 @@ function studio_bridge_schemas_update_8001(&$sandbox) {
   $schema = Database::getConnection()->schema();
   $schema->addField('studio_file_transfers', 'deleted', $spec);
 }
+
+/*
+ * Implements hook__update_8101().
+ *
+ * Adding {studio_product_shoot_period} table.
+ */
+function studio_bridge_schemas_update_8101(&$sandbox) {
+  $spec = array(
+    'fields' => array(
+      'id' => array('type' => 'serial', 'not null' => TRUE,),
+      'sid' => array('type' => 'varchar', 'length' => 40, 'not null' => TRUE,),
+      'pid' => array('type' => 'varchar', 'length' => 250, 'not null' => TRUE,),
+      'start'   => array('type' => 'int', 'not null' => TRUE, 'default' => 0),
+      'end'   => array('type' => 'int', 'not null' => TRUE, 'default' => 0),
+    ),
+    'primary key' => array('id'),
+  );
+  $schema = Database::getConnection()->schema();
+  $schema->createTable('studio_product_shoot_period', $spec);
+}

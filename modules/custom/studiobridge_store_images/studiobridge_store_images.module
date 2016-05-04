@@ -45,6 +45,12 @@ function studiobridge_store_images_entity_insert(Drupal\Core\Entity\EntityInterf
   $bundle = $entity->bundle();
   $values = $entity->toArray();
 
+  // Take a record fo shoot time.
+  if ($bundle == 'unmapped_products' || $bundle == 'products') {
+    $sid = Sessions::openSessionRecent();
+    Products::AddStartTimeToProduct($sid, $entity->id());
+  }
+
   // When new image is received by server, assign it to Current open product of particular session.
   if ($bundle == 'image' && isset($values['field_session'][0]['target_id'])) {
 

@@ -303,6 +303,7 @@ class StudioBridgeLiveShootingForm extends FormBase
         if ($last_scan_product != $identifier) {
             // todo : update last product as closed status
             Products::updateProductState($last_scan_product, 'completted');
+            Products::AddEndTimeToProduct($session_id,false,$last_scan_product);
         }
 
         // Once product is scanned update it to session

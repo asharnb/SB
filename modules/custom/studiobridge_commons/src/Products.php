@@ -385,4 +385,58 @@ Class Products {
 
   }
 
+  /*
+  * Helper function, to insert log into {studio_product_shoot_period} table.
+  *
+  * @param sid
+  *   Session node nid.
+  * @param pid
+  *   Product node nid.
+  */
+  public static function AddStartTimeToProduct($sid, $pid) {
+    db_insert('studio_product_shoot_period')
+      ->fields(array(
+        'sid' => $sid,
+        'pid' => $pid,
+        'start' => REQUEST_TIME,
+      ))
+      ->execute();
+  }
+
+  /*
+* Helper function, to insert log into {studio_product_shoot_period} table.
+*
+* @param sid
+*   Session node nid.
+* @param pid
+*   Product node nid.
+*/
+  public static function AddEndTimeToProduct($sid, $pid, $identifier=null) {
+
+    if(!$pid){
+      $pid = Products::getProductByIdentifier($identifier);
+      $pid = reset($pid);
+    }
+
+
+    // todo conditions to check multiple periods
+
+    db_update('studio_product_shoot_period') // Table name no longer needs {}
+      ->fields(array(
+        'end' => REQUEST_TIME,
+      ))
+      ->condition('sid',$sid)
+      ->condition('pid', $pid)
+      ->execute();
+
+  }
+
+  /*
+   * @param pid
+   *   Product node nid.
+   */
+  public static function CalculateProductPeriod($pid){
+    return 10;
+  }
+
 }
