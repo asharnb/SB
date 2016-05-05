@@ -44,7 +44,7 @@ class StudioBridgeLiveShootingForm extends FormBase
         $uid = $user->id();
 
         // current open session
-        $session_id = Sessions::openSessionRecent();
+        $session_id = Sessions::openSessionRecent(array('open','pause'));
 
         // if no session found then redirect to some other page
         if (!$session_id) {
@@ -91,6 +91,9 @@ class StudioBridgeLiveShootingForm extends FormBase
                 Sessions::addReshootProductToSession($session_id,$product_obj);
 
                 Products::AddStartTimeToProduct($session_id, $new_or_old_product_nid);
+
+               // if reshoot that means product under scan state closing ofter above process was done.
+              \Drupal::state()->set('productscan_' . $session_id, false);
 
                 // todo test all functions are
                 return new RedirectResponse(base_path() . 'live-shooting-page1');
@@ -426,7 +429,7 @@ class StudioBridgeLiveShootingForm extends FormBase
 
         }
 
-      \Drupal::state()->set('productscan_' . $session_id, false);
+        \Drupal::state()->set('productscan_' . $session_id, false);
         return $ajax_response;
     }
 

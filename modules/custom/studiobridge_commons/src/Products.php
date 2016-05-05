@@ -432,15 +432,36 @@ Class Products {
     }
 
 
+      $result = db_select('studio_product_shoot_period','spsp')
+      ->fields('spsp',array('id'))
+      ->condition('spsp.pid',$pid)
+      ->condition('spsp.sid',$sid)
+      ->orderBy('spsp.id', 'desc')
+      ->range(0, 1);
+    $last_log_id = $result->execute()->fetchField();
+
+
     // todo conditions to check multiple periods
 
-    db_update('studio_product_shoot_period') // Table name no longer needs {}
-      ->fields(array(
-        'end' => REQUEST_TIME,
-      ))
-      ->condition('sid',$sid)
-      ->condition('pid', $pid)
-      ->execute();
+    if($last_log_id){
+      db_update('studio_product_shoot_period') // Table name no longer needs {}
+        ->fields(array(
+          'end' => REQUEST_TIME,
+        ))
+        ->condition('sid',$sid)
+        ->condition('pid', $pid)
+        ->condition('id', $last_log_id)
+        ->execute();
+    }else{
+      db_update('studio_product_shoot_period') // Table name no longer needs {}
+        ->fields(array(
+          'end' => REQUEST_TIME,
+        ))
+        ->condition('sid',$sid)
+        ->condition('pid', $pid)
+        ->execute();
+    }
+
   }
 
   /*

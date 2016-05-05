@@ -10,7 +10,7 @@ Class Sessions {
   /*
    * Helper function, to return open session for current loggedIn photographer.
    */
-  public static function openSessionRecent() {
+  public static function openSessionRecent($status=array('open')) {
     // Get current logged in user.
     $user = \Drupal::currentUser();
     // Get uid of user.
@@ -19,7 +19,8 @@ Class Sessions {
     $result = \Drupal::entityQuery('node')
       ->condition('type', 'sessions')
       ->sort('created', 'DESC')
-      ->condition('field_status', 'open') // todo : poc on structure.
+//      ->condition('field_status', 'open') // todo : poc on structure.
+      ->condition('field_status', $status,'IN') // todo : poc on structure.
       ->condition('uid', $uid)
       ->range(0, 1)
       ->execute();
