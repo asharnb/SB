@@ -225,16 +225,21 @@ class StudioBridgeLiveShootingForm extends FormBase
 
         $user = \Drupal::currentUser();
         $uid = $user->id();
+        // Generate new ajax response object
+        $ajax_response = new AjaxResponse();
 
         // Get current session
         $session_id = Sessions::openSessionRecent();
         // If no session found then redirect to some other page
         if (!$session_id) {
-            return new RedirectResponse(base_path() . 'sessions');
+
+          $same_identifier = '<script>alert("Session in closed/pause state, cannot proceed. Update session and refresh the page.")</script>';
+          // return ajax here.
+          $ajax_response->addCommand(new HtmlCommand('#js-holder', $same_identifier));
+          return $ajax_response;
+
         }
 
-        // Generate new ajax response object
-        $ajax_response = new AjaxResponse();
         $reshoot = false;
         $is_unmapped_product = false;
 
