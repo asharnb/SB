@@ -394,13 +394,22 @@ Class Products {
   *   Product node nid.
   */
   public static function AddStartTimeToProduct($sid, $pid) {
-    db_insert('studio_product_shoot_period')
-      ->fields(array(
-        'sid' => $sid,
-        'pid' => $pid,
-        'start' => REQUEST_TIME,
-      ))
-      ->execute();
+    // On same request avoid saving multiple records.
+    $result = db_select('studio_product_shoot_period','spsp')
+      ->fields('spsp',array('id'))
+      ->condition('spsp.pid',$pid)
+      ->condition('spsp.sid',$sid)
+      ->condition('spsp.start',REQUEST_TIME);
+    $already_set = $result->execute()->fetchAll();
+    if(count($already_set) == 0){
+      db_insert('studio_product_shoot_period')
+        ->fields(array(
+          'sid' => $sid,
+          'pid' => $pid,
+          'start' => REQUEST_TIME,
+        ))
+        ->execute();
+    }
   }
 
   /*
@@ -445,7 +454,6 @@ Class Products {
       ->condition('spsp.pid',$pid)
       ->condition('spsp.sid',$sid)
       ->range(0, 1000);
-    //->orderRandom();
     $product_period = $result->execute()->fetchAll();
     if($product_period){
       foreach($product_period as $period){

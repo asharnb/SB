@@ -420,6 +420,26 @@ function studiobridge_store_images_entity_presave(Drupal\Core\Entity\EntityInter
       }
     }
   }
+
+  // On pause session, product time record also pause.
+  // todo : on same state saving of session, we should avoid time record.
+  if($entity->bundle() == 'sessions'){
+    $session_status = $entity->field_status->getValue();
+    $session_status = $session_status[0]['value'];
+    $product_scan = \Drupal::state()->get('productscan_' . $entity->id(), true);
+
+    $last_scan_product = \Drupal::state()->get('last_scan_product_' . $entity->getOwnerId() . '_' . $entity->id(), false);
+    if($last_scan_product && $session_status == 'pause' && !$product_scan){
+      Products::AddEndTimeToProduct($entity->id(),false,$last_scan_product);
+    }
+    elseif($last_scan_product && $session_status == 'open' & !$product_scan){
+      $pid = Products::getProductByIdentifier($last_scan_product);
+      if($pid){
+        Products::AddStartTimeToProduct($entity->id(),reset($pid));
+      }
+    }
+  }
+
 }
 
 
