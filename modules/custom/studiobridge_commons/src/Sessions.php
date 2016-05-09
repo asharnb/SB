@@ -168,4 +168,30 @@ Class Sessions {
     }
   }
 
+  /*
+   * Helper function to get session period.
+   *  formula : sum of all periods time.
+   *
+   * @param pid
+   *   Product node nid.
+   */
+  public static function CalculateSessionPeriod($sid) {
+    $secs = 0;
+    $result = db_select('studio_product_shoot_period', 'spsp')
+      ->fields('spsp', array('start', 'end'))
+      ->condition('spsp.sid', $sid)
+      ->range(0, 1000);
+    $product_period = $result->execute()->fetchAll();
+    if ($product_period) {
+      foreach ($product_period as $period) {
+        // check still product closed or not. ie., end time 0 or timestamp
+        if ($period->end) {
+          $diff = $period->end - $period->start;
+          $secs += $diff;
+        }
+      }
+    }
+    return $secs;
+  }
+
 }
