@@ -28,6 +28,7 @@
             </div>
             <div class="panel-controls">
               <span id ="{{ form.identifier_nid['#value'] }}">
+                <a class="btn btn-xs btn-info">Attach Model</a>
                 <a class="btn btn-xs btn-danger studio-product-drop">Drop Product</a>
                </span>
             </div>
@@ -148,11 +149,11 @@
     <div class="sidebard-panel" style="min-height: 100%;">
 
         <div id="widgettile">
-            <div class="widget blue-bg p-lg text-center">
-                <div class="m-b-md">
+            <div class="widget blue-bg text-center">
+                <div class="m-b-s">
                     <h1 class="m-xs no-of-products">{{ form.productdetails.total_products|length >0 ? form.productdetails.total_products : '0' }}</h1>
                     <h3 class="font-bold no-margins">Products</h3>
-                    <small>Unmapped: 0</small>
+                    <small>in this session</small>
                 </div>
             </div>
         </div>
@@ -162,12 +163,12 @@
 
     </div>
     <div class="">
-        <div class=" m-t-sm text-center">
+        <div class=" m-t-s text-center">
                   <span class="text-center">
                     <span><i class="fa fa-exchange text-success faa-passing animated"></i>    <strong>Connected</strong></span>
                   </span></div>
     </div>
-    <div class="m-t-md">
+    <div class="m-t-s">
         <h4>Session</h4>
         <h3 class="text-center"><strong></strong></h3>
         <div class="m-t-sm gray-bkground">
@@ -183,7 +184,7 @@
         </div>
     </div>
 
-    <div class="m-t-md">
+    <div class="m-t-s">
         <h4>QC Status</h4>
         <div>
             <ul class="list-group">
@@ -195,7 +196,7 @@
         </div>
     </div>
 
-    <div class="m-t-md">
+    <div class="m-t-s">
         <h4>Current Product</h4>
         <div>
             <ul class="list-group">
@@ -217,7 +218,7 @@
         </div>
     </div>
 
-    <div class="m-t-md">
+    <div class="m-t-s">
         <h4>Product Checks</h4>
         <div>
             <ul class="list-group">

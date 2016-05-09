@@ -154,6 +154,8 @@ class ViewSessionController extends ControllerBase
 
     unset($concept);
 
+
+
     return [
       '#theme' => 'view_session',
       '#cache' => ['max-age' => 0],
