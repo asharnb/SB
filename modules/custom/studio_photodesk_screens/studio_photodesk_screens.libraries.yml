@@ -1,5 +1,6 @@
 studiobridge-sessions:
   version: VERSION
+  head: true,
   css:
     theme:
       css/dataTables/datatables.min.css: {}

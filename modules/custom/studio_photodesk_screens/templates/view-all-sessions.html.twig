@@ -1,69 +1,76 @@
 
-{#{% for result in results %}#}
-    {#<p>{{ dump(result) }}</p>#}
-{#{% endfor %}#}
+<div class="row">
+  <div class="col-sm-12 col-md-8">
+    <h3>View <span class="semi-bold">Sessions</span></h3>
+  </div>
+  <div class="col-sm-12 col-md-4">
+    <!-- <a class="btn btn-primary btn-cons pull-right" href="/sbtest/node/add/sessions"><i class="fa fa-plus mr5"></i>Add Session</a> -->
+    <a class="next-btn btn-primary sf-right sf-btn sf-btn-next" href="/sbtest/node/add/sessions">ADD SESSION
+    <i class="fa fa-plus"></i></a>
+  </div>
+</div>
+
 
 <div class="row">
 
     <!-- NEW COL START -->
     <article class="col-sm-12 col-md-12 col-lg-12 ">
         <div class="panel panel-transparent">
-            <div class="panel-heading">
-                <div class="panel-title">View Sessions
-                </div>
-                <div class="panel-controls">
-                    <a class="btn btn-primary btn-cons" href="/sbtest/node/add/sessions"><i class="fa fa-plus mr5"></i>Add Session</a>
-                </div>
-
-            </div>
 
             <div class="panel-body">
-                <table id="dt_viewsessions" class="table table-responsive table-striped table-bordered table-hover" width="100%">
+                <table id="dt_viewsessions" class="table table-responsive  table-hover" width="100%">
 
                     <thead>
-                    <th>ID</th>
-                    <th>Name</th>
-                    <th>Status</th>
-                    <th>Stage</th>
-                    <th>Concept(s)</th>
-                    <th>Photographer</th>
-                    <th>VM</th>
-                    <th>Stylist</th>
-                    <th>Type</th>
-                    <th>Shoot Date</th>
-                    <th>Products Shot</th>
+                      <th>ID</th>
+                      <th>Status</th>
+                      <th>Stage</th>
+                      <th>Concept(s)</th>
+                      <th>Users</th>
+                      <th>Date</th>
+                      <th>Mapped</th>
+                      <th>Unmapped</th>
+                      <th></th>
+                    </thead>
 
-                    <th></th>
-
-                    </thead><tbody>
+                    <tbody>
 
                     {% for result in results %}
                         {% if result.stage.0.value == 'open'  %}
-                            {% set status_class = '<span><i class="fa fa-play-circle text-success"></i> Open</span>' %}
+                            {% set status_class = '<span class="text-success"><i class=""></i> Open</span>' %}
                         {% elseif result.stage.0.value == 'paused'  %}
-                            {% set status_class = '<span><i class="fa fa-pause text-warning"></i> Paused</span>' %}
+                            {% set status_class = '<span class="text-warning"><i class=""></i> Paused</span>' %}
                         {% else %}
-                            {% set status_class = '<span><i class="fa fa-stop-circle text-danger"></i> Closed</span>' %}
+                            {% set status_class = '<span class="text-danger"><i class=""></i> Closed</span>' %}
                         {% endif %}
 
-                        {% if result.shootdate.value|date('Y-m-d') == "now"|date("Y-m-d") %}
+                        {% if result.shootdate.0.value|date('Y-m-d') == "now"|date("Y-m-d") %}
                           {% set date_class = 'text-success' %}
                         {% else %}
                           {% set date_class = '' %}
                         {% endif %}
+
+
+
                         <tr>
 
                             <td>{{ result.id }}</td>
-                            <td>TBA</td>
                             <td>{{ status_class|raw }}</td>
                             <td>Shoot</td>
-                            <td><img class="brand_logo shortened-20" src="/sbtest/{{ directory }}/images/brands/brand_logo_{{ result.field_concept_name.value|lower }}.png" style="padding-top: 5px;"></td>
-                            <td>{{ result.photographer }}</td>
-                            <td>{{ result.vm }}</td>
-                            <td>{{ result.stylist }}</td>
-                            <td>{{ result.type.0.value|title|replace({'_': ' '}) }}</td>
-                            <td><span class="{{date_class}}">{{ result.shootdate.value|date('Y-m-d') }}</span></td>
-                            <td>0</td>
+                            <td>
+                              {% for concepts in result.concepts %}
+                                <img src="/sbtest/{{directory}}/images/brands/brand_logo_{{concepts.concept|lower}}.png" height="15px"><br>
+                              {% endfor %}
+                              {% if result.unmapped.0.unmappedcount > 0%}
+                                  <img src="/sbtest/{{directory}}/images/brands/brand_logo_.png" height="12px">
+                              {% endif %}
+
+                            </td>
+                            <td>{{ result.photographer }}
+{{ result.vm }}
+{{ result.stylist }}</td>
+                            <td><span class="{{date_class}}">{{ result.shootdate.0.value|date("Y-m-d") }}</span></td>
+                            <td>{{result.mapped.0.mappedcount}}</td>
+                            <td>{{result.unmapped.0.unmappedcount}}</td>
                             <td><a class="btn btn-xs btn-complete" href="/sbtest/view-session/{{ result.id }}">View</a></td>
                         </tr>
 

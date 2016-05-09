@@ -35,7 +35,7 @@
                     text: "Your selected images have been deleted",
                     type: "success",
                     showConfirmButton: false,
-                    timer: 1500
+                    timer: 1000
                 });
 
                 // update whole img container
@@ -155,5 +155,3 @@
     });
 
 })(jQuery);
-
-

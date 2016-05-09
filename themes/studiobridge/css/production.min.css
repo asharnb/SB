@@ -568,11 +568,12 @@ body.mini-navbar.fixed-sidebar .profile-element, .block {
         line-height: 20px;
         display: block;
         background: #474C54;
-        /* background: linear-gradient(#2FF648 0%, #40991E 100%); */
+        background: linear-gradient(#707986 0%, #3B3D42 100%);
         padding: .5em 1em;
         position: absolute;
     }
 
+.ribbon span.tag {/* background: #1ED07E; */background: linear-gradient(#21E48B 0%, #159259 100%);}
 
     .ribbon2 {
         position: absolute;

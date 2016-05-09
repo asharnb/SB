@@ -38,9 +38,9 @@
                     <dl class="dl-horizontal">
                         <dt>Concept: </dt>
                         {% if form.productdetails.concept == 'Unmapped' %}
-                            <dd><span class="bold">Unmapped</span></dd>
+                            <dd id="dd-concept"><span class="bold">Unmapped</span></dd>
                         {% else %}
-                            <dd class="mb-10"><img
+                            <dd id="dd-concept" class="mb-10"><img
                                         src="/sb/{{ directory }}/images/brands/brand_logo_{{ form.productdetails.concept|lower }}.png"
                                         height="20px"></dd>
                         {% endif %}
@@ -101,7 +101,7 @@
 
                 <div class="bulkviewfiles imagefile" id="warpper-img-{{ image.fid }}">
                     {% if image.tag == '1' %}
-                    <div class="ribbon" id="ribboncontainer"><span class="for-tag" id="seq-{{ image.fid }}" name="{{ image.id }}">Tag</span></div>
+                    <div class="ribbon" id="ribboncontainer"><span class="for-tag tag" id="seq-{{ image.fid }}" name="{{ image.id }}">Tag</span></div>
                     {% else %}
                     <div class="ribbon" id="ribboncontainer"><span class="for-tag" id="seq-{{ image.fid }}" name="{{ image.id }}">{{ image.id }}</span></div>
                     {% endif %}
@@ -150,22 +150,22 @@
         <div id="widgettile">
             <div class="widget blue-bg p-lg text-center">
                 <div class="m-b-md">
-                    <h1 class="m-xs no-of-products">{{ form.productdetails.total_products }}</h1>
+                    <h1 class="m-xs no-of-products">{{ form.productdetails.total_products|length >0 ? form.productdetails.total_products : '0' }}</h1>
                     <h3 class="font-bold no-margins">Products</h3>
                     <small>Unmapped: 0</small>
                 </div>
             </div>
         </div>
 
-        <div class="m-t-md">
-            <h4>Listener App</h4>
-            <div class=" m-t-sm gray-bkground text-center">
-											<span class="text-center">
-												<div id="appstatus"></div>
-											</span></div>
-        </div>
 
 
+
+    </div>
+    <div class="">
+        <div class=" m-t-sm text-center">
+                  <span class="text-center">
+                    <span><i class="fa fa-exchange text-success faa-passing animated"></i>    <strong>Connected</strong></span>
+                  </span></div>
     </div>
     <div class="m-t-md">
         <h4>Session</h4>
@@ -173,9 +173,10 @@
         <div class="m-t-sm gray-bkground">
             <div class="row">
                 <div class="col-md-6">
-                    &nbsp; <span><i class="fa fa-circle text-success"></i> Open</span>
+                    &nbsp; {{form.session['#value']}}
                 </div>
                 <div class="col-md-6">
+                  <span><i class="fa fa-circle text-success"></i> Open</span>
                 </div>
             </div>
 
