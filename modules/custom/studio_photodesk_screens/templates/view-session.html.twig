@@ -59,284 +59,360 @@
 * @ingroup themeable
 */
 #}
-                        {% if session.field_status.0.value == 'open' %}
-                            {% set status_class = 'fa fa-play-circle text-danger' %}
-                        {% else %}
-                            {% set status_class = 'fa fa-stop-circle text-danger' %}
-                        {% endif %}
 
-                        {% if session.field_shoot_class.0.value == 'model_shoot' %}
-                            {% set shoot_class = 'fa fa-user' %}
-                        {% else %}
-                            {% set shoot_class = 'fa fa-cubes' %}
-                        {% endif %}
+{% if session.field_status.0.value == 'open' %}
+{% set status_class = 'fa fa-play-circle text-success' %}
+{% set status_class_text = 'text-success' %}
+{% else %}
+{% set status_class = 'fa fa-stop-circle text-danger' %}
+{% set status_class_text = 'text-danger' %}
+{% endif %}
+
+{% if session.field_shoot_class.0.value == 'model_shoot' %}
+{% set shoot_class = 'fa fa-user' %}
+{% else %}
+{% set shoot_class = 'fa fa-cubes' %}
+{% endif %}
+
+<div class="row">
+  <div class="col-sm-12 col-md-8">
+    <h3>Session <span class="semi-bold">Details</span></h3>
+  </div>
+  <div class="col-sm-12 col-md-4 text-right">
+
+  </div>
+</div>
 
 <div class="row p-t-10">
-    <div class="col-lg-9">
-        <div class="panel panel-default">
-            <div class="panel-heading seperator">
-                <div class="panel-title">Session Details
-                </div>
-                <div class="panel-controls">
-                    {% if session.field_status.0.value == 'open' %}
-                    <a  data-id="{{ session.nid.0.value }}" class="btn btn-xs btn-danger pull-right mr-5" id="close-session"> Close Session </a>
-                    <a href="/sbtest/live-shooting-page1" class="btn btn-xs btn-complete pull-right mr-5"> Import Products </a>
+  <div class="col-lg-9">
+
+    <div class="panel panel-default">
+
+      <div class="row">
+        <div class="col-lg-12" >
+          <div class="panel-heading seperator">
+
+            <div class="panel-controls">
+              {% if session.field_status.0.value == 'open' %}
+              <a href="/sbtest/live-shooting-page1" class="btn btn-complete"><i class="fa fa-camera"></i> Import </a>
+              <a href="/sbtest/live-shooting-page1" class="btn btn-warning "><i class="fa fa-pause"></i> Pause </a>
+              <a data-id="{{ session.nid.0.value }}" class="btn btn-danger " id="close-session"><i class="fa fa-stop"></i> Close </a>
+
+
+              {% elseif session.field_status.0.value == 'paused' %}
+              <a href="/sbtest/live-shooting-page1" class="btn  btn-success"><i class="fa fa-play"></i> Resume </a></div>
+              <a data-id="{{ session.nid.0.value }}" class="btn btn-danger " id="close-session"><i class="fa fa-stop"></i> Close </a>
+
+              {% else %}
+              <a href="#" class="btn  btn-complete "><i class="fa fa-file-excel-0o"></i> Export Shootlist </a>
+              <a href="#" class="btn  btn-warning "><i class="fa fa-refresh"></i> Request to Reopen </a>
+              {% endif %}
+            </div>
+          </div>
+
+          <div class="col-sm-2">
+            <div class="widget  text-center">
+
+                <img src="/sbtest/{{directory}}/images/users/niranjan.jpg" class="img-circle circle-border " alt="profile">
+                <h3 class="m-xs text-primary">Sajeewa</h3>
+                <h5 class="font-bold no-margins">
+                  Photographer
+                </h5>
+
+            </div>
+          </div>
+          <div class="col-sm-2">
+            <div class="widget text-center">
+
+                <img src="/sbtest/{{directory}}/images/users/rebecca.jpg" class="img-circle circle-border" alt="profile">
+                <h3 class="m-xs text-primary">Rebecca</h3>
+                <h5 class="font-bold no-margins">
+                  Stylist
+                </h5>
+
+            </div>
+          </div>
+          <div class="col-sm-2">
+            <div class="widget text-center">
+
+                <img src="/sbtest/{{directory}}/images/users/cia.jpg" class="img-circle circle-border " alt="profile">
+                <h3 class="m-xs text-primary">Cia</h3>
+                <h5 class="font-bold no-margins">
+                  VM
+                </h5>
+
+            </div>
+          </div>
+          <div class="col-sm-2">
+            <!-- Other infos go here -->
+          </div>
+          <!-- <dl class="dl-horizontal">
+          <dt>Photographer:</dt>
+          <dd>{{ session_users.photographer }}</dd>
+          <dt>VM:</dt>
+          <dd>{{ session_users.vm }}</dd>
+          <dt>Stylist:</dt>
+          <dd> {{ session_users.stylist }} </dd>
+          <dt>Type:</dt>
+          <dd> {{ session.field_shoot_type.0.value|title|replace({'_': ' '}) }} </dd>
+        </dl> -->
+      </div>
+
+    </div>
+    <div class="row m-t-sm">
+      <div class="col-lg-12">
+        <div class="panel blank-panel">
+          <div class="panel-heading">
+            <div class="panel-options">
+              <ul class="nav nav-tabs nav-tabs-linetriangle">
+
+
+                <li class="active"><a href="#tab-mapped" data-toggle="tab" aria-expanded="false">Mapped <span class="text-success semi-bold">({{ mapped_products|length }})</span></a></li>
+                <li class=""><a href="#tab-unmapped" data-toggle="tab" aria-expanded="false">Unmapped <span class="text-warning semi-bold">({{ unmapped_products|length }})</span></a></li>
+                <li class=""><a href="#tab-dropped" data-toggle="tab" aria-expanded="false">Drops <span class="text-danger semi-bold">(0)</span></a></li>
+                <li class=""><a href="#tab-reports" data-toggle="tab" aria-expanded="false">Report(s)</a></li>
+                <li class=""><a href="#tab-log" data-toggle="tab" aria-expanded="true">Log</a></li>
+                <li class=""><a href="#tab-log" data-toggle="tab" aria-expanded="true">Analysis</a></li>
+
+              </ul>
+            </div>
+          </div>
+          <div class="panel-body">
+            <div class="tab-content">
+              <div class="tab-pane active" id="tab-mapped">
+
+                <table id="dt_mapped" class="table table-responsive table-hover" width="100%">
+                  <thead>
+                    <tr>
+                      <th>Concept</th>
+                      <th>Style Family</th>
+                      <th>Color Variant</th>
+                      <th>State</th>
+                      <th>QC Status</th>
+                      <th>Raw Count</th>
+                      <th></th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {% for item in mapped_products %}
+
+                    {% if item.field_images|length == 0 %}
+                    {% set image_count_class = 'text-align-center bold text-danger' %}
+                    {% elseif item.field_images|length >= 7 %}
+                    {% set image_count_class = 'text-align-center bold text-warning' %}
                     {% else %}
-                    <a href="#" class="btn btn-xs btn-complete pull-right mr-5"> Export Shootlist </a>
-                        <a href="#" class="btn btn-xs btn-warning pull-right mr-5"> Request to Reopen </a>
+                    {% set image_count_class = 'text-align-center bold text-success' %}
                     {% endif %}
+                    <tr>
+                      <td>
+                        <img src="/sbtest/{{ directory }}/images/brands/brand_logo_{{ item.field_concept_name.0.value|lower }}.png"
+                        height="20px"></td>
+                        <td>{{ item.field_style_family.0.value }}</td>
+                        <td>{{ item.title.0.value }}</td>
+                        <td><span class="label label-success">New</span></td>
+                        <td><span class="label label-warning">Pending</span></td>
+                        <td class="{{ image_count_class }}">{{ item.field_images|length }}</td>
+                        <td class="text-align-center"><a target="_blank" class="btn btn-primary" href="/sbtest/view-product/{{item.nid.0.value }}">View</a></td>
 
+                      </tr>
+
+                      {% endfor %}
+
+                    </tbody>
+                  </table>
                 </div>
-            </div>
+                <div class="tab-pane" id="tab-unmapped">
 
-            <div class="row">
-                <div class="col-lg-5">
-                    <dl class="dl-horizontal">
-                        <dt>Created by:</dt>
-                        <dd></dd>
-                        <dt>Total Products:</dt>
-                        <dd> <?php echo $sessionmappedcount['count']+$sessionunmappedcount['count']?></dd>
-                        <dt>Unmapped Products:</dt>
-                        <dd><span class="text-warning"> <?php echo $sessionunmappedcount['count'];?></span></dd>
-                        <dt>Total Images:</dt>
-                        <dd> {{ total_images }}</dd>
-                        <dt>Rejects:</dt>
-                        <dd><span class="text-danger"><?php echo $session['rejects'];?></span></dd>
-                    </dl>
-                </div>
-                <div class="col-lg-7" id="cluster_info">
-                    <dl class="dl-horizontal">
-                        <dt>Create Date:</dt>
-                        <dd> {{ session.create.0.value|date("m/d/Y") }} </dd>
-                        <dt>Photographer:</dt>
-                        <dd>{{ session_users.photographer }}</dd>
-                        <dt>VM:</dt>
-                        <dd>{{ session_users.vm }}</dd>
-                        <dt>Stylist:</dt>
-                        <dd> {{ session_users.stylist }} </dd>
-                        <dt>Type:</dt>
-                        <dd> {{ session.field_shoot_type.0.value }} </dd>
-                    </dl>
-                </div>
-            </div>
-            <div class="row m-t-sm">
-                <div class="col-lg-12">
-                    <div class="panel blank-panel">
-                        <div class="panel-heading">
-                            <div class="panel-options">
-                                <ul class="nav nav-tabs nav-tabs-linetriangle">
+                  <table id="dt_unmapped" class="table table-responsive table-hover" width="100%">
+                    <thead>
+                      <tr>
+                        <th>Concept</th>
+                        <th>Identifier</th>
+                        <th>Raw Count</th>
+                        <th></th>
+                      </tr>
+                    </thead>
+                    <tbody>
+
+                      {% for item in unmapped_products %}
+                      {% if item.field_images|length == 0 %}
+                      {% set image_count_class = 'text-align-center bold text-danger' %}
+                      {% elseif item.field_images|length >= 7 %}
+                      {% set image_count_class = 'text-align-center bold text-warning' %}
+                      {% else %}
+                      {% set image_count_class = 'text-align-center bold text-success' %}
+                      {% endif %}
+                      <tr>
+                        <td><img src="/sbtest/{{ directory }}/images/brands/brand_logo_.png"
+                          height="20px"></td>
+                          <td>{{ item.title.0.value }}</td>
+                          <td class="{{ image_count_class }}">{{ item.field_images|length }}</td>
+
+                          <td class="text-align-center"><a target="_blank" class="btn btn-primary"  href="/sbtest/view-product/{{item.nid.0.value }}">View</a></td>
+
+                        </tr>
+
+                        {% endfor %}
+
+                      </tbody>
+                    </table>
+                  </div>
+                  <div class="tab-pane" id="tab-dropped">
+
+                    <table id="dt_dropped" class="table table-striped table-bordered table-hover" width="100%">
+                      <thead>
+                        <tr>
+                          <th>Concept</th>
+                          <th>Identifier</th>
+                          <th>Raw Count</th>
+                          <th>Reason</th>
+                        </tr>
+                      </thead>
+                      <tbody>
 
 
-                                    <li class="active"><a href="#tab-mapped" data-toggle="tab" aria-expanded="false">Mapped Products ({{ mapped_products|length }})</a></li>
-                                    <li class=""><a href="#tab-unmapped" data-toggle="tab" aria-expanded="false">Unmapped Products ({{ unmapped_products|length }})</a></li>
-                                    <li class=""><a href="#tab-dropped" data-toggle="tab" aria-expanded="false">Drops(0)</a>
-                                    </li>
-                                    </li>
-                                    <li class=""><a href="#tab-reports" data-toggle="tab" aria-expanded="false">Report(s)</a>
-                                    </li>
-                                    <li class=""><a href="#tab-log" data-toggle="tab" aria-expanded="true">Activity
-                                            Log</a></li>
-                                </ul>
+                      </tbody>
+                    </table>
+                  </div>
+                  <div class="tab-pane" id="tab-reports">
+                    <div class="attachment">
+                      <div class="file-box">
+                        <div class="file">
+                          <a href="#">
+                            <span class="corner"></span>
+                            <div class="icon">
+                              <i class="fa fa-file-excel-o text-success"></i>
                             </div>
-                        </div>
-                        <div class="panel-body">
-                            <div class="tab-content">
-                                <div class="tab-pane active" id="tab-mapped">
+                          </a>
+                          <div class="file-name">
+                            <a target="_blank">Shoot List</a>
+                            <br>
+                          </div>
+                        </div></div>
+                        <div class="file-box">
+                          <div class="file">
+                            <a href="#">
+                              <span class="corner"></span>
 
-                                    <table id="dt_mapped" class="table table-responsive table-striped table-bordered table-hover" width="100%">
-                                        <thead>
-                                        <tr>
-                                            <th>Concept</th>
-                                            <th>Style Family</th>
-                                            <th>Color Variant</th>
-                                            <th>State</th>
-                                            <th>QC Status</th>
-                                            <th>Raw Count</th>
-                                            <th>View</th>
-                                        </tr>
-                                        </thead>
-                                        <tbody>
-
-                                        {% for item in mapped_products %}
-
-                                            {% if item.field_images|length == 0 %}
-                                                {% set image_count_class = 'text-align-center bold text-danger' %}
-                                            {% elseif item.field_images|length >= 7 %}
-                                                {% set image_count_class = 'text-align-center bold text-warning' %}
-                                            {% else %}
-                                                {% set image_count_class = 'text-align-center bold text-success' %}
-                                            {% endif %}
-                                            <tr>
-                                                <td>
-                                                    <img src="/sb/{{ directory }}/images/brands/brand_logo_{{ item.field_concept_name.0.value|lower }}.png"
-                                                         height="20px"></td>
-                                                <td>{{ item.field_style_family.0.value }}</td>
-                                                <td>{{ item.title.0.value }}</td>
-                                                <td>New</td>
-                                                <td><span class="label label-warning">Pending</span></td>
-                                                <td class="{{ image_count_class }}">{{ item.field_images|length }}</td>
-
-                                                <td><a target="_blank" class="btn btn-primary" href="/sb/view-product/{{item.nid.0.value }}">View</a></td>
-
-                                            </tr>
-
-                                        {% endfor %}
-
-                                        </tbody>
-                                    </table>
-                                </div>
-                                <div class="tab-pane" id="tab-unmapped">
-
-                                    <table id="dt_unmapped" class="table table-striped table-bordered table-hover" width="100%">
-                                        <thead>
-                                        <tr>
-                                            <th>Concept</th>
-                                            <th>Identifier</th>
-                                            <th>Raw Count</th>
-                                            <th>View</th>
-                                        </tr>
-                                        </thead>
-                                        <tbody>
-
-                                        {% for item in unmapped_products %}
-                                            {% if item.field_images|length == 0 %}
-                                                {% set image_count_class = 'text-align-center bold text-danger' %}
-                                            {% elseif item.field_images|length >= 7 %}
-                                                {% set image_count_class = 'text-align-center bold text-warning' %}
-                                            {% else %}
-                                                {% set image_count_class = 'text-align-center bold text-success' %}
-                                            {% endif %}
-                                            <tr>
-                                                <td><img src="/sb/{{ directory }}/images/brands/brand_logo_.png"
-                                                         height="20px"></td>
-                                                <td>{{ item.title.0.value }}</td>
-                                                <td class="{{ image_count_class }}">{{ item.field_images|length }}</td>
-
-                                                <td><a target="_blank" class="btn btn-primary"  href="/sb/view-product/{{item.nid.0.value }}">View</a></td>
-
-                                            </tr>
-
-                                        {% endfor %}
-
-                                        </tbody>
-                                    </table>
-                                </div>
-                                <div class="tab-pane" id="tab-dropped">
-
-                                    <table id="dt_dropped" class="table table-striped table-bordered table-hover" width="100%">
-                                        <thead>
-                                        <tr>
-                                            <th>Concept</th>
-                                            <th>Identifier</th>
-                                            <th>Raw Count</th>
-                                            <th>Reason</th>
-                                        </tr>
-                                        </thead>
-                                        <tbody>
-
-
-                                        </tbody>
-                                    </table>
-                                </div>
-                            </div>
-
+                              <div class="icon">
+                                <i class="fa fa-file-pdf-o text-danger"></i>
+                              </div>
+                              <div class="file-name">
+                                Analysis
+                                <br>
+                              </div>
+                            </a>
+                          </div>
 
                         </div>
+                        <div class="clearfix"></div>
+                      </div>
+
+
                     </div>
-                </div>
+                  </div>
 
+
+                </div>
+              </div>
             </div>
+
+          </div>
 
         </div>
-    </div>
+      </div>
 
-    <div class="col-lg-3">
+      <div class="col-lg-3">
 
         <div class="sidebard-panel" style="min-height: 100%;">
 
-            <div id="widgettile">
-                <div class="widget blue-bg p-lg text-center">
-                    <div class="m-b-md">
-                        <h1 class="m-xs no-of-products">PD-{{ session.nid.0.value }}</h1>
+          <div id="widgettile">
+            <div class="widget blue-bg text-center">
 
-                        <br>
-                        <div class="col-md-4">
-                            &nbsp; <span><i class="{{ status_class }}"></i> </span>
-                        </div>
-                        <div class="col-md-8">
-                            <span><i class="{{ shoot_class }}"></i> {{ session.field_shoot_class.0.value|title|replace({'_': ' '}) }}</span>
-                        </div>
-                    </div>
+
+
+              <div class="m-b-s">
+
+                <div class="row ">
+                  <div class="col-sm-6">
+                    <div class="timeline-day-number pull-right">{{ session.nid.0.value }}</div>
+                  </div>
+                  <div class="col-sm-6 text-left">
+                    <div class="timeline-day {{status_class_text}}"><span><i class="{{ status_class }}"></i>    {{ session.field_status.0.value|title}} </span></div>
+                    <div class="timeline-month c-gray text-info"><span><i class="{{ shoot_class }}"></i>    {{ session.field_shoot_class.0.value|title|replace({'_': ' '}) }}</span></div>
+                  </div>
                 </div>
+              </div>
             </div>
-<hr class=simple">
-            <div class="m-t-md">
-                <h3>
-                    <small>Stage:</small>
-                    <span id="textstage">Shoot</span></h3>
-                <div class="progress progress-striped active">
-                    <div style="width: 25%" class="progress-bar progress-bar-success"></div>
-                </div>
+          </div>
+          <hr class="simple">
+          <div class="m-t-s">
+            <h3>
+              <small>Stage:</small>
+              <span id="textstage">Shoot</span></h3>
+              <div class="progress progress-striped active">
+                <div style="width: 25%" class="progress-bar progress-bar-complete"></div>
+              </div>
             </div>
 
             {% for item in grouped_concepts %}
 
-                <div class="company-stat-boxes">
-                    <div data-index="" class="company-stat-box mb-10  active padding-10 bg-master-lightest">
-
-
-
-                            <p class="company-name pull-left text-uppercase bold no-margin">
-                                <img src="/sb/{{ directory }}/images/brands/brand_logo_{{ item.concept|lower }}.png"
-                                     height="15px">
-                            <div class="pull-right">
-                                <span class=" label label-primary p-t-5 m-l-5 p-b-5 inline fs-12">{{ item.product_count }}
-                                    </span>
-
-                            </div>
-
-                            </p>
-
-                            <div class="clearfix"></div>
-
-
-
-                    </div>
-
-                </div>
-            {% endfor %}
-    {% if unmapped_products|length > 0 %}
             <div class="company-stat-boxes">
-                <div data-index="" class="company-stat-box mb-10  active padding-10 bg-master-lightest">
+              <div data-index="" class="company-stat-box mb-10  active padding-10 bg-master-lightest">
 
 
 
-                    <p class="company-name pull-left text-uppercase bold no-margin">
-                        <img src="/sb/{{ directory }}/images/brands/brand_logo_.png"
-                             height="15px">
-                    <div class="pull-right">
-                                <span class=" label label-primary p-t-5 m-l-5 p-b-5 inline fs-12">{{ unmapped_products|length }}
-                                    </span>
+                <p class="company-name pull-left text-uppercase bold no-margin">
+                  <img src="/sbtest/{{ directory }}/images/brands/brand_logo_{{ item.concept|lower }}.png"
+                  height="15px">
+                  <div class="pull-right">
+                    <span class=" label label-primary p-t-5 m-l-5 p-b-5 inline fs-12">{{ item.product_count }}
+                    </span>
 
-                    </div>
+                  </div>
 
-                    </p>
+                </p>
 
-                    <div class="clearfix"></div>
+                <div class="clearfix"></div>
 
 
 
-                </div>
+              </div>
 
             </div>
-    {% endif %}
+            {% endfor %}
+            {% if unmapped_products|length > 0 %}
+            <div class="company-stat-boxes">
+              <div data-index="" class="company-stat-box mb-10  active padding-10 bg-master-lightest">
+
+
+
+                <p class="company-name pull-left text-uppercase bold no-margin">
+                  <img src="/sbtest/{{ directory }}/images/brands/brand_logo_.png"
+                  height="15px">
+                  <div class="pull-right">
+                    <span class=" label label-primary p-t-5 m-l-5 p-b-5 inline fs-12">{{ unmapped_products|length }}
+                    </span>
+
+                  </div>
+
+                </p>
+
+                <div class="clearfix"></div>
+
+
+
+              </div>
+
+            </div>
+            {% endif %}
+          </div>
+
         </div>
-
-    </div>
-</div>
+      </div>
 
 
-{#{% for item in unmapped_products %}#}
-    {#<h2>Product {{ item.title.0.value }}</h2>#}
-    {#<h2>No.of images in this Product {{ item.field_images|length }}</h2>#}
-{#{% endfor %}#}
+      {#{% for item in unmapped_products %}#}
+      {#<h2>Product {{ item.title.0.value }}</h2>#}
+      {#<h2>No.of images in this Product {{ item.field_images|length }}</h2>#}
+      {#{% endfor %}#}

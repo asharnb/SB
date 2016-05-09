@@ -10,10 +10,10 @@
     Drupal.behaviors.datatables = {
         attach: function(context, settings) {
             $('#dt_viewsessions').DataTable( {
-                "bSort": false,
+                "bSort": true,
                 "bDestroy": true,
                 "iDisplayLength": 15,
-                "order": [[1, 'asc']],
+                "order": [[0, 'desc']],
 
             } );
 

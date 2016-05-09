@@ -31,7 +31,7 @@
                     confirmButtonColor: "#DD6B55",
                     confirmButtonText: "OK",
                     closeOnConfirm: true,
-                    timer: 1500
+                    //timer: 1500
                 });
             },
             error: function(){
@@ -92,5 +92,3 @@
     });
 
 })(jQuery);
-
-

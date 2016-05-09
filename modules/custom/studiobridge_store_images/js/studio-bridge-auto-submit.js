@@ -14,7 +14,7 @@
          triggerit(identifier, rand);
 
      }else{
-         document.getElementById('studio-img-container').innerHTML = 'No Product Scanned';
+         //document.getElementById('studio-img-container').innerHTML = 'No Product Scanned';
          setInterval(function() {
 
              var identifier = document.getElementById('edit-identifier-hidden').value;
@@ -74,43 +74,34 @@
         li.setAttribute("class", "bulkviewfiles imagefile ui-sortable-handle"); // added line
         li.setAttribute('id','warpper-img-' + fid);
 
-        //var block = '<div class="bulkviewfiles imagefile">';
-        var block = '';
-        //block += '<div class="box" style="max-width: 250px;">';
 
-        block +=  '<div class="ribbon"><span id="seq-'+ fid +'">'+ seq +'</span></div>';
+        var block = '';
+        if(img.tag==1){
+          block += '<div class="ribbon"><span class="for-tag tag" id="seq-' +fid+ '">Tag</span></div>';
+        } else{
+          block += '<div class="ribbon"><span class="for-tag" id="seq-' +fid+ '">' +seq+ '</span></div>';
+        }
 
         block +=  '<div class="scancontainer">';
         block +=  '<img src="'+ img.uri +'" class="scanpicture">';
         block +=  '</div>';
-        //block +=  "<input name='image[" + fid + "]' type='hidden' value='" + fid + "'/>";
+
         block +=  '<div class="file-name">';
-//        block +=  '<span class="bkname"><i class="fa fa-camera"></i><b id="seq-img-' + fid + '">'+img.name+'</b></span>';
-//        block +=  '<hr class="simple">';
+
+        block +=  '<div id="tag-seq-img-'+fid+'" type="hidden"></div>';
 
         block += '<div class="row">';
-        //block += '<div class="col col-sm-6">';
-        block += '<div class="col col-sm-12">';
-//        block += '<span><a class=" dropdown-toggle label label-default dropdown mr-5" data-toggle="dropdown" ><i class="fa fa-cog"></i> <i class="fa fa-caret-down"></i></a>';
-//        block += '<ul class="dropdown-menu pull-right"><li><a class="label label-default no-margin" onclick="return false;">Use this as full shot</a></li></ul>';
-//        block += '<span ><a target ="_blank" href="#" class="label label-info"><i class="glyphicon glyphicon-fullscreen"></i></a>';
-//        block += '</div>';
-//        block += '<div class="col col-sm-6">';
-//        block += '<span><a onclick="return false;" class="label label-danger mr5 pull-right">Delete</a>';
-//        block += '<span><label for="del-img-'+ fid +'" class="checkbox"><input type="checkbox" id="del-img-'+ fid +'" class="form-checkbox" value="'+ fid +'"><i></i>Tag Image</label></span>';
-//        block += '<div class="studio-img-weight"><input type="hidden" value="'+ fid +'"></div>';
 
-        block += '<span><label for="del-img-'+ fid +'" class="checkbox"><input type="checkbox" id="del-img-'+ fid +'" class="form-checkbox" value="'+ fid +'"><i></i><b class="fa fa-trash"></b></label></span> <div class="studio-img-weight"><input id="fid-hidden" type="hidden" value="'+ fid +'"></div>';
+
+        block += '<div class="col col-sm-8"><span id= "'+fid+'" ><a class="label label-info"><i class="fa fa-lg fa-fw fa-arrows-alt"></i></a><a class="label label-warning studio-img-tag" ><i class="fa fa-lg fa-fw fa-tag"></i></a><a class="label label-success studio-img-fullshot"><i class="fa fa-lg fa-fw fa-copy"></i></a></span></div>';
+
+        block += '<div class="col col-sm-4"><div class="onoffswitch2 pull-right"><span id="'+fid+'"><input type="checkbox" name="onoffswitch" class="onoffswitch-checkbox form-checkbox" id="del-img-'+fid+'" value="'+fid+'"><label class="onoffswitch-label" for="del-img-'+fid+'"><span class="onoffswitch-inner"></span><span class="onoffswitch-switch"></span></label></span></div></div>';
 
         block += '</div>';
         block += '</div>';
-
+        block += '<div class="studio-img-weight"><input type="hidden" value="'+fid+'"></div>';
         block += '</div>';
-        //block += '</div>';
-        //block += '</div>';
 
-        //li.innerHTML = "<input name='image[" + fid + "]' type='hidden' value='" + fid + "'/>";
-        //li.innerHTML = "<img src='"+ img +"' /><input name='image[" + fid + "]' type='hidden' value='" + fid + "'/>";
         li.innerHTML = block;
         ul.appendChild(li);
     }
@@ -133,5 +124,3 @@
 
 
 })(jQuery);
-
-

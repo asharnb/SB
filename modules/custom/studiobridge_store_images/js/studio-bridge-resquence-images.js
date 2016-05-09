@@ -37,7 +37,7 @@
                     type: "success",
                     showConfirmButton: false,
                     closeOnConfirm: true,
-                    timer: 1500
+                    timer: 1000
                 });
                 // update whole img container
                 var container, inputs, index;
@@ -71,9 +71,6 @@
                     }
                 }
 
-                setTimeout(function(){
-                    document.getElementById('msg-up').innerHTML = '';
-                }, 3300);
             },
             error: function(){
                 alert('Failed!');
@@ -83,7 +80,7 @@
     }
 
     function update_w() {
-        document.getElementById('msg-up').innerHTML = 'Updating....';
+        //document.getElementById('msg-up').innerHTML = 'Updating....';
 
         var container, inputs, index;
         var imgs = [];
@@ -146,5 +143,3 @@
     });
 
 })(jQuery);
-
-
