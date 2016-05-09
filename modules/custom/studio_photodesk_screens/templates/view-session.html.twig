@@ -59,19 +59,18 @@
 * @ingroup themeable
 */
 #}
-
 {% if session.field_status.0.value == 'open' %}
-{% set status_class = 'fa fa-play-circle text-success' %}
-{% set status_class_text = 'text-success' %}
+  {% set status_class = 'fa fa-play-circle text-success' %}
+  {% set status_class_text = 'text-success' %}
 {% else %}
-{% set status_class = 'fa fa-stop-circle text-danger' %}
-{% set status_class_text = 'text-danger' %}
+  {% set status_class = 'fa fa-stop-circle text-danger' %}
+  {% set status_class_text = 'text-danger' %}
 {% endif %}
 
 {% if session.field_shoot_class.0.value == 'model_shoot' %}
-{% set shoot_class = 'fa fa-user' %}
+  {% set shoot_class = 'fa fa-user' %}
 {% else %}
-{% set shoot_class = 'fa fa-cubes' %}
+  {% set shoot_class = 'fa fa-cubes' %}
 {% endif %}
 
 <div class="row">
@@ -172,7 +171,7 @@
                 <li class=""><a href="#tab-dropped" data-toggle="tab" aria-expanded="false">Drops <span class="text-danger semi-bold">(0)</span></a></li>
                 <li class=""><a href="#tab-reports" data-toggle="tab" aria-expanded="false">Report(s)</a></li>
                 <li class=""><a href="#tab-log" data-toggle="tab" aria-expanded="true">Log</a></li>
-                <li class=""><a href="#tab-log" data-toggle="tab" aria-expanded="true">Analysis</a></li>
+
 
               </ul>
             </div>
@@ -180,7 +179,6 @@
           <div class="panel-body">
             <div class="tab-content">
               <div class="tab-pane active" id="tab-mapped">
-
                 <table id="dt_mapped" class="table table-responsive table-hover" width="100%">
                   <thead>
                     <tr>
@@ -195,13 +193,12 @@
                   </thead>
                   <tbody>
                     {% for item in mapped_products %}
-
-                    {% if item.field_images|length == 0 %}
-                    {% set image_count_class = 'text-align-center bold text-danger' %}
-                    {% elseif item.field_images|length >= 7 %}
-                    {% set image_count_class = 'text-align-center bold text-warning' %}
-                    {% else %}
-                    {% set image_count_class = 'text-align-center bold text-success' %}
+                      {% if item.field_images|length == 0 %}
+                        {% set image_count_class = 'text-align-center bold text-danger' %}
+                      {% elseif item.field_images|length >= 7 %}
+                        {% set image_count_class = 'text-align-center bold text-warning' %}
+                      {% else %}
+                      {% set image_count_class = 'text-align-center bold text-success' %}
                     {% endif %}
                     <tr>
                       <td>
@@ -209,7 +206,13 @@
                         height="20px"></td>
                         <td>{{ item.field_style_family.0.value }}</td>
                         <td>{{ item.title.0.value }}</td>
-                        <td><span class="label label-success">New</span></td>
+                        <td>
+                          {% if item.nid.0.value in session.field_reshoot_product|json_encode() %}
+                            <span class="text-warning semi-bold">Reshoot</span>
+                          {% else %}
+                            <span class="text-success semi-bold">New</span>
+                          {% endif %}
+                        </td>
                         <td><span class="label label-warning">Pending</span></td>
                         <td class="{{ image_count_class }}">{{ item.field_images|length }}</td>
                         <td class="text-align-center"><a target="_blank" class="btn btn-primary" href="/sbtest/view-product/{{item.nid.0.value }}">View</a></td>
@@ -228,6 +231,7 @@
                       <tr>
                         <th>Concept</th>
                         <th>Identifier</th>
+                        <th>State</th>
                         <th>Raw Count</th>
                         <th></th>
                       </tr>
@@ -235,17 +239,25 @@
                     <tbody>
 
                       {% for item in unmapped_products %}
-                      {% if item.field_images|length == 0 %}
-                      {% set image_count_class = 'text-align-center bold text-danger' %}
-                      {% elseif item.field_images|length >= 7 %}
-                      {% set image_count_class = 'text-align-center bold text-warning' %}
-                      {% else %}
+                        {% if item.field_images|length == 0 %}
+                          {% set image_count_class = 'text-align-center bold text-danger' %}
+                        {% elseif item.field_images|length >= 7 %}
+                          {% set image_count_class = 'text-align-center bold text-warning' %}
+                        {% else %}
+
                       {% set image_count_class = 'text-align-center bold text-success' %}
                       {% endif %}
                       <tr>
                         <td><img src="/sbtest/{{ directory }}/images/brands/brand_logo_.png"
                           height="20px"></td>
                           <td>{{ item.title.0.value }}</td>
+                          <td>
+                            {% if item.nid.0.value in session.field_reshoot_product|json_encode() %}
+                              <span class="text-warning semi-bold">Reshoot</span>
+                            {% else %}
+                              <span class="text-success semi-bold">New</span>
+                            {% endif %}
+                          </td>
                           <td class="{{ image_count_class }}">{{ item.field_images|length }}</td>
 
                           <td class="text-align-center"><a target="_blank" class="btn btn-primary"  href="/sbtest/view-product/{{item.nid.0.value }}">View</a></td>
@@ -257,9 +269,10 @@
                       </tbody>
                     </table>
                   </div>
+
                   <div class="tab-pane" id="tab-dropped">
 
-                    <table id="dt_dropped" class="table table-striped table-bordered table-hover" width="100%">
+                    <table id="dt_dropped" class="table table-responsive table-hover" width="100%">
                       <thead>
                         <tr>
                           <th>Concept</th>
@@ -328,9 +341,6 @@
 
           <div id="widgettile">
             <div class="widget blue-bg text-center">
-
-
-
               <div class="m-b-s">
 
                 <div class="row ">
