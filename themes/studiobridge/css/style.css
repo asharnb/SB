@@ -475,56 +475,22 @@ div.dataTables_info {
   width: 220px;
 }
 
-.sf-btn, .sf-sky .nocsript-sf-btn {
-    height: 50px;
-    line-height: 50px;
-    padding: 0 30px;
-    border-radius: 3px;
-    border: none;
-    color: #FFF;
-    text-decoration: none;
-    /* background: #2B2E33; */
-    position: relative;
+
+
+
+img.img-circle {
+    width: 60px;
+    height: 60px;
 }
 
-.sf-btn.sf-btn-next {
-    padding-right: 35px;
-    margin-right: 12px;
-}
-
-.sf-btn i {
-    content: "";
-    position: absolute;
-    right: -20px;
-    top: 5px;
-    margin-left: -15px;
-    font-size: 14px;
-    line-height: 26px;
-    font-weight: 700;
-    background: #040404;
-    border-radius: 50px;
-    border: 3px solid #A9A9A9;
-    width: 40px;
-    height: 40px;
-    text-align: center;
-    color: #FFF;
-}
-.sf-btn i:before {
-    position: absolute;
-    top: 5px;
-    margin-left: -5px;
-    font-size: 14px;
-    line-height: 25px;
-    font-weight: 700;
-    text-align: center;
-}
-.sf-right {
-    float: right;
-}
-
-.sf-btn.sf-btn-next:hover {
-    background-position: right -35px;
-}
-.sf-btn.sf-btn-next>a:hover {
-
+img.circle-border {
+    border-image-source: initial;
+    border-image-slice: initial;
+    border-image-width: initial;
+    border-image-outset: initial;
+    border-image-repeat: initial;
+    border-width: 3px;
+    border-style: solid;
+    border-color: rgb(72, 176, 247);
+    border-radius: 50%;
 }

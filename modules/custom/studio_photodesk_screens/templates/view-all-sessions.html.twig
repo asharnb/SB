@@ -4,9 +4,7 @@
     <h3>View <span class="semi-bold">Sessions</span></h3>
   </div>
   <div class="col-sm-12 col-md-4">
-    <!-- <a class="btn btn-primary btn-cons pull-right" href="/sbtest/node/add/sessions"><i class="fa fa-plus mr5"></i>Add Session</a> -->
-    <a class="next-btn btn-primary sf-right sf-btn sf-btn-next" href="/sbtest/node/add/sessions">ADD SESSION
-    <i class="fa fa-plus"></i></a>
+    <a class="btn btn-primary btn-cons pull-right" href="/sbtest/node/add/sessions"><i class="fa fa-plus mr5"></i>Add Session</a>
   </div>
 </div>
 
@@ -60,18 +58,23 @@
                               {% for concepts in result.concepts %}
                                 <img src="/sbtest/{{directory}}/images/brands/brand_logo_{{concepts.concept|lower}}.png" height="15px"><br>
                               {% endfor %}
-                              {% if result.unmapped.0.unmappedcount > 0%}
-                                  <img src="/sbtest/{{directory}}/images/brands/brand_logo_.png" height="12px">
-                              {% endif %}
 
                             </td>
                             <td>{{ result.photographer }}
 {{ result.vm }}
 {{ result.stylist }}</td>
                             <td><span class="{{date_class}}">{{ result.shootdate.0.value|date("Y-m-d") }}</span></td>
-                            <td>{{result.mapped.0.mappedcount}}</td>
-                            <td>{{result.unmapped.0.unmappedcount}}</td>
-                            <td><a class="btn btn-xs btn-complete" href="/sbtest/view-session/{{ result.id }}">View</a></td>
+                            {% set mapcount_class = (result.mapped.0.mappedcount > 0 ? 'text-success': 'text-danger') %}
+                            <td class="{{mapcount_class}} semi-bold text-center">{{result.mapped.0.mappedcount}}</td>
+
+                            <td class="text-warning semi-bold text-center">{{result.unmapped.0.unmappedcount}}</td>
+                            <td>
+
+                              <a class="btn btn-xs btn-complete" href="/sbtest/view-session/{{ result.id }}">View</a>
+                              {% if result.stage.0.value == 'open'  %}
+                                <a class="btn btn-xs btn-primary" href="/sbtest/live-shooting-page1">Import</a>
+                              {% endif %}
+                            </td>
                         </tr>
 
                     {% endfor %}
