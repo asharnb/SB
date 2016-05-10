@@ -310,15 +310,20 @@ class StudioBridgeLiveShootingForm extends FormBase {
     drupal_set_message('Nothing Submitted. Just an Example.');
   }
 
-  public function productUpdateSeqCallback(array &$form, FormStateInterface $form_state) {
-    $v = $form_state->getValues();
-  }
+//
+//  public function productUpdateSeqCallback(array &$form, FormStateInterface $form_state) {
+//    $v = $form_state->getValues();
+//  }
 
+  /*
+   * Ajax callback function.
+   */
   public function productGetOrUpdateCallback(array &$form, FormStateInterface $form_state) {
 
     // Load services as it is object context.
     $StudioProducts = \Drupal::service('studio.products');
     $StudioSessions = \Drupal::service('studio.sessions');
+    $StudioImgs = \Drupal::service('studio.imgs');
     $state = \Drupal::service('state');
     $current_user = \Drupal::service('current_user');
     $nodeStorage = \Drupal::service('entity_type.manager')->getStorage('node');
@@ -543,7 +548,7 @@ class StudioBridgeLiveShootingForm extends FormBase {
       $full_shot_img_fid = $state->get('full_shot' . '_' . $session_id, FALSE);
       if ($full_shot_img_fid) {
         //StudioImages::FullShootImage($product_node,$full_shot_img_fid);
-        $StudioSessions->FullShootImage($product_node, $full_shot_img_fid);
+        $StudioImgs->FullShootImage($product_node, $full_shot_img_fid);
 
         $state->set('full_shot' . '_' . $session_id, FALSE);
       }
