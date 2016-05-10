@@ -12,6 +12,8 @@ use Drupal\Core\Database\Connection;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use \Drupal\file\Entity\File;
 use Drupal\node\Entity\Node;
+use Drupal\Core\Session\AccountProxyInterface;
+use Drupal\Core\State\StateInterface;
 
 /**
  * Class StudioImgs.
@@ -41,18 +43,38 @@ class StudioImgs implements StudioImgsInterface {
    */
   protected $entityTypeManager;
 
+  /**
+   * The current user service.
+   *
+   * @var \Drupal\Core\Session\AccountProxyInterface
+   */
+  protected $currentUser = array();
 
+  /**
+   * The state.
+   *
+   * @var \Drupal\Core\State\StateInterface
+   */
+  protected $state;
+
+  /**
+   * The node storage service.
+   */
+  protected $fileStorage;
 
   /**
    * Constructor.
    */
-  public function __construct(Connection $database, EntityTypeManager $entityTypeManager) {
+  public function __construct(Connection $database, EntityTypeManager $entityTypeManager, AccountProxyInterface $current_user, StateInterface $state) {
 
     $this->entityTypeManager = $entityTypeManager;
 
     $this->nodeStorage = $entityTypeManager->getStorage('node');
     $this->userStorage = $entityTypeManager->getStorage('user');
+    $this->fileStorage = $entityTypeManager->getStorage('file');
     $this->database = $database;
+    $this->currentUser = $current_user;
+    $this->state = $state;
 
   }
 
@@ -67,7 +89,7 @@ class StudioImgs implements StudioImgsInterface {
  *   Session node nid.
  */
   public function AddFileTransfer($fid, $pid, $sid) {
-    db_insert('studio_file_transfers')
+    $this->database->insert('studio_file_transfers')
       ->fields(array(
         'fid' => $fid,
         'pid' => $pid,
@@ -75,6 +97,8 @@ class StudioImgs implements StudioImgsInterface {
         'created' => REQUEST_TIME,
       ))
       ->execute();
+
+    // Move it to service :todo
     \Drupal::logger('StudioImages Logs')->notice('New file log saved - '. $fid);
 
   }
@@ -86,7 +110,7 @@ class StudioImgs implements StudioImgsInterface {
    *   id of {studio_file_transfers} table row.
    */
   public function DeleteFileTransfer($id) {
-    db_delete('studio_file_transfers')
+    $this->database->delete('studio_file_transfers')
       //->condition('type', $entity->getEntityTypeId())
       ->condition('fid', $id)
       ->execute();
@@ -111,7 +135,8 @@ class StudioImgs implements StudioImgsInterface {
     $fields = array(
       'uri' => $uri,
     );
-    $query = \Drupal::database()->update('file_managed')
+    $query = $this->database->update('file_managed')
+    //$query = \Drupal::database()->update('file_managed')
       ->fields($fields)
       ->condition('fid', $fid);
     $query->execute();
@@ -148,10 +173,12 @@ class StudioImgs implements StudioImgsInterface {
    */
   public function TagImage($image, $tag=1, $session_id){
 
-    $user = \Drupal::currentUser();
-    $uid = $user->id();
+//    $user = \Drupal::currentUser();
+//    $uid = $user->id();
 
-    $last_scan_product = \Drupal::state()->get('last_scan_product_' . $uid . '_' . $session_id, false);
+    $uid = $this->currentUser->id();
+
+//    $last_scan_product = $this->state->get('last_scan_product_' . $uid . '_' . $session_id, false);
 //    if($last_scan_product){
 //      $product = Node::load($last_scan_product);
 //      $images = $product->field_images->getValue();
@@ -168,7 +195,8 @@ class StudioImgs implements StudioImgsInterface {
 //    }
 
 
-    $file = File::load($image);
+    //$file = File::load($image);
+    $file = $this->fileStorage->load($image);
     //$file->title->setValue('');
     $file->field_tag->setValue($tag);
     $file->save();
@@ -192,7 +220,8 @@ class StudioImgs implements StudioImgsInterface {
 
     $dir = $session_id.'/'.$concept.'/'.$color_variant;
 
-    if(StudioImages::ImagePhysicalName($dir,$filename,$file)){
+    //if(StudioImages::ImagePhysicalName($dir,$filename,$file)){
+    if($this->ImagePhysicalName($dir,$filename,$file)){
       $folder = "public://$dir";
       $uri = $folder.'/'.$filename;
       $file->uri->setValue($uri); //public://fileKVxEHe
@@ -202,7 +231,7 @@ class StudioImgs implements StudioImgsInterface {
     //
     $folder = "public://$dir";
     $uri = $folder.'/'.$filename;
-    StudioImages::UpdateFileLog($file->id(),$uri);
+    $this->UpdateFileLog($file->id(),$uri);
 
   }
 

@@ -16,7 +16,7 @@ use \Drupal\node\Entity\Node;
 use \Drupal\file\Entity\File;
 use \Drupal\studiobridge_commons\Sessions;
 use Drupal\image\Entity\ImageStyle;
-
+use Drupal\Core\State\StateInterface;
 use Drupal\studiobridge_commons\StudioCommons;
 
 /**
@@ -63,28 +63,33 @@ class StudioProducts implements StudioProductsInterface {
   protected $queryFactory;
 
   /**
+   * The state.
+   *
+   * @var \Drupal\Core\State\StateInterface
+   */
+  protected $state;
+
+  /**
+   * The user storage service.
+   */
+  protected $fileStorage;
+
+  /**
    * Constructor.
    */
-  public function __construct(Connection $database, EntityTypeManager $entityTypeManager, AccountProxyInterface $current_user, QueryFactory $query_factory) {
+  public function __construct(Connection $database, EntityTypeManager $entityTypeManager, AccountProxyInterface $current_user, QueryFactory $query_factory, StateInterface $state) {
 
     $this->entityTypeManager = $entityTypeManager;
 
     $this->nodeStorage = $entityTypeManager->getStorage('node');
     $this->userStorage = $entityTypeManager->getStorage('user');
+    $this->fileStorage = $entityTypeManager->getStorage('file');
+
     $this->database = $database;
     $this->currentUser = $current_user;
     $this->queryFactory = $query_factory;
+    $this->state = $state;
 
-  }
-
-  public function failure(){
-    $a =1;
-    return 'Hello!';
-  }
-
-  public function trail(){
-    $a =1;
-    return 'trail';
   }
 
   /*
@@ -95,7 +100,7 @@ class StudioProducts implements StudioProductsInterface {
    */
   public function getProductByIdentifier($identifier) {
 
-    $result = \Drupal::entityQuery('node')
+    $result = $this->queryFactory->get('node')
       ->condition('type', array('products', 'unmapped_products'), 'IN')
       ->sort('created', 'DESC')
       ->condition('title', $identifier)
@@ -112,14 +117,14 @@ class StudioProducts implements StudioProductsInterface {
    *   User entity uid.
    */
   public function getProductByUid($uid) {
-    return \Drupal::entityQuery('node')
+    $result = $this->queryFactory->get('node')
       ->condition('type', array('products', 'unmapped_products'), 'IN')
       ->sort('created', 'DESC')
       ->condition('field_state', 'open')
       ->condition('uid', $uid)
       ->range(0, 1)
       ->execute();
-
+    return $result;
   }
 
   /*
@@ -132,11 +137,14 @@ class StudioProducts implements StudioProductsInterface {
    */
   public function updateProductState($identifier, $state) {
     // Get the node by its identifier.
-    $node_id = self::getProductByIdentifier($identifier);
+    // $node_id = self::getProductByIdentifier($identifier);
+    $node_id = $this->getProductByIdentifier($identifier);
+
     if (count($node_id)) {
       $node_id = reset($node_id);
       // Load the node object.
-      $product_node = Node::load($node_id);
+      //$product_node = Node::load($node_id);
+      $product_node = $this->nodeStorage->load($node_id);
       if ($product_node) {
         $state = array(
           'value' => $state
@@ -163,7 +171,7 @@ class StudioProducts implements StudioProductsInterface {
   public function createUnmappedProduct($image = array(), $session_id, $identifier = 'UnMapped', $fid) {
     // The owner of session will be become owner of unmapped product.
     // Load session entity
-    $session = Node::load($session_id);
+    $session = $this->nodeStorage->load($session_id);
     // Get owner of session, ie., photographer.
     $session_uid = $session->getOwnerId();
 
@@ -182,16 +190,19 @@ class StudioProducts implements StudioProductsInterface {
     $node->save();
 
     // Update last scanned product nid of current user state value.
-    \Drupal::state()->set('last_scan_product_nid' . $session_uid . '_' . $session_id, $node->id());
+    $this->state->set('last_scan_product_nid' . $session_uid . '_' . $session_id, $node->id());
 
     // Log transferred image.
     if ($fid) {
-      StudioImages::AddFileTransfer($fid, $node->id(), $session_id);
+      //StudioImages::AddFileTransfer($fid, $node->id(), $session_id);
+      $StudioImgs = \Drupal::service('studio.imgs');
+      $StudioImgs->AddFileTransfer($fid, $node->id(), $session_id);
     }
 
     // Update image sequence number.
     if ($image) {
-      $file = File::load($image['target_id']);
+      //$file = File::load($image['target_id']);
+      $file = $this->fileStorage->load($image['target_id']);
       $filemime = $file->filemime->getValue();
       if ($filemime) {
         $filemime = $filemime[0]['value'];
@@ -205,7 +216,7 @@ class StudioProducts implements StudioProductsInterface {
     }
 
     // Update product to current session, ie,, session sent by chrome app.
-    self::addProductToSession($session_id, $node);
+    $this->addProductToSession($session_id, $node);
 
     return $node;
   }
@@ -220,9 +231,8 @@ class StudioProducts implements StudioProductsInterface {
    */
   public function createMappedProduct($product, $identifier) {
     // Get current logged in user.
-    $user = \Drupal::currentUser();
-    // Get uid of logged in user.
-    $uid = $user->id();
+    $uid = $this->currentUser->id();
+
     if (is_object($product)) {
       $values = array(
         'nid' => NULL,
@@ -260,7 +270,8 @@ class StudioProducts implements StudioProductsInterface {
     $image_uri = array();
 
     // Load the node.
-    $product = Node::load($nid);
+    //    $product = Node::load($nid);
+    $product = $this->nodeStorage->load($nid);
 
     if ($product) {
       // Get available images from the product.
@@ -320,7 +331,7 @@ class StudioProducts implements StudioProductsInterface {
    */
   public function addProductToSession($session_id, $node) {
     // Load session node object.
-    $session_node = Node::load($session_id);
+    $session_node = $this->nodeStorage->load($session_id);
     // Get products from session node.
     $session_products = $session_node->field_product->getValue();
     // Get product nid.
@@ -363,12 +374,12 @@ class StudioProducts implements StudioProductsInterface {
 */
   public function getProductInformation($identifier) {
 
-    $node_id = self::getProductByIdentifier($identifier);
+    $node_id = $this->getProductByIdentifier($identifier);
 
     if (count($node_id)) {
       $node_id = reset($node_id);
       // Load the node object.
-      $product = Node::load($node_id);
+      $product = $this->nodeStorage->load($node_id);
       $images = $product->field_images->getValue();
 
 
@@ -451,7 +462,8 @@ class StudioProducts implements StudioProductsInterface {
   *   Session node nid.
   */
   public function DeleteProductLog($identifier, $sid, $uid) {
-    db_insert('studio_dropped_products')
+    //
+    $this->database->insert('studio_dropped_products')
       ->fields(array(
         'product' => $identifier,
         'sid' => $sid,
@@ -459,6 +471,7 @@ class StudioProducts implements StudioProductsInterface {
         'dropped' => REQUEST_TIME,
       ))
       ->execute();
+    // todo : move it to service.
     \Drupal::logger('Studio')->notice('Product deleted - '. $identifier);
 
   }
@@ -473,14 +486,14 @@ class StudioProducts implements StudioProductsInterface {
   */
   public function AddStartTimeToProduct($sid, $pid) {
     // On same request avoid saving multiple records.
-    $result = db_select('studio_product_shoot_period','spsp')
+    $result = $this->database->select('studio_product_shoot_period','spsp')
       ->fields('spsp',array('id'))
       ->condition('spsp.pid',$pid)
       ->condition('spsp.sid',$sid)
       ->condition('spsp.start',REQUEST_TIME);
     $already_set = $result->execute()->fetchAll();
     if(count($already_set) == 0){
-      db_insert('studio_product_shoot_period')
+      $this->database->insert('studio_product_shoot_period')
         ->fields(array(
           'sid' => $sid,
           'pid' => $pid,
@@ -501,7 +514,7 @@ class StudioProducts implements StudioProductsInterface {
   public function AddEndTimeToProduct($sid, $pid, $identifier=null) {
 
     if(!$pid && $identifier){
-      $pid = Products::getProductByIdentifier($identifier);
+      $pid = $this->getProductByIdentifier($identifier);
       $pid = reset($pid);
     }
 
@@ -510,7 +523,7 @@ class StudioProducts implements StudioProductsInterface {
     }
 
 
-    $result = db_select('studio_product_shoot_period','spsp')
+    $result = $this->database->select('studio_product_shoot_period','spsp')
       ->fields('spsp',array('id'))
       ->condition('spsp.pid',$pid)
       ->condition('spsp.sid',$sid)
@@ -522,7 +535,7 @@ class StudioProducts implements StudioProductsInterface {
     // todo conditions to check multiple periods
 
     if($last_log_id){
-      db_update('studio_product_shoot_period') // Table name no longer needs {}
+      $this->database->update('studio_product_shoot_period') // Table name no longer needs {}
         ->fields(array(
           'end' => REQUEST_TIME,
         ))
@@ -531,7 +544,7 @@ class StudioProducts implements StudioProductsInterface {
         ->condition('id', $last_log_id)
         ->execute();
     }else{
-      db_update('studio_product_shoot_period') // Table name no longer needs {}
+      $this->database->update('studio_product_shoot_period') // Table name no longer needs {}
         ->fields(array(
           'end' => REQUEST_TIME,
         ))
@@ -548,7 +561,7 @@ class StudioProducts implements StudioProductsInterface {
    */
   public function CalculateProductPeriod($pid,$sid){
     $secs = 0;
-    $result = db_select('studio_product_shoot_period','spsp')
+    $result = $this->database->select('studio_product_shoot_period','spsp')
       ->fields('spsp',array('start','end'))
       ->condition('spsp.pid',$pid)
       ->condition('spsp.sid',$sid)

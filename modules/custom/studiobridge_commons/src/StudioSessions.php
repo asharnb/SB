@@ -10,6 +10,9 @@ namespace Drupal\studiobridge_commons;
 use Drupal\Core\Entity\EntityTypeManager;
 use Drupal\Core\Database\Connection;
 use \Drupal\node\Entity\Node;
+use Drupal\Core\Session\AccountProxyInterface;
+use Drupal\Core\State\StateInterface;
+use Drupal\Core\Entity\Query\QueryFactory;
 
 /**
  * Class StudioSessions.
@@ -39,17 +42,41 @@ class StudioSessions implements StudioSessionsInterface {
    */
   protected $entityTypeManager;
 
+  /**
+   * The current user service.
+   *
+   * @var \Drupal\Core\Session\AccountProxyInterface
+   */
+  protected $currentUser = array();
+
+  /**
+   * The entity query factory.
+   *
+   * @var \Drupal\Core\Entity\Query\QueryFactory
+   */
+  protected $queryFactory;
+
+  /**
+   * The state.
+   *
+   * @var \Drupal\Core\State\StateInterface
+   */
+  protected $state;
+
 
   /**
    * Constructor.
    */
-  public function __construct(Connection $database, EntityTypeManager $entityTypeManager) {
+  public function __construct(Connection $database, EntityTypeManager $entityTypeManager, AccountProxyInterface $current_user, QueryFactory $query_factory, StateInterface $state) {
 
     $this->entityTypeManager = $entityTypeManager;
 
     $this->nodeStorage = $entityTypeManager->getStorage('node');
     $this->userStorage = $entityTypeManager->getStorage('user');
     $this->database = $database;
+    $this->currentUser = $current_user;
+    $this->queryFactory = $query_factory;
+    $this->state = $state;
 
   }
 
@@ -58,11 +85,9 @@ class StudioSessions implements StudioSessionsInterface {
  */
   public function openSessionRecent($status=array('open')) {
     // Get current logged in user.
-    $user = \Drupal::currentUser();
-    // Get uid of user.
-    $uid = $user->id();
+    $uid = $this->currentUser->id();
 
-    $result = \Drupal::entityQuery('node')
+    $result = $this->queryFactory->get('node')
       ->condition('type', 'sessions')
       ->sort('created', 'DESC')
 //      ->condition('field_status', 'open') // todo : poc on structure.
@@ -83,7 +108,7 @@ class StudioSessions implements StudioSessionsInterface {
    *   User uid.
    */
   public function getSessionByUid($uid) {
-    return \Drupal::entityQuery('node')
+    return $this->queryFactory->get('node')
       ->condition('type', 'sessions')
       ->sort('created', 'DESC')
       ->condition('field_status', 'open') // todo : poc on structure.
@@ -96,7 +121,7 @@ class StudioSessions implements StudioSessionsInterface {
    * Helper function, to return all open sessions.
    */
   public function openSessionsAll() {
-    $result = \Drupal::entityQuery('node')
+    $result = $this->queryFactory->get('node')
       ->condition('type', 'sessions')
       ->sort('created', 'DESC')
       ->condition('field_status', 'open') // todo : poc on structure.
@@ -116,7 +141,7 @@ class StudioSessions implements StudioSessionsInterface {
   public function UpdateLastProductToSession($session_id, $product){
 
     // Load session object.
-    $session = Node::load($session_id);
+    $session = $this->nodeStorage->load($session_id);
 
     $color_variant = NULL;
     $concept = NULL;
@@ -179,7 +204,7 @@ class StudioSessions implements StudioSessionsInterface {
  */
   public function addReshootProductToSession($session_id, $node) {
     // Load session node object.
-    $session_node = Node::load($session_id);
+    $session_node = $this->nodeStorage->load($session_id);
     // Get products from session node.
     $session_products = $session_node->field_reshoot_product->getValue();
     // Get product nid.
@@ -223,7 +248,7 @@ class StudioSessions implements StudioSessionsInterface {
    */
   public function CalculateSessionPeriod($sid) {
     $secs = 0;
-    $result = db_select('studio_product_shoot_period', 'spsp')
+    $result = $this->database->select('studio_product_shoot_period', 'spsp')
       ->fields('spsp', array('start', 'end'))
       ->condition('spsp.sid', $sid)
       ->range(0, 1000);

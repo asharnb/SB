@@ -1,11 +1,11 @@
 services:
   studio.products:
     class: Drupal\studiobridge_commons\StudioProducts
-    arguments: ['@database', '@entity_type.manager', '@current_user', '@entity.query']
+    arguments: ['@database', '@entity_type.manager', '@current_user', '@entity.query', , '@state']
 
   studio.sessions:
     class: Drupal\studiobridge_commons\StudioSessions
-    arguments: ['@database', '@entity_type.manager', '@current_user']
+    arguments: ['@database', '@entity_type.manager', '@current_user', '@entity.query', , '@state']
 
   studio.queues:
     class: Drupal\studiobridge_commons\StudioQueues
@@ -13,7 +13,7 @@ services:
 
   studio.imgs:
     class: Drupal\studiobridge_commons\StudioImgs
-    arguments: ['@database', '@entity_type.manager', '@current_user']
+    arguments: ['@database', '@entity_type.manager', '@current_user', '@state']
 
   studio.commons:
     class: Drupal\studiobridge_commons\StudioCommons
