@@ -10,7 +10,7 @@ dependencies:
 id: studiobridge_currentsessionviewblock
 theme: studiobridge
 region: '-1'
-weight: -3
+weight: -4
 provider: null
 plugin: current_session_view_block
 settings:
