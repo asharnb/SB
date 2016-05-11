@@ -10,29 +10,15 @@
 namespace Drupal\studiobridge_live_shoot_page\Form;
 
 use Drupal\Core\Ajax\AjaxResponse;
-use Drupal\Core\Ajax\ChangedCommand;
-use Drupal\Core\Ajax\CssCommand;
 use Drupal\Core\Ajax\HtmlCommand;
 use Drupal\Core\Ajax\InvokeCommand;
-use Drupal\Core\Ajax\OpenModalDialogCommand;
 use Drupal\Core\Form\FormBase;
 use Drupal\Core\Form\FormStateInterface;
-use Drupal\Core\Entity\Element\EntityAutocomplete;
-use Drupal\Core\Routing\TrustedRedirectResponse;
 use \Drupal\node\Entity\Node;
-use Drupal\studiobridge_commons\Sessions;
-use Drupal\studiobridge_commons\Products;
-use Drupal\studiobridge_commons\StudioImages;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Drupal\Core\Entity;
-use Drupal\file\Entity\File;
-use Drupal\image\Entity\ImageStyle;
-use Drupal\Core\Controller\ControllerBase;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Drupal\Core\Database\Connection;
-use Drupal\Core\Entity\EntityStorageInterface;
-use Drupal\studiobridge_commons\StudioProducts;
-use Drupal\Core\State\StateInterface;
 
 class StudioBridgeLiveShootingForm extends FormBase {
   /**
@@ -111,7 +97,6 @@ class StudioBridgeLiveShootingForm extends FormBase {
     $uid = $this->currentUser()->id();
 
     // current open session
-    //$session_id = Sessions::openSessionRecent(array('open','pause'));
     $session_id = $this->StudioSessions->openSessionRecent(array('open', 'pause'));
 
     // if no session found then redirect to some other page
@@ -122,8 +107,6 @@ class StudioBridgeLiveShootingForm extends FormBase {
 
     $new_or_old_product_nid = 0;
 
-    $identifier_hidden = '';
-    //$identifier_hidden = \Drupal::state()->get('last_scan_product_' . $uid . '_' . $session_id, false);
     $identifier_hidden = $this->state->get('last_scan_product_' . $uid . '_' . $session_id, FALSE);
 
     // todo : identifier might available in query
@@ -145,36 +128,28 @@ class StudioBridgeLiveShootingForm extends FormBase {
 
         $last_scan_product = $this->state->get('last_scan_product_' . $uid . '_' . $session_id, FALSE);
 
-        //Products::AddEndTimeToProduct($session_id,false,$last_scan_product);
         $this->StudioProducts->AddEndTimeToProduct($session_id, FALSE, $last_scan_product);
 
 
         $this->state->set('last_scan_product_nid' . $uid . '_' . $session_id, $new_or_old_product_nid);
-        //studiobridge_store_images_update_product_as_open($_GET['identifier']);
 
-        //Products::updateProductState($_GET['identifier'], 'open');
         $this->StudioProducts->updateProductState($_GET['identifier'], 'open');
 
 
         $this->state->set('last_scan_product_' . $uid . '_' . $session_id, $_GET['identifier']);
 
-        //$product_obj = Node::load($new_or_old_product_nid);
         $product_obj = $this->nodeStorage->load($new_or_old_product_nid);
 
 
         // Add product to session.
-        //Sessions::UpdateLastProductToSession($session_id, $product_obj);
         $this->StudioSessions->UpdateLastProductToSession($session_id, $product_obj);
 
         // Add reshoot product to session.
-        //Sessions::addReshootProductToSession($session_id, $product_obj);
         $this->StudioSessions->addReshootProductToSession($session_id, $product_obj);
 
         // Add product to session; todo : double check workflow other things are working fine.
-        //Products::addProductToSession($session_id, $product_obj);
         $this->StudioProducts->addProductToSession($session_id, $product_obj);
 
-        //Products::AddStartTimeToProduct($session_id, $new_or_old_product_nid);
         $this->StudioProducts->AddStartTimeToProduct($session_id, $new_or_old_product_nid);
 
         // if reshoot that means product under scan state closing ofter above process was done.
@@ -188,7 +163,6 @@ class StudioBridgeLiveShootingForm extends FormBase {
 
     }
     else {
-      //  $result = Products::getProductByIdentifier($identifier_hidden);
       $result = $this->StudioProducts->getProductByIdentifier($identifier_hidden);
       if ($result) {
         $new_or_old_product_nid = reset($result);
@@ -225,13 +199,11 @@ class StudioBridgeLiveShootingForm extends FormBase {
     $images = array();
     $pid = $this->state->get('last_scan_product_nid' . $uid . '_' . $session_id, FALSE);
     if ($pid) {
-      //$images = Products::getProductImages($pid);
       $images = $this->StudioProducts->getProductImages($pid);
     }
     else {
       $result = $this->StudioProducts->getProductByIdentifier($identifier);
       if ($result) {
-        //$images = Products::getProductImages(reset($result));
         $images = $this->StudioProducts->getProductImages(reset($result));
       }
     }
@@ -251,18 +223,15 @@ class StudioBridgeLiveShootingForm extends FormBase {
       '#value' => 'Apply',
       '#attributes' => array('class' => array('hidden')),
       '#ajax' => array(
-        //'callback' => 'Drupal\studiobridge_live_shoot_page\Form\StudioBridgeLiveShootingForm::productGetOrUpdateCallback',
         'callback' => [get_class($this), 'productGetOrUpdateCallback'],
         'event' => 'click',
 
       ),
     );
 
-    //$productdetails = Products::getProductInformation($identifier_hidden);
     $productdetails = $this->StudioProducts->getProductInformation($identifier_hidden);
 
     if ($productdetails) {
-      //$session = Node::load($session_id);
       $session = $this->nodeStorage->load($session_id);
       $session_products = $session->field_product->getValue();
       $form['productdetails'] = array(
@@ -310,11 +279,6 @@ class StudioBridgeLiveShootingForm extends FormBase {
     drupal_set_message('Nothing Submitted. Just an Example.');
   }
 
-//
-//  public function productUpdateSeqCallback(array &$form, FormStateInterface $form_state) {
-//    $v = $form_state->getValues();
-//  }
-
   /*
    * Ajax callback function.
    */
@@ -334,7 +298,6 @@ class StudioBridgeLiveShootingForm extends FormBase {
     $ajax_response = new AjaxResponse();
 
     // Get current session
-//    $session_id = Sessions::openSessionRecent();
     $session_id = $StudioSessions->openSessionRecent();
     // If no session found then redirect to some other page
     if (!$session_id) {
@@ -351,7 +314,6 @@ class StudioBridgeLiveShootingForm extends FormBase {
     $identifier = $form_state->getValue('identifier');
     $identifier_old = $form_state->getValue('identifier_hidden'); // @note : this will be the recent product.
 
-//    $last_scan_product = \Drupal::state()->get('last_scan_product_' . $uid . '_' . $session_id, false);
     $last_scan_product = $state->get('last_scan_product_' . $uid . '_' . $session_id, FALSE);
 
     if (empty(trim($identifier))) {
@@ -385,28 +347,22 @@ class StudioBridgeLiveShootingForm extends FormBase {
     }
 
     //if identifier found in our products then skip importing.
-    //$result = Products::getProductByIdentifier($identifier);
     $result = $StudioProducts->getProductByIdentifier($identifier);
 
-    //\Drupal::state()->set('productscan_' . $session_id, true);
     $state->set('productscan_' . $session_id, TRUE);
 
     if (!$result) {
       // Get product from server
-      //$product = Products::getProductExternal($identifier);
       $product = $StudioProducts->getProductExternal($identifier);
       $product = json_decode($product);
       // validate product
       if (isset($product->msg)) {
         // product not found on the server so save it as unmapped product.
-        //studiobridge_store_images_create_unmapped_product(array(),$session_id,$identifier,false);
-        //$un_mapped_node = Products::createUnmappedProduct(array(), $session_id, $identifier, false);
         $un_mapped_node = $StudioProducts->createUnmappedProduct(array(), $session_id, $identifier, FALSE);
 
         $new_or_old_product_nid = $un_mapped_node->id();
         $is_unmapped_product = TRUE;
         // todo : update product to session.
-        //Sessions::UpdateLastProductToSession($session_id, $un_mapped_node);
         $StudioSessions->UpdateLastProductToSession($session_id, $un_mapped_node);
 
         $inject_script_mapping = '<script>
@@ -437,7 +393,6 @@ class StudioBridgeLiveShootingForm extends FormBase {
       }
       else {
         // import it in our drupal.
-        //$new_product = Products::createMappedProduct($product, $identifier);
         $new_product = $StudioProducts->createMappedProduct($product, $identifier);
 
         $new_or_old_product_nid = $new_product->id();
@@ -508,27 +463,20 @@ class StudioBridgeLiveShootingForm extends FormBase {
       }
 
       // update the current product as open status
-      //studiobridge_store_images_update_product_as_open($identifier);
-      //Products::updateProductState($_GET['identifier'], 'open');
       $StudioProducts->updateProductState($_GET['identifier'], 'open');
 
-      //Products::AddStartTimeToProduct($session_id, $new_or_old_product_nid);
       $StudioProducts->AddStartTimeToProduct($session_id, $new_or_old_product_nid);
     }
 
     if ($last_scan_product != $identifier) {
       // todo : update last product as closed status
-      //Products::updateProductState($last_scan_product, 'completted');
       $StudioProducts->updateProductState($last_scan_product, 'completted');
 
-      //Products::AddEndTimeToProduct($session_id,false,$last_scan_product);
       $StudioProducts->AddEndTimeToProduct($session_id, FALSE, $last_scan_product);
     }
 
     // Once product is scanned update it to session
     if (!$is_unmapped_product) {
-      //studiobridge_store_images_add_product_to_session($session_id, \Drupal\node\Entity\Node::load($new_or_old_product_nid));
-      //Products::addProductToSession($session_id, Node::load($new_or_old_product_nid));
       $StudioProducts->addProductToSession($session_id, Node::load($new_or_old_product_nid));
     }
 
@@ -536,18 +484,16 @@ class StudioBridgeLiveShootingForm extends FormBase {
 
     if ($new_or_old_product_nid) {
 
-      //$product_node = Node::load($new_or_old_product_nid);
       $product_node = $nodeStorage->load($new_or_old_product_nid);
 
       $state->set('last_scan_product_nid' . $uid . '_' . $session_id, $new_or_old_product_nid);
+
       // todo : add product to session.
-      //Sessions::UpdateLastProductToSession($session_id, $product_node);
       $StudioSessions->UpdateLastProductToSession($session_id, $product_node);
 
       // Add fullshot image to next product; if not exist
       $full_shot_img_fid = $state->get('full_shot' . '_' . $session_id, FALSE);
       if ($full_shot_img_fid) {
-        //StudioImages::FullShootImage($product_node,$full_shot_img_fid);
         $StudioImgs->FullShootImage($product_node, $full_shot_img_fid);
 
         $state->set('full_shot' . '_' . $session_id, FALSE);
@@ -555,14 +501,11 @@ class StudioBridgeLiveShootingForm extends FormBase {
     }
 
 
-    //$images = Products::getProductImages($new_or_old_product_nid);
     $images = $StudioProducts->getProductImages($new_or_old_product_nid);
 
-    //$block = '<div id="sortable" class="ui-sortable">';
     $block = '<div id="imagecontainer" name="imagecontainer" class="ui-sortable">';
     $i = 1;
     foreach ($images as $fid => $src) {
-      //$block = '';
       $block .= '<div class="bulkviewfiles imagefile ui-sortable-handle" id="warpper-img-' . $fid . '">';
 
       if ($src['tag'] !== 1) {
@@ -575,7 +518,6 @@ class StudioBridgeLiveShootingForm extends FormBase {
       $block .= '<div class="scancontainer">';
       $block .= '<img src="' . $src['uri'] . '" class="scanpicture">';
       $block .= '</div>';
-      //$block .=  "<input name='image[" . $fid . "]' type='hidden' value='" . $fid . "'/>";
 
       $block .= '<div class="file-name">';
       $block .= '<div id="tag-seq-img-' . $fid . '" type="hidden"></div>';
@@ -622,7 +564,7 @@ class StudioBridgeLiveShootingForm extends FormBase {
     $ajax_response->addCommand(new HtmlCommand('#imagecontainer-wrapper', $block));
     $ajax_response->addCommand(new HtmlCommand('#studio-img-container', ''));
     $ajax_response->addCommand(new HtmlCommand('#js-holder', $sort_js));
-//$ajax_response->addCommand(new HtmlCommand('#sortable', $block));
+    //$ajax_response->addCommand(new HtmlCommand('#sortable', $block));
     $ajax_response->addCommand(new InvokeCommand('#edit-identifier-hidden', 'val', array($identifier)));
     $ajax_response->addCommand(new InvokeCommand('#edit-identifier-nid', 'val', array($new_or_old_product_nid)));
     $ajax_response->addCommand(new InvokeCommand('#edit-identifier-hidden', 'change'));
@@ -630,11 +572,9 @@ class StudioBridgeLiveShootingForm extends FormBase {
 
 // update in product details section   todo : later remove it @ ashar
 
-    //$productdetails = Products::getProductInformation($identifier);
     $productdetails = $StudioProducts->getProductInformation($identifier);
 
     if ($productdetails) {
-      //$session = Node::load($session_id);
       $session = $nodeStorage->load($session_id);
       $session_products = $session->field_product->getValue();
 

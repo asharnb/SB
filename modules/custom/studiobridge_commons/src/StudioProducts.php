@@ -11,13 +11,9 @@ use Drupal\Core\Entity\EntityTypeManager;
 use Drupal\Core\Database\Connection;
 use Drupal\Core\Session\AccountProxyInterface;
 use Drupal\Core\Entity\Query\QueryFactory;
-
-use \Drupal\node\Entity\Node;
 use \Drupal\file\Entity\File;
-use \Drupal\studiobridge_commons\Sessions;
 use Drupal\image\Entity\ImageStyle;
 use Drupal\Core\State\StateInterface;
-use Drupal\studiobridge_commons\StudioCommons;
 
 /**
  * Class StudioProducts.
@@ -137,13 +133,11 @@ class StudioProducts implements StudioProductsInterface {
    */
   public function updateProductState($identifier, $state) {
     // Get the node by its identifier.
-    // $node_id = self::getProductByIdentifier($identifier);
     $node_id = $this->getProductByIdentifier($identifier);
 
     if (count($node_id)) {
       $node_id = reset($node_id);
       // Load the node object.
-      //$product_node = Node::load($node_id);
       $product_node = $this->nodeStorage->load($node_id);
       if ($product_node) {
         $state = array(
@@ -270,7 +264,6 @@ class StudioProducts implements StudioProductsInterface {
     $image_uri = array();
 
     // Load the node.
-    //    $product = Node::load($nid);
     $product = $this->nodeStorage->load($nid);
 
     if ($product) {
@@ -578,7 +571,5 @@ class StudioProducts implements StudioProductsInterface {
     }
     return $secs;
   }
-
-
 
 }

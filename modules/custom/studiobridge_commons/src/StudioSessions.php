@@ -9,7 +9,6 @@ namespace Drupal\studiobridge_commons;
 
 use Drupal\Core\Entity\EntityTypeManager;
 use Drupal\Core\Database\Connection;
-use \Drupal\node\Entity\Node;
 use Drupal\Core\Session\AccountProxyInterface;
 use Drupal\Core\State\StateInterface;
 use Drupal\Core\Entity\Query\QueryFactory;
@@ -70,7 +69,6 @@ class StudioSessions implements StudioSessionsInterface {
   public function __construct(Connection $database, EntityTypeManager $entityTypeManager, AccountProxyInterface $current_user, QueryFactory $query_factory, StateInterface $state) {
 
     $this->entityTypeManager = $entityTypeManager;
-
     $this->nodeStorage = $entityTypeManager->getStorage('node');
     $this->userStorage = $entityTypeManager->getStorage('user');
     $this->database = $database;
@@ -90,8 +88,7 @@ class StudioSessions implements StudioSessionsInterface {
     $result = $this->queryFactory->get('node')
       ->condition('type', 'sessions')
       ->sort('created', 'DESC')
-//      ->condition('field_status', 'open') // todo : poc on structure.
-      ->condition('field_status', $status,'IN') // todo : poc on structure.
+      ->condition('field_status', $status,'IN')
       ->condition('uid', $uid)
       ->range(0, 1)
       ->execute();

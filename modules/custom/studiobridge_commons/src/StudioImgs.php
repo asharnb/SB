@@ -9,9 +9,6 @@ namespace Drupal\studiobridge_commons;
 
 use Drupal\Core\Entity\EntityTypeManager;
 use Drupal\Core\Database\Connection;
-use Symfony\Component\DependencyInjection\ContainerInterface;
-use \Drupal\file\Entity\File;
-use Drupal\node\Entity\Node;
 use Drupal\Core\Session\AccountProxyInterface;
 use Drupal\Core\State\StateInterface;
 
@@ -117,7 +114,7 @@ class StudioImgs implements StudioImgsInterface {
   }
 
   /*
-   *
+   *  Helper function, to move file from location.
    */
   public function ImagePhysicalName($dir, $filename, $fileObj){
     $folder = "public://$dir";
@@ -130,6 +127,9 @@ class StudioImgs implements StudioImgsInterface {
 
   }
 
+  /*
+   * Helper function, to update file uri.
+   */
   public function UpdateFileLog($fid,$uri){
 
     $fields = array(
@@ -169,47 +169,24 @@ class StudioImgs implements StudioImgsInterface {
   }
 
   /*
-   *
+   *  Helper function, To tag image as tagged.
    */
   public function TagImage($image, $tag=1, $session_id){
-
-//    $user = \Drupal::currentUser();
-//    $uid = $user->id();
-
-    $uid = $this->currentUser->id();
-
-//    $last_scan_product = $this->state->get('last_scan_product_' . $uid . '_' . $session_id, false);
-//    if($last_scan_product){
-//      $product = Node::load($last_scan_product);
-//      $images = $product->field_images->getValue();
-//
-//      $title = $product->title->getValue();
-//      $title = $title[0]['value'];
-//
-//      $count = count($images);
-//      if($count == 1){
-//        $title = $title.'_1.jpg';
-//      }elseif($count > 1){
-//
-//      }
-//    }
-
-
-    //$file = File::load($image);
     $file = $this->fileStorage->load($image);
-    //$file->title->setValue('');
     $file->field_tag->setValue($tag);
     $file->save();
   }
 
-
+  /*
+   * Helper function, to update image physical path.
+   */
   public function ImgUpdate($file, $session_id,$field_base_product_id,$i,$concept, $color_variant, $tag = false){
-//    $filemime = $filemime[0]['value'];
-//    $filemime = explode('/', $filemime);
-//    $filemime = $filemime[1];
-//    if ($filemime == 'octet-stream') {
+    //    $filemime = $filemime[0]['value'];
+    //    $filemime = explode('/', $filemime);
+    //    $filemime = $filemime[1];
+    //    if ($filemime == 'octet-stream') {
     $filemime = 'jpg';
-//    }
+    //    }
     // todo : filemime will be wrong
     // change file name as per sequence number and base product_id value.
     if($tag){

@@ -12,11 +12,6 @@ use Drupal\Core\Database\Connection;
 use Drupal\Core\Session\AccountProxyInterface;
 use Drupal\Core\Entity\Query\QueryFactory;
 
-use \Drupal\node\Entity\Node;
-use \Drupal\file\Entity\File;
-use \Drupal\studiobridge_commons\Sessions;
-use Drupal\image\Entity\ImageStyle;
-
 /**
  * Class StudioCommons.
  *
