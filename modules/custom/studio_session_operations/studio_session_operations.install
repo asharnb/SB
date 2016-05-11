@@ -1,5 +1,7 @@
 <?php
 
+use Drupal\Core\Database\Database;
+
 /*
  * Implements hook_schema().
  */
@@ -16,3 +18,37 @@ function studio_session_operations_schema() {
   );
   return $schema;
 }
+
+
+///*
+// * Implements hook__update_8001().
+// *
+// * Adding 'deleted' column to {studio_file_transfers} table.
+// */
+//function studio_session_operations_update_8101(&$sandbox) {
+//  $Concept = array(
+//    'type' => 'varchar',
+//    'description' => "New Col",
+//    'length' => 250,
+//    'not null' => FALSE,
+//  );
+//
+//  $ColorVariant = array(
+//    'type' => 'varchar',
+//    'description' => "New Col",
+//    'length' => 250,
+//    'not null' => FALSE,
+//  );
+//
+//  $StyleFamily = array(
+//    'type' => 'varchar',
+//    'description' => "New Col",
+//    'length' => 250,
+//    'not null' => FALSE,
+//  );
+//
+//  $schema = Database::getConnection()->schema();
+//  $schema->addField('studio_dropped_products', 'concept', $Concept);
+//  $schema->addField('studio_dropped_products', 'color_variant', $ColorVariant);
+//  $schema->addField('studio_dropped_products', 'style_family', $StyleFamily);
+//}

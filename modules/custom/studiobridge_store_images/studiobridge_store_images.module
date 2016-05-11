@@ -305,11 +305,12 @@ function studiobridge_store_images_entity_delete(Drupal\Core\Entity\EntityInterf
   }
 
   if($bundle == 'unmapped_products' || $bundle == 'products'){
-    $title = $entity->title->getValue();
-    $sid = Sessions::openSessionRecent();
-    Products::DeleteProductLog($title[0]['value'], $sid,1);
+ //   $title = $entity->title->getValue();
+    $StudioProducts = \Drupal::service('studio.products');
+    
+    //Products::DeleteProductLog($title[0]['value'], $session_id,1);
+    $StudioProducts->DeleteProductLog($entity);
   }
-
 
 }
 

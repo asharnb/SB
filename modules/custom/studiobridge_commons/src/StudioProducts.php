@@ -454,18 +454,89 @@ class StudioProducts implements StudioProductsInterface {
   * @param sid
   *   Session node nid.
   */
-  public function DeleteProductLog($identifier, $sid, $uid) {
-    //
-    $this->database->insert('studio_dropped_products')
-      ->fields(array(
-        'product' => $identifier,
-        'sid' => $sid,
-        'uid' => $uid,
-        'dropped' => REQUEST_TIME,
-      ))
-      ->execute();
-    // todo : move it to service.
-    \Drupal::logger('Studio')->notice('Product deleted - '. $identifier);
+  public function DeleteProductLog($product) {
+
+    $key = 'close_operation_delete_'.$product->id();
+    $check_sid = $this->state->get($key,false);
+    if(!$check_sid){
+      $StudioSessions = \Drupal::service('studio.sessions');
+      $session_id = $StudioSessions->openSessionRecent();
+    }else{
+      $session_id = $check_sid;
+    }
+
+    $session = array( array( 'target_id' => $session_id ) );
+    $color_variant = NULL;
+    $concept = NULL;
+    $title = NULL;
+    $style_family = NULL;
+    $uid = $this->currentUser->id();
+
+    $bundle = $product->bundle();
+
+    if($bundle == 'products'){
+
+      // Get color variant.
+      $product_color_variant = $product->field_color_variant->getValue();
+      if($product_color_variant){
+        $color_variant = $product_color_variant[0]['value'];
+      }
+      if(!$color_variant){
+        $title = $product->title->getValue();
+        if($title) {
+          $color_variant = $title[0]['value'];
+        }
+      }
+      if ($title) {
+        $title = $title[0]['value'];
+      }
+
+      // Get concept name.
+      $product_concept = $product->field_concept_name->getValue();
+      if($product_concept){
+        $concept = $product_concept[0]['value'];
+      }
+
+      // Get concept name.
+      $style_family = $product->field_style_family->getValue();
+      if($style_family){
+        $style_family = $style_family[0]['value'];
+      }
+
+    }elseif($bundle == 'unmapped_products'){
+
+      // Set concept as unmapped.
+      $concept = 'Unmapped';
+
+      $field_identifier = $product->field_identifier->getValue();
+      $title = $product->title->getValue();
+      if ($field_identifier) {
+        $color_variant = $field_identifier[0]['value'];
+      }elseif ($title) {
+        $color_variant = $title[0]['value'];
+      }
+
+      if ($title) {
+        $title = $title[0]['value'];
+      }
+
+    }
+
+    $values = array(
+      'nid' => NULL,
+      'type' => 'dropped_products',
+      'title' => $title,
+      'uid' => $uid,
+      'status' => TRUE,
+      'field_style_family' => array('value' => $style_family),
+      'field_concept_name' => array('value' => $concept),
+      'field_color_variant' => array('value' => $color_variant), // todo: may be multiple
+      'field_session' => $session,
+    );
+    // Create node object with above values.
+    $node = \Drupal::entityManager()->getStorage('node')->create($values);
+    // Finally save the node object.
+    $node->save();
 
   }
 

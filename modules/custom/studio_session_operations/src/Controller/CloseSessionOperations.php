@@ -152,17 +152,25 @@ class CloseSessionOperations extends ControllerBase {
     // The 'success' parameter means no fatal PHP errors were detected. All
     // other error management should be handled using 'results'.
     if ($success) {
-      $message = \Drupal::translation()->formatPlural(
-        count($results),
-        'One operation processed.', '@count posts processed.'
+      $message1 = \Drupal::translation()->formatPlural(
+        count($results['mapped']),
+        'One product mapped.', '@count products mapped.'
+      );
+
+      $message2 = \Drupal::translation()->formatPlural(
+        count($results['drop']),
+        'One product deleted.', '@count products deleted.'
       );
     }
     else {
-      $message = t('Finished with an error.');
+      $message1 = t('Finished with an error.');
+      $message2 = false;
     }
 
-    drupal_set_message($message);
-    //$_SESSION['disc_migrate_batch_results'] = $results;
+    drupal_set_message($message1);
+    if($message2){
+      drupal_set_message($message2);
+    }
   }
 
   /*
@@ -206,9 +214,17 @@ class CloseSessionOperations extends ControllerBase {
    *  Product node object
    *
    */
-  public function DeleteProducts($product, &$context) {
+  public function DeleteProducts($product, $sid, &$context) {
+    $key = 'close_operation_delete_'.$product->id();
+    \Drupal::state()->set($key,$sid);
+
+    //    // todo : move it to service.
+    $title = $product->title->getValue();
+    \Drupal::logger('Studio')->notice('Product deleted - '. $title[0]['value']);
+
     $product->delete();
-    $context['results'][] = $product->id();
+    $context['results']['drop'][] = $product->id();
+    \Drupal::state()->delete($key);
   }
 
   /*
@@ -297,7 +313,7 @@ class CloseSessionOperations extends ControllerBase {
         if($draft[0]['value'] == 1){
           $this->draft_products[] = $product;
           $this->draft_product_nids[] = $product->id();
-          $this->operations[] = array(array(get_class($this), 'DeleteProducts'), array($product));
+          $this->operations[] = array(array(get_class($this), 'DeleteProducts'), array($product,$this->sid));
         }
 
         $bundle = $product->bundle();
@@ -313,10 +329,12 @@ class CloseSessionOperations extends ControllerBase {
   /*
    *
    */
-  public function NodeCovert($unmappedProduct,$server_product){
+  public function NodeCovert($unmappedProduct,$server_product, &$context){
       if (is_object($server_product)) {
         $unmappedProduct->type->setValue('products');
         $unmappedProduct->save();
+
+        $context['results']['mapped'][] = $unmappedProduct->id();
       }
   }
 
