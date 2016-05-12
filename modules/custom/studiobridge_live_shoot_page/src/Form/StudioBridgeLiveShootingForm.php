@@ -109,6 +109,8 @@ class StudioBridgeLiveShootingForm extends FormBase {
 
     $identifier_hidden = $this->state->get('last_scan_product_' . $uid . '_' . $session_id, FALSE);
 
+    $this->StudioSessions->AddEndTimeToSession($session_id,1,1);
+
     // todo : identifier might available in query
     // todo : get default product (current open product last)
     if (!empty($_GET['identifier']) && isset($_GET['reshoot']) && ($identifier_hidden != $_GET['identifier'])) {

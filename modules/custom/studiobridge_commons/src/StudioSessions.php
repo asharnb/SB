@@ -262,4 +262,76 @@ class StudioSessions implements StudioSessionsInterface {
     return $secs;
   }
 
+  /*
+* Helper function, to insert log into {studio_product_shoot_period} table.
+*
+* @param sid
+*   Session node nid.
+* @param pid
+*   Product node nid.
+*/
+  public function AddStartTimeToSession($sid, $pause=0) {
+    // On same request avoid saving multiple records.
+    $result = $this->database->select('studio_session_shoot_period','sssp')
+      ->fields('sssp',array('id'))
+      ->condition('sssp.sid',$sid)
+      ->condition('sssp.start',REQUEST_TIME);
+    $already_set = $result->execute()->fetchAll();
+    if(count($already_set) == 0){
+      $this->database->insert('studio_session_shoot_period')
+        ->fields(array(
+          'sid' => $sid,
+          'start' => REQUEST_TIME,
+          'pause' => $pause,
+        ))
+        ->execute();
+    }
+  }
+
+  /*
+* Helper function, to insert log into {studio_product_shoot_period} table.
+*
+* @param sid
+*   Session node nid.
+* @param pid
+*   Product node nid.
+*/
+  public function AddEndTimeToSession($sid, $pause=0, $page_load = false) {
+
+    $result = $this->database->select('studio_session_shoot_period','sssp')
+      ->fields('sssp',array('id'))
+      ->condition('sssp.sid',$sid)
+      ->condition('sssp.end',1,'<')
+      ->condition('sssp.pause',$pause)
+      ->orderBy('sssp.id', 'desc')
+      ->range(0, 1);
+    $last_log_id = $result->execute()->fetchField();
+
+    // todo conditions to check multiple periods
+
+    if($last_log_id){
+      $this->database->update('studio_session_shoot_period') // Table name no longer needs {}
+        ->fields(array(
+          'end' => REQUEST_TIME,
+        ))
+        ->condition('sid',$sid)
+        ->condition('id', $last_log_id)
+        ->execute();
+
+      if($pause){
+        $this->AddStartTimeToSession($sid,0);
+      }
+
+    }else{
+      if(!$page_load){
+        $this->database->update('studio_session_shoot_period') // Table name no longer needs {}
+          ->fields(array(
+            'end' => REQUEST_TIME,
+          ))
+          ->condition('sid',$sid)
+          ->execute();
+      }
+    }
+  }
+
 }
