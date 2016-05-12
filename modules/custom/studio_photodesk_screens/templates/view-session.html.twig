@@ -94,17 +94,17 @@
             <div class="panel-controls">
               {% if session.field_status.0.value == 'open' %}
               <a href="/sbtest/live-shooting-page1" class="btn btn-complete"><i class="fa fa-camera"></i> Import </a>
-              <a href="/sbtest/live-shooting-page1" class="btn btn-warning "><i class="fa fa-pause"></i> Pause </a>
-              <a data-id="{{ session.nid.0.value }}" class="btn btn-danger " id="close-session"><i class="fa fa-stop"></i> Close </a>
+              <a href="#" id="fa-pause-session" data-id="{{ session.nid.0.value }}"  class="btn btn-warning "><i class="fa fa-pause"></i> Pause </a>
+              <a href="/close-session/{{ session.nid.0.value }}/1" data-id="{{ session.nid.0.value }}" class="btn btn-danger " id="close-session"><i class="fa fa-stop"></i> Close </a>
 
 
               {% elseif session.field_status.0.value == 'paused' %}
-              <a href="/sbtest/live-shooting-page1" class="btn  btn-success"><i class="fa fa-play"></i> Resume </a></div>
-              <a data-id="{{ session.nid.0.value }}" class="btn btn-danger " id="close-session"><i class="fa fa-stop"></i> Close </a>
+              <a href="#" id="fa-resume-session" data-id="{{ session.nid.0.value }}" class="btn  btn-success"><i class="fa fa-play"></i> Resume </a></div>
+              <a href="/close-session/{{ session.nid.0.value }}/1" data-id="{{ session.nid.0.value }}" class="btn btn-danger " id="close-session"><i class="fa fa-stop"></i> Close </a>
 
               {% else %}
               <a href="#" class="btn  btn-complete "><i class="fa fa-file-excel-0o"></i> Export Shootlist </a>
-              <a href="#" class="btn  btn-warning "><i class="fa fa-refresh"></i> Request to Reopen </a>
+              <a href="#" id="fa-req-resume-session" data-id="{{ session.nid.0.value }}" class="btn  btn-warning "><i class="fa fa-refresh"></i> Request to Reopen </a>
               {% endif %}
             </div>
           </div>

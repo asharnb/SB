@@ -101,19 +101,31 @@ class SessionProductTimeRestResource extends ResourceBase {
       throw new AccessDeniedHttpException();
     }
 
-    if($node_type == 'start1'){
+    if($node_type == 'start'){
       if($data->body->value['sid']){
+        $this->studioSessions->AddEndTimeToSession($data->body->value['sid'], 0);
         $this->studioSessions->AddStartTimeToSession($data->body->value['sid'], $data->body->value['pause']);
+
+        if($data->body->value['pause']){
+          $this->studioSessions->updateSessionStatus($data->body->value['sid'], 'pause');
+        }
+
+
         return new ResourceResponse('started');
       }
     }elseif($node_type == 'end'){
       if($data->body->value['sid']){
         $this->studioSessions->AddEndTimeToSession($data->body->value['sid'], $data->body->value['pause']);
+
+        if($data->body->value['pause']){
+          $this->studioSessions->updateSessionStatus($data->body->value['sid'], 'open');
+        }
+
         return new ResourceResponse('ended');
       }
     }
 
-    return new ResourceResponse('failed');
+    return new ResourceResponse($data);
   }
 
 }

@@ -1,0 +1,17 @@
+uuid: 0aa73df4-f356-41a4-b9f9-d79f6355319c
+langcode: en
+status: true
+dependencies:
+  config:
+    - core.entity_view_mode.node.teaser
+    - node.type.dropped_products
+  module:
+    - user
+id: node.dropped_products.teaser
+targetEntityType: node
+bundle: dropped_products
+mode: teaser
+content:
+  links:
+    weight: 100
+hidden: {  }

@@ -1,0 +1,19 @@
+uuid: 4258bf2f-1cee-4f77-8dda-e5d4f842a252
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_color_variant
+    - node.type.dropped_products
+id: node.dropped_products.field_color_variant
+field_name: field_color_variant
+entity_type: node
+bundle: dropped_products
+label: 'Color Variant'
+description: ''
+required: false
+translatable: true
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: string

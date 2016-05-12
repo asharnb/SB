@@ -23,3 +23,5 @@ permissions:
   - 'edit any image files'
   - 'edit own image files'
   - 'restful post site_bundle_post'
+  - 'restful post drop_product_post'
+  - 'restful post time_session_product_post'

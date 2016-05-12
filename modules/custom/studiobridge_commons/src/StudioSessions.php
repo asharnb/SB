@@ -301,7 +301,7 @@ class StudioSessions implements StudioSessionsInterface {
     $result = $this->database->select('studio_session_shoot_period','sssp')
       ->fields('sssp',array('id'))
       ->condition('sssp.sid',$sid)
-      ->condition('sssp.end',1,'<')
+      ->condition('sssp.end',0)
       ->condition('sssp.pause',$pause)
       ->orderBy('sssp.id', 'desc')
       ->range(0, 1);
@@ -332,6 +332,15 @@ class StudioSessions implements StudioSessionsInterface {
           ->execute();
       }
     }
+  }
+
+  /*
+   * Helper function, to update session status.
+   */
+  public function updateSessionStatus($sid, $status){
+    $session = $this->nodeStorage->load($sid);
+    $session->field_status->setValue(array('value' => $status)); //pause
+    $session->save();
   }
 
 }

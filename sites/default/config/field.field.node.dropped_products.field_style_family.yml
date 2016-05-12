@@ -1,0 +1,19 @@
+uuid: 06944d21-5cb1-44a0-bba5-d03c8e02f112
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_style_family
+    - node.type.dropped_products
+id: node.dropped_products.field_style_family
+field_name: field_style_family
+entity_type: node
+bundle: dropped_products
+label: 'Style Family'
+description: ''
+required: false
+translatable: true
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: string

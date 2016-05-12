@@ -211,9 +211,11 @@ function studiobridge_store_images_page_attachments(array &$attachments) {
     $route_name == 'view.individual_project_view.page_2' ||
     $route_name == 'view.individual_project_view.page_3' ||
     $route_name == 'view.view_sessions.page_3' ||
-    $route_name == 'studiobridge_live_shoot_page.form'
+    $route_name == 'studiobridge_live_shoot_page.form' ||
+    $route_name == 'studio_photodesk_screens.view_session_controller_content'
   ) {
     $attachments['#attached']['library'][] = 'studiobridge_store_images/studio-bridge-view-product';
+    $attachments['#attached']['library'][] = 'studiobridge/sweet-alert';
   }
 }
 

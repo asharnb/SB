@@ -9,10 +9,10 @@
             });
     }
 
-    function patchNodeDeleteX(csrfToken, node, nid) {
+    function postSessionTime(csrfToken, node, sid, init) {
 
         $.ajax({
-            url: Drupal.url('studio/product/test/post?_format=json'),
+            url: Drupal.url('studio/time/' + init + '/post?_format=json'),
             method: 'POST',
             headers: {
                 'Content-Type': 'application/hal+json',
@@ -22,13 +22,13 @@
             success: function (node) {
                 //console.log(node);
                 swal({
-                    title: "Images Deleted",
-                    text: "Your selected images have been deleted",
+                    title: "Session paused",
+                    text: "Your selected session to pause",
                     type: "success",
                     showConfirmButton: false,
                     timer: 1000
                 });
-
+                window.location = Drupal.url('view-session/' + sid);
             },
             error: function(){
                 alert('Failed!');
@@ -37,55 +37,61 @@
         });
     }
 
-    function update_deleteX() {
-        alert(11111);
-        var Node_imgs = {
-            "title": [
-                {
-                    "value": "Krishna kanth *123"
+    function updateSessionPeriod(sid,pause, init) {
+        //        alert(11111);
+        var data = {
+            _links: {
+                type: {
+                    href: Drupal.url.toAbsolute(drupalSettings.path.baseUrl + 'rest/type/node/test')
                 }
-            ],
+            },
             "body": [
                 {
-                    "value": "Example node title"
+                    "value": {
+                        "pause": pause,
+                        "sid": sid
+                    },
+                    "format": null,
+                    "summary": null
                 }
             ],
-            "type": [
-                {
-                    "target_id": "test"
-                }
-            ]
+            "type":[{"target_id":"test"}]
         };
 
         getCsrfTokenForDelete(function (csrfToken) {
-            patchNodeDeleteX(csrfToken, Node_imgs, 1);
+            postSessionTime(csrfToken, data, sid, init);
         });
 
     }
 
-//    $("#studio-delete-bt").click(function () {
-//        update_deleteX();
-//        //alert(1234)
-//    });
-
-    $(window).bind('beforeunload', function() {
-        if(/Firefox[\/\s](\d+)/.test(navigator.userAgent) && new Number(RegExp.$1) >= 4) {
-            if(confirm("Are you Sure do you want to leave?")) {
-                alert('hellow inside');
-                update_deleteX();
-                history.go();
-            } else {
-                alert('hellow insidessss');
-                window.setTimeout(function() {
-                    window.stop();
-                }, 1);
-            }
-        } else {
-            alert('hellow insideddddddd');
-            return "Are you Sure do you want to leave?";
-        }
+    $("#fa-pause-session").click(function () {
+        var sid = document.getElementById('fa-pause-session').getAttribute("data-id");
+        updateSessionPeriod(sid,1,'start');
     });
 
+    $("#fa-req-resume-session").click(function () {
+        var sid = document.getElementById('fa-req-resume-session').getAttribute("data-id");
+        updateSessionPeriod(sid,1,'end');
+    });
 
+//    $(window).bind('beforeunload', function() {
+//        if(/Firefox[\/\s](\d+)/.test(navigator.userAgent) && new Number(RegExp.$1) >= 4) {
+//            if(confirm("Are you Sure do you want to leave?")) {
+//                alert('hellow inside');
+//                updateSessionPeriod();
+//                history.go();
+//            } else {
+//                alert('hellow insidessss');
+//                window.setTimeout(function() {
+//                    window.stop();
+//                }, 1);
+//            }
+//        } else {
+//            alert('hellow insideddddddd');
+//            return "Are you Sure do you want to leave?";
+//        }
+//    });
+
+//alert(12);
 
 })(jQuery);

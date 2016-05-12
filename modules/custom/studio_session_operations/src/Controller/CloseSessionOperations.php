@@ -206,6 +206,8 @@ class CloseSessionOperations extends ControllerBase {
 
   public function ProductEndTime($sid, $identifier){
     Products::AddEndTimeToProduct($sid,false,$identifier);
+    $StudioSessions = \Drupal::service('studio.sessions');
+    $StudioSessions->AddEndTimeToSession($sid, 0, false);
   }
 
   /*

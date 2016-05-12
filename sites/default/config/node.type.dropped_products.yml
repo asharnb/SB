@@ -1,0 +1,18 @@
+uuid: 9be606f0-13ca-462e-877b-516c6befa661
+langcode: en
+status: true
+dependencies:
+  module:
+    - menu_ui
+third_party_settings:
+  menu_ui:
+    available_menus:
+      - main
+    parent: 'main:'
+name: 'Dropped Products'
+type: dropped_products
+description: 'All dropped products.'
+help: ''
+new_revision: false
+preview_mode: 1
+display_submitted: true
