@@ -22,7 +22,6 @@
             },
             data: JSON.stringify(node),
             success: function (node) {
-                //console.log(node);
                 swal({
                     title: "Product Dropped",
                     text: "This product has been marked as dropped, you can undrop this product until the session is closed.",

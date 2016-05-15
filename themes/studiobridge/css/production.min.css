@@ -639,7 +639,7 @@ body.mini-navbar.fixed-sidebar .profile-element, .block {
     .sidebard-panel {
         width: 100%;
         /* background: #E0E0E0; */
-        padding: 5px 15px;
+        /* padding: 5px 15px; */
         /* position: fixed; */
         right: 0;
         display: block;

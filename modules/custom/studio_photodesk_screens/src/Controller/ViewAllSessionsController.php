@@ -90,14 +90,17 @@ public function content()
         $pid_array[] = $p['target_id'];
       }
 
-      $in_q = '('.implode(',', $pid_array).')';
-
-      if($in_q !== '()'){
+      if ($pid_array !== '') {
+        $in_q = '('.implode(',', $pid_array).')';
         $concepts = db_query("select distinct field_concept_name_value as concept from node__field_concept_name
         where bundle='products' AND entity_id IN $in_q")->fetchAll();
         $mapped = db_query("select count(nid) as mappedcount from node where type='products' AND nid IN $in_q")->fetchAll();
         $unmapped = db_query("select count(nid) as unmappedcount from node where type='unmapped_products' AND nid IN $in_q")->fetchAll();
+    
       }
+
+      if($in_q !== ''){
+}
 
       //set values into array
       $session_data[] = array( 'id' => $session->id(),

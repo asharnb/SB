@@ -34,6 +34,7 @@ sweet-alert:
       js/sweetalert/sweetalert2.css: {}
   js:
     js/sweetalert/sweetalert2.min.js: {}
+    js/sweetalert/promise.min.js: {}
   dependencies:
     - core/jquery
 
@@ -44,7 +45,15 @@ flot-charts:
     js/flot/jquery.flot.tooltip.min.js: {}
     js/flot/jquery.flot.resize.js: {}
     js/flot/jquery.flot.time.js: {}
+  dependencies:
+    - core/jquery
 
 dashboard:
   js:
     js/dashboard.js: {}
+
+chart-js:
+  js:
+    js/chartjs/Chart.js: {}
+  dependencies:
+    - core/jquery
