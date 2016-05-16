@@ -149,7 +149,7 @@
     <div class="sidebard-panel" style="min-height: 100%;">
 
         <div id="widgettile">
-            <div class="widget blue-bg text-center">
+            <div class="widget text-center">
                 <div class="m-b-s">
                     <h1 class="m-xs no-of-products">{{ form.productdetails.total_products|length >0 ? form.productdetails.total_products : '0' }}</h1>
                     <h3 class="font-bold no-margins">Products</h3>
@@ -174,7 +174,7 @@
         <div class="m-t-sm gray-bkground">
             <div class="row">
                 <div class="col-md-6">
-                    &nbsp; {{form.session['#value']}}
+                    <a href="/sbtest/view-session/{{form.session['#value']}}" >&nbsp; {{form.session['#value']}}</a>
                 </div>
                 <div class="col-md-6">
                   <span><i class="fa fa-circle text-success"></i> Open</span>
@@ -189,7 +189,7 @@
         <div>
             <ul class="list-group">
                 <li class="list-group-item ">
-                    <span class="label label-danger pull-right">0</span>
+                    <span class=" pull-right">0</span>
                     Rejected
                 </li>
             </ul>
@@ -201,17 +201,16 @@
         <div>
             <ul class="list-group">
                 <li class="list-group-item">
-                    <span class="label label-default pull-right">-- </span>
-                    Product Status
+                    <span class="bold text-success pull-right ">New </span>
+                    Status
                 </li>
                 <li class="list-group-item">
-                    <span class="label label-success pull-right"
-                          id="product-img-count">{{ form.productdetails.image_count }}</span>
-                    Images Shot
+                    <span class="bold text-info pull-right"> {{ form.productdetails.image_count }}</span>
+                    Shot
                 </li>
                 <li class="list-group-item">
-                    <span class="label label-danger pull-right">0</span>
-                    Images Deleted
+                    <span class="bold text-danger pull-right">0 </span>
+                    Deleted
                 </li>
 
             </ul>
@@ -223,16 +222,16 @@
         <div>
             <ul class="list-group">
                 <li class="list-group-item">
-                    <span class="label label-warning pull-right">No</span>
-                    Is complete?
+                    <span class="bold text-success pull-right">-- </span>
+                    Is Complete?
                 </li>
                 <li class="list-group-item">
-                    <span class="label label-success pull-right">Ok</span>
-                    In Sequence
+                    <span class="bold text-success pull-right"><i class="fa fa-check"></i> </span>
+                    In Sequence?
                 </li>
                 <li class="list-group-item">
-                    <span class="label label-warning pull-right">No</span>
-                    Has Tag Image?
+                    <span class="bold text-success pull-right">-- </span>
+                    Has Tag?
                 </li>
             </ul>
         </div>

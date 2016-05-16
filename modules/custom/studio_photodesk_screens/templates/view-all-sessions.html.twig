@@ -10,20 +10,16 @@
 
 
 <div class="row">
-
     <!-- NEW COL START -->
-    <article class="col-sm-12 col-md-12 col-lg-12 ">
-        <div class="panel panel-transparent">
-
-            <div class="panel-body">
-                <table id="dt_viewsessions" class="table table-responsive  table-hover" width="100%">
+    <article class="col-sm-12 col-md-12 col-lg-12 no-padding">
+                <table id="dt_viewsessions" class="table table-responsive  table-striped table-hover" width="100%">
 
                     <thead>
                       <th>ID</th>
                       <th>Status</th>
                       <th>Stage</th>
                       <th>Concept(s)</th>
-                      <th>Users</th>
+                      <th>Contributors</th>
                       <th>Date</th>
                       <th>Mapped</th>
                       <th>Unmapped</th>
@@ -60,9 +56,14 @@
                               {% endfor %}
 
                             </td>
-                            <td>{{ result.photographer }}
-{{ result.vm }}
-{{ result.stylist }}</td>
+                            <td>
+                                <!-- {{ result.photographer }}
+                                {{ result.vm }}
+                                {{ result.stylist }} -->
+<img src="/sbtest/{{directory}}/images/users/{{ random(['niranjan', 'vikas', 'anahita', 'moosa', 'azhar']) }}.jpg" class="img-circle-table " alt="profile">
+<img src="/sbtest/{{directory}}/images/users/{{ random(['disha', 'rebecca']) }}.jpg" class="img-circle-table " alt="profile">
+<img src="/sbtest/{{directory}}/images/users/{{ random(['althea', 'rinki', 'cia']) }}.jpg" class="img-circle-table " alt="profile">
+                            </td>
                             <td><span class="{{date_class}}">{{ result.shootdate.0.value|date("Y-m-d") }}</span></td>
                             {% set mapcount_class = (result.mapped.0.mappedcount > 0 ? 'text-success': 'text-danger') %}
                             <td class="{{mapcount_class}} semi-bold text-center">{{result.mapped.0.mappedcount}}</td>
@@ -82,8 +83,6 @@
 
                     </tbody>
                 </table>
-            </div>
-        </div>
 
     </article>
     <!-- END COL -->

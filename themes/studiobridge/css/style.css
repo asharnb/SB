@@ -430,12 +430,12 @@ div.dataTables_info {
   font-weight: 600;
 }
 .timeline-day-number {
-  float: left;
+  /* float: left; */
   font-size: 44px;
   font-weight: 300;
-  height: 40px;
-  margin-top: -10px;
-  padding-right: 8px;
+  /* height: 40px; */
+  /* margin-top: -10px; */
+  /* padding-right: 8px; */
 }
 .timeline-month {
   font-weight: 600;
@@ -475,12 +475,20 @@ div.dataTables_info {
   width: 220px;
 }
 
-
+.blue-bg{
+  background-color: #002D5B;
+  box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.2);
+}
 
 
 img.img-circle {
     width: 60px;
     height: 60px;
+}
+
+img.img-circle-table {
+    width: 40px;
+    height: 40px;
 }
 
 img.circle-border {
@@ -493,4 +501,9 @@ img.circle-border {
     border-style: solid;
     border-color: rgb(72, 176, 247);
     border-radius: 50%;
+}
+
+.today-tr {
+  background-color: #002D5B;
+
 }
