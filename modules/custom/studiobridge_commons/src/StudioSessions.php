@@ -237,32 +237,6 @@ class StudioSessions implements StudioSessionsInterface {
   }
 
   /*
-   * Helper function to get session period.
-   *  formula : sum of all periods time.
-   *
-   * @param pid
-   *   Product node nid.
-   */
-  public function CalculateSessionPeriod($sid) {
-    $secs = 0;
-    $result = $this->database->select('studio_product_shoot_period', 'spsp')
-      ->fields('spsp', array('start', 'end'))
-      ->condition('spsp.sid', $sid)
-      ->range(0, 1000);
-    $product_period = $result->execute()->fetchAll();
-    if ($product_period) {
-      foreach ($product_period as $period) {
-        // check still product closed or not. ie., end time 0 or timestamp
-        if ($period->end) {
-          $diff = $period->end - $period->start;
-          $secs += $diff;
-        }
-      }
-    }
-    return $secs;
-  }
-
-  /*
 * Helper function, to insert log into {studio_product_shoot_period} table.
 *
 * @param sid
@@ -329,6 +303,8 @@ class StudioSessions implements StudioSessionsInterface {
             'end' => REQUEST_TIME,
           ))
           ->condition('sid',$sid)
+          ->condition('end',0)
+          ->condition('pause',$pause)
           ->execute();
       }
     }
@@ -341,6 +317,111 @@ class StudioSessions implements StudioSessionsInterface {
     $session = $this->nodeStorage->load($sid);
     $session->field_status->setValue(array('value' => $status)); //pause
     $session->save();
+  }
+
+  /*
+ * Helper function to get session period.
+ *
+ * @param pid
+ *   Product node nid.
+ */
+  public function CalculateSessionBreakTime($sid) {
+    $secs = 0;
+    $result = $this->database->select('studio_session_shoot_period', 'sssp')
+      ->fields('sssp', array('start', 'end'))
+      ->condition('sssp.sid', $sid)
+      ->condition('sssp.pause', 1)
+      ->range(0, 100000);
+    $product_period = $result->execute()->fetchAll();
+    if ($product_period) {
+      foreach ($product_period as $period) {
+        // check still product closed or not. ie., end time 0 or timestamp
+        if ($period->end) {
+          $diff = $period->end - $period->start;
+          $secs += $diff;
+        }
+      }
+    }
+    return $secs;
+  }
+
+  /*
+* Helper function to get session period.
+*  formula : sum of all periods time.
+*
+* @param pid
+*   Product node nid.
+*/
+  public function CalculateSessionOpenTime($sid) {
+    $secs = 0;
+    $result = $this->database->select('studio_session_shoot_period', 'sssp')
+      ->fields('sssp', array('start', 'end'))
+      ->condition('sssp.sid', $sid)
+      ->condition('sssp.pause', 0)
+      ->range(0, 100000);
+    $product_period = $result->execute()->fetchAll();
+    if ($product_period) {
+      foreach ($product_period as $period) {
+        // check still product closed or not. ie., end time 0 or timestamp
+        if ($period->end) {
+          $diff = $period->end - $period->start;
+          $secs += $diff;
+        }
+      }
+    }
+    return $secs;
+  }
+
+  /*
+ * Helper function to get session period.
+ *  formula : sum of all periods time.
+ *
+ * @param pid
+ *   Product node nid.
+ */
+  public function CalculateSessionPeriodOfProducts($sid) {
+    $secs = 0;
+    $result = $this->database->select('studio_product_shoot_period', 'spsp')
+      ->fields('spsp', array('start', 'end'))
+      ->condition('spsp.sid', $sid)
+      ->range(0, 1000);
+    $product_period = $result->execute()->fetchAll();
+    if ($product_period) {
+      foreach ($product_period as $period) {
+        // check still product closed or not. ie., end time 0 or timestamp
+        if ($period->end) {
+          $diff = $period->end - $period->start;
+          $secs += $diff;
+        }
+      }
+    }
+    return $secs;
+  }
+
+  /*
+* Helper function to get session period.
+*  formula : sum of all periods time.
+*
+* @param pid
+*   Product node nid.
+*/
+  public function CalculateSessionTotalTime($sid) {
+    $secs = 0;
+    $result = $this->database->select('studio_session_shoot_period', 'sssp')
+      ->fields('sssp', array('start', 'end'))
+      ->condition('sssp.sid', $sid)
+      ->range(0, 100000);
+    $product_period = $result->execute()->fetchAll();
+    if ($product_period) {
+      foreach ($product_period as $period) {
+        // check still product closed or not. ie., end time 0 or timestamp
+        if ($period->end) {
+          $diff = $period->end - $period->start;
+          $secs += $diff;
+        }
+      }
+    }
+    return $secs;
   }
 
 }

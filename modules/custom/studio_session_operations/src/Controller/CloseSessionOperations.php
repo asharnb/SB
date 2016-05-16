@@ -74,7 +74,7 @@ class CloseSessionOperations extends ControllerBase {
     //$entity_manager = $container->get('entity.manager');
     return new static(
       $container->get('database')
-    //$entity_manager->getStorage('node')
+      //$entity_manager->getStorage('node')
     );
   }
 
