@@ -7,6 +7,19 @@
 
     'use strict';
 
+    Drupal.behaviors.sessiondatatable = {
+        attach: function(context) {
+          $('#dt_viewsessions').DataTable( {
+             "bSort": false,
+             "bDestroy": true,
+             "iDisplayLength": 100,
+               "order": [[1 , 'asc']],
+                   "autoWidth" : true
+         } );
+        }
+    };
+
+
     Drupal.behaviors.closesession = {
         attach: function(context) {
             $("#close-session", context).click(function () {
