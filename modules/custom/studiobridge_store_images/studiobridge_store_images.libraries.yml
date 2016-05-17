@@ -11,3 +11,7 @@ studio-bridge-view-product:
   css:
     theme:
       css/studio-bridge-auto-submit.css: {}
+studio-bridge-global-changes:
+  version: VERSION
+  js:
+    js/studio-global-changes.js: {}

@@ -1,0 +1,21 @@
+uuid: 13ea61d7-db12-44cf-a49f-2b194a4f5e92
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_container_state
+    - node.type.container
+  module:
+    - options
+id: node.container.field_container_state
+field_name: field_container_state
+entity_type: node
+bundle: container
+label: State
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: list_string

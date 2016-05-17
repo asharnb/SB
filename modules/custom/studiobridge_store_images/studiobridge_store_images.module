@@ -217,6 +217,9 @@ function studiobridge_store_images_page_attachments(array &$attachments) {
     $attachments['#attached']['library'][] = 'studiobridge_store_images/studio-bridge-view-product';
     $attachments['#attached']['library'][] = 'studiobridge/sweet-alert';
   }
+  //Js load js file that required in all pages.
+  $attachments['#attached']['library'][] = 'studiobridge_store_images/studio-bridge-global-changes';
+
 }
 
 /*

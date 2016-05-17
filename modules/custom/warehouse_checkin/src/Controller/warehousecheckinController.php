@@ -35,7 +35,7 @@ class warehousecheckinController extends ControllerBase
             '#cache' => ['max-age' => 0],
             '#attached' => array(
                 'library' =>  array(
-                    'warehouse_checkin/checkin-form'
+                    'warehouse_checkin/checkin-form',
 
                 )
             ),

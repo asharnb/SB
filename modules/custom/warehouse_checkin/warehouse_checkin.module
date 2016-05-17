@@ -32,3 +32,11 @@ function warehouse_checkin_theme($existing, $type, $theme, $path) {
       ),
   );
 }
+
+/*
+ *  Implements hook_form_alter().
+ */
+function warehouse_checkin_form_alter(&$form, \Drupal\Core\Form\FormStateInterface $form_state, $form_id) {
+  //todo : move js code here , to change label of node title for container content type.
+  if ($form_id == 'node_container_form') {}
+}

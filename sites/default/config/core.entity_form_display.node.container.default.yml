@@ -1,0 +1,64 @@
+uuid: 1e30257e-d854-4733-9776-5de757b7e5dc
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.field.node.container.field_actual_quantity
+    - field.field.node.container.field_container_state
+    - field.field.node.container.field_expected_quantity
+    - field.field.node.container.field_product
+    - node.type.container
+  module:
+    - path
+id: node.container.default
+targetEntityType: node
+bundle: container
+mode: default
+content:
+  created:
+    type: datetime_timestamp
+    weight: 2
+    settings: {  }
+    third_party_settings: {  }
+  field_expected_quantity:
+    weight: 6
+    settings:
+      placeholder: ''
+    third_party_settings: {  }
+    type: number
+  path:
+    type: path
+    weight: 5
+    settings: {  }
+    third_party_settings: {  }
+  promote:
+    type: boolean_checkbox
+    settings:
+      display_label: true
+    weight: 3
+    third_party_settings: {  }
+  sticky:
+    type: boolean_checkbox
+    settings:
+      display_label: true
+    weight: 4
+    third_party_settings: {  }
+  title:
+    type: string_textfield
+    weight: 0
+    settings:
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+  uid:
+    type: entity_reference_autocomplete
+    weight: 1
+    settings:
+      match_operator: CONTAINS
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+hidden:
+  field_actual_quantity: true
+  field_container_state: true
+  field_product: true

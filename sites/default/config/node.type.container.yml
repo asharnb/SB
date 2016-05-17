@@ -1,0 +1,17 @@
+uuid: 624b4708-d3ef-4a6b-a75a-158b815a15ab
+langcode: en
+status: true
+dependencies:
+  module:
+    - menu_ui
+third_party_settings:
+  menu_ui:
+    available_menus: {  }
+    parent: ''
+name: Container
+type: container
+description: ''
+help: ''
+new_revision: false
+preview_mode: 1
+display_submitted: true
