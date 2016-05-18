@@ -9,22 +9,28 @@
             });
     }
 
+    // When user hits enter.
     $('#warehouse-checkin-product-scan').keypress(function (e) {
         var key = e.which;
         if(key == 13)  // the enter key code
         {
-            document.getElementById('warehouse-checkin-product-status-wrapper').innerHTML = 'Processing product...';
+            $('#warehouse-checkin-product-status-wrapper').html('Processing product...');
+            var container = document.getElementById('warehouse-container-id').value;
+            var container_nid = document.getElementById('warehouse-container-nid').value;
             //check for scanning same product
             if(this.value.length){
-                process_product(this.value);
+                process_product(this.value,container, container_nid);
             }else{
-                document.getElementById('warehouse-checkin-product-status-wrapper').innerHTML = 'Please enter product value.';
+                $('#warehouse-checkin-product-status-wrapper').html('Please enter product value.');
             }
         }
     });
 
+    /*
+     *  Process to warehouse rest resource.
+     */
     function wareHouseScanProduct(csrfToken, node, init) {
-        document.getElementById('warehouse-checkin-product-status-wrapper').innerHTML = 'Checking server ...';
+        $('#warehouse-checkin-product-status-wrapper').html('Checking server ...');
         $.ajax({
             url: Drupal.url('warehouse/operation/' + init + '/post?_format=json'),
             method: 'POST',
@@ -35,8 +41,12 @@
             data: JSON.stringify(node),
             success: function (response) {
                 updateProductInformationBlock(response);
-                document.getElementById('warehouse-checkin-product-status-wrapper').innerHTML = 'Processed successfully.';
+                $('#warehouse-checkin-product-status-wrapper').html('Processed successfully.');
                 console.log(response);
+
+                setTimeout(function(){
+                    $('#warehouse-checkin-product-status-wrapper').html('&nbsp');
+                }, 3300);
             },
             error: function(){
                 alert('Failed! **');
@@ -47,10 +57,9 @@
 
 
     /*
-
+     *  Process product in the container.
      */
-    function process_product(product){
-
+    function process_product(product,container, container_nid){
         var data = {
             _links: {
                 type: {
@@ -60,8 +69,9 @@
             "body": [
                 {
                     "value": {
-                        "product": product
-                        //"sid": 2
+                        "product": product,
+                        "container": container,
+                        "container_nid": container_nid
                     },
                     "format": null,
                     "summary": null
@@ -76,8 +86,21 @@
 
     }
 
+    function onLoadProductBlock(){
+        var container = document.getElementById('warehouse-container-id').value;
+        var container_nid = document.getElementById('warehouse-container-nid').value;
+    }
+
+
     function updateProductInformationBlock(data){
-        document.getElementById('dd-identifier').innerHTML = 1234;
+        //document.getElementById('dd-identifier').innerHTML = data.product.concept;
+        $('#dd-identifier').html(data.product.identifier);
+        $('#dd-description').html(data.product.description);
+        $('#dd-color-variant').html(data.product.colorvariant);
+        $('#dd-gender').html(data.product.gender);
+        $('#dd-color').html(data.product.color);
+        $('#dd-size').html(data.product.size);
+        $('#dd-styleno').html(data.product.styleno);
     }
 
 })(jQuery);

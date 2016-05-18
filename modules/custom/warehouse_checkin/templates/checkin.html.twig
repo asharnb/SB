@@ -18,11 +18,13 @@
                             <span class="semi-bold">Scan</span> Product Tag</h4>
                         <div>
                             <div class="row">
-                            <input type="text" id="warehouse-checkin-product-scan">
-                                </div>
+                                <input type="hidden" value="{{ container.nid.0.value }}" id="warehouse-container-nid">
+                                <input type="hidden" value="{{ container.title.0.value }}" id="warehouse-container-id">
+                                <input type="text" value="{{ product_identifier }}" id="warehouse-checkin-product-scan">
+                            </div>
                             <div class="row">
-                            <span id="warehouse-checkin-product-status-wrapper"></span>
-                                </div>
+                                <span id="warehouse-checkin-product-status-wrapper">&nbsp</span>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -53,11 +55,11 @@
                           <div class="col-lg-6">
                               <dl class="dl-horizontal">
                                   <dt>Concept: </dt>
-                                  {% if form.productdetails.concept == 'Unmapped' %}
+                                  {% if product_block.concept == 'Unmapped' %}
                                       <dd><span class="bold"></span></dd>
                                   {% else %}
                                       <dd class="mb-10"><img
-                                                  src="/sb/{{ directory }}/images/brands/brand_logo_{{ form.productdetails.concept|lower }}.png"
+                                                  src="/sb/{{ directory }}/images/brands/brand_logo_{{ product_block.concept|lower }}.png"
                                                   height="20px"></dd>
                                   {% endif %}
                               </dl>
@@ -66,7 +68,7 @@
                           <div class="col-lg-6">
                               <dl class="dl-horizontal">
                                   <dt>Color Variant:</dt>
-                                  <dd><strong><{{ form.productdetails.colorvariant|raw }}</strong></dd>
+                                  <dd><strong id="dd-color-variant"></strong></dd>
                               </dl>
 
                           </div>
@@ -76,9 +78,9 @@
                           <div class="col-lg-6">
                               <dl class="dl-horizontal">
                                   <dt>Identifier:</dt>
-                                  <dd id="dd-identifier">{{ form.productdetails.identifier }}</dd>
+                                  <dd id="dd-identifier">{{ product_block.identifier }}</dd>
                                   <dt>Style No:</dt>
-                                  <dd id="dd-styleno">{{ form.productdetails.styleno }}</dd>
+                                  <dd id="dd-styleno">{{ product_block.styleno }}</dd>
 
                                   <dt>Season:</dt>
                                   <dd>--</dd>
@@ -87,18 +89,18 @@
                           <div class="col-lg-6">
                               <dl class="dl-horizontal">
                                   <dt>Gender:</dt>
-                                  <dd><strong id="dd-gender">{{ form.productdetails.gender }}</strong></dd>
+                                  <dd><strong id="dd-gender">{{ product_block.gender }}</strong></dd>
                                   <dt>Color:</dt>
-                                  <dd id="dd-color">{{ form.productdetails.color }}</dd>
+                                  <dd id="dd-color">{{ product_blocks.color }}</dd>
                                   <dt>Size:</dt>
-                                  <dd>--</dd>
+                                  <dd id="dd-size">--</dd>
 
                               </dl>
                           </div>
                           <div class="col-lg-12">
                               <dl class="dl-horizontal">
                                   <dt>Description:</dt>
-                                  <dd id="dd-description">{{ form.productdetails.description }}</dd>
+                                  <dd id="dd-description">{{ product_block.description }}</dd>
 
                               </dl>
                           </div>

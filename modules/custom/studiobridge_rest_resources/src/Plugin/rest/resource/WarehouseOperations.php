@@ -35,6 +35,12 @@ class WarehouseOperations extends ResourceBase {
 
   protected $studioSessions;
 
+  protected $state;
+
+  protected $nodeStorage;
+
+  protected $studioContainer;
+
 
   /**
    * Constructs a Drupal\rest\Plugin\ResourceBase object.
@@ -58,12 +64,15 @@ class WarehouseOperations extends ResourceBase {
     $plugin_definition,
     array $serializer_formats,
     LoggerInterface $logger,
-    AccountProxyInterface $current_user, $studioProducts, $studioSessions) {
+    AccountProxyInterface $current_user, $studioProducts, $studioSessions, $state, $entity_manager, $studioContainer) {
     parent::__construct($configuration, $plugin_id, $plugin_definition, $serializer_formats, $logger);
 
     $this->currentUser = $current_user;
     $this->studioProducts = $studioProducts;
     $this->studioSessions = $studioSessions;
+    $this->state = $state;
+    $this->nodeStorage = $entity_manager->getStorage('node');
+    $this->studioContainer = $studioContainer;
 
   }
 
@@ -79,7 +88,10 @@ class WarehouseOperations extends ResourceBase {
       $container->get('logger.factory')->get('ccms_rest'),
       $container->get('current_user'),
       $container->get('studio.products'),
-      $container->get('studio.sessions')
+      $container->get('studio.sessions'),
+      $container->get('state'),
+      $container->get('entity_type.manager'),
+      $container->get('studio.container')
     );
   }
 
@@ -96,45 +108,68 @@ class WarehouseOperations extends ResourceBase {
   public function post($op_type, $data) {
 
     $node_type = $op_type;
-    // You must to implement the logic of your REST Resource here.
-    // Use current user after pass authentication to validate access.
-    if (!$this->currentUser->hasPermission('access content')) {
-      throw new AccessDeniedHttpException();
-    }
 
-    if($node_type == 'start'){
-      if($data->body->value['sid']){
-        $this->studioSessions->AddEndTimeToSession($data->body->value['sid'], 0);
-        $this->studioSessions->AddStartTimeToSession($data->body->value['sid'], $data->body->value['pause']);
+    if ($node_type == 'import') {
+      if ($data->body->value['product'] && $data->body->value['container'] && $data->body->value['container_nid']) {
+        $container = $data->body->value['container'];
+        $product_identifier = $data->body->value['product'];
+        $container_nid = $data->body->value['container_nid'];
 
-        if($data->body->value['pause']){
-          $this->studioSessions->updateSessionStatus($data->body->value['sid'], 'pause');
-        }
+        // Set product identifier to container state
+        $this->state->set('warehouse_container_last_scan_product_' . $container, $product_identifier);
 
+        // Check server for product.
+        $result = $this->studioProducts->getProductByIdentifier($product_identifier);
+        $product = $this->productCheck($result, $product_identifier);
+        $product_values = $product->toArray();
 
-        return new ResourceResponse('started');
-      }
-    }elseif($node_type == 'end'){
-      if($data->body->value['sid']){
-        $this->studioSessions->AddEndTimeToSession($data->body->value['sid'], $data->body->value['pause']);
+        // Assign this product to container.
+        $this->studioContainer->addProductToContainer($container_nid, $product);
 
-        if($data->body->value['pause']){
-          $this->studioSessions->updateSessionStatus($data->body->value['sid'], 'open');
-        }
+        // Product data response.
+        $product_return_data = $this->studioProducts->getProductInfoByObject($product);
 
-        return new ResourceResponse('ended');
+        // Return the response. Product info, container info, import status, etc.,
+        return new ResourceResponse(array('product'=>$product_return_data));
       }
     }
 
-    sleep(1);
+    if ($node_type == 'get') {
 
-    if($node_type == 'import'){
-      if($data->body->value['product']){
-        return new ResourceResponse(array(rand(1,22222222), array($node_type, $data->body->value['product'])));
+    }
+
+    return new ResourceResponse(array(rand(1, 22222222), array($node_type)));
+  }
+
+  /*
+   *
+   */
+  public function productCheck($result, $identifier) {
+    $return = array();
+    if (!$result) {
+      // Get product from server
+      $product = $this->studioProducts->getProductExternal($identifier);
+      $product = json_decode($product);
+      // validate product
+      if (isset($product->msg)) {
+        // product not found on the server so save it as unmapped product.
+        $return = $this->studioProducts->createUnmappedProductFromContainer($identifier);
+      }
+      else {
+        // Create them if not exist in drupal server.
+        $return = $this->studioProducts->createMappedProduct($product, $identifier);
+      }
+    }
+    else {
+      // todo : code for product re shoot
+      $product_nid = reset($result);
+      if($product_nid){
+        $return = $this->nodeStorage->load($product_nid);
       }
     }
 
-    return new ResourceResponse(array(rand(1,22222222), array($node_type)));
+    return $return;
+
   }
 
 }
