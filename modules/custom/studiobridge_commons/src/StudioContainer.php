@@ -143,4 +143,52 @@ class StudioContainer implements StudioContainerInterface {
     }
   }
 
+  /*
+* Helper function, to add reshot product to session.
+*
+* @param session_id
+*   Session node nid.
+* @param node
+*   Product Node object.
+*/
+  public function addDropProductToContainer($container_id, $node) {
+    // Load session node object.
+    $container_node = $this->nodeStorage->load($container_id);
+    // Get products from session node.
+    $container_products = $container_node->field_dropped_products->getValue();
+    // Get product nid.
+    $product_nid = $node->id();
+
+    // Check for this product already exist in the current session.
+    // todo : other logs and property settings may come here
+    $product_exist = FALSE;
+    if (count($container_products)) {
+      foreach ($container_products as $each) {
+        if ($each['target_id'] == $product_nid) {
+          $product_exist = TRUE;
+          break;
+        }
+      }
+    }
+    if (!$product_exist) {
+      // Prepare product array.
+      $product = array(
+        array(
+          'target_id' => $product_nid
+        )
+      );
+
+      // merge the current product to existing products.
+      $products = array_merge($product, $container_products);
+
+      // add the product to field.
+      $container_node->field_dropped_products->setValue($products);
+      // save the node.
+      $container_node->save();
+      return array('message' => 'Product dropped successfully.','status' => true);
+    }else{
+      return array('message' => 'Product already dropped.','status' => false);
+    }
+  }
+
 }

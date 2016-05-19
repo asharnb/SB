@@ -134,8 +134,12 @@ class WarehouseOperations extends ResourceBase {
       }
     }
 
-    if ($node_type == 'get') {
+    if ($node_type == 'drop-product') {
+      if ($data->body->value['product'] && $data->body->value['container'] && $data->body->value['container_nid']) {
 
+        $return = $this->dropProductInContainer($data);
+        return new ResourceResponse($return);
+      }
     }
 
     return new ResourceResponse(array(rand(1, 22222222), array($node_type)));
@@ -170,6 +174,25 @@ class WarehouseOperations extends ResourceBase {
 
     return $return;
 
+  }
+
+  /*
+   * Helper function, to drop product from container.
+   */
+  public function dropProductInContainer($data){
+    $container = $data->body->value['container'];
+    $product_identifier = $data->body->value['product'];
+    $container_nid = $data->body->value['container_nid'];
+    // Return the response. Product info, container info, import status, etc.,
+
+    $result = $this->studioProducts->getProductByIdentifier($product_identifier);
+    $node = $this->nodeStorage->load(reset($result));
+
+    if($node){
+      return $this->studioContainer->addDropProductToContainer($container_nid, $node);
+    }
+
+    return array('message' => 'Failed to drop product. It not exists in the system.','status' => false);
   }
 
 }
