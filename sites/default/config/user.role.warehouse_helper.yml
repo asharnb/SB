@@ -1,0 +1,24 @@
+uuid: 41e4b689-b167-4f47-9bce-2ce949eaf84c
+langcode: en
+status: true
+dependencies: {  }
+id: warehouse_helper
+label: 'Warehouse helper'
+weight: 7
+is_admin: null
+permissions:
+  - 'create container content'
+  - 'edit any container content'
+  - 'edit own container content'
+  - 'create dropped_products content'
+  - 'delete own dropped_products content'
+  - 'edit any dropped_products content'
+  - 'edit own dropped_products content'
+  - 'create products content'
+  - 'edit own products content'
+  - 'create sessions content'
+  - 'create unmapped_products content'
+  - 'edit any unmapped_products content'
+  - 'edit own unmapped_products content'
+  - 'restful post entity:file'
+  - 'restful get entity:file'

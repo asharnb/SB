@@ -26,3 +26,4 @@ permissions:
   - 'create container content'
   - 'edit any container content'
   - 'edit own container content'
+  - 'restful post warehouse_operations'

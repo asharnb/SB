@@ -41,3 +41,8 @@ permissions:
   - 'create container content'
   - 'edit any container content'
   - 'edit own container content'
+  - 'restful post warehouse_operations'
+  - 'create dropped_products content'
+  - 'delete own dropped_products content'
+  - 'edit any dropped_products content'
+  - 'edit own dropped_products content'
