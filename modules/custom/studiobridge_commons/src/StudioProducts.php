@@ -15,6 +15,8 @@ use \Drupal\file\Entity\File;
 use Drupal\image\Entity\ImageStyle;
 use Drupal\Core\State\StateInterface;
 
+CONST PRODUCT_LOOKUP_SERVER_URL = 'http://alpha.cms2.dreamcms.me/service/product-data?_format=json&product_identifier=';
+
 /**
  * Class StudioProducts.
  *
@@ -96,12 +98,28 @@ class StudioProducts implements StudioProductsInterface {
    */
   public function getProductByIdentifier($identifier) {
 
-    $result = $this->queryFactory->get('node')
-      ->condition('type', array('products', 'unmapped_products'), 'IN')
-      ->sort('created', 'DESC')
-      ->condition('title', $identifier)
-      ->range(0, 1)
-      ->execute();
+    $query = $this->queryFactory->get('node');
+    $query->condition('type', array('products', 'unmapped_products'), 'IN');
+
+
+
+    $orCondition = $query->orConditionGroup();
+    $orCondition->condition('field_color_variant', $identifier);
+    $orCondition->condition('title', $identifier);
+    $orCondition->condition('field_barcode', $identifier);
+    $orCondition->condition('field_size_variant', $identifier);
+    $query->condition($orCondition);
+    $query->sort('created', 'DESC');
+    $result = $query->range(0, 1)->execute();
+
+
+//    //get all nodes of session type
+//    $result = \Drupal::entityQuery('node')
+//      ->condition('type', 'sessions')
+//      ->condition('uid', $uid)
+//      ->sort('created', 'DESC')
+//      ->range(0, 10000)
+//      ->execute();
 
     return $result;
   }
@@ -228,6 +246,35 @@ class StudioProducts implements StudioProductsInterface {
     $uid = $this->currentUser->id();
 
     if (is_object($product)) {
+
+      $field_size_variant = array();
+      $field_size_name = array();
+      $field_barcode = array();
+
+      if($product->barcode){
+        foreach($product->barcode as $barcode){
+          //$field_size_variant[] = ['value' => $barcode];
+          $tmp1 = array('value' => $barcode);
+          array_push($field_barcode,$tmp1);
+        }
+      }
+
+      if($product->size_name){
+        foreach($product->size_name as $sn){
+          //$field_size_variant[] = ['value' => $barcode];
+          $tmp2 = array('value' => $sn);
+          array_push($field_size_name,$tmp2);
+        }
+      }
+
+      if($product->size_variant){
+        foreach($product->size_variant as $sv){
+          //$field_size_variant[] = ['value' => $barcode];
+          $tmp3 = array('value' => $sv);
+          array_push($field_size_variant,$tmp3);
+        }
+      }
+
       $values = array(
         'nid' => NULL,
         'type' => 'products',
@@ -241,8 +288,9 @@ class StudioProducts implements StudioProductsInterface {
         'field_description' => array('value' => $product->description),
         'field_color_variant' => array('value' => $product->color_variant), // todo: may be multiple
         'field_color_name' => array('value' => $product->color_name), //  todo: may be multiple
-        'field_size_name' => array('value' => $product->size_name), // todo: may be multiple
-        'field_size_variant' => array('value' => $product->size_variant), // todo: may be multiple
+        'field_size_name' => $field_size_name, // todo: may be multiple
+        'field_size_variant' => $field_size_variant, // todo: may be multiple
+        'field_barcode' => $field_barcode, // todo: may be multiple
       );
       // Create node object with above values.
       $node = $this->nodeStorage->create($values);
@@ -306,12 +354,20 @@ class StudioProducts implements StudioProductsInterface {
 
     // todo : multiple search, means if product not found with sku_id then look for color variant.
     // todo : for now external resource is public, but it might be changed to auth.
-    $response = \Drupal::httpClient()
-      ->get("http://staging.dreamcms.me/service/product-data?sku_id=$input"
-      //['auth' => ['username', 'password'],]
-      );
 
-    return (string) $response->getBody();
+    $url = "http://alpha.cms2.dreamcms.me/service/product-data?_format=json&product_identifier=$input";
+    //$url = "http://staging.dreamcms.me/service/product-data?sku_id=$input";
+     $response = \Drupal::httpClient()
+       ->get($url, [
+         'auth' => ['demouser', 'demouser'],
+         //'body' => $serialized_entity,
+         'headers' => [
+           'Content-Type' => 'application/json'
+         ],
+       ]);
+
+    $result = (string) $response->getBody();
+    return $result;
   }
 
   /*
