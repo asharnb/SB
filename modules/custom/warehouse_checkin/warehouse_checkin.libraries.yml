@@ -6,5 +6,6 @@ checkin-form:
   js:
     js/script.js: {}
     js/warehouse-checkin.js: {}
+    js/warehouse-img-actions.js: {}
   dependencies:
     - core/jquery
