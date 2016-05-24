@@ -110,7 +110,7 @@ class StudioProducts implements StudioProductsInterface {
 
     $query->condition($orCondition);
     $query->sort('created', 'DESC');
-    $result = $query->range(0, 1)->execute();
+    $result = $query->execute();
 
     return $result;
   }
@@ -421,7 +421,6 @@ class StudioProducts implements StudioProductsInterface {
       // Load the node object.
       $product = $this->nodeStorage->load($node_id);
       $images = $product->field_images->getValue();
-
 
       $bundle = $product->bundle();
       $concept = '';
@@ -799,6 +798,22 @@ class StudioProducts implements StudioProductsInterface {
       return false;
     }
 
+  }
+
+  /*
+   * Helper function, to check product duplicates in session/container.
+   */
+  public function checkProductDuplicate($product, $bundles=array()){
+    $product_nid = $product->id();
+    $query = $this->queryFactory->get('node');
+    if($bundles){
+      $query->condition('type', $bundles, 'IN');
+    }
+
+    $query->condition('field_product',$product_nid);
+    $result = $query->execute();
+
+    return $result;
   }
 
 
