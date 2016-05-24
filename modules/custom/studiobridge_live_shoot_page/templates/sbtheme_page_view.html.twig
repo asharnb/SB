@@ -2,39 +2,22 @@
 
 
 {% block sbtheme_scancontainer %}
-
-    <div id="panel-psa" class="panel panel-default">
-        <div class="panel-heading seperator">
-            <div class="panel-title">Product Scan
-            </div>
-            <div class="panel-controls">
-            </div>
-        </div>
-        <div class="panel-body">
-            <h4>
-                <span class="semi-bold">Scan</span> Product Tag</h4>
+  <div class="col-sm-12 m-t-sm no-padding">
+        <div class="col-sm-5">
+            <h5 class="no-margins semi-bold">Enter Product Tag</h5>
             {{ form|without('delete',"resequence") }}
         </div>
-    </div>
+  </div>
+
 
 
 {% endblock %}
 
 
 {% block sbtheme_product %}
-    <div id="panel-pi" class="panel panel-default">
-        <div class="panel-heading seperator">
-            <div class="panel-title">Product Information
-            </div>
-            <div class="panel-controls">
-              <span id ="{{ form.identifier_nid['#value'] }}">
-                <a class="btn btn-xs btn-info">Attach Model</a>
-                <a class="btn btn-xs btn-danger studio-product-drop">Drop Product</a>
-               </span>
-            </div>
-        </div>
-        <div class="panel-body">
-            <div class="row">
+
+            <div class="col-sm-12 p-sm">
+              <h5 class="no-margins semi-bold m-b-sm">Product Information</h5>
                 <div class="col-lg-6">
                     <dl class="dl-horizontal">
                         <dt>Concept: </dt>
@@ -51,34 +34,33 @@
                 <div class="col-lg-6">
                     <dl class="dl-horizontal">
                         <dt>Color Variant:</dt>
-                        <dd><strong><{{ form.productdetails.colorvariant|raw }}/strong></dd>
+                        <dd><strong>{{ form.productdetails.colorvariant|raw }}</strong></dd>
                     </dl>
 
                 </div>
-            </div>
-            <div class="row">
 
-                <div class="col-lg-6">
-                    <dl class="dl-horizontal">
-                        <dt>Identifier:</dt>
-                        <dd id="dd-identifier">{{ form.productdetails.identifier }}</dd>
-                        <dt>Style No:</dt>
-                        <dd id="dd-styleno">{{ form.productdetails.styleno }}</dd>
+                    <div class="col-lg-6">
+                        <dl class="dl-horizontal">
+                            <dt>Identifier:</dt>
+                            <dd id="dd-identifier">{{ form.productdetails.identifier }}</dd>
+                            <dt>Style No:</dt>
+                            <dd id="dd-styleno">{{ form.productdetails.styleno }}</dd>
 
-                        <dt>Season:</dt>
-                        <dd>--</dd>
-                    </dl>
-                </div>
-                <div class="col-lg-6">
-                    <dl class="dl-horizontal">
-                        <dt>Gender:</dt>
-                        <dd><strong id="dd-gender">{{ form.productdetails.gender }}</strong></dd>
-                        <dt>Color:</dt>
-                        <dd id="dd-color">{{ form.productdetails.color }}</dd>
-                        <dt>Size:</dt>
-                        <dd>--</dd>
+                            <dt>Season:</dt>
+                            <dd>--</dd>
+                        </dl>
+                    </div>
+                    <div class="col-lg-6">
+                        <dl class="dl-horizontal">
+                            <dt>Gender:</dt>
+                            <dd><strong id="dd-gender">{{ form.productdetails.gender }}</strong></dd>
+                            <dt>Color:</dt>
+                            <dd id="dd-color">{{ form.productdetails.color }}</dd>
+                            <dt>Size:</dt>
+                            <dd>--</dd>
 
-                    </dl>
+                        </dl>
+                    </div>
                 </div>
                 <div class="col-lg-12">
                     <dl class="dl-horizontal">
@@ -88,15 +70,18 @@
                     </dl>
                 </div>
 
-            </div>
 
-        </div>
 
-    </div>
 {% endblock %}
 
 {% spaceless %}
     {% block sbimages %}
+    <div class="col-lg-12">
+    <h5 class="no-margins semi-bold">Product Images</h5>
+          <span class="pull-right">
+                                    {{ form.resequence }}
+                                    {{ form.delete }}
+    </span>
         {% for image in form.images.images %}
             {% if not image.fid == '' %}
 
@@ -107,23 +92,25 @@
                     <div class="ribbon" id="ribboncontainer"><span class="for-tag" id="seq-{{ image.fid }}" name="{{ image.id }}">{{ image.id }}</span></div>
                     {% endif %}
                     <div class="scancontainer">
-                        <img src="{{ image.url }}" class="scanpicture">
 
-                    </div>
+                        <img src="{{ image.url }}" class="scanpicture"  data-imageid="{{ image.fid }}">
+
+
                     <div class="file-name">
                         <div id="tag-seq-img-{{ image.fid }}" type="hidden"></div>
 
                         <div class="row">
 
-                            <div class="col col-sm-8">
+                            <div class="col-sm-12">
                             <span id = {{ image.fid }}>
-                                <a class="label label-info"><i class="fa fa-lg fa-fw fa-arrows-alt"></i></a>
-                                <a class="label label-warning studio-img-tag" ><i class="fa fa-lg fa-fw fa-tag"></i></a>
-                                <a class="label label-success studio-img-fullshot"><i class="fa fa-lg fa-fw fa-copy"></i></a>
+                                <a class="txt-color-white"><i class="fa fa-lg fa-fw fa-search"></i></a>
+                                <a class="txt-color-white studio-img-tag" ><i class="fa fa-lg fa-fw fa-tag"></i></a>
+                                <a class="txt-color-white studio-img-fullshot"><i class="fa fa-lg fa-fw fa-copy"></i></a>
+                                <a class="txt-color-white"><i class="fa fa-lg fa-fw fa-trash-o"></i></a>
                             </span>
 
                             </div>
-                            <div class="col col-sm-4">
+                            <!-- <div class="col col-sm-4">
                                 <div class="onoffswitch2 pull-right">
                                     <span id="{{ image.fid }}">
                                         <input type="checkbox" name="onoffswitch" class="onoffswitch-checkbox form-checkbox" id="del-img-{{ image.fid }}" value="{{ image.fid }}">
@@ -133,46 +120,42 @@
                                             </label>
                                     </span>
                                 </div>
-                            </div>
+                            </div> -->
 
                         </div>
 
                     </div>
+                  </div>
                     <div class="studio-img-weight"><input type="hidden" value="{{ image.fid }}"></div>
                 </div>
             {% endif %}
         {% endfor %}
+      </div>
     {% endblock sbimages %}
 {% endspaceless %}
 
 {% block sidepanel %}
-    <div class="sidebard-panel" style="min-height: 100%;">
 
-        <div id="widgettile">
-            <div class="widget text-center">
-                <div class="m-b-s">
+        <div id="widgettile" class="row">
+            <div class="widget p-sm m-b-s">
+                  <div class="col-sm-4">
                     <h1 class="m-xs no-of-products">{{ form.productdetails.total_products|length >0 ? form.productdetails.total_products : '0' }}</h1>
-                    <h3 class="font-bold no-margins">Products</h3>
-                    <small>in this session</small>
-                </div>
+                  </div>
+                  <div class="col-sm-8">
+                    <h5 class="semi-bold no-padding no-margins">Products</h5>
+                    <h5 class="semi-bold no-padding no-margins">in this session</h5>
+
+                  </div>
             </div>
         </div>
 
 
-
-
-    </div>
-    <div class="">
-        <div class=" m-t-s text-center">
-                  <span class="text-center">
-                    <span><i class="fa fa-exchange text-success faa-passing animated"></i>    <strong>Connected</strong></span>
-                  </span></div>
-    </div>
-    <div class="m-t-s">
-        <h4>Session</h4>
-        <h3 class="text-center"><strong></strong></h3>
-        <div class="m-t-sm gray-bkground">
+    <div class="m-t-sm">
             <div class="row">
+              <dl class="dl-horizontal">
+                <dt>Session No: </dt>
+                <dd><span class="bold">777</span></dd>
+              </dl>
                 <div class="col-md-6">
                     <a href="/sbtest/view-session/{{form.session['#value']}}" >&nbsp; {{form.session['#value']}}</a>
                 </div>
@@ -181,22 +164,10 @@
                 </div>
             </div>
 
-        </div>
     </div>
 
-    <div class="m-t-s">
-        <h4>QC Status</h4>
-        <div>
-            <ul class="list-group">
-                <li class="list-group-item ">
-                    <span class=" pull-right">0</span>
-                    Rejected
-                </li>
-            </ul>
-        </div>
-    </div>
 
-    <div class="m-t-s">
+    <div class="m-t-sm">
         <h4>Current Product</h4>
         <div>
             <ul class="list-group">

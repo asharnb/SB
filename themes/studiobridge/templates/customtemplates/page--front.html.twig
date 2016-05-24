@@ -4,12 +4,8 @@
 {{ attach_library('studiobridge/dashboard') }}
 
 {#Check if user is logged in, if not only show login page, no default page#}
-{% if user.isAnonymous==true %}
-    {% block logincontainer %}
-        {{ page.content }}
-
-    {% endblock %}
-
+{% if user.isAnonymous == true %}
+      <script>window.location.href = 'user/login'</script>
 {% else %}
 
     <header id="header">

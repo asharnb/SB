@@ -446,8 +446,11 @@ div.dataTables_info {
 
 .file-name {
     padding: 5px;
-    background-color: #F1EFEF;
+    background-color: rgba(0,0,0,0.5);
     border-top: 1px solid #D0CFCF;
+    position: absolute;
+    margin-top: -30px;
+    width: 100%;
 }
 .file .icon {
     padding: 15px 10px;
@@ -482,13 +485,14 @@ div.dataTables_info {
 
 
 img.img-circle {
-    width: 60px;
-    height: 60px;
+    width: 50px;
+    height: 50px;
 }
 
 img.img-circle-table {
     width: 40px;
     height: 40px;
+    border-radius: 50%;
 }
 
 img.circle-border {
@@ -506,4 +510,7 @@ img.circle-border {
 .today-tr {
   background-color: #002D5B;
 
+}
+.no-of-products{
+  font-size: 55px;
 }

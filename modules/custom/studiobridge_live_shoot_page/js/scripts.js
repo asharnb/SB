@@ -22,5 +22,18 @@
     }
   };
 
+  Drupal.behaviors.tagfordelete2 = {
+    attach: function(context, settings) {
+      // $(".scanpicture").ondblclick(function(){
+      //   // var closeelement = var id = $(this).parents('span').attr('data-imageid');
+      //   console.log('yes');
+      // });
+
+      $(".scanpicture", context).ondblclick = function() { console.log("ondblclick event detected!"); };
+    }
+  };
+
+
+
 
 }(jQuery));

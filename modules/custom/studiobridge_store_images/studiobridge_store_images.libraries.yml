@@ -11,3 +11,7 @@ studio-bridge-view-product:
   css:
     theme:
       css/studio-bridge-auto-submit.css: {}
+
+studio-bridge-view-session:
+  js:
+    js/studio-bridge-close-tab.js: {}

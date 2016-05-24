@@ -226,6 +226,8 @@ Class Products {
     // todo : for now external resource is public, but it might be changed to auth.
     $response = \Drupal::httpClient()
       ->get("http://staging.dreamcms.me/service/product-data?sku_id=$input"
+      //->get("http://alpha.cms2.dreamcms.me/service/product-data?_format=json&product_identifier=$input"
+
       //['auth' => ['username', 'password'],]
       );
 

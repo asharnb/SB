@@ -60,12 +60,27 @@
 */
 #}
 
+{# {% if session.field_status.0.value == 'open' %}
+<a href="/sbtest/live-shooting-page1" class="btn btn-complete"><i class="fa fa-camera"></i> Import </a>
+<a id="fa-pause-session" data-id="{{ session.nid.0.value }}"  class="btn btn-warning "><i class="fa fa-pause"></i> Pause </a>
+<a href="/close-session/{{ session.nid.0.value }}/1" data-id="{{ session.nid.0.value }}" class="btn btn-danger " id="close-session"><i class="fa fa-stop"></i> Close </a>
 
-{{ attach_library('studiobridge/flot-charts') }}
+{% elseif session.field_status.0.value == 'pause' %}
+<a id="fa-req-resume-session" data-id="{{ session.nid.0.value }}" class="btn  btn-success"><i class="fa fa-play"></i> Resume </a>
+<a href="/close-session/{{ session.nid.0.value }}/1" data-id="{{ session.nid.0.value }}" class="btn btn-danger " id="close-session"><i class="fa fa-stop"></i> Close </a>
+
+{% else %}
+<a href="#" class="btn  btn-complete "><i class="fa fa-file-excel-0o"></i> Export Shootlist </a>
+<a  id="fa-resume-session" data-id="{{ session.nid.0.value }}" class="btn  btn-warning "><i class="fa fa-refresh"></i> Request to Reopen </a>
+{% endif %} #}
+
 
 {% if session.field_status.0.value == 'open' %}
 {% set status_class = 'fa fa-play-circle text-success' %}
 {% set status_class_text = 'text-success' %}
+{% elseif session.field_status.0.value == 'pause'  %}
+{% set status_class = 'fa fa-pause text-warning' %}
+{% set status_class_text = 'text-warning' %}
 {% else %}
   {% set status_class = 'fa fa-stop-circle text-danger' %}
   {% set status_class_text = 'text-danger' %}
@@ -83,153 +98,132 @@
 {% set total_dropped = unmapped_dropped_products|length + mapped_dropped_products|length %}
 
 {% set total_count = adjusted_mapped + adjusted_unmapped + total_dropped %}
+
+
 <div class="row">
   <div class="col-sm-12 col-md-8">
-    <h3>Session <span class="semi-bold">Details</span></h3>
+    <h3>Session Details</h3>
+    <h4>View all your photography sessions and add session</h4>
   </div>
-  <div class="col-sm-12 col-md-4 text-right">
-
+  <div class="col-sm-12 col-md-4 m-t-md">
+    <a class="btn btn-primary pull-right p-t-10" href="/sbtest/live-shooting-page1"><i class="fa fa-camera mr-5"></i>Add Products</a>
   </div>
 </div>
 
-<div class="row p-t-10">
-  <div class="col-lg-9">
-
+<hr class="simple">
+<div class="row">
+  <div class="col-lg-12">
     <div class="panel panel-default">
 
-      <div class="row">
-        <div class="col-lg-12" >
-          <div class="panel-heading seperator m-b-sm">
+      <div class="clearfix">
+        <div class="col-sm-6">
 
-            <div class="panel-controls">
-              {% if session.field_status.0.value == 'open' %}
-              <a href="/sbtest/live-shooting-page1" class="btn btn-complete"><i class="fa fa-camera"></i> Import </a>
-              <a href="#" id="fa-pause-session" data-id="{{ session.nid.0.value }}"  class="btn btn-warning "><i class="fa fa-pause"></i> Pause </a>
-              <a href="/close-session/{{ session.nid.0.value }}/1" data-id="{{ session.nid.0.value }}" class="btn btn-danger " id="close-session"><i class="fa fa-stop"></i> Close </a>
+          <h5 class="text-success bold"><i class="fa fa-circle"></i> OPEN</h5>
+        </div>
+        <div class="col-sm-6">
+          <span class="pull-right">
+            <h4 class="text-success">{{session_time}}</h4>
+          </span>
+          <span class="pull-right  m-r-md">
+            <h5 class="text-info"><i class="fa fa-pause "></i> Pause</h5>
 
-              {% elseif session.field_status.0.value == 'paused' %}
-              <a href="#" id="fa-resume-session" data-id="{{ session.nid.0.value }}" class="btn  btn-success"><i class="fa fa-play"></i> Resume </a></div>
-              <a href="/close-session/{{ session.nid.0.value }}/1" data-id="{{ session.nid.0.value }}" class="btn btn-danger " id="close-session"><i class="fa fa-stop"></i> Close </a>
+          </span>
+          <span class="pull-right  m-r-md">
+            <h5 class="text-info"><i class="fa fa-stop"></i> Close</h5>
 
-              {% else %}
-              <a href="#" class="btn  btn-complete "><i class="fa fa-file-excel-0o"></i> Export Shootlist </a>
-              <a href="#" id="fa-req-resume-session" data-id="{{ session.nid.0.value }}" class="btn  btn-warning "><i class="fa fa-refresh"></i> Request to Reopen </a>
-              {% endif %}
-            </div>
-          </div>
-          <div class="col-sm-6">
-            <table class="table">
-              <tbody>
-                <tr>
-                  <td class="col-sm-6">
-                    Shoot Date
-                  </td>
-                  <td class="col-sm-6">
-                    <span class="semi-bold text-navy">{{ session.created.0.value|date("m-d-Y") }}</span>
-                  </td>
-
-                </tr>
-                <tr>
-                  <td class="col-sm-6">
-                    Shoot Count
-                  </td>
-                  <td class="col-sm-6">
-                    <span class="semi-bold text-navy">{{ adjusted_mapped + adjusted_unmapped }}</span>
-                  </td>
-
-                </tr>
-                <tr>
-                  <td class="col-sm-6">
-                    Shoot Type
-                  </td>
-                  <td class="col-sm-6">
-                    <span class="semi-bold text-navy">{{ session.field_shoot_type.0.value|title|replace({'_':' '}) }}</span>
-                  </td>
-
-                </tr>
-                <tr>
-                  <td class="col-sm-6">
-                    Session Time
-                  </td>
-                  <td class="col-sm-6">
-                    <span class="semi-bold text-navy">{{session_time}}</span>
-                  </td>
-
-                </tr>
-              </tbody>
-            </table>
-          </div>
-          <div class="col-sm-2">
-            <div class="widget  text-center">
-
-              <img src="/sbtest/{{directory}}/images/users/niranjan.jpg" class="img-circle circle-border " alt="profile">
-              <h3 class="m-xs text-primary">Sajeewa</h3>
-              <h5 class="font-bold no-margins">
-                Photographer
-              </h5>
-
-            </div>
-          </div>
-          <div class="col-sm-2">
-            <div class="widget text-center">
-
-              <img src="/sbtest/{{directory}}/images/users/rebecca.jpg" class="img-circle circle-border" alt="profile">
-              <h3 class="m-xs text-primary">Rebecca</h3>
-              <h5 class="font-bold no-margins">
-                Stylist
-              </h5>
-
-            </div>
-          </div>
-          <div class="col-sm-2">
-            <div class="widget text-center">
-
-              <img src="/sbtest/{{directory}}/images/users/cia.jpg" class="img-circle circle-border " alt="profile">
-              <h3 class="m-xs text-primary">Cia</h3>
-              <h5 class="font-bold no-margins">
-                VM
-              </h5>
-
-            </div>
-          </div>
-
-          <!-- <dl class="dl-horizontal">
-          <dt>Photographer:</dt>
-          <dd>{{ session_users.photographer }}</dd>
-          <dt>VM:</dt>
-          <dd>{{ session_users.vm }}</dd>
-          <dt>Stylist:</dt>
-          <dd> {{ session_users.stylist }} </dd>
-          <dt>Type:</dt>
-          <dd> {{ session.field_shoot_type.0.value|title|replace({'_': ' '}) }} </dd>
-        </dl> -->
+          </span>
+        </div>
       </div>
 
-    </div>
-    <div class="row m-t-sm">
-      <div class="col-lg-12">
-        <div class="panel blank-panel">
-          <div class="panel-heading">
-            <div class="panel-options">
-              <ul class="nav nav-tabs nav-tabs-linetriangle">
 
 
-                <li class="active"><a href="#tab-mapped" data-toggle="tab" aria-expanded="false">Mapped <span class="text-success semi-bold">({{ adjusted_mapped }})</span></a></li>
-                <li class=""><a href="#tab-unmapped" data-toggle="tab" aria-expanded="false">Unmapped <span class="text-warning semi-bold">({{ adjusted_unmapped }})</span></a></li>
-                <li class=""><a href="#tab-dropped" data-toggle="tab" aria-expanded="false">Drops <span class="text-danger semi-bold">({{total_dropped}})</span></a></li>
-                <li class=""><a href="#tab-reports" data-toggle="tab" aria-expanded="false">Report(s)</a></li>
+      <div class="clearfix">
+        <div class="col-sm-4">
+          <div class="col-sm-4">
+            <h5 class="m-xs">ID</h5>
+            <h3 class="m-xs">{{ session.nid.0.value }}</h3>
+          </div>
 
-                {% if is_admin == true %}
-                <li class=""><a href="#tab-analysis" data-toggle="tab" aria-expanded="true">Analysis</a></li>
-                {% endif %}
-                <
-                <li class=""><a href="#tab-log" data-toggle="tab" aria-expanded="true">Log</a></li>
+          <div class="col-sm-4">
+            <h5 class="m-xs">Products</h5>
+            <h3 class="m-xs">{{total_count}}</h3>
+          </div>
 
-
-              </ul>
+          <div class="col-sm-4">
+            <h5 class="m-xs">Class</h5>
+            <h3 class="m-xs">{{ session.field_shoot_class.0.value|title|replace({'_': '', 'Shoot': ''}) }}</h3>
+          </div>
+        </div>
+        <div class="col-sm-8 p-xs">
+          <div class="col-sm-4">
+            <div class="social-avatar">
+              <a href="" class="pull-left">
+                <img src="/sbtest/{{directory}}/images/users/niranjan.jpg" class="img-circle" alt="profile">
+              </a>
+              <div class="media-body m-t-sm">
+                <h6 class="no-margins bold">
+                  Niranjan
+                </h6>
+                <small class="text-muted">Photographer</small>
+              </div>
             </div>
           </div>
-          <div class="panel-body">
+
+          <div class="col-sm-4">
+            <div class="social-avatar">
+              <a href="" class="pull-left">
+                <img src="/sbtest/{{directory}}/images/users/rebecca.jpg" class="img-circle" alt="profile">
+              </a>
+              <div class="media-body m-t-sm">
+                <h6 class="no-margins bold">
+                  Rebecca
+                </h6>
+                <small class="text-muted">Stylist</small>
+              </div>
+            </div>
+          </div>
+          <div class="col-sm-4">
+            <div class="social-avatar">
+              <a href="" class="pull-left">
+                <img src="/sbtest/{{directory}}/images/users/cia.jpg" class="img-circle" alt="profile">
+              </a>
+              <div class="media-body m-t-sm">
+                <h6 class="no-margins bold">
+                  Cia
+                </h6>
+                <small class="text-muted">Visual Merch</small>
+              </div>
+            </div>
+          </div>
+        </div>
+
+
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+
+<div class="row p-t-10">
+  <div class="col-lg-10">
+    <ul class="nav nav-tabs ">
+
+
+      <li class="active"><a href="#tab-mapped" data-toggle="tab" aria-expanded="false">Mapped <span class=" label label-success semi-bold">{{ adjusted_mapped }}</span></a></li>
+      <li class=""><a href="#tab-unmapped" data-toggle="tab" aria-expanded="false">Unmapped <span class="p-t-5 label label-danger semi-bold">{{ adjusted_unmapped }}</span></a></li>
+      <li class=""><a href="#tab-dropped" data-toggle="tab" aria-expanded="false">Drops <span class="label label-warning semi-bold">{{total_dropped}}</span></a></li>
+      <li class=""><a href="#tab-reports" data-toggle="tab" aria-expanded="false">Report(s)</a></li>
+
+      {% if is_admin == true %}
+      <li class=""><a href="#tab-analysis" data-toggle="tab" aria-expanded="true">Analysis</a></li>
+      {% endif %}
+      <
+      <li class=""><a href="#tab-log" data-toggle="tab" aria-expanded="true">Log</a></li>
+
+
+    </ul>
+
+
             <div class="tab-content">
               <div class="tab-pane active" id="tab-mapped">
                 <table id="dt_mapped" class="table table-responsive table-hover" width="100%">
@@ -451,7 +445,7 @@
 
                           <div class="col-sm-height col-bottom ">
                             <div class="flot-chart">
-                                <div class="flot-chart-content" id="flot-analysis-chart" style="height:300px;"></div>
+                              <div class="flot-chart-content" id="flot-analysis-chart" style="height:300px;"></div>
                             </div>
                           </div>
 
@@ -463,44 +457,16 @@
                       </div>
 
 
-                    </div>
-                  </div>
-                </div>
 
-              </div>
 
-            </div>
+
           </div>
 
-          <div class="col-lg-3">
+          <div class="col-lg-2">
 
             <div class="sidebard-panel" style="min-height: 100%;">
 
-              <div id="widgettile">
-                <div class="widget blue-bg text-center">
-                  <div class="m-b-s">
 
-                    <div class="row ">
-                      <div class="col-sm-6">
-                        <div class="timeline-day-number pull-right text-white">{{ session.nid.0.value }}</div>
-                      </div>
-                      <div class="col-sm-6 text-left m-t-sm">
-                        <div class="timeline-day {{status_class_text}}"><span><i class="{{ status_class }}"></i>    {{ session.field_status.0.value|title}} </span></div>
-                        <div class="timeline-month c-gray text-white"><span><i class="{{ shoot_class }}"></i>    {{ session.field_shoot_class.0.value|title|replace({'_': ' '}) }}</span></div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <hr class="simple">
-              <div class="m-t-s">
-                <h3>
-                  <small>Stage:</small>
-                  <span id="textstage">Shoot</span></h3>
-                  <div class="progress progress-striped active">
-                    <div style="width: 25%" class="progress-bar progress-bar-complete"></div>
-                  </div>
-                </div>
 
                 {% for item in grouped_concepts %}
 
@@ -557,89 +523,3 @@
 
             </div>
           </div>
-
-
-          {#-------------------Analysis Chart---------------------------#}
-          {% if period_chart|length > 0 %}
-          <script type="text/javascript">
-
-          // var data2 = [
-          //     [gd(2012, 1, 1), 7], [gd(2012, 1, 2), 6], [gd(2012, 1, 3), 4], [gd(2012, 1, 4), 8],
-          //     [gd(2012, 1, 5), 9], [gd(2012, 1, 6), 7], [gd(2012, 1, 7), 5]
-          // ];
-          //
-          // var data3 = [
-          //     [gd(2012, 1, 1), 10], [gd(2012, 1, 2), 12], [gd(2012, 1, 3), 24], [gd(2012, 1, 4), 9],
-          //     [gd(2012, 1, 5), 14], [gd(2012, 1, 6), 6], [gd(2012, 1, 7), 20]
-          // ];
-
-var data3 = [
-          {% for chart in period_chart %}
-
-
-            [{{chart.label}}, "{{chart.value}}"]
-          ,
-            {% endfor %}
-          ];
-
-console.log(data3);
-
-
-          var dataset = [
-              {
-                  label: "This Week",
-                  data: data3,
-
-                  lines: {
-                      show: false,
-                      fill: true
-                  },
-                  splines: {
-                      show: true,
-                      tension: 0.4,
-                      lineWidth: 1,
-                      fill: 0.4
-                  },
-                  points: {
-                      radius: 0,
-                      show: true
-                  },
-                  shadowSize: 2
-
-              }
-          ];
-
-
-          var options = {
-              colors: ["#1ab394", "#1C84C6"],
-              xaxis: {
-                ticks: 0
-              },
-              yaxes: [{
-                ticks: 0
-              },{
-                ticks: 0
-              }
-              ],
-              legend: {
-                  noColumns: 1,
-                  labelBoxBorderColor: "#000000",
-                  position: "nw"
-              },
-              grid: {
-                  hoverable: false,
-                  borderWidth: 0
-              },
-              tooltip: true
-          };
-
-          function gd(year, month, day) {
-              return new Date(year, month - 1, day).getTime();
-          }
-
-          var previousPoint = null, previousLabel = null;
-
-          //$.plot($("#flot-analysis-chart"), dataset, options);
-          console.log(dataset);
-          </script>
-          {% endif %}
