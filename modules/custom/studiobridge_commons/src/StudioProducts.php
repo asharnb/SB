@@ -101,25 +101,16 @@ class StudioProducts implements StudioProductsInterface {
     $query = $this->queryFactory->get('node');
     $query->condition('type', array('products', 'unmapped_products'), 'IN');
 
-
-
+    // Or condition for product fields
     $orCondition = $query->orConditionGroup();
     $orCondition->condition('field_color_variant', $identifier);
     $orCondition->condition('title', $identifier);
     $orCondition->condition('field_barcode', $identifier);
     $orCondition->condition('field_size_variant', $identifier);
+
     $query->condition($orCondition);
     $query->sort('created', 'DESC');
     $result = $query->range(0, 1)->execute();
-
-
-//    //get all nodes of session type
-//    $result = \Drupal::entityQuery('node')
-//      ->condition('type', 'sessions')
-//      ->condition('uid', $uid)
-//      ->sort('created', 'DESC')
-//      ->range(0, 10000)
-//      ->execute();
 
     return $result;
   }

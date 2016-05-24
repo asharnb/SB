@@ -182,7 +182,7 @@
 
         swal({
             title: "Confirm Drop",
-            text: "Are you sure you want to drop this product from this session?",
+            text: "Are you sure you want to drop this product from this container?",
             type: "warning",
             showCancelButton: true,
             confirmButtonColor: "#DD6B55",
