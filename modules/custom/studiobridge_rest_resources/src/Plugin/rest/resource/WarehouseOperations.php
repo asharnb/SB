@@ -115,6 +115,7 @@ class WarehouseOperations extends ResourceBase {
         $product_identifier = $data->body->value['product'];
         $container_nid = $data->body->value['container_nid'];
         $duplicate = false;
+        $already_scanned = false;
 
         // Set product identifier to container state
         $this->state->set('warehouse_container_last_scan_product_' . $container, $product_identifier);
@@ -135,11 +136,15 @@ class WarehouseOperations extends ResourceBase {
           $duplicates = $this->studioProducts->checkProductDuplicate($product, array('container'));
           if(count($duplicates) > 1){
             $duplicate = true;
+          }elseif(count($duplicates) == 1){
+            if(reset($duplicates) == $container_nid){
+              $already_scanned = true;
+            }
           }
         }
 
         // Return the response. Product info, container info, import status, etc.,
-        return new ResourceResponse(array('product'=>$product_return_data,'duplicate' => $duplicate));
+        return new ResourceResponse(array('product'=>$product_return_data,'duplicate' => $duplicate,'already_scanned' => $already_scanned));
       }
     }
 

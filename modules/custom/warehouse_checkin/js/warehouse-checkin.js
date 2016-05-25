@@ -43,10 +43,23 @@
                 updateProductInformationBlock(response);
                 $('#warehouse-checkin-product-status-wrapper').html('Processed successfully.');
                 console.log(response);
+
                 if(response.duplicate){
                     swal({
                         title: 'Duplicate Product',
                         text: 'Duplicate product, already found in another container.',
+                        type: 'warning', //error
+                        showCancelButton: false,
+                        confirmButtonColor: "#DD6B55",
+                        confirmButtonText: "OK",
+                        closeOnConfirm: true,
+                        timer: 5000
+                    });
+                }
+                if(response.already_scanned){
+                    swal({
+                        title: 'Product already scanned',
+                        text: 'This product already scanned in this container.',
                         type: 'warning', //error
                         showCancelButton: false,
                         confirmButtonColor: "#DD6B55",

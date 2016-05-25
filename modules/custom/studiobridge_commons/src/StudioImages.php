@@ -17,12 +17,13 @@ Class StudioImages {
    * @param sid
    *   Session node nid.
    */
-  public static function AddFileTransfer($fid, $pid, $sid) {
+  public static function AddFileTransfer($fid, $pid, $sid=0,$cid=0) {
     db_insert('studio_file_transfers')
       ->fields(array(
         'fid' => $fid,
         'pid' => $pid,
         'sid' => $sid,
+        'cid' => $cid,
         'created' => REQUEST_TIME,
       ))
       ->execute();

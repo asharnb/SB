@@ -56,6 +56,8 @@ function studiobridge_store_images_entity_insert(Drupal\Core\Entity\EntityInterf
 
     // Get sessionid from image entity ; basically when image is uploaded that time user will select opended session.
     $session_id = $values['field_session'][0]['target_id'];
+    // If session id is 0 then stop here.
+    if(!$session_id) return;
 
     // todo : attach width, height and other image properties
     $image = array(
@@ -186,7 +188,6 @@ function studiobridge_store_images_entity_insert(Drupal\Core\Entity\EntityInterf
     // Add product to session.
     //studiobridge_store_images_add_product_to_session($session_id, $node);
     //Products::addProductToSession($session_id, $node);
-
   }
 
   // todo : logs yet be added.
@@ -196,6 +197,58 @@ function studiobridge_store_images_entity_insert(Drupal\Core\Entity\EntityInterf
     // Load services as it is object context.
     $StudioSessions = \Drupal::service('studio.sessions');
     $StudioSessions->AddStartTimeToSession($entity->id(),0);
+  }
+
+  if ($bundle == 'image' && isset($values['field_container'][0]['target_id'])) {
+
+    // Get sessionid from image entity ; basically when image is uploaded that time user will select opended session.
+    $container_id = $values['field_container'][0]['target_id'];
+    if($container_id){
+      $container  = Node::load($container_id);
+      $title = $container->title->getValue();
+      if($title) {
+        $title = $title[0]['value'];
+      }
+
+      // Set product identifier to container state
+      $identifier = \Drupal::state()->get('warehouse_container_last_scan_product_' . $title,false);
+
+      $StudioProducts = \Drupal::service('studio.products');
+      $result = $StudioProducts->getProductByIdentifier($identifier);
+
+      if($result){
+        $product_nid = reset($result);
+        $StudioImgs = \Drupal::service('studio.imgs');
+
+        $StudioImgs->AddFileTransfer($entity->id(), $product_nid,0,$container_id);
+
+        $image = array(
+          'target_id' => $values['fid'][0]['value'],
+        );
+
+        $product_node = Node::load($product_nid);
+        // Get the available images
+        $images = $product_node->field_images->getValue();
+
+        // add new image to existing
+        if(count($images)){
+          $images = array_merge($images, array($image));
+        }else{
+          $image = array(0=>$image);
+          $images = array_merge($images, $image);
+          //$images = array_push($images,$image);
+        }
+
+        // Set the image array to image field
+        $product_node->field_images->setValue($images);
+
+
+        // finally save the node
+        $product_node->save();
+
+      }
+
+    }
   }
 
 }
