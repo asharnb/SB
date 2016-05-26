@@ -582,37 +582,3 @@ function studiobridge_store_images_entity_update(Drupal\Core\Entity\EntityInterf
 function studiobridge_store_images_user_logout($account){
   return (new RedirectResponse('/user/login'))->send();
 }
-
-
-// ---- Testing code  -------
-
-//
-//function studiobridge_store_images_file_copy(Drupal\file\FileInterface $file, Drupal\file\FileInterface $source) {
-//  // Make sure that the file name starts with the owner's user name.
-////  if (strpos($file->getFilename(), $file->getOwner()->name) !== 0) {
-////    $file->setFilename($file->getOwner()->name . '_' . $file->getFilename());
-////    $file->save();
-////
-////    \Drupal::logger('file')->notice('Copied file %source has been renamed to %destination', array('%source' => $source->filename, '%destination' => $file->getFilename()));
-////  }
-//}
-//
-///**
-// * Respond to a file that has been moved.
-// *
-// * @param \Drupal\file\FileInterface $file
-// *   The updated file entity after the move.
-// * @param \Drupal\file\FileInterface $source
-// *   The original file entity before the move.
-// *
-// * @see file_move()
-// */
-//function studiobridge_store_images_file_move(Drupal\file\FileInterface $file, Drupal\file\FileInterface $source) {
-//  // Make sure that the file name starts with the owner's user name.
-////  if (strpos($file->getFilename(), $file->getOwner()->name) !== 0) {
-////    //$file->setFilename($file->getOwner()->name . '_' . $file->getFilename());
-////    //$file->save();
-////
-////    \Drupal::logger('file')->notice('Moved file %source has been renamed to %destination', array('%source' => $source->filename, '%destination' => $file->getFilename()));
-////  }
-//}
