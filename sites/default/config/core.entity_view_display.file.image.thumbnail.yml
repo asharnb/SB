@@ -4,9 +4,13 @@ status: true
 dependencies:
   config:
     - core.entity_view_mode.file.thumbnail
+    - field.field.file.image.field_container
+    - field.field.file.image.field_full_shoot
     - field.field.file.image.field_image_alt_text
     - field.field.file.image.field_image_title_text
+    - field.field.file.image.field_reference
     - field.field.file.image.field_session
+    - field.field.file.image.field_tag
     - file_entity.type.image
     - image.style.thumbnail
   module:
@@ -34,9 +38,13 @@ content:
       image_link: ''
     third_party_settings: {  }
 hidden:
+  field_container: true
+  field_full_shoot: true
   field_image_alt_text: true
   field_image_title_text: true
+  field_reference: true
   field_session: true
+  field_tag: true
   filemime: true
   filesize: true
   uid: true

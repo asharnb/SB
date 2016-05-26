@@ -1,0 +1,23 @@
+uuid: 5dccb7ab-289c-48c3-aeb8-1eebc38613a3
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.file.field_reference
+    - file_entity.type.image
+id: file.image.field_reference
+field_name: field_reference
+entity_type: file
+bundle: image
+label: 'Container Reference'
+description: ''
+required: false
+translatable: false
+default_value:
+  -
+    value: 0
+default_value_callback: ''
+settings:
+  on_label: 'Yes'
+  off_label: 'No'
+field_type: boolean

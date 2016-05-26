@@ -1,0 +1,30 @@
+uuid: 5e778178-0146-4ae0-a703-9f9e47b93482
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_product
+    - node.type.container
+    - node.type.products
+    - node.type.unmapped_products
+id: node.container.field_product
+field_name: field_product
+entity_type: node
+bundle: container
+label: Products
+description: ''
+required: false
+translatable: true
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: 'default:node'
+  handler_settings:
+    target_bundles:
+      products: products
+      unmapped_products: unmapped_products
+    sort:
+      field: _none
+    auto_create: false
+    auto_create_bundle: products
+field_type: entity_reference

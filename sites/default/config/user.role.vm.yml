@@ -23,3 +23,7 @@ permissions:
   - 'restful post site_bundle_post'
   - 'restful post drop_product_post'
   - 'restful post time_session_product_post'
+  - 'create container content'
+  - 'edit any container content'
+  - 'edit own container content'
+  - 'restful post warehouse_operations'

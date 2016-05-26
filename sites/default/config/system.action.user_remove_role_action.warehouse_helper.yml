@@ -1,0 +1,14 @@
+uuid: 7f53ce2d-8315-495b-b2e3-36426b55a3f2
+langcode: en
+status: true
+dependencies:
+  config:
+    - user.role.warehouse_helper
+  module:
+    - user
+id: user_remove_role_action.warehouse_helper
+label: 'Remove the Warehouse helper role from the selected users'
+type: user
+plugin: user_remove_role_action
+configuration:
+  rid: warehouse_helper

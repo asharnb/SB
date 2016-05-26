@@ -19,3 +19,7 @@ services:
     class: Drupal\studiobridge_commons\StudioCommons
     arguments: ['@database', '@entity_type.manager', '@current_user', '@entity.query']
 
+  studio.container:
+    class: Drupal\studiobridge_commons\StudioContainer
+    arguments: ['@database', '@entity_type.manager', '@current_user', '@entity.query', , '@state']
+

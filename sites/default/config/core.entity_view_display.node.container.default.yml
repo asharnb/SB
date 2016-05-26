@@ -1,0 +1,76 @@
+uuid: 253067be-34b3-4c22-a999-9b2c91f75379
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.field.node.container.field_actual_quantity
+    - field.field.node.container.field_container_state
+    - field.field.node.container.field_dropped_products
+    - field.field.node.container.field_expected_quantity
+    - field.field.node.container.field_product
+    - field.field.node.container.field_received_by
+    - field.field.node.container.field_received_date
+    - node.type.container
+  module:
+    - datetime
+    - options
+    - user
+id: node.container.default
+targetEntityType: node
+bundle: container
+mode: default
+content:
+  field_actual_quantity:
+    weight: 102
+    label: above
+    settings:
+      thousand_separator: ''
+      prefix_suffix: true
+    third_party_settings: {  }
+    type: number_integer
+  field_container_state:
+    weight: 103
+    label: above
+    settings: {  }
+    third_party_settings: {  }
+    type: list_default
+  field_dropped_products:
+    weight: 107
+    label: above
+    settings:
+      link: true
+    third_party_settings: {  }
+    type: entity_reference_label
+  field_expected_quantity:
+    weight: 101
+    label: above
+    settings:
+      thousand_separator: ''
+      prefix_suffix: true
+    third_party_settings: {  }
+    type: number_integer
+  field_product:
+    weight: 104
+    label: above
+    settings:
+      link: true
+    third_party_settings: {  }
+    type: entity_reference_label
+  field_received_by:
+    weight: 106
+    label: above
+    settings:
+      link: true
+    third_party_settings: {  }
+    type: entity_reference_label
+  field_received_date:
+    weight: 105
+    label: above
+    settings:
+      format_type: medium
+      timezone_override: ''
+    third_party_settings: {  }
+    type: datetime_default
+  links:
+    weight: 100
+hidden: {  }

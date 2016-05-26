@@ -1,17 +1,15 @@
-uuid: 43fe4a55-d8a4-4eab-9301-01a92e4b4260
+uuid: 1d812f3f-9629-4f80-9a27-641f0fb0fb4f
 langcode: en
 status: true
 dependencies:
   module:
     - node
-id: node.field_size_variant
-field_name: field_size_variant
+id: node.field_dropped_products
+field_name: field_dropped_products
 entity_type: node
-type: string
+type: entity_reference
 settings:
-  max_length: 255
-  is_ascii: false
-  case_sensitive: false
+  target_type: node
 module: core
 locked: false
 cardinality: -1

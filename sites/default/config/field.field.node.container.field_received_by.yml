@@ -1,0 +1,36 @@
+uuid: cb309b74-b03d-4bd9-bc4b-ebd527c2b53f
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_received_by
+    - node.type.container
+id: node.container.field_received_by
+field_name: field_received_by
+entity_type: node
+bundle: container
+label: 'Received By'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: 'default:user'
+  handler_settings:
+    include_anonymous: true
+    filter:
+      type: role
+      role:
+        warehouse_helper: warehouse_helper
+        administrator: '0'
+        vm: '0'
+        photographer: '0'
+        stylish: '0'
+        qc: '0'
+    target_bundles: null
+    sort:
+      field: name
+      direction: ASC
+    auto_create: false
+field_type: entity_reference
