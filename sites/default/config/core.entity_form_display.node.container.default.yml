@@ -24,28 +24,12 @@ content:
     weight: 2
     settings: {  }
     third_party_settings: {  }
-  field_dropped_products:
-    weight: 28
-    settings:
-      match_operator: CONTAINS
-      size: 60
-      placeholder: ''
-    third_party_settings: {  }
-    type: entity_reference_autocomplete
   field_expected_quantity:
     weight: 6
     settings:
       placeholder: ''
     third_party_settings: {  }
     type: number
-  field_product:
-    type: entity_reference_autocomplete
-    weight: 0
-    settings:
-      match_operator: CONTAINS
-      size: 60
-      placeholder: ''
-    third_party_settings: {  }
   field_received_by:
     weight: 27
     settings:
@@ -94,3 +78,5 @@ content:
 hidden:
   field_actual_quantity: true
   field_container_state: true
+  field_dropped_products: true
+  field_product: true

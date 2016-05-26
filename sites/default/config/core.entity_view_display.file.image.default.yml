@@ -11,7 +11,9 @@ dependencies:
     - field.field.file.image.field_session
     - field.field.file.image.field_tag
     - file_entity.type.image
+    - image.style.live_shoot_preview
   module:
+    - file_entity
     - user
 _core:
   default_config_hash: _Bf428kqU4oErwcNNTL2Wj4HQfES94Bs4usKnK3iL2Q
@@ -102,10 +104,11 @@ content:
     settings: {  }
     third_party_settings: {  }
   uri:
-    type: string
+    type: file_image
     weight: 1
     label: above
     settings:
-      link_to_entity: false
+      image_style: live_shoot_preview
+      image_link: ''
     third_party_settings: {  }
 hidden: {  }
