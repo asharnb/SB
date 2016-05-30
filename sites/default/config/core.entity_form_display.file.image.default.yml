@@ -3,9 +3,11 @@ langcode: en
 status: true
 dependencies:
   config:
+    - field.field.file.image.field_container
     - field.field.file.image.field_full_shoot
     - field.field.file.image.field_image_alt_text
     - field.field.file.image.field_image_title_text
+    - field.field.file.image.field_reference
     - field.field.file.image.field_session
     - field.field.file.image.field_tag
     - file_entity.type.image
@@ -16,6 +18,14 @@ targetEntityType: file
 bundle: image
 mode: default
 content:
+  field_container:
+    weight: 5
+    settings:
+      match_operator: CONTAINS
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+    type: entity_reference_autocomplete
   field_full_shoot:
     weight: 3
     settings:
@@ -36,6 +46,12 @@ content:
       size: 60
       placeholder: ''
     third_party_settings: {  }
+  field_reference:
+    weight: 4
+    settings:
+      display_label: false
+    third_party_settings: {  }
+    type: boolean_checkbox
   field_session:
     weight: 1
     settings:

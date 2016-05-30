@@ -1,0 +1,19 @@
+uuid: 6a36783c-5ed8-4ed5-9258-831d610c6a96
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_department
+    - node.type.products
+id: node.products.field_department
+field_name: field_department
+entity_type: node
+bundle: products
+label: Department
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: string

@@ -3,13 +3,17 @@ langcode: en
 status: true
 dependencies:
   config:
+    - field.field.file.image.field_container
     - field.field.file.image.field_full_shoot
     - field.field.file.image.field_image_alt_text
     - field.field.file.image.field_image_title_text
+    - field.field.file.image.field_reference
     - field.field.file.image.field_session
     - field.field.file.image.field_tag
     - file_entity.type.image
+    - image.style.live_shoot_preview
   module:
+    - file_entity
     - user
 _core:
   default_config_hash: _Bf428kqU4oErwcNNTL2Wj4HQfES94Bs4usKnK3iL2Q
@@ -18,6 +22,13 @@ targetEntityType: file
 bundle: image
 mode: default
 content:
+  field_container:
+    weight: 11
+    label: above
+    settings:
+      link: true
+    third_party_settings: {  }
+    type: entity_reference_label
   field_full_shoot:
     weight: 9
     label: above
@@ -41,6 +52,15 @@ content:
     settings:
       link_to_entity: false
     third_party_settings: {  }
+  field_reference:
+    weight: 10
+    label: above
+    settings:
+      format: default
+      format_custom_false: ''
+      format_custom_true: ''
+    third_party_settings: {  }
+    type: boolean
   field_session:
     type: entity_reference_label
     weight: 3
@@ -84,10 +104,11 @@ content:
     settings: {  }
     third_party_settings: {  }
   uri:
-    type: string
+    type: file_image
     weight: 1
     label: above
     settings:
-      link_to_entity: false
+      image_style: live_shoot_preview
+      image_link: ''
     third_party_settings: {  }
 hidden: {  }

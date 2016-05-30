@@ -1,0 +1,30 @@
+uuid: 4501d90f-66ae-4547-874f-ae89f7b41b5a
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_dropped_products
+    - node.type.container
+    - node.type.products
+    - node.type.unmapped_products
+id: node.container.field_dropped_products
+field_name: field_dropped_products
+entity_type: node
+bundle: container
+label: 'Dropped Products'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: 'default:node'
+  handler_settings:
+    target_bundles:
+      products: products
+      unmapped_products: unmapped_products
+    sort:
+      field: _none
+    auto_create: false
+    auto_create_bundle: products
+field_type: entity_reference

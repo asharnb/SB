@@ -85,12 +85,13 @@ class StudioImgs implements StudioImgsInterface {
  * @param sid
  *   Session node nid.
  */
-  public function AddFileTransfer($fid, $pid, $sid) {
+  public function AddFileTransfer($fid, $pid, $sid=0,$cid=0) {
     $this->database->insert('studio_file_transfers')
       ->fields(array(
         'fid' => $fid,
         'pid' => $pid,
         'sid' => $sid,
+        'cid' => $cid,
         'created' => REQUEST_TIME,
       ))
       ->execute();

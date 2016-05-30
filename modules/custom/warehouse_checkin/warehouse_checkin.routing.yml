@@ -9,7 +9,7 @@
 # ("\Drupal\studio_photodesk_screens\Controller\ViewSessionController")
 # and a method ("content").
 warehouse_checkin.checkin_content:
-  path: '/warehouse/checkin'
+  path: '/warehouse/checkin/{cid}'
   defaults:
     _controller: '\Drupal\warehouse_checkin\Controller\warehousecheckinController::content'
   requirements:

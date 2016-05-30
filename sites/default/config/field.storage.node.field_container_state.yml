@@ -1,0 +1,33 @@
+uuid: 50127372-ca4f-4f3c-8e5b-68518a3c4e8f
+langcode: en
+status: true
+dependencies:
+  module:
+    - node
+    - options
+id: node.field_container_state
+field_name: field_container_state
+entity_type: node
+type: list_string
+settings:
+  allowed_values:
+    -
+      value: received
+      label: Received
+    -
+      value: checkIn
+      label: CheckIn
+    -
+      value: checkout
+      label: Checkout
+    -
+      value: closed
+      label: Closed
+  allowed_values_function: ''
+module: options
+locked: false
+cardinality: 1
+translatable: true
+indexes: {  }
+persist_with_no_fields: false
+custom_storage: false

@@ -1,0 +1,21 @@
+uuid: d4c9f448-2eb5-4ea1-99af-2892ff43cc50
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_received_date
+    - node.type.container
+  module:
+    - datetime
+id: node.container.field_received_date
+field_name: field_received_date
+entity_type: node
+bundle: container
+label: 'Received Date'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: datetime

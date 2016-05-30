@@ -9,6 +9,7 @@ dependencies:
     - field.field.node.products.field_color_variant
     - field.field.node.products.field_concept
     - field.field.node.products.field_concept_name
+    - field.field.node.products.field_department
     - field.field.node.products.field_description
     - field.field.node.products.field_draft
     - field.field.node.products.field_ean_code
@@ -71,6 +72,13 @@ content:
     type: options_select
   field_concept_name:
     weight: 32
+    settings:
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+    type: string_textfield
+  field_department:
+    weight: 34
     settings:
       size: 60
       placeholder: ''

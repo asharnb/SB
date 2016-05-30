@@ -15,3 +15,8 @@ studio-bridge-view-product:
 studio-bridge-view-session:
   js:
     js/studio-bridge-close-tab.js: {}
+
+studio-bridge-global-changes:
+  version: VERSION
+  js:
+    js/studio-global-changes.js: {}

@@ -1,0 +1,14 @@
+uuid: 8105a0c8-9406-45d8-ba26-5cc070116b6e
+langcode: en
+status: true
+dependencies:
+  config:
+    - user.role.warehouse_helper
+  module:
+    - user
+id: user_add_role_action.warehouse_helper
+label: 'Add the Warehouse helper role to the selected users'
+type: user
+plugin: user_add_role_action
+configuration:
+  rid: warehouse_helper

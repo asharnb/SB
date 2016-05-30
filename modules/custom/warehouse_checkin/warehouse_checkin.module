@@ -28,7 +28,15 @@ function warehouse_checkin_theme($existing, $type, $theme, $path) {
   return array(
 
       'checkin' => array(
-          'variables' => array(),
+        'variables' => array('container' => array(),'product_identifier' => NULL, 'product_block' => array()),
       ),
   );
+}
+
+/*
+ *  Implements hook_form_alter().
+ */
+function warehouse_checkin_form_alter(&$form, \Drupal\Core\Form\FormStateInterface $form_state, $form_id) {
+  //todo : move js code here , to change label of node title for container content type.
+  if ($form_id == 'node_container_form') {}
 }

@@ -1,0 +1,23 @@
+uuid: 493b2ec7-3b83-4f08-8b7b-0cf8c3a9643c
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_actual_quantity
+    - node.type.container
+id: node.container.field_actual_quantity
+field_name: field_actual_quantity
+entity_type: node
+bundle: container
+label: 'Actual Quantity'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  min: 0
+  max: null
+  prefix: ''
+  suffix: ''
+field_type: integer
