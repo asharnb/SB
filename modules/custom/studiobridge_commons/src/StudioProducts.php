@@ -803,8 +803,8 @@ class StudioProducts implements StudioProductsInterface {
   /*
    * Helper function, to check product duplicates in session/container.
    */
-  public function checkProductDuplicate($product, $bundles=array()){
-    $product_nid = $product->id();
+  public function checkProductDuplicate($product_nid, $bundles=array()){
+    //$product_nid = $product->id();
     $query = $this->queryFactory->get('node');
     if($bundles){
       $query->condition('type', $bundles, 'IN');

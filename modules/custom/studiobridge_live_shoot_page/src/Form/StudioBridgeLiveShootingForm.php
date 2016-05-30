@@ -430,6 +430,7 @@ class StudioBridgeLiveShootingForm extends FormBase {
       $sessions_nids = $db->select('node__field_product', 'c')
         ->fields('c')
         ->condition('field_product_target_id', $new_or_old_product_nid)
+        ->condition('bundle', 'sessions')
         ->execute()->fetchAll();
 
       // todo : if count is more than 1
