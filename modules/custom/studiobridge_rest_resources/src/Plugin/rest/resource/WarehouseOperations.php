@@ -133,7 +133,7 @@ class WarehouseOperations extends ResourceBase {
 
         // Check for duplicate/Reshoot
         if($product){
-          $duplicates = $this->studioProducts->checkProductDuplicate($product->nid, array('container'));
+          $duplicates = $this->studioProducts->checkProductDuplicate($product->id(), array('container'));
           if(count($duplicates) > 1){
             $duplicate = true;
           }elseif(count($duplicates) == 1){
