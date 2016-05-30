@@ -50,11 +50,11 @@
     position: relative;
     padding: 0px;
     display: inline-block;
-    margin: 5px;
+    margin: 10px;
     vertical-align: top;
     border: 1px solid #E0E0E0;
     /* padding: 6px; */
-    /* box-shadow: 1px 1px 4px rgba(0,0,0,.16); */
+    box-shadow: 1px 1px 1px rgba(0,0,0,.16);
     /* font-size: 14px; */
 }
 

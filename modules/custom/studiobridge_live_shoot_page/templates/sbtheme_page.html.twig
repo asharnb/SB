@@ -2,15 +2,12 @@
                 {{ form.form_id }}
 
                 <div class="row">
-                  <div class="col-sm-12 col-md-8">
-                    <h3>Add <span class="semi-bold">Products</span></h3>
-                    <h4>Import new products and perform image selection</h4>
-                  </div>
-                  <div class="col-sm-12 col-md-4">
-                    <a class="btn btn-primary btn-cons pull-right" href="/sbtest/node/add/sessions"><i class="fa fa-plus mr5"></i>Add Session</a>
+                  <div class="col-sm-12 col-md-12">
+                    <h3>Add Product</h3>
+                    <h4>Add, select, and resequence product images for this option</h4>
                   </div>
                 </div>
-
+                <hr>
                     <div class="col-xs-9">
 <div class="panel panel-default row">
 
@@ -27,16 +24,34 @@
 
 <hr>
 
+                  <div class="col-sm-12 p-sm">
+
+
+
+                    <div class="row">
+                      <div class="col-sm-8 ">
+                          <h5 class="no-margins semi-bold">Product Images</h5>
+                      </div>
+                      <div class="col-sm-4 ">
+                        <span class="pull-right">
+                                                  {{ form.resequence }}
+                                                  {{ form.delete }}
+                  </span>
+                      </div>
+
+
+                    </div>
 
                             <div  id="imagecontainer-wrapper">
                                 <div id="imagecontainer" name="imagecontainer" class="ui-sortable">
+
 
                                     {% block sbimages %}
                                     {% endblock sbimages %}
 
                                 </div>
                             </div>
-
+  </div>
 
 
 
@@ -45,12 +60,10 @@
   </div>
     <!-- right panel -->
     <div class="col-xs-3">
-      <div class="panel panel-default">
-        <div class="row">
+
         {% block sidepanel %}
         {% endblock sidepanel %}
-      </div>
-    </div>
+
     </div>
 
 <div id="smartnotification"></div>

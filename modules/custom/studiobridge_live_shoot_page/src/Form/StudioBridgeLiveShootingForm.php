@@ -212,10 +212,10 @@ class StudioBridgeLiveShootingForm extends FormBase {
     // @ashar : seperate this image container so we can apply theme formatting to it
 
     $form['resequence'] = array(
-      '#markup' => '<a id="studio-resequence-bt" class="btn btn-xs btn-complete">Resequence</a>',
+      '#markup' => '<a id="studio-resequence-bt" class="btn btn-xs">Resequence</a>',
     );
     $form['delete'] = array(
-      '#markup' => '<a id="studio-delete-bt" class="btn btn-xs btn-danger">Delete</a>',
+      '#markup' => '<a id="studio-delete-bt" class="btn btn-xs border-red text-danger">Delete</a>',
     );
     $form['misc'] = array(
       '#markup' => '<div id="studio-img-container"></div><div id="js-holder"></div><div id="msg-up"></div>',
@@ -556,7 +556,7 @@ class StudioBridgeLiveShootingForm extends FormBase {
     $sort_js = '<script>!function(e){e(function(){e("#imagecontainer").sortable(({
   tolerance: \'pointer\',
   start: function(event, ui){
-    ui.placeholder.html("<div class=\'bulkviewfiles file gray-bkground\' style=\'width: 250px; height: 250px; background: #D2D2D2;\'></div>");
+    ui.placeholder.html("<div class=\'bulkviewfiles file gray-bkground\' style=\'width: 200px; height: 250px; background: #D2D2D2;\'></div>");
   },
   stop: function(event, ui){
     ui.placeholder.html("");

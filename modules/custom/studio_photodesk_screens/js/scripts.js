@@ -5,19 +5,19 @@
 
   //TO DO: disable delete button by default, only enable when something is checked to delete
 
-  'use strict';
+  //'use strict';
 
-  Drupal.behaviors.sessiondatatable = {
-    attach: function(context) {
-      $('#dt_viewsessions').DataTable( {
-        "bSort": false,
-        "bDestroy": true,
-        "iDisplayLength": 100,
-        "order": [[1 , 'asc']],
-        "autoWidth" : true
-      } );
-    }
-  };
+  // Drupal.behaviors.sessiondatatable = {
+  //   attach: function(context) {
+  //     $('#dt_viewsessions').DataTable( {
+  //       "bSort": false,
+  //       "bDestroy": true,
+  //       "iDisplayLength": 100,
+  //       "order": [[1 , 'asc']],
+  //       "autoWidth" : true
+  //     } );
+  //   }
+  // };
 
 
   Drupal.behaviors.closesession = {
@@ -71,5 +71,44 @@
     }
   };
 
+  var equalheight = function(container){
+
+    var currentTallest = 0,
+    currentRowStart = 0,
+    rowDivs = new Array(),
+    topPosition = 0;
+    $(container).each(function() {
+
+      var el = jQuery(this);
+      console.log(el.height());
+      el.height('auto')
+      topPosition = el.position().top;
+
+      if (currentRowStart != topPosition) {
+        for (currentDiv = 0 ; currentDiv < rowDivs.length ; currentDiv++) {
+          rowDivs[currentDiv].height(currentTallest);
+        }
+        rowDivs.length = 0; // empty the array
+        currentRowStart = topPosition;
+        currentTallest = el.height();
+        rowDivs.push(el);
+      } else {
+        rowDivs.push(el);
+        currentTallest = (currentTallest < el.height()) ? (el.height()) : (currentTallest);
+      }
+      for (currentDiv = 0 ; currentDiv < rowDivs.length ; currentDiv++) {
+        rowDivs[currentDiv].height(currentTallest);
+      }
+    });
+  }
+
+  $(window).load(function() {
+    equalheight('.equalheight');
+  });
+
+
+  $(window).resize(function(){
+    equalheight('.equalheight');
+  });
 
 }(jQuery));
