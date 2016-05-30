@@ -503,7 +503,8 @@ class StudioBridgeLiveShootingForm extends FormBase {
     }
 
 
-    $images = $StudioProducts->getProductImages($new_or_old_product_nid);
+    //$images = $StudioProducts->getProductImages($new_or_old_product_nid);
+    $images = '';
 
     $block = '<div id="imagecontainer" name="imagecontainer" class="ui-sortable">';
     $i = 1;
