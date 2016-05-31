@@ -69,7 +69,7 @@ class warehousecheckinController extends ControllerBase {
     // on invalid container, redirect user to somewhere & notify him.
     if (!$container_nid) {
       drupal_set_message('Invalid Container found', 'warning');
-      return new RedirectResponse(base_path() . 'view-sessions2');
+      return new RedirectResponse(base_path() . 'containers');
     }
 
     if($state == 'checkin'){
@@ -85,7 +85,6 @@ class warehousecheckinController extends ControllerBase {
           // Product data response.
           $product_return_data = $this->studioProducts->getProductInfoByObject($product);
         }
-        $a = 1;
       }
 
       return [
@@ -100,7 +99,6 @@ class warehousecheckinController extends ControllerBase {
             'warehouse_checkin/checkin-form',
           )
         ),
-
       ];
     }
 

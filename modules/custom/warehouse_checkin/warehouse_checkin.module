@@ -26,10 +26,19 @@ function warehouse_checkin_help($route_name, RouteMatchInterface $route_match) {
 
 function warehouse_checkin_theme($existing, $type, $theme, $path) {
   return array(
-
-      'checkin' => array(
-        'variables' => array('container' => array(),'product_identifier' => NULL, 'product_block' => array()),
+    'checkin' => array(
+      'variables' => array('container' => array(), 'product_identifier' => NULL, 'product_block' => array()),
+    ),
+    'view_container' => array(
+      'variables' => array(
+        'container' => array(),
+        'products' => array(),
+        'test' => NULL,
+        'grouped_concepts' => array(),
+        'unmapped_products' => array(),
+//        'mapped_products' => array(),
       ),
+    )
   );
 }
 

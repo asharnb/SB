@@ -1,0 +1,68 @@
+{#
+/**
+* @file
+* Default theme implementation to display the Container details page.
+*
+* Available variables:
+* - container: container node array
+*   -  title: Container ID  -  {{ container.title.0.value }}
+*   -  field_container_state: Status of container  -  {{ container.field_container_state.0.value }}
+*   -  field_product: array of product ids, use like this to get count of total products - {{ ITEM.field_product|length }}
+*   -  field_actual_quantity: Actual Quantity. -  {{ container.field_actual_quantity.0.value }}
+*   -  field_expected_quantity: Class of container. - {{ container.field_expected_quantity.0.value }}
+*   -  field_received_by: Container received by. - {{ container.field_received_by.0.value }}
+*   -  field_received_date: Container received by. - {{ container.field_received_date.0.value|date("m/d/Y") }}
+*  todo : check for missing values
+*
+* - grouped_concepts: array contain concept & count of its products
+*   -  concept: Name of the concept  -  {{ ITEM.concept }}
+*   -  product_count: Count of products under this concept -  {{ ITEM.product_count }}
+*
+* - unmapped_products: array contains all properties of unmapped products
+*   -  title: Title/Identifier of unmapped product   -  {{ ITEM.title.0.value }}
+*   -  field_images: To get count of image, use like -  {{ ITEM.field_images|length }}
+*   -  field_state: Product status/stage.  -  {{ ITEM.field_state.0.value }}
+*   -  created: Timestamp product created - {{ ITEM.create.0.value|date("m/d/Y") }}
+*  todo : check for missing values
+*
+* - mapped_products: array contains all properties of mapped products
+*   -  title: Title/Identifier of mapped product  -  {{ ITEM.title.0.value }}
+*   -  field_images: To get count of image, use like -  {{ ITEM.field_images|length }}
+*   -  field_state: Product status/stage. -  {{ ITEM.field_state.0.value }}
+*   -  created: Timestamp product created - {{ ITEM.session.create.0.value|date("m/d/Y") }}
+*   -  field_concept_name: Name of concept - {{ ITEM.field_concept_name.0.value }}
+*   -  field_style_family: Name of style family - {{ ITEM.field_style_family.0.value }}
+*   -  field_color_variant: Name of style family - {{ ITEM.field_color_variant.0.value }}
+*   -  field_sku_id: SKU_ID value - {{ ITEM.field_sku_id.0.value }}
+*  todo : check for missing values
+*
+* - total_images: Total no.of images in this session - {{ total_images }}
+*
+*
+* - products: array contains all properties of unmapped products
+*   -  concept: Concept of product   -  {{ ITEM.concept }}
+*   -  styleno: Style No -  {{ ITEM.styleno }}
+*   -  colorvariant: Color Variant -  {{ ITEM.colorvariant }}
+*   -  image_count: Image count in this product -  {{ ITEM.image_count }}
+*   -  state: Product status/stage.  -  {{ ITEM.state }}
+*   -  identifier: Product identifier.  -  {{ ITEM.identifier }}
+*   -  nid: Product nid- {{ ITEM.nid }}
+* @ingroup themeable
+*/
+#}
+
+
+<h1>Testing container.</h1>
+
+
+<ul>
+{% for item in products %}
+    <li>{{ item.concept }}, {{ item.styleno }}</li>
+{% endfor %}
+</ul>
+<hr>
+<ul>
+    {% for item in grouped_concepts %}
+        <li>{{ item.concept }}, {{ item.product_count }}</li>
+    {% endfor %}
+</ul>
