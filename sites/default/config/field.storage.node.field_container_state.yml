@@ -23,6 +23,9 @@ settings:
     -
       value: closed
       label: Closed
+    -
+      value: started
+      label: Started
   allowed_values_function: ''
 module: options
 locked: false
