@@ -85,7 +85,7 @@ class StudioImgs implements StudioImgsInterface {
  * @param sid
  *   Session node nid.
  */
-  public function AddFileTransfer($fid, $pid, $sid=0,$cid=0) {
+  public function AddFileTransfer($fid, $pid, $sid = 0, $cid = 0) {
     $this->database->insert('studio_file_transfers')
       ->fields(array(
         'fid' => $fid,
@@ -97,7 +97,7 @@ class StudioImgs implements StudioImgsInterface {
       ->execute();
 
     // Move it to service :todo
-    \Drupal::logger('StudioImages Logs')->notice('New file log saved - '. $fid);
+    \Drupal::logger('StudioImages Logs')->notice('New file log saved - ' . $fid);
 
   }
 
@@ -117,11 +117,11 @@ class StudioImgs implements StudioImgsInterface {
   /*
    *  Helper function, to move file from location.
    */
-  public function ImagePhysicalName($dir, $filename, $fileObj){
+  public function ImagePhysicalName($dir, $filename, $fileObj) {
     $folder = "public://$dir";
-    if(file_prepare_directory($folder, FILE_CREATE_DIRECTORY)){
+    if (file_prepare_directory($folder, FILE_CREATE_DIRECTORY)) {
       //\Drupal::logger('GGG')->notice('');
-      $uri = $folder.'/'.$filename;
+      $uri = $folder . '/' . $filename;
       //file_build_uri();
       return file_move($fileObj, $uri, FILE_EXISTS_REPLACE);
     }
@@ -131,13 +131,13 @@ class StudioImgs implements StudioImgsInterface {
   /*
    * Helper function, to update file uri.
    */
-  public function UpdateFileLog($fid,$uri){
+  public function UpdateFileLog($fid, $uri) {
 
     $fields = array(
       'uri' => $uri,
     );
     $query = $this->database->update('file_managed')
-    //$query = \Drupal::database()->update('file_managed')
+      //$query = \Drupal::database()->update('file_managed')
       ->fields($fields)
       ->condition('fid', $fid);
     $query->execute();
@@ -150,17 +150,18 @@ class StudioImgs implements StudioImgsInterface {
    * @param fid
    *   Image fid
    */
-  public function FullShootImage($product, $fid){
+  public function FullShootImage($product, $fid) {
     $images = $product->field_images->getValue();
     $image = array('target_id' => $fid);
 
     // Get the available images
 
     // add new image to existing
-    if(count($images)){
+    if (count($images)) {
       $images = array_merge($images, array($image));
-    }else{
-      $image = array(0=>$image);
+    }
+    else {
+      $image = array(0 => $image);
       $images = array_merge($images, $image);
       //$images = array_push($images,$image);
     }
@@ -172,7 +173,7 @@ class StudioImgs implements StudioImgsInterface {
   /*
    *  Helper function, To tag image as tagged.
    */
-  public function TagImage($image, $tag=1, $session_id){
+  public function TagImage($image, $tag = 1, $session_id) {
     $file = $this->fileStorage->load($image);
     $file->field_tag->setValue($tag);
     $file->save();
@@ -181,7 +182,7 @@ class StudioImgs implements StudioImgsInterface {
   /*
    * Helper function, to update image physical path.
    */
-  public function ImgUpdate($file, $session_id,$field_base_product_id,$i,$concept, $color_variant, $tag = false){
+  public function ImgUpdate($file, $session_id, $field_base_product_id, $i, $concept, $color_variant, $tag = FALSE) {
     //    $filemime = $filemime[0]['value'];
     //    $filemime = explode('/', $filemime);
     //    $filemime = $filemime[1];
@@ -190,26 +191,27 @@ class StudioImgs implements StudioImgsInterface {
     //    }
     // todo : filemime will be wrong
     // change file name as per sequence number and base product_id value.
-    if($tag){
+    if ($tag) {
       $filename = 'Tag.jpg';
-    }else{
+    }
+    else {
       $filename = $field_base_product_id . '_' . $i . ".$filemime";
     }
 
-    $dir = $session_id.'/'.$concept.'/'.$color_variant;
+    $dir = $session_id . '/' . $concept . '/' . $color_variant;
 
     //if(StudioImages::ImagePhysicalName($dir,$filename,$file)){
-    if($this->ImagePhysicalName($dir,$filename,$file)){
+    if ($this->ImagePhysicalName($dir, $filename, $file)) {
       $folder = "public://$dir";
-      $uri = $folder.'/'.$filename;
+      $uri = $folder . '/' . $filename;
       $file->uri->setValue($uri); //public://fileKVxEHe
     }
     $file->filename->setValue($filename);
     $file->save();
     //
     $folder = "public://$dir";
-    $uri = $folder.'/'.$filename;
-    $this->UpdateFileLog($file->id(),$uri);
+    $uri = $folder . '/' . $filename;
+    $this->UpdateFileLog($file->id(), $uri);
 
   }
 

@@ -242,27 +242,27 @@ class StudioProducts implements StudioProductsInterface {
       $field_size_name = array();
       $field_barcode = array();
 
-      if($product->barcode){
-        foreach($product->barcode as $barcode){
+      if ($product->barcode) {
+        foreach ($product->barcode as $barcode) {
           //$field_size_variant[] = ['value' => $barcode];
           $tmp1 = array('value' => $barcode);
-          array_push($field_barcode,$tmp1);
+          array_push($field_barcode, $tmp1);
         }
       }
 
-      if($product->size_name){
-        foreach($product->size_name as $sn){
+      if ($product->size_name) {
+        foreach ($product->size_name as $sn) {
           //$field_size_variant[] = ['value' => $barcode];
           $tmp2 = array('value' => $sn);
-          array_push($field_size_name,$tmp2);
+          array_push($field_size_name, $tmp2);
         }
       }
 
-      if($product->size_variant){
-        foreach($product->size_variant as $sv){
+      if ($product->size_variant) {
+        foreach ($product->size_variant as $sv) {
           //$field_size_variant[] = ['value' => $barcode];
           $tmp3 = array('value' => $sv);
-          array_push($field_size_variant,$tmp3);
+          array_push($field_size_variant, $tmp3);
         }
       }
 
@@ -315,7 +315,7 @@ class StudioProducts implements StudioProductsInterface {
           // Load the file object.
           $file = File::load($fid);
           // Validated file if it is deleted then error will occur.
-          if($file){
+          if ($file) {
             // Get the file name.
             $file_name = $file->filename->getValue();
             $file_name = $file_name[0]['value'];
@@ -348,14 +348,14 @@ class StudioProducts implements StudioProductsInterface {
 
     $url = "http://alpha.cms2.dreamcms.me/service/product-data?_format=json&product_identifier=$input";
     //$url = "http://staging.dreamcms.me/service/product-data?sku_id=$input";
-     $response = \Drupal::httpClient()
-       ->get($url, [
-         'auth' => ['demouser', 'demouser'],
-         //'body' => $serialized_entity,
-         'headers' => [
-           'Content-Type' => 'application/json'
-         ],
-       ]);
+    $response = \Drupal::httpClient()
+      ->get($url, [
+        'auth' => ['demouser', 'demouser'],
+        //'body' => $serialized_entity,
+        'headers' => [
+          'Content-Type' => 'application/json'
+        ],
+      ]);
 
     $result = (string) $response->getBody();
     return $result;
@@ -431,10 +431,11 @@ class StudioProducts implements StudioProductsInterface {
       $description = '';
 
 
-      if($bundle == 'unmapped_products'){
+      if ($bundle == 'unmapped_products') {
         $concept = 'Unmapped';
 
-        $output_array = array("concept" => $concept,
+        $output_array = array(
+          "concept" => $concept,
           "styleno" => '',
           "colorvariant" => '',
           "gender" => '',
@@ -443,36 +444,38 @@ class StudioProducts implements StudioProductsInterface {
           "image_count" => count($images)
         );
 
-      }else{
+      }
+      else {
 
         $product_concept = $product->field_concept_name->getValue();
-        if($product_concept){
+        if ($product_concept) {
           $concept = $product_concept[0]['value'];
         }
 
         $product_style_no = $product->field_style_family->getValue();
-        if($product_style_no){
+        if ($product_style_no) {
           $style_no = $product_style_no[0]['value'];
         }
         $product_color_variant = $product->field_color_variant->getValue();
-        if($product_color_variant){
+        if ($product_color_variant) {
           $color_variant = $product_color_variant[0]['value'];
         }
         $product_gender = $product->field_gender->getValue();
-        if($product_gender){
+        if ($product_gender) {
           $gender = $product_gender[0]['value'];
         }
         $product_color = $product->field_color_name->getValue();
-        if($product_color){
+        if ($product_color) {
           $color = $product_color[0]['value'];
         }
 
         $product_description = $product->field_description->getValue();
-        if($product_description){
+        if ($product_description) {
           $description = $product_description[0]['value'];
         }
 
-        $output_array = array("concept" => $concept,
+        $output_array = array(
+          "concept" => $concept,
           "styleno" => $style_no,
           "colorvariant" => $color_variant,
           "gender" => $gender,
@@ -484,8 +487,9 @@ class StudioProducts implements StudioProductsInterface {
       }
       $output = $output_array;
       return $output;
-    }else{
-      return false;
+    }
+    else {
+      return FALSE;
     }
 
   }
@@ -502,16 +506,17 @@ class StudioProducts implements StudioProductsInterface {
   */
   public function DeleteProductLog($product) {
 
-    $key = 'close_operation_delete_'.$product->id();
-    $check_sid = $this->state->get($key,false);
-    if(!$check_sid){
+    $key = 'close_operation_delete_' . $product->id();
+    $check_sid = $this->state->get($key, FALSE);
+    if (!$check_sid) {
       $StudioSessions = \Drupal::service('studio.sessions');
       $session_id = $StudioSessions->openSessionRecent();
-    }else{
+    }
+    else {
       $session_id = $check_sid;
     }
 
-    $session = array( array( 'target_id' => $session_id ) );
+    $session = array(array('target_id' => $session_id));
     $color_variant = NULL;
     $concept = NULL;
     $title = NULL;
@@ -520,16 +525,16 @@ class StudioProducts implements StudioProductsInterface {
 
     $bundle = $product->bundle();
 
-    if($bundle == 'products'){
+    if ($bundle == 'products') {
 
       // Get color variant.
       $product_color_variant = $product->field_color_variant->getValue();
-      if($product_color_variant){
+      if ($product_color_variant) {
         $color_variant = $product_color_variant[0]['value'];
       }
-      if(!$color_variant){
+      if (!$color_variant) {
         $title = $product->title->getValue();
-        if($title) {
+        if ($title) {
           $color_variant = $title[0]['value'];
         }
       }
@@ -539,17 +544,18 @@ class StudioProducts implements StudioProductsInterface {
 
       // Get concept name.
       $product_concept = $product->field_concept_name->getValue();
-      if($product_concept){
+      if ($product_concept) {
         $concept = $product_concept[0]['value'];
       }
 
       // Get concept name.
       $style_family = $product->field_style_family->getValue();
-      if($style_family){
+      if ($style_family) {
         $style_family = $style_family[0]['value'];
       }
 
-    }elseif($bundle == 'unmapped_products'){
+    }
+    elseif ($bundle == 'unmapped_products') {
 
       // Set concept as unmapped.
       $concept = 'Unmapped';
@@ -558,7 +564,8 @@ class StudioProducts implements StudioProductsInterface {
       $title = $product->title->getValue();
       if ($field_identifier) {
         $color_variant = $field_identifier[0]['value'];
-      }elseif ($title) {
+      }
+      elseif ($title) {
         $color_variant = $title[0]['value'];
       }
 
@@ -596,13 +603,13 @@ class StudioProducts implements StudioProductsInterface {
   */
   public function AddStartTimeToProduct($sid, $pid) {
     // On same request avoid saving multiple records.
-    $result = $this->database->select('studio_product_shoot_period','spsp')
-      ->fields('spsp',array('id'))
-      ->condition('spsp.pid',$pid)
-      ->condition('spsp.sid',$sid)
-      ->condition('spsp.start',REQUEST_TIME);
+    $result = $this->database->select('studio_product_shoot_period', 'spsp')
+      ->fields('spsp', array('id'))
+      ->condition('spsp.pid', $pid)
+      ->condition('spsp.sid', $sid)
+      ->condition('spsp.start', REQUEST_TIME);
     $already_set = $result->execute()->fetchAll();
-    if(count($already_set) == 0){
+    if (count($already_set) == 0) {
       $this->database->insert('studio_product_shoot_period')
         ->fields(array(
           'sid' => $sid,
@@ -621,22 +628,22 @@ class StudioProducts implements StudioProductsInterface {
 * @param pid
 *   Product node nid.
 */
-  public function AddEndTimeToProduct($sid, $pid, $identifier=null) {
+  public function AddEndTimeToProduct($sid, $pid, $identifier = NULL) {
 
-    if(!$pid && $identifier){
+    if (!$pid && $identifier) {
       $pid = $this->getProductByIdentifier($identifier);
       $pid = reset($pid);
     }
 
-    if(!$pid){
-      return false;
+    if (!$pid) {
+      return FALSE;
     }
 
 
-    $result = $this->database->select('studio_product_shoot_period','spsp')
-      ->fields('spsp',array('id'))
-      ->condition('spsp.pid',$pid)
-      ->condition('spsp.sid',$sid)
+    $result = $this->database->select('studio_product_shoot_period', 'spsp')
+      ->fields('spsp', array('id'))
+      ->condition('spsp.pid', $pid)
+      ->condition('spsp.sid', $sid)
       ->orderBy('spsp.id', 'desc')
       ->range(0, 1);
     $last_log_id = $result->execute()->fetchField();
@@ -644,21 +651,22 @@ class StudioProducts implements StudioProductsInterface {
 
     // todo conditions to check multiple periods
 
-    if($last_log_id){
+    if ($last_log_id) {
       $this->database->update('studio_product_shoot_period') // Table name no longer needs {}
         ->fields(array(
           'end' => REQUEST_TIME,
         ))
-        ->condition('sid',$sid)
+        ->condition('sid', $sid)
         ->condition('pid', $pid)
         ->condition('id', $last_log_id)
         ->execute();
-    }else{
+    }
+    else {
       $this->database->update('studio_product_shoot_period') // Table name no longer needs {}
         ->fields(array(
           'end' => REQUEST_TIME,
         ))
-        ->condition('sid',$sid)
+        ->condition('sid', $sid)
         ->condition('pid', $pid)
         ->execute();
     }
@@ -669,18 +677,18 @@ class StudioProducts implements StudioProductsInterface {
    * @param pid
    *   Product node nid.
    */
-  public function CalculateProductPeriod($pid,$sid){
+  public function CalculateProductPeriod($pid, $sid) {
     $secs = 0;
-    $result = $this->database->select('studio_product_shoot_period','spsp')
-      ->fields('spsp',array('start','end'))
-      ->condition('spsp.pid',$pid)
-      ->condition('spsp.sid',$sid)
+    $result = $this->database->select('studio_product_shoot_period', 'spsp')
+      ->fields('spsp', array('start', 'end'))
+      ->condition('spsp.pid', $pid)
+      ->condition('spsp.sid', $sid)
       ->range(0, 1000);
     $product_period = $result->execute()->fetchAll();
-    if($product_period){
-      foreach($product_period as $period){
+    if ($product_period) {
+      foreach ($product_period as $period) {
         // check still product closed or not. ie., end time 0 or timestamp
-        if($period->end){
+        if ($period->end) {
           $diff = $period->end - $period->start;
           $secs += $diff;
         }
@@ -713,7 +721,6 @@ class StudioProducts implements StudioProductsInterface {
   }
 
 
-
   /*
 * Helper function, to get a product by product object.
 *
@@ -735,14 +742,15 @@ class StudioProducts implements StudioProductsInterface {
       $identifier = '';
 
       $title = $product->title->getValue();
-      if($title){
+      if ($title) {
         $identifier = $title[0]['value'];
       }
 
-      if($bundle == 'unmapped_products'){
+      if ($bundle == 'unmapped_products') {
         $concept = 'Unmapped';
 
-        $output_array = array("concept" => $concept,
+        $output_array = array(
+          "concept" => $concept,
           "styleno" => '',
           "colorvariant" => '',
           "gender" => '',
@@ -752,36 +760,38 @@ class StudioProducts implements StudioProductsInterface {
           "identifier" => $identifier
         );
 
-      }else{
+      }
+      else {
 
         $product_concept = $product->field_concept_name->getValue();
-        if($product_concept){
+        if ($product_concept) {
           $concept = $product_concept[0]['value'];
         }
 
         $product_style_no = $product->field_style_family->getValue();
-        if($product_style_no){
+        if ($product_style_no) {
           $style_no = $product_style_no[0]['value'];
         }
         $product_color_variant = $product->field_color_variant->getValue();
-        if($product_color_variant){
+        if ($product_color_variant) {
           $color_variant = $product_color_variant[0]['value'];
         }
         $product_gender = $product->field_gender->getValue();
-        if($product_gender){
+        if ($product_gender) {
           $gender = $product_gender[0]['value'];
         }
         $product_color = $product->field_color_name->getValue();
-        if($product_color){
+        if ($product_color) {
           $color = $product_color[0]['value'];
         }
 
         $product_description = $product->field_description->getValue();
-        if($product_description){
+        if ($product_description) {
           $description = $product_description[0]['value'];
         }
 
-        $output_array = array("concept" => $concept,
+        $output_array = array(
+          "concept" => $concept,
           "styleno" => $style_no,
           "colorvariant" => $color_variant,
           "gender" => $gender,
@@ -794,8 +804,9 @@ class StudioProducts implements StudioProductsInterface {
       }
       $output = $output_array;
       return $output;
-    }else{
-      return false;
+    }
+    else {
+      return FALSE;
     }
 
   }
@@ -803,14 +814,14 @@ class StudioProducts implements StudioProductsInterface {
   /*
    * Helper function, to check product duplicates in session/container.
    */
-  public function checkProductDuplicate($product_nid, $bundles=array()){
+  public function checkProductDuplicate($product_nid, $bundles = array()) {
     //$product_nid = $product->id();
     $query = $this->queryFactory->get('node');
-    if($bundles){
+    if ($bundles) {
       $query->condition('type', $bundles, 'IN');
     }
 
-    $query->condition('field_product',$product_nid);
+    $query->condition('field_product', $product_nid);
     $result = $query->execute();
 
     return $result;

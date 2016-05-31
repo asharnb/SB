@@ -81,14 +81,14 @@ class StudioSessions implements StudioSessionsInterface {
   /*
  * Helper function, to return open session for current loggedIn photographer.
  */
-  public function openSessionRecent($status=array('open')) {
+  public function openSessionRecent($status = array('open')) {
     // Get current logged in user.
     $uid = $this->currentUser->id();
 
     $result = $this->queryFactory->get('node')
       ->condition('type', 'sessions')
       ->sort('created', 'DESC')
-      ->condition('field_status', $status,'IN')
+      ->condition('field_status', $status, 'IN')
       ->condition('uid', $uid)
       ->range(0, 1)
       ->execute();
@@ -135,7 +135,7 @@ class StudioSessions implements StudioSessionsInterface {
    * @param product
    *   product node object.
    */
-  public function UpdateLastProductToSession($session_id, $product){
+  public function UpdateLastProductToSession($session_id, $product) {
 
     // Load session object.
     $session = $this->nodeStorage->load($session_id);
@@ -143,31 +143,32 @@ class StudioSessions implements StudioSessionsInterface {
     $color_variant = NULL;
     $concept = NULL;
 
-    if(is_object($product) && $session){
+    if (is_object($product) && $session) {
       // Get mapped or unmapped product.
       $bundle = $product->bundle();
 
-      if($bundle == 'products'){
+      if ($bundle == 'products') {
 
         // Get color variant.
         $product_color_variant = $product->field_color_variant->getValue();
-        if($product_color_variant){
+        if ($product_color_variant) {
           $color_variant = $product_color_variant[0]['value'];
         }
-        if(!$color_variant){
+        if (!$color_variant) {
           $title = $product->title->getValue();
-          if($title) {
+          if ($title) {
             $color_variant = $title[0]['value'];
           }
         }
 
         // Get concept name.
         $product_concept = $product->field_concept_name->getValue();
-        if($product_concept){
+        if ($product_concept) {
           $concept = $product_concept[0]['value'];
         }
 
-      }elseif($bundle == 'unmapped_products'){
+      }
+      elseif ($bundle == 'unmapped_products') {
 
         // Set concept as unmapped.
         $concept = 'Unmapped';
@@ -176,7 +177,8 @@ class StudioSessions implements StudioSessionsInterface {
         $title = $product->title->getValue();
         if ($field_identifier) {
           $color_variant = $field_identifier[0]['value'];
-        }elseif ($title) {
+        }
+        elseif ($title) {
           $color_variant = $title[0]['value'];
         }
 
@@ -244,14 +246,14 @@ class StudioSessions implements StudioSessionsInterface {
 * @param pid
 *   Product node nid.
 */
-  public function AddStartTimeToSession($sid, $pause=0) {
+  public function AddStartTimeToSession($sid, $pause = 0) {
     // On same request avoid saving multiple records.
-    $result = $this->database->select('studio_session_shoot_period','sssp')
-      ->fields('sssp',array('id'))
-      ->condition('sssp.sid',$sid)
-      ->condition('sssp.start',REQUEST_TIME);
+    $result = $this->database->select('studio_session_shoot_period', 'sssp')
+      ->fields('sssp', array('id'))
+      ->condition('sssp.sid', $sid)
+      ->condition('sssp.start', REQUEST_TIME);
     $already_set = $result->execute()->fetchAll();
-    if(count($already_set) == 0){
+    if (count($already_set) == 0) {
       $this->database->insert('studio_session_shoot_period')
         ->fields(array(
           'sid' => $sid,
@@ -270,41 +272,42 @@ class StudioSessions implements StudioSessionsInterface {
 * @param pid
 *   Product node nid.
 */
-  public function AddEndTimeToSession($sid, $pause=0, $page_load = false) {
+  public function AddEndTimeToSession($sid, $pause = 0, $page_load = FALSE) {
 
-    $result = $this->database->select('studio_session_shoot_period','sssp')
-      ->fields('sssp',array('id'))
-      ->condition('sssp.sid',$sid)
-      ->condition('sssp.end',0)
-      ->condition('sssp.pause',$pause)
+    $result = $this->database->select('studio_session_shoot_period', 'sssp')
+      ->fields('sssp', array('id'))
+      ->condition('sssp.sid', $sid)
+      ->condition('sssp.end', 0)
+      ->condition('sssp.pause', $pause)
       ->orderBy('sssp.id', 'desc')
       ->range(0, 1);
     $last_log_id = $result->execute()->fetchField();
 
     // todo conditions to check multiple periods
 
-    if($last_log_id){
+    if ($last_log_id) {
       $this->database->update('studio_session_shoot_period') // Table name no longer needs {}
         ->fields(array(
           'end' => REQUEST_TIME,
         ))
-        ->condition('sid',$sid)
+        ->condition('sid', $sid)
         ->condition('id', $last_log_id)
         ->execute();
 
-      if($pause){
-        $this->AddStartTimeToSession($sid,0);
+      if ($pause) {
+        $this->AddStartTimeToSession($sid, 0);
       }
 
-    }else{
-      if(!$page_load){
+    }
+    else {
+      if (!$page_load) {
         $this->database->update('studio_session_shoot_period') // Table name no longer needs {}
           ->fields(array(
             'end' => REQUEST_TIME,
           ))
-          ->condition('sid',$sid)
-          ->condition('end',0)
-          ->condition('pause',$pause)
+          ->condition('sid', $sid)
+          ->condition('end', 0)
+          ->condition('pause', $pause)
           ->execute();
       }
     }
@@ -313,7 +316,7 @@ class StudioSessions implements StudioSessionsInterface {
   /*
    * Helper function, to update session status.
    */
-  public function updateSessionStatus($sid, $status){
+  public function updateSessionStatus($sid, $status) {
     $session = $this->nodeStorage->load($sid);
     $session->field_status->setValue(array('value' => $status)); //pause
     $session->save();
