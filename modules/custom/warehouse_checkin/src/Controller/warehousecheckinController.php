@@ -60,7 +60,7 @@ class warehousecheckinController extends ControllerBase {
   }
 
   //handle all checkin at the warehouse level
-  public function content($cid) {
+  public function content($cid, $state) {
     // Get container id. (not container node id, container title will be container id in our case.)
     $container_id = $cid;
     $container_nid = $this->studioContainer->getContainerNodeIdByContainerId($container_id);
@@ -72,34 +72,37 @@ class warehousecheckinController extends ControllerBase {
       return new RedirectResponse(base_path() . 'view-sessions2');
     }
 
-    $container = $this->nodeStorage->load($container_nid);
-    $container_values = $container->toArray();
+    if($state == 'checkin'){
+      $container = $this->nodeStorage->load($container_nid);
+      $container_values = $container->toArray();
 
-    $last_scanned_product_container = $this->state()->get('warehouse_container_last_scan_product_' . $container_id,'');
+      $last_scanned_product_container = $this->state()->get('warehouse_container_last_scan_product_' . $container_id,'');
 
-    if($last_scanned_product_container){
-      $result = $this->studioProducts->getProductByIdentifier($last_scanned_product_container);
-      if($result){
-        $product = $this->nodeStorage->load(reset($result));
-        // Product data response.
-        $product_return_data = $this->studioProducts->getProductInfoByObject($product);
+      if($last_scanned_product_container){
+        $result = $this->studioProducts->getProductByIdentifier($last_scanned_product_container);
+        if($result){
+          $product = $this->nodeStorage->load(reset($result));
+          // Product data response.
+          $product_return_data = $this->studioProducts->getProductInfoByObject($product);
+        }
+        $a = 1;
       }
-      $a = 1;
+
+      return [
+        '#theme' => 'checkin',
+        '#cache' => ['max-age' => 0],
+        '#container' => $container_values,
+        '#product_identifier' => $last_scanned_product_container,
+        '#product_block' => $product_return_data,
+        '#tmp' => $container_id,
+        '#attached' => array(
+          'library' => array(
+            'warehouse_checkin/checkin-form',
+          )
+        ),
+
+      ];
     }
 
-    return [
-      '#theme' => 'checkin',
-      '#cache' => ['max-age' => 0],
-      '#container' => $container_values,
-      '#product_identifier' => $last_scanned_product_container,
-      '#product_block' => $product_return_data,
-      '#tmp' => $container_id,
-      '#attached' => array(
-        'library' => array(
-          'warehouse_checkin/checkin-form',
-        )
-      ),
-
-    ];
   }
 }

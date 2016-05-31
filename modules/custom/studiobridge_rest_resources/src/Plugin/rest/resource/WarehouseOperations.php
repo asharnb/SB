@@ -41,6 +41,8 @@ class WarehouseOperations extends ResourceBase {
 
   protected $studioContainer;
 
+  protected $newProduct = false;
+
 
   /**
    * Constructs a Drupal\rest\Plugin\ResourceBase object.
@@ -138,7 +140,9 @@ class WarehouseOperations extends ResourceBase {
             $duplicate = true;
           }elseif(count($duplicates) == 1){
             if(reset($duplicates) == $container_nid){
-              $already_scanned = true;
+              if(!$this->newProduct){
+                $already_scanned = true;
+              }
             }
           }
         }
@@ -172,10 +176,12 @@ class WarehouseOperations extends ResourceBase {
       if (isset($product->msg)) {
         // product not found on the server so save it as unmapped product.
         $return = $this->studioProducts->createUnmappedProductFromContainer($identifier);
+        $this->newProduct = true;
       }
       else {
         // Create them if not exist in drupal server.
         $return = $this->studioProducts->createMappedProduct($product, $identifier);
+        $this->newProduct = true;
       }
     }
     else {
