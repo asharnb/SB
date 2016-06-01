@@ -25,20 +25,6 @@
 *   -  created: Timestamp product created - {{ ITEM.create.0.value|date("m/d/Y") }}
 *  todo : check for missing values
 *
-* - mapped_products: array contains all properties of mapped products
-*   -  title: Title/Identifier of mapped product  -  {{ ITEM.title.0.value }}
-*   -  field_images: To get count of image, use like -  {{ ITEM.field_images|length }}
-*   -  field_state: Product status/stage. -  {{ ITEM.field_state.0.value }}
-*   -  created: Timestamp product created - {{ ITEM.session.create.0.value|date("m/d/Y") }}
-*   -  field_concept_name: Name of concept - {{ ITEM.field_concept_name.0.value }}
-*   -  field_style_family: Name of style family - {{ ITEM.field_style_family.0.value }}
-*   -  field_color_variant: Name of style family - {{ ITEM.field_color_variant.0.value }}
-*   -  field_sku_id: SKU_ID value - {{ ITEM.field_sku_id.0.value }}
-*  todo : check for missing values
-*
-* - total_images: Total no.of images in this session - {{ total_images }}
-*
-*
 * - products: array contains all properties of unmapped products
 *   -  concept: Concept of product   -  {{ ITEM.concept }}
 *   -  styleno: Style No -  {{ ITEM.styleno }}

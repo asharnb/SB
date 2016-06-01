@@ -243,8 +243,9 @@ class CloseSessionOperations extends ControllerBase {
         }
 
         if($identifier){
-
-          $server_product = Products::getProductExternal($identifier);
+          $StudioProducts = \Drupal::service('studio.products');
+          //$server_product = Products::getProductExternal($identifier);
+          $server_product = $StudioProducts->getProductExternal($identifier);
           $server_product = json_decode($server_product);
           if (!isset($server_product->msg)){
 
@@ -260,7 +261,7 @@ class CloseSessionOperations extends ControllerBase {
   }
 
   public function AutomaticEmails($sid, $session){
-    //Queues::RunMappingQueues($sid);
+    Queues::RunMappingQueues($sid);
 
 
     $title = $session->title->getValue();
