@@ -1,75 +1,39 @@
+
 <div class="login-wrapper" id="login-page">
-
-    <div class="bg-pic">
-
-        <img src="/sbtest/{{ directory }}/images/wallpapers/wallpaper.jpg"  alt="" class="lazy">
-
-
-        <div class="bg-caption pull-bottom sm-pull-bottom text-white p-l-20 m-b-20">
-            <h2 class="semi-bold text-white">
-                Whats under the curtain?</h2>
-            <p class="small">
-                maybe StudioBridge 2.0....maybe not...who knows
-            </p>
-        </div>
-
-    </div>
 
 
     <div class="login-container bg-login">
-        <div class="p-l-50 m-l-20 p-r-50 m-r-20 p-t-50 m-t-30 sm-p-l-15 sm-p-r-15 sm-p-t-40">
-            <img src="/sbtest/{{ directory }}/images/Drawing.png">
-            <p class="p-t-35">Sign into your StudioBridge account</p>
+        <div class="p-t-50 ">
+            <!-- <img src="/sbtest/{{ directory }}/images/Drawing.png"> -->
+            <h1 class="m-b-40"><i class="fa fa-creative-commons text-info"></i>  Content Central</h1>
+            <h5 class="login-signin">Sign into your account</h5>
 
-            <form id="form-login" class="p-t-15" role="form" action="?ls" method="post" name="ls">
-
-                <div class="form-group form-group-default">
-
-                    <div class="controls">
+            <div id="form-login" class="p-t-15 login-form" role="form" action="?ls" method="post" name="ls">
+              {{ form.form_build_id }}
+              {{ form.form_id }}
+              
                         {{ form.name }}
-                    </div>
-                </div>
-
-
-                <div class="form-group form-group-default">
-
-                    <div class="controls">
                         {{ form.pass }}
-                    </div>
-                </div>
-                {{ form.form_build_id }}
-                {{ form.form_id }}
+
+
+
+
                 <div class="row">
-                    <div class="col-md-6 no-padding">
-                        <div class="checkbox ">
-                            <input type="checkbox" value="1" id="checkbox1">
-                            <label for="checkbox1">Keep Me Signed in</label>
-                        </div>
-                    </div>
-                    <div class="col-md-6 text-right">
-                        <a href="#" class="text-info small">Forgot Password?</a>
+                    <div class="col-md-12">
+                        <button class="btn btn-primary btn-cons m-t-10 full-width" type="submit">Login</button>
                     </div>
                 </div>
 
-                <button class="btn btn-primary btn-cons m-t-10" type="submit">Sign in</button>
-
-            </form>
-
-            <div class="pull-bottom sm-pull-bottom">
-                <div class="col-sm-12 no-padding m-t-10">
-                    <p>
-                        <small>
-                            If you do not have an account, email ashar.babar@landmarkgroup.com
-
-                        </small>
-                        <br>
-                        <small>
-                            Production Version 2.0
-
-                        </small>
-                    </p>
+                <div class="row">
+                    <div class="col-md-12">
+                        <a href="#" class="text-complete small">Forgot Password?</a>
+                    </div>
                 </div>
+
+
+
             </div>
+
         </div>
     </div>
 </div>

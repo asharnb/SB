@@ -5,11 +5,25 @@
  *
  * Place your custom PHP code in this file.
  */
+
+ function hook_form_alter(&$form, &$form_state, $form_id) {
+
+ if($form_id == 'node_sessions_form') {
+    $form['field_photographer']['widget']['#title'] = t('Request your username');
+  }
+
+ };
+
+
 function studiobridge_theme(&$existing, $type, $theme, $path) {
     $hooks = array();
     $hooks['user_login_form'] = array(
         'render element' => 'form',
         'template' => 'user-login-form',
     );
+    $hooks['node_sessions_form'] = array(
+        'render element' => 'form',
+        'template' => 'customtemplates/add-session',
+    );
     return $hooks;
-}
+};

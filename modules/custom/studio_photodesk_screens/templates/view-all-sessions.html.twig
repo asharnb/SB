@@ -1,18 +1,36 @@
 
 <div class="row">
   <div class="col-sm-12 col-md-8">
-    <h3>Photography <span class="semi-bold">Sessions</span></h3>
-    <h4>View all your photography sessions and add session</h4>
+    <h3 class="no-margins p-b-sm">Photography Sessions</span></h3>
+    <h4 class="no-margins">View and track all your sessions or add a new session</h4>
   </div>
-  <div class="col-sm-12 col-md-4">
-    <a class="btn btn-primary btn-cons pull-right" href="/sbtest/node/add/sessions"><i class="fa fa-plus mr5"></i>Add Session</a>
+  <div class="col-sm-12 col-md-4 m-t-md">
+    <a class="btn btn-primary btn-cons pull-right" href="/sbtest/node/add/sessions">Add New Session</a>
   </div>
 </div>
+<hr class="simple">
+
+<div class="panel panel-default">
+  <div class="">
+    <div class="panel-body" style="padding-left:0px !important;">
+        <div id="dt_viewsessions_filter" class="col-sm-5 search-container">
+              <div class="input-group">
+        <span class="input-group-addon" id="basic-addon1"><i class="fa fa-search"></i></span>
+        <input type="text" class="form-control input-sm" placeholder="What are you looking for?" id="dt_search_box">
 
 
-<div class="row p-sm">
+      </div>
+        </div>
+        <div class="col-sm-4">
+      <button type="button" id="btn_search_reset" class="btn">Reset</button>
+        </div>
+
+    </div>
+  </div>
+</div>
+<div class="panel panel-default">
   <!-- NEW COL START -->
-  <article class="col-sm-12 col-md-12 col-lg-12 panel panel-default m-sm">
+  <article class="m-sm">
     <table id="dt_viewsessions" class="table table-responsive  table-striped table-hover" width="100%">
 
       <thead>
@@ -21,7 +39,7 @@
         <th>Concept(s)</th>
         <th>Contributors</th>
         <th>Date Created</th>
-        <th class="text-center">Total Products</th>
+        <th>Total Products</th>
         <th></th>
       </thead>
 
@@ -54,8 +72,13 @@
         {#rules for status stages#}
             {% if result.shootdate.0.value|date('Y-m-d') == "now"|date("Y-m-d") %}
               {% set date_class = 'text-success' %}
+              {% set date_text = 'Today, ' ~ result.shootdate.0.value|date("h:m a") %}
+            {% elseif result.shootdate.0.value|date('Y-m-d') == "now"|date_modify("-1 day")|date("Y-m-d") %}
+              {% set date_class = '' %}
+              {% set date_text = 'Yesterday, ' ~ result.shootdate.0.value|date("h:m a") %}
             {% else %}
               {% set date_class = '' %}
+              {% set date_text = result.shootdate.0.value|date("M d, Y, h:m a") %}
             {% endif %}
 
 
@@ -66,21 +89,25 @@
           <td>{{ result.id }}</td>
           <td>{{ status_class|raw }}</td>
           <td>
-            {% for concepts in result.concepts %}
-            <img src="/sbtest/{{directory}}/images/brands/brand_logo_{{concepts.concept|lower}}.png" height="20px"> <span class="text text-complete bold">   +2</span>
-            {% endfor %}
+            {% if result.concepts|length == 0 %}
+                Not Available
 
+            {% elseif result.concepts|length > 1 %}
+
+                <img src="/sbtest/{{directory}}/images/brands/brand_logo_{{result.concepts.0.concept|lower}}.png" height="20px"> <span class="text text-complete bold">   +{{result.concepts|length -1}}</span>
+
+            {% endif %}
           </td>
           <td>
-            <img src="/sbtest/{{directory}}/images/users/{{ random(['niranjan', 'vikas', 'anahita', 'moosa', 'azhar']) }}.jpg" class="img-circle-table " alt="profile">
-            <img src="/sbtest/{{directory}}/images/users/{{ random(['disha', 'rebecca']) }}.jpg" class="img-circle-table " alt="profile">
-            <img src="/sbtest/{{directory}}/images/users/{{ random(['althea', 'rinki']) }}.jpg" class="img-circle-table " alt="profile">
+            <img src="/sbtest/{{directory}}/images/users/{{ random(['niranjan', 'vikas', 'anahita', 'moosa', 'azhar']) }}.jpg" class="img-circle-table " alt="niranjan">
+            <img src="/sbtest/{{directory}}/images/users/{{ random(['disha', 'rebecca']) }}.jpg" class="img-circle-table " alt="ashar">
+            <img src="/sbtest/{{directory}}/images/users/{{ random(['althea', 'rinki']) }}.jpg" class="img-circle-table " alt="aqeel">
           </td>
-          <td><span class="{{date_class}}">{{ result.shootdate.0.value|date("M d, Y, h:m a") }}</span></td>
+          <td><span class="{{date_class}}">{{ date_text }}</span></td>
 
-          <td class="bold text-center">{{total_count}}</td>
+          <td class="bold">{{total_count}}</td>
           <td>
-            <a class="btn btn-xs btn-complete" href="/sbtest/view-session/{{ result.id }}">View</a>
+            <a class="btn btn-xs " href="/sbtest/view-session/{{ result.id }}">View</a>
           </td>
 
         </tr>

@@ -7,17 +7,28 @@
 
   //'use strict';
 
-  // Drupal.behaviors.sessiondatatable = {
-  //   attach: function(context) {
-  //     $('#dt_viewsessions').DataTable( {
-  //       "bSort": false,
-  //       "bDestroy": true,
-  //       "iDisplayLength": 100,
-  //       "order": [[1 , 'asc']],
-  //       "autoWidth" : true
-  //     } );
-  //   }
-  // };
+  Drupal.behaviors.sessiondatatable = {
+    attach: function(context) {
+       var oTable = $('#dt_viewsessions').DataTable( {
+        "bSort": true,
+        "bDestroy": true,
+        "iDisplayLength": 30,
+        "order": [[0 , 'desc']],
+        "autoWidth" : true
+      } );
+      $('#dt_search_box').keyup(function(){
+            oTable.search($(this).val()).draw() ;
+      })
+
+      $('#btn_search_reset').click(function(){
+            document.getElementById('dt_search_box').value = "";
+              oTable.search('').draw() ;
+      })
+
+      $('#dt_viewsessions_wrapper').addClass('m-t-n');
+    }
+  };
+
 
 
   Drupal.behaviors.closesession = {

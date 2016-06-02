@@ -177,7 +177,7 @@
                 <h5 >Images Shot</h5>
               </div>
               <div class="col-sm-6 text-right bold">
-                <h5 class="bold">{{ form.productdetails.image_count }}</h5>
+                <h5 class="bold">{{ form.productdetails.image_count ? form.productdetails.image_count : '0' }}</h5>
               </div>
 
               <div class="col-sm-6 ">

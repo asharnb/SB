@@ -6,6 +6,9 @@
 
   Drupal.behaviors.tagfordelete = {
     attach: function(context, settings) {
+
+      var selected = 0
+
       $( ".select-delete" ).click(function() {
         var id = $(this).attr("data-id")
         var clicked = $(this).attr("data-click")
@@ -16,14 +19,24 @@
           $(this).attr("data-click","no")
           $(this).html("Select Image")
           $('#del-img-'+id).prop('checked', false);
+          selected--
         }else{
           $("#warpper-img-"+id).addClass('border-selected');
           $(this).attr("data-click","yes")
           $(this).html("Unselect Image")
           $('#del-img-'+id).prop('checked', true);
+          selected++
         }
 
-        console.log( container);
+        if(selected === 0){
+          $('#studio-delete-bt').attr('disabled', 'disabled');
+          $('#studio-delete-bt').removeClass('border-blue text-complete');
+
+        }else{
+          $('#studio-delete-bt').removeAttr("disabled");
+          $('#studio-delete-bt').addClass('border-blue text-complete');
+        }
+
       });
 
     }

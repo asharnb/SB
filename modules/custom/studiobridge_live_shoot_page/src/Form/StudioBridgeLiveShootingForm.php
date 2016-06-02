@@ -212,10 +212,10 @@ class StudioBridgeLiveShootingForm extends FormBase {
     // @ashar : seperate this image container so we can apply theme formatting to it
 
     $form['resequence'] = array(
-      '#markup' => '<a id="studio-resequence-bt" class="btn btn-xs">Resequence</a>',
+      '#markup' => '<a id="studio-resequence-bt" class="btn btn-xs" disabled>Resequence</a>',
     );
     $form['delete'] = array(
-      '#markup' => '<a id="studio-delete-bt" class="btn btn-xs border-red text-danger">Delete</a>',
+      '#markup' => '<a id="studio-delete-bt" class="btn btn-xs" disabled>Delete</a>',
     );
     $form['misc'] = array(
       '#markup' => '<div id="studio-img-container"></div><div id="js-holder"></div><div id="msg-up"></div>',
@@ -322,7 +322,7 @@ class StudioBridgeLiveShootingForm extends FormBase {
       //return js with error message
 
       $inject_script = '<script>
-    Command: toastr["error"]("No identifier has been scanned. Please scan the tag to continue.")
+    Command: toastr["error"]("No identifier has been scanned. Please scan the tags to continue.")
 
     toastr.options = {
       "closeButton": false,
@@ -354,9 +354,11 @@ class StudioBridgeLiveShootingForm extends FormBase {
     $state->set('productscan_' . $session_id, TRUE);
 
     if (!$result) {
+
       // Get product from server
       $product = $StudioProducts->getProductExternal($identifier);
       $product = json_decode($product);
+
       // validate product
       if (isset($product->msg)) {
         // product not found on the server so save it as unmapped product.
@@ -503,8 +505,8 @@ class StudioBridgeLiveShootingForm extends FormBase {
     }
 
 
-    //$images = $StudioProducts->getProductImages($new_or_old_product_nid);
-    $images = '';
+    $images = $StudioProducts->getProductImages($new_or_old_product_nid);
+    //$images = '';
 
     $block = '<div id="imagecontainer" name="imagecontainer" class="ui-sortable">';
     $i = 1;

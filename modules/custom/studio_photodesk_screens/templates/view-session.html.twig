@@ -23,20 +23,20 @@ total_images: Total no.of images in this session - {{ total_images }} * * * @ing
 #}
 
 {% if session.field_status.0. value == 'open' %}
-  {% set status_class = 'fa fa-play-circle text-success' %}
-  {% set status_class_text = 'text-success' %}
+{% set status_class = 'fa fa-play-circle text-success' %}
+{% set status_class_text = 'text-success' %}
 {% elseif session.field_status.0. value == 'pause' %}
-  {% set status_class = 'fa fa-pause text-warning' %}
-  {% set status_class_text = 'text-warning' %}
+{% set status_class = 'fa fa-pause text-warning' %}
+{% set status_class_text = 'text-warning' %}
 {% else %}
-  {% set status_class = 'fa fa-stop-circle text-danger' %}
-  {% set status_class_text = 'text-danger' %}
+{% set status_class = 'fa fa-stop-circle text-danger' %}
+{% set status_class_text = 'text-danger' %}
 {% endif %}
 
 {% if session.field_shoot_class.0. value == 'model_shoot' %}
-  {% set shoot_class = 'fa fa-user' %}
+{% set shoot_class = 'fa fa-user' %}
 {% else %}
-  {% set shoot_class = 'fa fa-cubes' %}
+{% set shoot_class = 'fa fa-cubes' %}
 {% endif %}
 
 {# calculate counts adjusted for drops #}
@@ -55,215 +55,219 @@ total_images: Total no.of images in this session - {{ total_images }} * * * @ing
   <div class="col-sm-12 col-md-4 m-t-md">
     <a class="btn btn-primary pull-right p-t-10" href="/sbtest/live-shooting-page1">
       Add Products</a>
+    </div>
   </div>
-</div>
 
-<hr class="simple">
-<div class="row ">
-  <div class="col-lg-8">
-    <div class="panel panel-default equalheight">
+  <hr class="simple">
+  <div class="row ">
+    <div class="col-lg-8">
+      <div class="panel panel-default equalheight">
+        <div class="panel-body p-xs-imp m-t-5">
 
-      <div class="p-sm clearfix">
-        <div class="col-sm-5">
-          <address>
-            <strong class="text-success">Session is Open</strong><br>
-            <em class="text-muted">Started at Jan12th, 2016 12:05 pm</em>
-          </address>
 
-        </div>
-        <div class="col-sm-7">
-          <span class="pull-right">
+          <div class="col-sm-12 no-margins no-padding ">
+            <div class="col-sm-5">
+              <address>
+                <strong class="text-success">Session is Open</strong><br>
+                <em class="text-muted">Started at Jan12th, 2016 12:05 pm</em>
+              </address>
 
-            <h3 class="no-margins ">{{session_time}}</h3>
-            <h6 class="no-margins no-padding">Total Session Time</h6>
-          </span>
-          <span class="pull-right  m-r-md">
-            <a class="btn btn-sm border-blue text-complete">Finish</a>
+            </div>
+            <div class="col-sm-7">
+              <span class="pull-right">
 
-          </span>
-          <span class="pull-right  m-r-sm">
-            <a class="text-info btn btn-sm">Pause</a>
+                <h3 class="no-margins ">{{session_time}}</h3>
+                <h6 class="no-margins no-padding">Total Session Time</h6>
+              </span>
+              <span class="pull-right  m-r-md">
+                <a id="close-session" class="btn btn-sm border-blue text-complete" data-id="{{ session.nid.0.value }}">Finish</a>
 
-          </span>
+              </span>
+              <span class="pull-right  m-r-sm">
+                <a class="text-info btn btn-sm">Pause</a>
 
-        </div>
-      </div>
+              </span>
 
-      <div class="p-sm clearfix">
-        <div class="col-sm-8">
-          <div class="col-sm-4">
-            <h5 class="m-xs">ID</h5>
-            <h3 class="m-xs">{{ session.nid.0.value }}</h3>
+            </div>
           </div>
 
-          <div class="col-sm-4">
-            <h5 class="m-xs">Products</h5>
-            <h3 class="m-xs">{{total_count}}</h3>
+          <div class="col-sm-12 no-margins no-padding p-t-20">
+            <div class="col-sm-8">
+              <div class="col-sm-4 m-l-n">
+                <h5 class="m-sm">ID</h5>
+                <h3 class="m-sm">{{ session.nid.0.value }}</h3>
+              </div>
+
+              <div class="col-sm-4">
+                <h5 class="m-sm">Products</h5>
+                <h3 class="m-sm">{{total_count}}</h3>
+              </div>
+
+              <div class="col-sm-4">
+                <h5 class="m-sm">Shoot Class</h5>
+                <h3 class="m-sm">{{ session.field_shoot_class.0.value|title|replace({'_': ' '}) }}</h3>
+              </div>
+            </div>
+            <div class="col-sm-4">
+              <table class="table table-stripped small no-margins no-padding">
+                <tbody>
+                  <tr class="no-margins no-padding text-danger ">
+                    <td>
+                      <h5 class="no-margins ">Unmapped</h5>
+                    </td>
+                    <td class="pull-right">
+                      <h5 class="no-margins semi-bold">7</h5>
+                    </td>
+                  </tr>
+
+                  <tr class="no-margins no-padding">
+                    <td>
+                      <h5 class="no-margins ">Shoemart</h5>
+                    </td>
+                    <td class="pull-right">
+                      <h5 class="no-margins semi-bold">1</h5>
+                    </td>
+                  </tr>
+
+                  <tr class="no-margins no-padding">
+                    <td>
+                      <h5 class="no-margins ">Lifestyle</h5>
+                    </td>
+                    <td class="pull-right">
+                      <h5 class="no-margins semi-bold">2</h5>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+
+            </div>
           </div>
-
-          <div class="col-sm-4">
-            <h5 class="m-xs">Shoot Class</h5>
-            <h3 class="m-xs">{{ session.field_shoot_class.0.value|title|replace({'_': '', 'Shoot': ''}) }}</h3>
-          </div>
-        </div>
-        <div class="col-sm-4">
-          <table class="table table-stripped small no-margins no-padding">
-                                    <tbody>
-                                    <tr class="no-margins no-padding text-danger ">
-                                        <td>
-                                          <h5 class="no-margins ">Unmapped</h5>
-                                        </td>
-                                        <td class="pull-right">
-                                            <h5 class="no-margins semi-bold">7</h5>
-                                        </td>
-                                    </tr>
-
-                                    <tr class="no-margins no-padding">
-                                        <td>
-                                          <h5 class="no-margins ">Shoemart</h5>
-                                        </td>
-                                        <td class="pull-right">
-                                          <h5 class="no-margins semi-bold">1</h5>
-                                        </td>
-                                    </tr>
-
-                                    <tr class="no-margins no-padding">
-                                        <td>
-                                          <h5 class="no-margins ">Lifestyle</h5>
-                                        </td>
-                                        <td class="pull-right">
-                                            <h5 class="no-margins semi-bold">2</h5>
-                                        </td>
-                                    </tr>
-                                    </tbody>
-                                </table>
 
         </div>
       </div>
     </div>
-  </div>
-  <div class="col-lg-4 ">
-    <div class="panel panel-default equalheight">
+    <div class="col-lg-4 ">
+      <div class="panel panel-default equalheight">
 
-      <div class="panel-heading">
-        <div class="panel-title">CONTRIBUTORS
+        <div class="panel-heading">
+          <div class="panel-title">CONTRIBUTORS
+          </div>
+
+        </div>
+
+        <div class="panel-body p-xs-imp m-t-n">
+
+          <div class="col-sm-6 no-padding">
+            <div class="social-avatar">
+              <a href="" class="pull-left">
+                <img src="/sbtest/{{directory}}/images/users/niranjan.jpg" class="img-circle" alt="profile">
+              </a>
+              <div class="media-body p-xs">
+                <h6 class="no-margins bold">
+                  Niranjan
+                </h6>
+                <small class="text-muted">Photographer</small>
+              </div>
+            </div>
+          </div>
+          <div class="col-sm-6 no-padding">
+            <div class="social-avatar">
+              <a href="" class="pull-left m-r-5">
+                <img src="/sbtest/{{directory}}/images/users/rebecca.jpg" class="img-circle" alt="profile">
+              </a>
+              <div class="media-body p-xs">
+                <h6 class="no-margins bold">
+                  Rebecca
+                </h6>
+                <small class="text-muted">Stylist</small>
+              </div>
+            </div>
+          </div>
+          <div class="col-sm-6 no-padding">
+            <div class="social-avatar">
+              <a href="" class="pull-left">
+                <img src="/sbtest/{{directory}}/images/users/cia.jpg" class="img-circle" alt="profile">
+              </a>
+              <div class="media-body p-xs">
+                <h6 class="no-margins bold">
+                  Cia
+                </h6>
+                <small class="text-muted">Visual Merchandiser</small>
+              </div>
+            </div>
+          </div>
         </div>
 
       </div>
-
-      <div class="panel-body p-xs-imp">
-
-        <div class="col-sm-6 no-padding">
-          <div class="social-avatar">
-            <a href="" class="pull-left">
-              <img src="/sbtest/{{directory}}/images/users/niranjan.jpg" class="img-circle" alt="profile">
-            </a>
-            <div class="media-body p-xs">
-              <h6 class="no-margins bold">
-                Niranjan
-              </h6>
-              <small class="text-muted">Photographer</small>
-            </div>
-          </div>
-        </div>
-        <div class="col-sm-6 no-padding">
-          <div class="social-avatar">
-            <a href="" class="pull-left m-r-5">
-              <img src="/sbtest/{{directory}}/images/users/rebecca.jpg" class="img-circle" alt="profile">
-            </a>
-            <div class="media-body p-xs">
-              <h6 class="no-margins bold">
-                Rebecca
-              </h6>
-              <small class="text-muted">Stylist</small>
-            </div>
-          </div>
-        </div>
-        <div class="col-sm-6 no-padding">
-          <div class="social-avatar">
-            <a href="" class="pull-left">
-              <img src="/sbtest/{{directory}}/images/users/cia.jpg" class="img-circle" alt="profile">
-            </a>
-            <div class="media-body p-xs">
-              <h6 class="no-margins bold">
-                Cia
-              </h6>
-              <small class="text-muted">Visual Merchandiser</small>
-            </div>
-          </div>
-        </div>
-      </div>
-
     </div>
-  </div>
 
-</div>
+  </div>
 </div>
 
 <div class="row p-t-10">
-<div class="col-lg-12">
-  <ul class="nav nav-tabs ">
+  <div class="col-lg-12">
+    <ul class="nav nav-tabs ">
 
-    <li class="active">
-      <a href="#tab-mapped" data-toggle="tab" aria-expanded="false">Mapped
-        <span class=" label label-success semi-bold">{{ adjusted_mapped }}</span>
-      </a>
-    </li>
-    <li class="">
-      <a href="#tab-unmapped" data-toggle="tab" aria-expanded="false">Unmapped
-        <span class="p-t-5 label label-danger semi-bold">{{ adjusted_unmapped }}</span>
-      </a>
-    </li>
-    <li class="">
-      <a href="#tab-dropped" data-toggle="tab" aria-expanded="false">Dropped
-        <span class="label label-warning semi-bold">{{total_dropped}}</span>
-      </a>
-    </li>
-    <li class="">
-      <a href="#tab-reports" data-toggle="tab" aria-expanded="false">Report(s)</a>
-    </li>
-    <li class="">
-      <a href="#tab-log" data-toggle="tab" aria-expanded="true">Log</a>
-    </li>
+      <li class="active">
+        <a href="#tab-mapped" data-toggle="tab" aria-expanded="false">Mapped
+          <span class=" label label-success semi-bold">{{ adjusted_mapped }}</span>
+        </a>
+      </li>
+      <li class="">
+        <a href="#tab-unmapped" data-toggle="tab" aria-expanded="false">Unmapped
+          <span class="p-t-5 label label-danger semi-bold">{{ adjusted_unmapped }}</span>
+        </a>
+      </li>
+      <li class="">
+        <a href="#tab-dropped" data-toggle="tab" aria-expanded="false">Dropped
+          <span class="label label-warning semi-bold">{{total_dropped}}</span>
+        </a>
+      </li>
+      <li class="">
+        <a href="#tab-reports" data-toggle="tab" aria-expanded="false">Report(s)</a>
+      </li>
+      <li class="">
+        <a href="#tab-log" data-toggle="tab" aria-expanded="true">Log</a>
+      </li>
 
-  </ul>
+    </ul>
 
-  <div class="tab-content">
-    <div class="tab-pane active" id="tab-mapped">
-      <table id="dt_mapped" class="table table-responsive table-hover" width="100%">
-        <thead>
-          <tr>
-            <th>Concept</th>
-            <th>Style ID</th>
-            <th>Color Variant</th>
-            <th>State</th>
-            <th>QC Status</th>
-            <th>Image Count</th>
-            <th></th>
-          </tr>
-        </thead>
-        <tbody>
-          {% for item in mapped_products %}
+    <div class="tab-content">
+      <div class="tab-pane active" id="tab-mapped">
+        <table id="dt_mapped" class="table table-responsive table-hover" width="100%">
+          <thead>
+            <tr>
+              <th>Concept</th>
+              <th>Style ID</th>
+              <th>Color Variant</th>
+              <th>State</th>
+              <th>QC Status</th>
+              <th>Image Count</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for item in mapped_products %}
 
             {% if item.field_draft.0. value == 0 %}
 
-              {% if item.field_images | length == 0 %}
-                {% set image_count_class = 'text-align-center bold text-danger' %}
-              {% elseif item.field_images | length >= 7 %}
-                {% set image_count_class = 'text-align-center bold text-warning' %}
-              {% else %}
-                {% set image_count_class = 'text-align-center bold text-success' %}
-              {% endif %}
-              <tr>
-                <td>
-                  <img src="/sbtest/{{ directory }}/images/brands/brand_logo_{{ item.field_concept_name.0.value|lower }}.png" height="20px"></td>
+            {% if item.field_images | length == 0 %}
+            {% set image_count_class = 'text-align-center bold text-danger' %}
+            {% elseif item.field_images | length >= 7 %}
+            {% set image_count_class = 'text-align-center bold text-warning' %}
+            {% else %}
+            {% set image_count_class = 'text-align-center bold text-success' %}
+            {% endif %}
+            <tr>
+              <td>
+                <img src="/sbtest/{{ directory }}/images/brands/brand_logo_{{ item.field_concept_name.0.value|lower }}.png" height="20px"></td>
                 <td>{{ item.field_style_family.0.value }}</td>
                 <td>{{ item.title.0.value }}</td>
                 <td>
                   {% if item.nid.0. value in session.field_reshoot_product | json_encode() %}
-                    <span class="text-warning semi-bold">Reshoot</span>
+                  <span class="text-warning semi-bold">Reshoot</span>
                   {% else %}
-                    <span class="text-success semi-bold">New</span>
+                  <span class="text-success semi-bold">New</span>
                   {% endif %}
                 </td>
                 <td>
@@ -276,46 +280,46 @@ total_images: Total no.of images in this session - {{ total_images }} * * * @ing
                 </td>
 
               </tr>
-            {% endif %}
-          {% endfor %}
+              {% endif %}
+              {% endfor %}
 
-        </tbody>
-      </table>
-    </div>
+            </tbody>
+          </table>
+        </div>
 
-    <div class="tab-pane" id="tab-unmapped">
+        <div class="tab-pane" id="tab-unmapped">
 
-      <table id="dt_unmapped" class="table table-responsive table-hover" width="100%">
-        <thead>
-          <tr>
-            <th>Concept</th>
-            <th>Identifier</th>
-            <th>State</th>
-            <th>Raw Count</th>
-            <th></th>
-          </tr>
-        </thead>
-        <tbody>
+          <table id="dt_unmapped" class="table table-responsive table-hover" width="100%">
+            <thead>
+              <tr>
+                <th>Concept</th>
+                <th>Identifier</th>
+                <th>State</th>
+                <th>Raw Count</th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody>
 
-          {% for item in unmapped_products %}
-            {% if item.field_draft.0. value == 0 %}
+              {% for item in unmapped_products %}
+              {% if item.field_draft.0. value == 0 %}
 
               {% if item.field_images | length == 0 %}
-                {% set image_count_class = 'text-align-center bold text-danger' %}
+              {% set image_count_class = 'text-align-center bold text-danger' %}
               {% elseif item.field_images | length >= 7 %}
-                {% set image_count_class = 'text-align-center bold text-warning' %}
+              {% set image_count_class = 'text-align-center bold text-warning' %}
               {% else %}
 
-                {% set image_count_class = 'text-align-center bold text-success' %}
+              {% set image_count_class = 'text-align-center bold text-success' %}
               {% endif %}
               <tr>
                 <td><img src="/sbtest/{{ directory }}/images/brands/brand_logo_.png" height="20px"></td>
                 <td>{{ item.title.0.value }}</td>
                 <td>
                   {% if item.nid.0. value in session.field_reshoot_product | json_encode() %}
-                    <span class="text-warning semi-bold">Reshoot</span>
+                  <span class="text-warning semi-bold">Reshoot</span>
                   {% else %}
-                    <span class="text-success semi-bold">New</span>
+                  <span class="text-success semi-bold">New</span>
                   {% endif %}
                 </td>
                 <td class="{{ image_count_class }}">{{ item.field_images|length }}</td>
@@ -325,190 +329,190 @@ total_images: Total no.of images in this session - {{ total_images }} * * * @ing
                 </td>
 
               </tr>
-            {% endif %}
-          {% endfor %}
+              {% endif %}
+              {% endfor %}
 
-        </tbody>
-      </table>
-    </div>
+            </tbody>
+          </table>
+        </div>
 
-    <div class="tab-pane" id="tab-dropped">
-      <table id="dt_drops" class="table table-responsive table-hover" width="100%">
-        <thead>
-          <tr>
-            <th>Concept</th>
-            <th>Style Family</th>
-            <th>Color Variant</th>
-            <th>State</th>
-            <th>Raw Count</th>
-            <th></th>
-            <th></th>
-          </tr>
-        </thead>
-        <tbody>
-          {% for item in mapped_products %}
+        <div class="tab-pane" id="tab-dropped">
+          <table id="dt_drops" class="table table-responsive table-hover" width="100%">
+            <thead>
+              <tr>
+                <th>Concept</th>
+                <th>Style Family</th>
+                <th>Color Variant</th>
+                <th>State</th>
+                <th>Raw Count</th>
+                <th></th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for item in mapped_products %}
 
-            {% if item.field_draft.0. value == 1 %}
+              {% if item.field_draft.0. value == 1 %}
 
               {% if item.field_images | length == 0 %}
-                {% set image_count_class = 'text-align-center bold text-danger' %}
+              {% set image_count_class = 'text-align-center bold text-danger' %}
               {% elseif item.field_images | length >= 7 %}
-                {% set image_count_class = 'text-align-center bold text-warning' %}
+              {% set image_count_class = 'text-align-center bold text-warning' %}
               {% else %}
-                {% set image_count_class = 'text-align-center bold text-success' %}
+              {% set image_count_class = 'text-align-center bold text-success' %}
               {% endif %}
               <tr>
                 <td>
                   <img src="/sbtest/{{ directory }}/images/brands/brand_logo_{{ item.field_concept_name.0.value|lower }}.png" height="20px"></td>
-                <td>{{ item.field_style_family.0.value }}</td>
-                <td>{{ item.title.0.value }}</td>
-                <td>
-                  <span class="text-danger semi-bold">Dropped</span>
+                  <td>{{ item.field_style_family.0.value }}</td>
+                  <td>{{ item.title.0.value }}</td>
+                  <td>
+                    <span class="text-danger semi-bold">Dropped</span>
 
-                </td>
-                <td class="{{ image_count_class }}">{{ item.field_images|length }}</td>
+                  </td>
+                  <td class="{{ image_count_class }}">{{ item.field_images|length }}</td>
 
-                <td class="text-align-center">
-                  <a target="_blank" class="btn btn-primary" href="/sbtest/view-product/{{item.nid.0.value }}">View</a>
-                </td>
-                <td class="text-align-center">
-                  <a target="_blank" class="btn btn-success" href="/sbtest/view-product/{{item.nid.0.value }}">Undo</a>
-                </td>
+                  <td class="text-align-center">
+                    <a target="_blank" class="btn btn-primary" href="/sbtest/view-product/{{item.nid.0.value }}">View</a>
+                  </td>
+                  <td class="text-align-center">
+                    <a target="_blank" class="btn btn-success" href="/sbtest/view-product/{{item.nid.0.value }}">Undo</a>
+                  </td>
 
-              </tr>
-            {% endif %}
-          {% endfor %}
+                </tr>
+                {% endif %}
+                {% endfor %}
 
-          {% for item in unmapped_products %}
+                {% for item in unmapped_products %}
 
-            {% if item.field_draft.0. value == 1 %}
+                {% if item.field_draft.0. value == 1 %}
 
-              {% if item.field_images | length == 0 %}
+                {% if item.field_images | length == 0 %}
                 {% set image_count_class = 'text-align-center bold text-danger' %}
-              {% elseif item.field_images | length >= 7 %}
+                {% elseif item.field_images | length >= 7 %}
                 {% set image_count_class = 'text-align-center bold text-warning' %}
-              {% else %}
+                {% else %}
                 {% set image_count_class = 'text-align-center bold text-success' %}
-              {% endif %}
-              <tr>
-                <td>
-                  <img src="/sbtest/{{ directory }}/images/brands/brand_logo_{{ item.field_concept_name.0.value|lower }}.png" height="20px"></td>
-                <td>{{ item.field_style_family.0.value }}</td>
-                <td>{{ item.title.0.value }}</td>
-                <td>
-                  <span class="text-danger semi-bold">Dropped</span>
+                {% endif %}
+                <tr>
+                  <td>
+                    <img src="/sbtest/{{ directory }}/images/brands/brand_logo_{{ item.field_concept_name.0.value|lower }}.png" height="20px"></td>
+                    <td>{{ item.field_style_family.0.value }}</td>
+                    <td>{{ item.title.0.value }}</td>
+                    <td>
+                      <span class="text-danger semi-bold">Dropped</span>
 
-                </td>
-                <td class="{{ image_count_class }}">{{ item.field_images|length }}</td>
+                    </td>
+                    <td class="{{ image_count_class }}">{{ item.field_images|length }}</td>
 
-                <td class="text-align-center">
-                  <a target="_blank" class="btn btn-primary" href="/sbtest/view-product/{{item.nid.0.value }}">View</a>
-                </td>
-                <td class="text-align-center">
-                  <a target="_blank" class="btn btn-success" href="/sbtest/view-product/{{item.nid.0.value }}">Undo</a>
-                </td>
+                    <td class="text-align-center">
+                      <a target="_blank" class="btn btn-primary" href="/sbtest/view-product/{{item.nid.0.value }}">View</a>
+                    </td>
+                    <td class="text-align-center">
+                      <a target="_blank" class="btn btn-success" href="/sbtest/view-product/{{item.nid.0.value }}">Undo</a>
+                    </td>
 
-              </tr>
-            {% endif %}
-          {% endfor %}
-        </tbody>
-      </table>
-    </div>
-
-    <div class="tab-pane" id="tab-reports">
-      <div class="attachment">
-        <div class="file-box">
-          <div class="file">
-            <a href="#">
-              <span class="corner"></span>
-              <div class="icon">
-                <i class="fa fa-file-excel-o text-success"></i>
-              </div>
-            </a>
-            <div class="file-name">
-              <a target="_blank">Shoot List</a>
-              <br>
+                  </tr>
+                  {% endif %}
+                  {% endfor %}
+                </tbody>
+              </table>
             </div>
-          </div>
-        </div>
-        <div class="file-box">
-          <div class="file">
-            <a href="#">
-              <span class="corner"></span>
 
-              <div class="icon">
-                <i class="fa fa-file-pdf-o text-danger"></i>
+            <div class="tab-pane" id="tab-reports">
+              <div class="attachment">
+                <div class="file-box">
+                  <div class="file">
+                    <a href="#">
+                      <span class="corner"></span>
+                      <div class="icon">
+                        <i class="fa fa-file-excel-o text-success"></i>
+                      </div>
+                    </a>
+                    <div class="file-name">
+                      <a target="_blank">Shoot List</a>
+                      <br>
+                    </div>
+                  </div>
+                </div>
+                <div class="file-box">
+                  <div class="file">
+                    <a href="#">
+                      <span class="corner"></span>
+
+                      <div class="icon">
+                        <i class="fa fa-file-pdf-o text-danger"></i>
+                      </div>
+                      <div class="file-name">
+                        Analysis
+                        <br>
+                      </div>
+                    </a>
+                  </div>
+
+                </div>
+                <div class="clearfix"></div>
               </div>
-              <div class="file-name">
-                Analysis
-                <br>
+
+            </div>
+
+            <div class="tab-pane" id="tab-analysis">
+
+              <div class="col-sm-height col-bottom ">
+                <div class="flot-chart">
+                  <div class="flot-chart-content" id="flot-analysis-chart" style="height:300px;"></div>
+                </div>
               </div>
-            </a>
+
+            </div>
+
           </div>
 
         </div>
-        <div class="clearfix"></div>
-      </div>
+
+        <!-- <div class="col-lg-2">
+
+        <div class="sidebard-panel" style="min-height: 100%;">
+
+
+
+        {% for item in grouped_concepts %}
+
+        <div class="company-stat-boxes">
+        <div data-index="" class="company-stat-box mb-10  active padding-10 bg-master-lightest">
+
+
+
+        <p class="company-name pull-left text-uppercase bold no-margin">
+        <img src="/sbtest/{{ directory }}/images/brands/brand_logo_{{ item.concept|lower }}.png"
+        height="15px">
+        <div class="pull-right">
+        <span class=" label label-primary p-t-5 m-l-5 p-b-5 inline fs-12">{{ item.product_count }}
+      </span>
 
     </div>
 
-    <div class="tab-pane" id="tab-analysis">
+  </p>
 
-      <div class="col-sm-height col-bottom ">
-        <div class="flot-chart">
-          <div class="flot-chart-content" id="flot-analysis-chart" style="height:300px;"></div>
-        </div>
-      </div>
+  <div class="clearfix"></div>
 
-    </div>
 
-  </div>
 
 </div>
 
-<!-- <div class="col-lg-2">
-
-            <div class="sidebard-panel" style="min-height: 100%;">
-
-
-
-            {% for item in grouped_concepts %}
-
-            <div class="company-stat-boxes">
-            <div data-index="" class="company-stat-box mb-10  active padding-10 bg-master-lightest">
+</div>
+{% endfor %}
+{% if unmapped_products|length > 0 %}
+<div class="company-stat-boxes">
+<div data-index="" class="company-stat-box mb-10  active padding-10 bg-master-lightest">
 
 
 
-            <p class="company-name pull-left text-uppercase bold no-margin">
-            <img src="/sbtest/{{ directory }}/images/brands/brand_logo_{{ item.concept|lower }}.png"
-            height="15px">
-            <div class="pull-right">
-            <span class=" label label-primary p-t-5 m-l-5 p-b-5 inline fs-12">{{ item.product_count }}
-          </span>
-
-        </div>
-
-      </p>
-
-      <div class="clearfix"></div>
-
-
-
-    </div>
-
-  </div>
-  {% endfor %}
-  {% if unmapped_products|length > 0 %}
-  <div class="company-stat-boxes">
-  <div data-index="" class="company-stat-box mb-10  active padding-10 bg-master-lightest">
-
-
-
-  <p class="company-name pull-left text-uppercase bold no-margin">
-  <img src="/sbtest/{{ directory }}/images/brands/brand_logo_.png"
-  height="15px">
-  <div class="pull-right">
-  <span class=" label label-danger p-t-5 m-l-5 p-b-5 inline fs-12">{{ unmapped_products|length }}
+<p class="company-name pull-left text-uppercase bold no-margin">
+<img src="/sbtest/{{ directory }}/images/brands/brand_logo_.png"
+height="15px">
+<div class="pull-right">
+<span class=" label label-danger p-t-5 m-l-5 p-b-5 inline fs-12">{{ unmapped_products|length }}
 </span>
 
 </div>
