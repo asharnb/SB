@@ -79,7 +79,6 @@ class StudioQueues implements StudioQueuesInterface {
   }
 
   public function RunMappingQueues($sid){
-    drupal_set_message('yes im here');
     /** @var QueueInterface $queue */
     //$queue = $this->queueFactory->get('manual_node_publisher');
     $queue_factory = \Drupal::service('queue');
@@ -110,7 +109,6 @@ class StudioQueues implements StudioQueuesInterface {
   }
 
   public function runQueue($sid, $fids = array()) {
-    drupal_set_message('yes im here');
     /** @var QueueInterface $queue */
     //$queue = $this->queueFactory->get('manual_node_publisher');
     $queue_factory = \Drupal::service('queue');

@@ -101,6 +101,18 @@ public function content()
 
       if($in_q !== ''){
 }
+      $photographer = '';
+      $vm = '';
+      $stylist = '';
+      if(!empty($session->field_photographer->get(0)->target_id)){
+        $photographer = $this->userStorage->load($session->field_photographer->get(0)->target_id)->label();
+      }
+      if(!empty($session->field_vm->get(0)->target_id)){
+        $vm = $this->userStorage->load($session->field_vm->get(0)->target_id)->label();
+      }
+      if(!empty($session->field_stylish->get(0)->target_id)){
+        $stylist = $this->userStorage->load($session->field_stylish->get(0)->target_id)->label();
+      }
 
       //set values into array
       $session_data[] = array( 'id' => $session->id(),
@@ -109,9 +121,9 @@ public function content()
       'shootdate' => $session->created->getValue(),
       'type' => $session->field_shoot_type->getValue(),
       'concepts' => $concepts,
-      'photographer' => $this->userStorage->load($session->field_photographer->get(0)->target_id)->label(),
-      'vm' => $this->userStorage->load($session->field_vm->get(0)->target_id)->label(),
-      'stylist' => $this->userStorage->load($session->field_stylish->get(0)->target_id)->label(),
+      'photographer' => $photographer,
+      'vm' => $vm,
+      'stylist' => $stylist,
       'productcount' => $products,
       'mapped' => $mapped,
       'unmapped' => $unmapped

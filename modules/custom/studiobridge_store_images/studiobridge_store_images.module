@@ -8,13 +8,12 @@
 use Drupal\Core\Routing\RouteMatchInterface;
 use \Drupal\node\Entity\Node;
 use \Drupal\file\Entity\File;
-use Drupal\Core\Entity\ContentEntityInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\studiobridge_commons\Products;
 use Drupal\studiobridge_commons\Sessions;
 use Drupal\studiobridge_commons\StudioImages;
 use Symfony\Component\HttpFoundation\RedirectResponse;
-use Drupal\file\FileInterface;
+use Drupal\user\Entity\User;
 
 /**
 * Implements hook_help().
@@ -323,9 +322,12 @@ function studiobridge_store_images_form_alter(&$form, \Drupal\Core\Form\FormStat
 
   // Validate in node/add/sessions page to avoid creating multiple open sessions.
   if ($form_id == 'node_sessions_form') {
+    $form['field_photographer']['widget'][0]['target_id']['#default_value'] = User::load(Drupal::currentUser()->id());
+
     // Get session of logged in user.
     $result = Sessions::getSessionByUid($uid);
     if (count($result)) {
+
       // redirect to sessions page.
       $response = new Symfony\Component\HttpFoundation\RedirectResponse(base_path() . 'view-sessions2');
       drupal_set_message('There is a open session, please close it to add new session', 'error');
@@ -584,4 +586,15 @@ function studiobridge_store_images_entity_update(Drupal\Core\Entity\EntityInterf
  */
 function studiobridge_store_images_user_logout($account){
   return (new RedirectResponse('/user/login'))->send();
+}
+
+/*
+ * Implements hook_user_login().
+ */
+function studiobridge_store_images_user_login($account){
+  // Get roles to check for photographer role.
+  $roles  = $account->getRoles();
+  if(in_array('photographer',$roles)){
+    return (new RedirectResponse('/view-sessions2'))->send();
+  }
 }

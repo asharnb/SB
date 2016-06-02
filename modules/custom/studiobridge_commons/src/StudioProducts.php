@@ -532,8 +532,8 @@ class StudioProducts implements StudioProductsInterface {
       if ($product_color_variant) {
         $color_variant = $product_color_variant[0]['value'];
       }
+      $title = $product->title->getValue();
       if (!$color_variant) {
-        $title = $product->title->getValue();
         if ($title) {
           $color_variant = $title[0]['value'];
         }
