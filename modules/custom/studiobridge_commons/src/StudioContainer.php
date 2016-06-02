@@ -191,4 +191,25 @@ class StudioContainer implements StudioContainerInterface {
     }
   }
 
+  /*
+   * Helper method to update container status.
+   *
+   * @param container
+   *  container node object.
+   * @param status
+   *  Container state value.
+   *
+   */
+  public function updateContainerStatus($container, $status = 'checkout'){
+    if($container){
+      $state = array(
+        'value' => $status
+      );
+      // Set the field state values.
+      $container->field_container_state->setValue($state);
+      // Save the node.
+      $container->save();
+    }
+  }
+
 }

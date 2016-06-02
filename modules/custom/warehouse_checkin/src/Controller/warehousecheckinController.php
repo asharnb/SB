@@ -72,9 +72,10 @@ class warehousecheckinController extends ControllerBase {
       return new RedirectResponse(base_path() . 'containers');
     }
 
+    $container = $this->nodeStorage->load($container_nid);
+    $container_values = $container->toArray();
+
     if($state == 'checkin'){
-      $container = $this->nodeStorage->load($container_nid);
-      $container_values = $container->toArray();
 
       $last_scanned_product_container = $this->state()->get('warehouse_container_last_scan_product_' . $container_id,'');
 
@@ -86,6 +87,9 @@ class warehousecheckinController extends ControllerBase {
           $product_return_data = $this->studioProducts->getProductInfoByObject($product);
         }
       }
+
+      // Update container state to checkin
+      $this->studioContainer->updateContainerStatus($container, 'checkIn');
 
       return [
         '#theme' => 'checkin',
@@ -100,6 +104,15 @@ class warehousecheckinController extends ControllerBase {
           )
         ),
       ];
+    }
+    elseif($state == 'checkout'){
+      // if any checkout operations will come here.
+
+      // Update container state to checkin
+      $this->studioContainer->updateContainerStatus($container, 'checkout');
+
+      drupal_set_message('Container check out successful.', 'success');
+      return new RedirectResponse(base_path() . 'containers');
     }
 
   }
