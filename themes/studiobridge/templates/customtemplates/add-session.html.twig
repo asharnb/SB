@@ -1,4 +1,4 @@
-
+{{kint(form)}}
 <div class="row">
   <div class="col-sm-12">
     <h3 class="no-margins p-b-sm">Add New Session</span></h3>
@@ -8,13 +8,14 @@
 <hr class="simple">
 
 <div class="panel panel-default">
-<form class="node-sessions-form node-form" data-drupal-selector="node-sessions-form" action="/sbtest/node/add/sessions" method="post" id="node-sessions-form" accept-charset="UTF-8" data-drupal-form-fields="form-E30h5TZl0SWr5vxukSiIDe_s0XixqpRtqWN72mKBE9Q,edit-node-sessions-form,edit-changed,edit-title-0-value,form-E30h5TZl0SWr5vxukSiIDe_s0XixqpRtqWN72mKBE9Q,edit-node-sessions-form-form-token,edit-node-sessions-form,edit-field-photographer-0-target-id,edit-field-vm-0-target-id,edit-field-stylish-0-target-id,edit-field-shoot-class-mix-shoot,edit-field-shoot-class-model-shoot,edit-field-notes-0-value,edit-advanced-active-tab,edit-submit,edit-field-photographer-0-target-id,edit-field-vm-0-target-id,edit-field-stylish-0-target-id,edit-field-shoot-class-mix-shoot,edit-field-shoot-class-model-shoot,edit-field-notes-0-value">
+<form>
   {{ form.form_build_id }}
   {{ form.form_id }}
-
   <div class="panel-body">
     <div class="col-lg-8 col-md-9 col-sm-9 col-xs-12 m-l-n">
-
+      <div class="col-sm-6 m-b-10">
+        {{form.title}}
+      </div>
       <div class="col-sm-6 m-b-10">
         {{form.field_photographer}}
       </div>
@@ -36,9 +37,9 @@
         <small class="m-t-n">Note limited to 250 characters</small>
       </div>
       <br>
-      <div class="col-sm-4 m-t-10">
-        <button class="btn btn-primary btn-cons m-t-10 full-width" type="submit">Login</button>
-      </div>
+
+      {{form.actions.submit}}
+
     </div>
 
 

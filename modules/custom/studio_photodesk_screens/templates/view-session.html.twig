@@ -22,22 +22,6 @@ total_images: Total no.of images in this session - {{ total_images }} * * * @ing
 */
 #}
 
-{% if session.field_status.0. value == 'open' %}
-{% set status_class = 'fa fa-play-circle text-success' %}
-{% set status_class_text = 'text-success' %}
-{% elseif session.field_status.0. value == 'pause' %}
-{% set status_class = 'fa fa-pause text-warning' %}
-{% set status_class_text = 'text-warning' %}
-{% else %}
-{% set status_class = 'fa fa-stop-circle text-danger' %}
-{% set status_class_text = 'text-danger' %}
-{% endif %}
-
-{% if session.field_shoot_class.0. value == 'model_shoot' %}
-{% set shoot_class = 'fa fa-user' %}
-{% else %}
-{% set shoot_class = 'fa fa-cubes' %}
-{% endif %}
 
 {# calculate counts adjusted for drops #}
 {% set adjusted_mapped = mapped_products | length - mapped_dropped_products | length %}
@@ -45,6 +29,24 @@ total_images: Total no.of images in this session - {{ total_images }} * * * @ing
 {% set total_dropped = unmapped_dropped_products | length + mapped_dropped_products | length %}
 
 {% set total_count = adjusted_mapped + adjusted_unmapped + total_dropped %}
+
+{% if session.field_status.0.value == 'open' and total_count == 0  %}
+  {% set status_class = '<span class="text-success"><i class=""></i> Session has started</span>' %}
+{% elseif session.field_status.0.value == 'open' and total_count > 0   %}
+  {% set status_class = '<span class="text-success"><i class=""></i> Importing products in session</span>' %}
+{% endif %}
+
+{% if session.field_status.0.value == 'pause' and total_count == 0  %}
+  {% set status_class = '<span class="text-warning"><i class=""></i> Session is paused</span>' %}
+{% endif %}
+
+{% if session.field_status.0.value == 'closed' and total_count == 0  %}
+  {% set status_class = '<span class="text-danger"><i class=""></i> Session Cancelled</span>' %}
+{% elseif session.field_status.0.value == 'closed' and result.unmapped.0.unmappedcount > 0   %}
+  {% set status_class = '<span class="text-danger"><i class=""></i>'~ result.unmapped.0.unmappedcount ~' items are unmapped</span>' %}
+{% elseif session.field_status.0.value == 'closed' and result.unmapped.0.unmappedcount == 0  and total_count > 0 %}
+    {% set status_class = '<span class="text-warning"><i class=""></i> Shootlist email is pending</span>' %}
+{% endif %}
 
 {#Header#}
 <div class="row">
@@ -69,8 +71,8 @@ total_images: Total no.of images in this session - {{ total_images }} * * * @ing
           <div class="col-sm-12 no-margins no-padding ">
             <div class="col-sm-5">
               <address>
-                <strong class="text-success">Session is Open</strong><br>
-                <em class="text-muted">Started at Jan12th, 2016 12:05 pm</em>
+                <strong class="text-success">{{status_class|raw}}</strong><br>
+                <em class="text-muted">Started at Jan 12th, 2016 12:05 pm</em>
               </address>
 
             </div>

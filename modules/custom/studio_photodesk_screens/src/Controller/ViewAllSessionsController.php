@@ -110,8 +110,8 @@ public function content()
       'type' => $session->field_shoot_type->getValue(),
       'concepts' => $concepts,
       'photographer' => $this->userStorage->load($session->field_photographer->get(0)->target_id)->label(),
-      'vm' => $this->userStorage->load($session->field_vm->get(0)->target_id)->label(),
-      'stylist' => $this->userStorage->load($session->field_stylish->get(0)->target_id)->label(),
+      //'vm' => $this->userStorage->load($session->field_vm->get(0)->target_id)->label(),
+      //'stylist' => $this->userStorage->load($session->field_stylish->get(0)->target_id)->label(),
       'productcount' => $products,
       'mapped' => $mapped,
       'unmapped' => $unmapped
