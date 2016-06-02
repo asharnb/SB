@@ -9,10 +9,10 @@
  * @ingroup templates
  */
 #}
-{% if breadcrumb %}
+{# {% if breadcrumb %} #}
 <div id="ribbon">
   <ol class="breadcrumb">
-    <li>Studio<strong>Bridge</strong></li>
+    <li>Photography Desk</li>
     {% for item in breadcrumb %}
       <li {{ item.attributes }}>
         {% if item.url %}
@@ -24,4 +24,4 @@
     {% endfor %}
   </ol>
 </div>
-{% endif %}
+{# {% endif %} #}

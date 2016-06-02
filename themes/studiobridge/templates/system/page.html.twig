@@ -85,19 +85,11 @@
         <div id="main" role="main">
 
 
-
+{% include 'breadcrumb.html.twig'%}
 
             <div id="content">
-                <div class="row">
+                <div class="col-sm-12 p-t-25">
 
-                    {# Content #}
-                    {% set content_classes = [
-                    page.sidebar_first and page.sidebar_second ? 'col-sm-6',
-                    page.sidebar_first and page.sidebar_second is empty ? 'col-sm-9',
-                    page.sidebar_second and page.sidebar_first is empty ? 'col-sm-9',
-                    page.sidebar_first is empty and page.sidebar_second is empty ? 'col-sm-12'
-                    ] %}
-                    <section{{ content_attributes.addClass(content_classes) }}>
 
 
 
@@ -106,7 +98,7 @@
                             {{ page.content }}
 
                         {% endblock %}
-                    </section>
+
 
                 </div>
             </div>

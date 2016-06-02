@@ -45,12 +45,15 @@
  */
 #}
 {% if user.isAnonymous == true %}
-    {% set margin_class = ['']  %}
     {% set login_class = ['not-loggedin']  %}
 {% else %}
-    {% set margin_class = ['dev-margin']  %}
     {% set login_class = ['']  %}
 {% endif %}
+
+{% if user.hasPermission('administrator') == true %}
+    {% set margin_class = ['dev-margin']  %}
+{% endif %}
+
 {%
   set body_classes = [
     'fixed-header',

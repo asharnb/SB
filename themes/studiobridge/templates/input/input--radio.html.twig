@@ -1,0 +1,15 @@
+{% spaceless %}
+  {%
+    set classes = [
+      'form-control',
+
+    ]
+  %}
+  {% block input %}
+
+  <div class="iradio_square">
+        <input{{ attributes.addClass(classes) }} />
+  </div>
+
+  {% endblock %}
+{% endspaceless %}

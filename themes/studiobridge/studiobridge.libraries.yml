@@ -57,3 +57,13 @@ chart-js:
     js/chartjs/Chart.js: {}
   dependencies:
     - core/jquery
+
+iCheck:
+  css:
+    theme:
+      css/iCheck-blue.css: {}
+  js:
+    js/check/iCheck.min.js: {}
+    js/icheck.js: {}
+  dependencies:
+    - core/jquery
