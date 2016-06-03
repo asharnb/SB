@@ -2,7 +2,7 @@ country:
   default: IN
 first_day: 0
 timezone:
-  default: Asia/Bishkek
+  default: Asia/Dubai
   user:
     configurable: true
     warn: false

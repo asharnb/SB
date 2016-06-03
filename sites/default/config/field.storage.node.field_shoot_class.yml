@@ -12,11 +12,11 @@ type: list_string
 settings:
   allowed_values:
     -
-      value: model_shoot
-      label: 'MODEL SHOOT'
-    -
       value: mix_shoot
-      label: 'MIX SHOOT'
+      label: 'Product Shoot'
+    -
+      value: model_shoot
+      label: 'Model Shoot'
   allowed_values_function: ''
 module: options
 locked: false

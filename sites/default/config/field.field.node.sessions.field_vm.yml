@@ -9,7 +9,7 @@ id: node.sessions.field_vm
 field_name: field_vm
 entity_type: node
 bundle: sessions
-label: VM
+label: 'Visual Merchandiser'
 description: ''
 required: false
 translatable: false
@@ -27,8 +27,10 @@ settings:
         photographer: '0'
         stylish: '0'
         qc: '0'
+        warehouse_helper: '0'
     target_bundles: null
     sort:
       field: name
       direction: ASC
+    auto_create: false
 field_type: entity_reference
