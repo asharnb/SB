@@ -110,7 +110,7 @@
         $("#imagecontainer").sortable({
             tolerance: 'pointer',
             start: function(event, ui){
-                ui.placeholder.html("<div class='bulkviewfiles file gray-bkground' style='width: 250px; height: 250px; background: #D2D2D2;'></div>");
+                ui.placeholder.html("<div class='bulkviewfiles file gray-bkground' style='width: 200px; height: 250px; background: #D2D2D2;'></div>");
             },
             stop: function(event, ui){
                 ui.placeholder.html("");

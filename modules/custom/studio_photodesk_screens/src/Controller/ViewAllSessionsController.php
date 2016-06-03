@@ -69,7 +69,7 @@ public function content()
   //get all nodes of session type
   $result = \Drupal::entityQuery('node')
   ->condition('type', 'sessions')
-  ->condition('uid', $uid)
+  //->condition('field_photographer', $uid)
   ->sort('created', 'DESC')
   ->range(0, 10000)
   ->execute();
@@ -96,7 +96,7 @@ public function content()
         where bundle='products' AND entity_id IN $in_q")->fetchAll();
         $mapped = db_query("select count(nid) as mappedcount from node where type='products' AND nid IN $in_q")->fetchAll();
         $unmapped = db_query("select count(nid) as unmappedcount from node where type='unmapped_products' AND nid IN $in_q")->fetchAll();
-    
+
       }
 
       if($in_q !== ''){

@@ -22,4 +22,5 @@ regions:
 libraries:
   - 'studiobridge/global-styling'
   - 'studiobridge/sweet-alert'
-  - 'studiobridge/smart-alert'  
+  - 'studiobridge/smart-alert'
+  - 'studiobridge/iCheck'  

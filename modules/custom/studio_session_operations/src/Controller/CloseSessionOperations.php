@@ -278,8 +278,7 @@ class CloseSessionOperations extends ControllerBase {
     global $base_insecure_url;
     $link = $base_insecure_url."/shootlist/$sid/download.csv";
 
-
-    $params['message'] = 'Download the shootlist csve file here ' . $link;
+    $params['message'] = 'Download the shootlist csv file here ' . $link;
     $params['node_title'] = $title;
     $langcode = \Drupal::currentUser()->getPreferredLangcode();
     $send = true;
@@ -287,10 +286,10 @@ class CloseSessionOperations extends ControllerBase {
     $result = $mailManager->mail($module, $key, $to, $langcode, $params, NULL, $send);
 
     if ($result['result'] !== true) {
-      drupal_set_message(t('There was a problem sending your message and it was not sent.'), 'error');
+      drupal_set_message(t('There was a problem sending automated shootlist email, please download shootlists manually.'), 'error');
     }
     else {
-      drupal_set_message(t('Your message has been sent.'));
+      drupal_set_message(t('Shootlist email has been sent.'));
     }
 
   }

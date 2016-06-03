@@ -5,11 +5,27 @@
  *
  * Place your custom PHP code in this file.
  */
+
+
+
 function studiobridge_theme(&$existing, $type, $theme, $path) {
     $hooks = array();
     $hooks['user_login_form'] = array(
         'render element' => 'form',
         'template' => 'user-login-form',
     );
+    $hooks['node_sessions_form'] = array(
+        'render element' => 'form',
+        'template' => 'customtemplates/add-session',
+    );
     return $hooks;
+};
+
+function studiobridge_preprocess_breadcrumb(&$variables){
+       if(($node = \Drupal::routeMatch()->getParameter('node')) && $variables['breadcrumb']){
+               $variables['breadcrumb'][] = array(
+                         'text' => $node->getTitle(),
+                         'url' => $node->URL()
+                       );
+       }
 }

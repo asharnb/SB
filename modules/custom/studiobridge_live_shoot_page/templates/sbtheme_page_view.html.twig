@@ -7,9 +7,8 @@
             <h5 class="no-margins semi-bold">Enter Product Tag</h5>
             {{ form|without('delete',"resequence") }}
         </div>
+
   </div>
-
-
 
 {% endblock %}
 
@@ -17,57 +16,48 @@
 {% block sbtheme_product %}
 
             <div class="col-sm-12 p-sm">
-              <h5 class="no-margins semi-bold m-b-sm">Product Information</h5>
-                <div class="col-lg-6">
-                    <dl class="dl-horizontal">
-                        <dt>Concept: </dt>
-                        {% if form.productdetails.concept == 'Unmapped' %}
-                            <dd id="dd-concept"><span class="bold">Unmapped</span></dd>
-                        {% else %}
-                            <dd id="dd-concept" class="mb-10"><img
-                                        src="/sb/{{ directory }}/images/brands/brand_logo_{{ form.productdetails.concept|lower }}.png"
-                                        height="20px"></dd>
-                        {% endif %}
-                    </dl>
-
-                </div>
-                <div class="col-lg-6">
-                    <dl class="dl-horizontal">
-                        <dt>Color Variant:</dt>
-                        <dd><strong>{{ form.productdetails.colorvariant|raw }}</strong></dd>
-                    </dl>
-
-                </div>
+              <h5 class="semi-bold m-b-sm">Product Information</h5>
 
                     <div class="col-lg-6">
                         <dl class="dl-horizontal">
-                            <dt>Identifier:</dt>
+                          <dt>Concept </dt>
+                          {% if form.productdetails.concept == 'Unmapped' %}
+                              <dd id="dd-concept"><span class="bold">Unmapped</span></dd>
+                          {% else %}
+                              <dd id="dd-concept" class="mb-10"><img
+                                          src="/sb/{{ directory }}/images/brands/brand_logo_{{ form.productdetails.concept|lower }}.png"
+                                          height="20px"></dd>
+                          {% endif %}
+                            <dt>Identifier</dt>
                             <dd id="dd-identifier">{{ form.productdetails.identifier }}</dd>
-                            <dt>Style No:</dt>
+                            <dt>Style No</dt>
                             <dd id="dd-styleno">{{ form.productdetails.styleno }}</dd>
 
-                            <dt>Season:</dt>
+                            <dt>Season</dt>
                             <dd>--</dd>
                         </dl>
                     </div>
                     <div class="col-lg-6">
                         <dl class="dl-horizontal">
-                            <dt>Gender:</dt>
+                          <dt>Color Variant</dt>
+                          <dd><strong>{{ form.productdetails.colorvariant|raw }}</strong></dd>
+                            <dt>Gender</dt>
                             <dd><strong id="dd-gender">{{ form.productdetails.gender }}</strong></dd>
-                            <dt>Color:</dt>
+                            <dt>Color</dt>
                             <dd id="dd-color">{{ form.productdetails.color }}</dd>
-                            <dt>Size:</dt>
+                            <dt>Size</dt>
                             <dd>--</dd>
 
                         </dl>
                     </div>
-                </div>
-                <div class="col-lg-12">
-                    <dl class="dl-horizontal">
-                        <dt>Description:</dt>
-                        <dd id="dd-description">{{ form.productdetails.description }}</dd>
+                    <div class="col-lg-12 border-bottom">
+                        <dl class="dl-horizontal">
+                            <dt>Description</dt>
+                            <dd id="dd-description">{{ form.productdetails.description }}</dd>
 
-                    </dl>
+                        </dl>
+                    </div>
+
                 </div>
 
 
@@ -76,25 +66,27 @@
 
 {% spaceless %}
     {% block sbimages %}
-    <div class="col-lg-12">
-    <h5 class="no-margins semi-bold">Product Images</h5>
-          <span class="pull-right">
-                                    {{ form.resequence }}
-                                    {{ form.delete }}
-    </span>
+
+
         {% for image in form.images.images %}
             {% if not image.fid == '' %}
 
                 <div class="bulkviewfiles imagefile" id="warpper-img-{{ image.fid }}">
                     {% if image.tag == '1' %}
-                    <div class="ribbon" id="ribboncontainer"><span class="for-tag tag" id="seq-{{ image.fid }}" name="{{ image.id }}">Tag</span></div>
+                    <div class="ribbon" id="ribboncontainer"><span class="for-tag tag" id="seq-{{ image.fid }}" name="{{ image.id }}"><i class="fa fa-lg fa-barcode txt-color-white"></i></span></div>
                     {% else %}
                     <div class="ribbon" id="ribboncontainer"><span class="for-tag" id="seq-{{ image.fid }}" name="{{ image.id }}">{{ image.id }}</span></div>
                     {% endif %}
-                    <div class="scancontainer">
 
+                    <div class="scancontainer">
+                      <div class="hovereffect">
                         <img src="{{ image.url }}" class="scanpicture"  data-imageid="{{ image.fid }}">
 
+                        <div class="overlay">
+                            <input type="checkbox" class="form-checkbox" id="del-img-{{ image.fid }}" hidden value="{{image.fid}}">
+                           <a class="info select-delete" data-id="{{ image.fid }}" data-click="no">Select image</a>
+                        </div>
+                    </div>
 
                     <div class="file-name">
                         <div id="tag-seq-img-{{ image.fid }}" type="hidden"></div>
@@ -102,25 +94,14 @@
                         <div class="row">
 
                             <div class="col-sm-12">
-                            <span id = {{ image.fid }}>
-                                <a class="txt-color-white"><i class="fa fa-lg fa-fw fa-search"></i></a>
-                                <a class="txt-color-white studio-img-tag" ><i class="fa fa-lg fa-fw fa-tag"></i></a>
-                                <a class="txt-color-white studio-img-fullshot"><i class="fa fa-lg fa-fw fa-copy"></i></a>
-                                <a class="txt-color-white"><i class="fa fa-lg fa-fw fa-trash-o"></i></a>
+                            <span  id = {{ image.fid }}>
+                                <a class="col-sm-4 text-info"><i class="fa fa-lg fa-fw fa-search"></i></a>
+                                <a class="col-sm-4 studio-img-fullshot text-info"><i class="fa fa-lg fa-fw fa-copy"></i></a>
+                                <a class=" col-sm-4 studio-img-tag text-info" ><i class="fa fa-lg fa-fw fa-barcode"></i></a>
+
                             </span>
 
                             </div>
-                            <!-- <div class="col col-sm-4">
-                                <div class="onoffswitch2 pull-right">
-                                    <span id="{{ image.fid }}">
-                                        <input type="checkbox" name="onoffswitch" class="onoffswitch-checkbox form-checkbox" id="del-img-{{ image.fid }}" value="{{ image.fid }}">
-                                            <label class="onoffswitch-label" for="del-img-{{ image.fid }}">
-                                                <span class="onoffswitch-inner"></span>
-                                                <span class="onoffswitch-switch"></span>
-                                            </label>
-                                    </span>
-                                </div>
-                            </div> -->
 
                         </div>
 
@@ -130,81 +111,108 @@
                 </div>
             {% endif %}
         {% endfor %}
-      </div>
+
     {% endblock sbimages %}
 {% endspaceless %}
 
 {% block sidepanel %}
+<div class="panel panel-default">
+  <div class="panel-body">
 
-        <div id="widgettile" class="row">
-            <div class="widget p-sm m-b-s">
-                  <div class="col-sm-4">
+<div  class="row">
+    <div class=" m-b-s">
+      <span class="pull-right text-success">App Connected  <i class="fa fa-circle"></i></span>
+
+    </div>
+</div>
+
+        <div  class="row border-bottom">
+                  <div class="col-sm-6">
+                    <h5 class="semi-bold">Products</h5>
                     <h1 class="m-xs no-of-products">{{ form.productdetails.total_products|length >0 ? form.productdetails.total_products : '0' }}</h1>
                   </div>
-                  <div class="col-sm-8">
-                    <h5 class="semi-bold no-padding no-margins">Products</h5>
-                    <h5 class="semi-bold no-padding no-margins">in this session</h5>
-
+                  <div class="col-sm-6 text-danger">
+                    <h5 class="semi-bold">Unmaped</h5>
+                    <h1 class="m-xs no-of-products">{{ form.productdetails.unmapped_products|length >0 ? form.productdetails.unmapped_products : '0' }}</h1>
                   </div>
-            </div>
+                  <hr class="simple">
+
         </div>
 
 
-    <div class="m-t-sm">
+
             <div class="row">
-              <dl class="dl-horizontal">
-                <dt>Session No: </dt>
-                <dd><span class="bold">777</span></dd>
-              </dl>
-                <div class="col-md-6">
-                    <a href="/sbtest/view-session/{{form.session['#value']}}" >&nbsp; {{form.session['#value']}}</a>
-                </div>
-                <div class="col-md-6">
-                  <span><i class="fa fa-circle text-success"></i> Open</span>
-                </div>
+              <div class="col-sm-6 ">
+                <h5 class="bold">Session ID</h5>
+              </div>
+              <div class="col-sm-6 text-right bold">
+              <h5 class="bold">703</h5>
+              </div>
+
+              <div class="col-sm-6 ">
+                <h5 class="bold">Status</h5>
+              </div>
+              <div class="col-sm-6 text-right text-success bold">
+                <h5 class="bold">Open</h5>
+              </div>
             </div>
 
+</div></div>
+<div class="panel panel-default">
+  <div class="panel-body">
+
+    <div  class="row border-bottom">
+              <div class="col-sm-12">
+                <h5 class="semi-bold">Current Product</h5>
+              </div>
+
+              <div class="col-sm-6 ">
+                <h5>State</h5>
+              </div>
+              <div class="col-sm-6 text-right text-success bold">
+                <h5 class="bold">New</h5>
+              </div>
+
+              <div class="col-sm-6 ">
+                <h5 >Images Shot</h5>
+              </div>
+              <div class="col-sm-6 text-right bold">
+                <h5 class="bold">{{ form.productdetails.image_count ? form.productdetails.image_count : '0' }}</h5>
+              </div>
+
+              <div class="col-sm-6 ">
+                <h5 >Images Deleted</h5>
+              </div>
+              <div class="col-sm-6 text-right text-danger bold">
+                <h5 class="bold">2</h5>
+              </div>
+
+              <div class="col-sm-12 m-b-sm">
+                <a href="" id="" class="btn">Drop Product</a>
+              </div>
+
     </div>
 
+    <div  class="row ">
+              <div class="col-sm-12">
+                <h5 class="semi-bold">Completion Checklist</h5>
+              </div>
 
-    <div class="m-t-sm">
-        <h4>Current Product</h4>
-        <div>
-            <ul class="list-group">
-                <li class="list-group-item">
-                    <span class="bold text-success pull-right ">New </span>
-                    Status
-                </li>
-                <li class="list-group-item">
-                    <span class="bold text-info pull-right"> {{ form.productdetails.image_count }}</span>
-                    Shot
-                </li>
-                <li class="list-group-item">
-                    <span class="bold text-danger pull-right">0 </span>
-                    Deleted
-                </li>
+              <div class="col-sm-6 ">
+                <h5 >Image sequence</h5>
+              </div>
+              <div class="col-sm-6 text-right text-success bold">
+                <h5 class="bold"><i class="fa fa-check"></i></h5>
+              </div>
 
-            </ul>
-        </div>
+              <div class="col-sm-6 ">
+                <h5>Tag Image</h5>
+              </div>
+              <div class="col-sm-6 text-right bold text-success">
+                <h5 class="bold"><i class="fa fa-check"></i></h5>
+              </div>
     </div>
 
-    <div class="m-t-s">
-        <h4>Product Checks</h4>
-        <div>
-            <ul class="list-group">
-                <li class="list-group-item">
-                    <span class="bold text-success pull-right">-- </span>
-                    Is Complete?
-                </li>
-                <li class="list-group-item">
-                    <span class="bold text-success pull-right"><i class="fa fa-check"></i> </span>
-                    In Sequence?
-                </li>
-                <li class="list-group-item">
-                    <span class="bold text-success pull-right">-- </span>
-                    Has Tag?
-                </li>
-            </ul>
-        </div>
-    </div>
+  </div>
+</div>
 {% endblock sidepanel %}

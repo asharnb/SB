@@ -44,11 +44,21 @@
  * @ingroup templates
  */
 #}
+{% if user.isAnonymous == true %}
+    {% set login_class = ['not-loggedin']  %}
+{% else %}
+    {% set login_class = ['']  %}
+{% endif %}
+
+{% if user.hasPermission('administrator') == true %}
+    {% set margin_class = ['dev-margin']  %}
+{% endif %}
+
 {%
   set body_classes = [
     'fixed-header',
     'fixed-navigation',
-    'fixed-ribbon'
+    'fixed-ribbon',
   ]
 %}
 <!DOCTYPE html>
@@ -59,7 +69,7 @@
     <css-placeholder token="{{ placeholder_token|raw }}">
     <js-placeholder token="{{ placeholder_token|raw }}">
   </head>
-  <body{{ attributes.addClass(body_classes) }}>
+  <body{{ attributes.addClass(body_classes,margin_class,login_class)}}>
     {{ page_top }}
     {{ page }}
     {{ page_bottom }}

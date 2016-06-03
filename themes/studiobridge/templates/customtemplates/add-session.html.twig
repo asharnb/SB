@@ -1,0 +1,49 @@
+{{kint(form)}}
+<div class="row">
+  <div class="col-sm-12">
+    <h3 class="no-margins p-b-sm">Add New Session</span></h3>
+    <h4 class="no-margins">Create a new session by selecting contributors and classification</h4>
+  </div>
+</div>
+<hr class="simple">
+
+<div class="panel panel-default">
+<form>
+  {{ form.form_build_id }}
+  {{ form.form_id }}
+  <div class="panel-body">
+    <div class="col-lg-8 col-md-9 col-sm-9 col-xs-12 m-l-n">
+      <div class="col-sm-6 m-b-10">
+        {{form.title}}
+      </div>
+      <div class="col-sm-6 m-b-10">
+        {{form.field_photographer}}
+      </div>
+      <br>
+      <div class="col-sm-6 m-b-10">
+        {{form.field_vm}}
+      </div>
+      <div class="col-sm-6 m-b-10">
+        {{form.field_stylish}}
+      </div>
+      <br>
+      <div class="col-sm-6 m-b-10">
+      {{form.field_shoot_class}}
+
+      </div>
+      <br>
+      <div class="col-sm-12 m-b-10">
+        {{form.field_notes}}
+        <small class="m-t-n">Note limited to 250 characters</small>
+      </div>
+      <br>
+
+      {{form.actions.submit}}
+
+    </div>
+
+
+
+  </div>
+</form>
+</div>
