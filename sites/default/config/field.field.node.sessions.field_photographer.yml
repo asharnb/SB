@@ -11,7 +11,7 @@ entity_type: node
 bundle: sessions
 label: Photographer
 description: ''
-required: false
+required: true
 translatable: false
 default_value: {  }
 default_value_callback: ''
@@ -27,8 +27,10 @@ settings:
         vm: '0'
         stylish: '0'
         qc: '0'
+        warehouse_helper: '0'
     target_bundles: null
     sort:
       field: name
       direction: ASC
+    auto_create: false
 field_type: entity_reference
