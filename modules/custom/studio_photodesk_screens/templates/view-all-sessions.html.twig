@@ -1,6 +1,6 @@
 
 <div class="row">
-  {{kint()}}
+{{kint()}}
   <div class="col-sm-12 col-md-8">
     <h3 class="no-margins p-b-sm">Photography Sessions</span></h3>
     <h4 class="no-margins">View and track all your sessions or add a new session</h4>
@@ -108,14 +108,14 @@
           </td>
           <td>
             <img src="/sbtest/{{directory}}/images/users/{{ random(['niranjan', 'vikas', 'anahita', 'moosa', 'azhar']) }}.jpg" class="img-circle-table " alt="niranjan">
-            <span style="display:none;">{{ random(['niranjan', 'vikas', 'anahita', 'moosa', 'azhar']) }}</span>
+            <span style="display:none;">{{ result.photographer }}</span>
             {% if not result.vm == '' %}
               <img src="/sbtest/{{directory}}/images/users/{{ random(['disha', 'rebecca']) }}.jpg" class="img-circle-table " alt="ashar">
-              <span style="display:none;">{{ random(['niranjan', 'vikas', 'anahita', 'moosa', 'azhar']) }}</span>
+              <span style="display:none;">{{ result.vm }}</span>
             {% endif %}
             {% if not result.stylist == '' %}
               <img src="/sbtest/{{directory}}/images/users/{{ random(['althea', 'rinki']) }}.jpg" class="img-circle-table " alt="aqeel">
-              <span style="display:none;">{{ random(['niranjan', 'vikas', 'anahita', 'moosa', 'azhar']) }}</span>
+              <span style="display:none;">{{ result.stylist }}</span>
             {% endif %}
           </td>
           <td><span class="{{date_class}}">{{ date_text }}</span></td>
