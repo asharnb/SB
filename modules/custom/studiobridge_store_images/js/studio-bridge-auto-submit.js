@@ -77,13 +77,15 @@
 
         var block = '';
         if(img.tag==1){
-          block += '<div class="ribbon"><span class="for-tag tag" id="seq-' +fid+ '">Tag</span></div>';
+          block += '<div class="ribbon" id="ribboncontainer"><span class="for-tag tag" id="seq-' + fid +'" name="' + seq +'"><i class="fa fa-lg fa-barcode txt-color-white"></i></span></div>';
         } else{
-          block += '<div class="ribbon"><span class="for-tag" id="seq-' +fid+ '">' +seq+ '</span></div>';
+          block += '<div class="ribbon" id="ribboncontainer"><span class="for-tag" id="seq-' + fid +'" name="{{ image.id }}">' + seq +'</span></div>';
         }
 
-        block +=  '<div class="scancontainer">';
-        block +=  '<img src="'+ img.uri +'" class="scanpicture">';
+        block +=  '<div class="scancontainer"><div class="hovereffect">';
+        block +=  '<img src="'+ img.uri +'" class="scanpicture" data-imageid="'+ fid +'">';
+        block += '<div class="overlay"><input type="checkbox" class="form-checkbox" id="del-img-'+ fid +'" hidden value="'+ fid +'"><a class="info select-delete" data-id="'+ fid +'" data-click="no">Select image</a></div>';
+
         block +=  '</div>';
 
         block +=  '<div class="file-name">';
@@ -93,10 +95,9 @@
         block += '<div class="row">';
 
 
-        block += '<div class="col col-sm-8"><span id= "'+fid+'" ><a class="label label-info"><i class="fa fa-lg fa-fw fa-arrows-alt"></i></a><a class="label label-warning studio-img-tag" ><i class="fa fa-lg fa-fw fa-tag"></i></a><a class="label label-success studio-img-fullshot"><i class="fa fa-lg fa-fw fa-copy"></i></a></span></div>';
+        block += '<div class="col col-sm-12"><span id= "'+fid+'"><a class="col-sm-4 text-info"><i class="fa fa-lg fa-fw fa-search"></i></a><a class="col-sm-4 studio-img-fullshot text-info"><i class="fa fa-lg fa-fw fa-copy"></i></a><a class=" col-sm-4 studio-img-tag text-info" ><i class="fa fa-lg fa-fw fa-barcode"></i></a></span></div>';
 
-        block += '<div class="col col-sm-4"><div class="onoffswitch2 pull-right"><span id="'+fid+'"><input type="checkbox" name="onoffswitch" class="onoffswitch-checkbox form-checkbox" id="del-img-'+fid+'" value="'+fid+'"><label class="onoffswitch-label" for="del-img-'+fid+'"><span class="onoffswitch-inner"></span><span class="onoffswitch-switch"></span></label></span></div></div>';
-
+        block += '</div>';
         block += '</div>';
         block += '</div>';
         block += '<div class="studio-img-weight"><input type="hidden" value="'+fid+'"></div>';
@@ -107,18 +108,7 @@
     }
 
     $(function() {
-        $("#imagecontainer").sortable({
-            tolerance: 'pointer',
-            start: function(event, ui){
-                ui.placeholder.html("<div class='bulkviewfiles file gray-bkground' style='width: 200px; height: 250px; background: #D2D2D2;'></div>");
-            },
-            stop: function(event, ui){
-                ui.placeholder.html("");
-            }
-        });
 
-
-        $( "#imagecontainer" ).disableSelection();
     });
 
 

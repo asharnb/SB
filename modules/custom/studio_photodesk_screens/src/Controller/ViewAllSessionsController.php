@@ -69,7 +69,7 @@ public function content()
   //get all nodes of session type
   $result = \Drupal::entityQuery('node')
   ->condition('type', 'sessions')
-  //->condition('field_photographer', $uid)
+  ->condition('field_photographer', $uid)
   ->sort('created', 'DESC')
   ->range(0, 10000)
   ->execute();
@@ -96,11 +96,16 @@ public function content()
         where bundle='products' AND entity_id IN $in_q")->fetchAll();
         $mapped = db_query("select count(nid) as mappedcount from node where type='products' AND nid IN $in_q")->fetchAll();
         $unmapped = db_query("select count(nid) as unmappedcount from node where type='unmapped_products' AND nid IN $in_q")->fetchAll();
-
+        $concepts = objectToArray($concepts);
+      } else{
+        $mapped = '';
+        $unmapped = '';
+        $concepts = '';
       }
 
-      if($in_q !== ''){
-}
+      // $session_data = '';
+      // if(!empty($in_q)){
+
       $photographer = '';
       $vm = '';
       $stylist = '';
@@ -126,8 +131,11 @@ public function content()
       'stylist' => $stylist,
       'productcount' => $products,
       'mapped' => $mapped,
-      'unmapped' => $unmapped
+      'unmapped' => $unmapped,
     );
+
+  // }
+
   }
 }
 
@@ -147,4 +155,14 @@ return [
 
 }
 
+
+
+}
+
+function objectToArray($data) {
+    if (is_object($data))
+        $data = get_object_vars($data);
+    if (is_array($data))
+        return array_map(__FUNCTION__, $data);
+    return $data;
 }

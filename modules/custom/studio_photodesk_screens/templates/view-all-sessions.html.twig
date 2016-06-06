@@ -1,5 +1,6 @@
 
 <div class="row">
+  {{kint()}}
   <div class="col-sm-12 col-md-8">
     <h3 class="no-margins p-b-sm">Photography Sessions</span></h3>
     <h4 class="no-margins">View and track all your sessions or add a new session</h4>
@@ -16,13 +17,14 @@
         <div id="dt_viewsessions_filter" class="col-sm-5 search-container">
               <div class="input-group">
         <span class="input-group-addon" id="basic-addon1"><i class="fa fa-search"></i></span>
-        <input type="text" class="form-control input-sm" placeholder="What are you looking for?" id="dt_search_box">
+        <input type="text" class="form-control inputs" placeholder="What are you looking for?" id="dt_search_box">
 
 
       </div>
+
         </div>
         <div class="col-sm-4">
-      <button type="button" id="btn_search_reset" class="btn">Reset</button>
+      <button type="button" id="btn_search_reset" class="btn">Clear</button>
         </div>
 
     </div>
@@ -31,7 +33,7 @@
 <div class="panel panel-default">
   <!-- NEW COL START -->
   <article class="m-sm">
-    <table id="dt_viewsessions" class="table table-responsive  table-striped table-hover" width="100%">
+    <table id="dt_viewsessions" class="table table-responsive table-hover" width="100%">
 
       <thead>
         <th>ID</th>
@@ -66,7 +68,7 @@
             {% elseif result.stage.0.value == 'closed' and result.unmapped.0.unmappedcount > 0   %}
               {% set status_class = '<span class="text-danger"><i class=""></i>'~ result.unmapped.0.unmappedcount ~' items unmapped</span>' %}
             {% elseif result.stage.0.value == 'closed' and result.unmapped.0.unmappedcount == 0  and total_count > 0 %}
-                {% set status_class = '<span class="text-warning"><i class=""></i> Shootlist Pending</span>' %}
+                {% set status_class = '<span class="text-success"><i class=""></i> Session Complete</span>' %}
             {% endif %}
 
         {#rules for status stages#}
@@ -89,19 +91,32 @@
           <td>{{ result.id }}</td>
           <td>{{ status_class|raw }}</td>
           <td>
+
             {% if result.concepts|length == 0 %}
                 Not Available
 
-            {% elseif result.concepts|length > 1 %}
+            {% elseif result.concepts|length == 1 %}
 
-                <img src="/sbtest/{{directory}}/images/brands/brand_logo_{{result.concepts.0.concept|lower}}.png" height="20px"> <span class="text text-complete bold">   +{{result.concepts|length -1}}</span>
+                <img src="/sbtest/{{directory}}/images/brands/brand_logo_{{result.concepts.0.concept|lower}}.png" height="20px" alt="{{result.concepts.0.concept|lower}}">
+                <span style="display:none;">{% for item in result.concepts %}{{item.concept}}{% endfor %}</span>
+            {% elseif result.concepts|length >= 2 %}
 
+                <img src="/sbtest/{{directory}}/images/brands/brand_logo_{{result.concepts.0.concept|lower}}.png" height="20px" alt="{{result.concepts.0.concept|lower}}">
+                <span class="text text-complete bold" data-toggle="tooltip" title="{% for item in result.concepts|slice(1) %}{{item.concept|title}}{% if not loop.last %},{% endif %}{% endfor %}">   +{{result.concepts|length -1}}</span>
+                <span style="display:none;">{% for item in result.concepts %}{{item.concept}}{% endfor %}</span>
             {% endif %}
           </td>
           <td>
             <img src="/sbtest/{{directory}}/images/users/{{ random(['niranjan', 'vikas', 'anahita', 'moosa', 'azhar']) }}.jpg" class="img-circle-table " alt="niranjan">
-            <img src="/sbtest/{{directory}}/images/users/{{ random(['disha', 'rebecca']) }}.jpg" class="img-circle-table " alt="ashar">
-            <img src="/sbtest/{{directory}}/images/users/{{ random(['althea', 'rinki']) }}.jpg" class="img-circle-table " alt="aqeel">
+            <span style="display:none;">{{ random(['niranjan', 'vikas', 'anahita', 'moosa', 'azhar']) }}</span>
+            {% if not result.vm == '' %}
+              <img src="/sbtest/{{directory}}/images/users/{{ random(['disha', 'rebecca']) }}.jpg" class="img-circle-table " alt="ashar">
+              <span style="display:none;">{{ random(['niranjan', 'vikas', 'anahita', 'moosa', 'azhar']) }}</span>
+            {% endif %}
+            {% if not result.stylist == '' %}
+              <img src="/sbtest/{{directory}}/images/users/{{ random(['althea', 'rinki']) }}.jpg" class="img-circle-table " alt="aqeel">
+              <span style="display:none;">{{ random(['niranjan', 'vikas', 'anahita', 'moosa', 'azhar']) }}</span>
+            {% endif %}
           </td>
           <td><span class="{{date_class}}">{{ date_text }}</span></td>
 

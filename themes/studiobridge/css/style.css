@@ -285,12 +285,15 @@
     transition: all 0.3s ease-in;
 }
 .userlogged {
-    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    /* border-bottom: 1px solid rgba(255, 255, 255, 0.1); */
     display: block;
+    position: absolute;
     margin-bottom: 0;
-    margin: 0;
+    margin-bottom: 20px;
+    margin-left: 10px;
     padding: 5px 10px 0 10px;
     zoom: 0.9;
+    bottom: 0;
 }
 .userlogged > i {
     float: left;
@@ -302,7 +305,7 @@
 .userlogged img {width: 70px;height: auto;display: inline-block;vertical-align: middle;margin-top: 1px;margin-right: 5px;margin-left: 0;/* margin-bottom: -15px; */border-radius: 50%;float: left;z-index: -50;}
 .user-details {
     float: left;
-    padding-left: 5px;
+    padding-left: 10px;
     text-align: left;
 }
 

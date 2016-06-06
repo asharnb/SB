@@ -28,4 +28,4 @@ function studiobridge_preprocess_breadcrumb(&$variables){
                          'url' => $node->URL()
                        );
        }
-}
+};

@@ -1,11 +1,11 @@
 <?php
 
 /**
- * @file
- * Contains Drupal\studiobridge_live_shoot_page\StudioBridgeLiveShootingForm
- *
- * @Note : As of now this are only development code
- */
+* @file
+* Contains Drupal\studiobridge_live_shoot_page\StudioBridgeLiveShootingForm
+*
+* @Note : As of now this are only development code
+*/
 
 namespace Drupal\studiobridge_live_shoot_page\Form;
 
@@ -22,10 +22,10 @@ use Drupal\Core\Database\Connection;
 
 class StudioBridgeLiveShootingForm extends FormBase {
   /**
-   * The database service.
-   *
-   * @var \Drupal\Core\Database\Connection
-   */
+  * The database service.
+  *
+  * @var \Drupal\Core\Database\Connection
+  */
   protected $database;
 
   protected $nodeStorage;
@@ -41,23 +41,23 @@ class StudioBridgeLiveShootingForm extends FormBase {
   protected $StudioCommons;
 
   /**
-   * The state.
-   *
-   * @var \Drupal\Core\State\StateInterface
-   */
+  * The state.
+  *
+  * @var \Drupal\Core\State\StateInterface
+  */
   protected $state;
 
 
   /*
-   * {@inheritdoc}
-   */
+  * {@inheritdoc}
+  */
   public static function create(ContainerInterface $container) {
     return new static($container->get('database'), $container->get('entity_type.manager'), $container);
   }
 
   /**
-   * {@doc}
-   */
+  * {@doc}
+  */
   public function __construct(Connection $database, $entity_manager, $container) {
     $this->database = $database;
     $this->nodeStorage = $entity_manager->getStorage('node');
@@ -72,26 +72,26 @@ class StudioBridgeLiveShootingForm extends FormBase {
   }
 
   /**
-   * Returns a unique string identifying the form.
-   *
-   * @return string
-   *   The unique string identifying the form.
-   */
+  * Returns a unique string identifying the form.
+  *
+  * @return string
+  *   The unique string identifying the form.
+  */
   public function getFormId() {
     return 'studiobridge_live_shoot_form';
   }
 
   /**
-   * Form constructor.
-   *
-   * @param array $form
-   *   An associative array containing the structure of the form.
-   * @param \Drupal\Core\Form\FormStateInterface $form_state
-   *   The current state of the form.
-   *
-   * @return array
-   *   The form structure.
-   */
+  * Form constructor.
+  *
+  * @param array $form
+  *   An associative array containing the structure of the form.
+  * @param \Drupal\Core\Form\FormStateInterface $form_state
+  *   The current state of the form.
+  *
+  * @return array
+  *   The form structure.
+  */
   public function buildForm(array $form, FormStateInterface $form_state) {
 
     $uid = $this->currentUser()->id();
@@ -181,7 +181,6 @@ class StudioBridgeLiveShootingForm extends FormBase {
     );
     $form['identifier'] = array(
       '#type' => 'textfield',
-      '#description' => $this->t('description will come here'),
       '#default_value' => $identifier,
       '#title' => t(''),
 
@@ -227,6 +226,9 @@ class StudioBridgeLiveShootingForm extends FormBase {
       '#ajax' => array(
         'callback' => [get_class($this), 'productGetOrUpdateCallback'],
         'event' => 'click',
+        'progress' => array(
+          'type' => 'throbber',
+    ),
 
       ),
     );
@@ -236,34 +238,38 @@ class StudioBridgeLiveShootingForm extends FormBase {
     if ($productdetails) {
       $session = $this->nodeStorage->load($session_id);
       $session_products = $session->field_product->getValue();
+
       $form['productdetails'] = array(
-        'concept' => $productdetails['concept'],
-        'styleno' => $productdetails['styleno'],
-        'colorvariant' => $productdetails['colorvariant'],
-        'gender' => $productdetails['gender'],
-        'color' => $productdetails['color'],
-        'description' => $productdetails['description'],
-        'identifier' => $identifier,
-        'image_count' => $productdetails['image_count'],
-        'total_products' => count($session_products),
+        '#concept' => $productdetails['concept'],
+        '#styleno' => $productdetails['styleno'],
+        '#colorvariant' => $productdetails['colorvariant'],
+        '#gender' => $productdetails['gender'],
+        '#color' => $productdetails['color'],
+        '#description' => $productdetails['description'],
+        '#identifier' => $identifier,
+        '#image_count' => $productdetails['image_count'],
+        '#total_products' => count($session_products),
+        '#unmapped_products' => '0',
       );
     }
 
     $array_images = array();
     $i = 1;
+
     foreach ($images as $fid => $src) {
 
       $array_images[] = array(
-        'url' => $src['uri'],
-        'name' => $src['name'],
-        'fid' => $fid,
-        'id' => $i,
-        'tag' => $src['tag'],
+        '#url' => $src['uri'],
+        '#name' => $src['name'],
+        '#fid' => $fid,
+        '#id' => $i,
+        '#tag' => $src['tag'],
       );
       $i++;
 
 
     }
+
 
     $form['images'] = array(
       'images' => $array_images,
@@ -278,12 +284,12 @@ class StudioBridgeLiveShootingForm extends FormBase {
     $v = $form_state->getValues();
     $form_state->setRebuild(TRUE);
 
-    drupal_set_message('Nothing Submitted. Just an Example.');
+    //drupal_set_message('Nothing Submitted. Just an Example.');
   }
 
   /*
-   * Ajax callback function.
-   */
+  * Ajax callback function.
+  */
   public function productGetOrUpdateCallback(array &$form, FormStateInterface $form_state) {
 
     // Load services as it is object context.
@@ -322,27 +328,27 @@ class StudioBridgeLiveShootingForm extends FormBase {
       //return js with error message
 
       $inject_script = '<script>
-    Command: toastr["error"]("No identifier has been scanned. Please scan the tags to continue.")
+      Command: toastr["error"]("No identifier has been scanned. Please scan the tags to continue.")
 
-    toastr.options = {
-      "closeButton": false,
-      "debug": false,
-      "newestOnTop": false,
-      "progressBar": false,
-      "positionClass": "toast-top-right",
-      "preventDuplicates": false,
-      "onclick": null,
-      "showDuration": "300",
-      "hideDuration": "1000",
-      "timeOut": "5000",
-      "extendedTimeOut": "1000",
-      "showEasing": "swing",
-      "hideEasing": "linear",
-      "showMethod": "fadeIn",
-      "hideMethod": "fadeOut"
-    }
+      toastr.options = {
+        "closeButton": false,
+        "debug": false,
+        "newestOnTop": false,
+        "progressBar": false,
+        "positionClass": "toast-top-right",
+        "preventDuplicates": false,
+        "onclick": null,
+        "showDuration": "300",
+        "hideDuration": "1000",
+        "timeOut": "5000",
+        "extendedTimeOut": "1000",
+        "showEasing": "swing",
+        "hideEasing": "linear",
+        "showMethod": "fadeIn",
+        "hideMethod": "fadeOut"
+      }
 
-    </script>';
+      </script>';
       //
       $ajax_response->addCommand(new HtmlCommand('#smartnotification', $inject_script));
       return $ajax_response;
@@ -370,27 +376,27 @@ class StudioBridgeLiveShootingForm extends FormBase {
         $StudioSessions->UpdateLastProductToSession($session_id, $un_mapped_node);
 
         $inject_script_mapping = '<script>
-      Command: toastr["error"]("Identifier was not found, an unmapped product has been created.")
+        Command: toastr["error"]("No mapped product was found with that identifier. An unmapped product has been created instead")
 
-      toastr.options = {
-        "closeButton": false,
-        "debug": false,
-        "newestOnTop": false,
-        "progressBar": false,
-        "positionClass": "toast-top-right",
-        "preventDuplicates": false,
-        "onclick": null,
-        "showDuration": "300",
-        "hideDuration": "1000",
-        "timeOut": "5000",
-        "extendedTimeOut": "1000",
-        "showEasing": "swing",
-        "hideEasing": "linear",
-        "showMethod": "fadeIn",
-        "hideMethod": "fadeOut"
-      }
+        toastr.options = {
+          "closeButton": false,
+          "debug": false,
+          "newestOnTop": false,
+          "progressBar": false,
+          "positionClass": "toast-top-right",
+          "preventDuplicates": false,
+          "onclick": null,
+          "showDuration": "300",
+          "hideDuration": "1000",
+          "timeOut": "5000",
+          "extendedTimeOut": "1000",
+          "showEasing": "swing",
+          "hideEasing": "linear",
+          "showMethod": "fadeIn",
+          "hideMethod": "fadeOut"
+        }
 
-      </script>';
+        </script>';
         //
 
 
@@ -401,27 +407,27 @@ class StudioBridgeLiveShootingForm extends FormBase {
 
         $new_or_old_product_nid = $new_product->id();
         $inject_script_mapping = '<script>
-      Command: toastr["success"]("New mapped product found")
+        Command: toastr["success"]("New mapped product is found")
 
-      toastr.options = {
-        "closeButton": false,
-        "debug": false,
-        "newestOnTop": false,
-        "progressBar": false,
-        "positionClass": "toast-top-right",
-        "preventDuplicates": false,
-        "onclick": null,
-        "showDuration": "300",
-        "hideDuration": "1000",
-        "timeOut": "5000",
-        "extendedTimeOut": "1000",
-        "showEasing": "swing",
-        "hideEasing": "linear",
-        "showMethod": "fadeIn",
-        "hideMethod": "fadeOut"
-      }
+        toastr.options = {
+          "closeButton": false,
+          "debug": false,
+          "newestOnTop": false,
+          "progressBar": false,
+          "positionClass": "toast-top-right",
+          "preventDuplicates": false,
+          "onclick": null,
+          "showDuration": "300",
+          "hideDuration": "1000",
+          "timeOut": "5000",
+          "extendedTimeOut": "1000",
+          "showEasing": "swing",
+          "hideEasing": "linear",
+          "showMethod": "fadeIn",
+          "hideMethod": "fadeOut"
+        }
 
-      </script>';
+        </script>';
       }
     }
     else {
@@ -430,10 +436,10 @@ class StudioBridgeLiveShootingForm extends FormBase {
 
       $db = \Drupal::database();
       $sessions_nids = $db->select('node__field_product', 'c')
-        ->fields('c')
-        ->condition('field_product_target_id', $new_or_old_product_nid)
-        ->condition('bundle', 'sessions')
-        ->execute()->fetchAll();
+      ->fields('c')
+      ->condition('field_product_target_id', $new_or_old_product_nid)
+      ->condition('bundle', 'sessions')
+      ->execute()->fetchAll();
 
       // todo : if count is more than 1
       if (count($sessions_nids)) {
@@ -448,20 +454,20 @@ class StudioBridgeLiveShootingForm extends FormBase {
       // If current product is reshoot then prompt user to confirm
       if ($reshoot && $_GET['identifier'] !== $identifier) {
         $inject_script = '<script>
-      swal({
-        title: "Reshoot Product?",
-        text: "This product already exists, do you want to reshoot this product?",
-        type: "info",
-        showCancelButton: true,
-        confirmButtonColor: "#DD6B55",
-        confirmButtonText: "Reshoot",
-        closeOnConfirm: false
-      },function () {
-        window.location="' . base_path() . 'live-shooting-page1?reshoot&identifier=' . $identifier . '"
-      });
+        swal({
+          title: "Reshoot Product?",
+          text: "This product already exists, do you want to reshoot this product?",
+          type: "info",
+          showCancelButton: true,
+          confirmButtonColor: "#DD6B55",
+          confirmButtonText: "Reshoot",
+          closeOnConfirm: false
+        },function () {
+          window.location="' . base_path() . 'live-shooting-page1?reshoot&identifier=' . $identifier . '"
+        });
 
 
-    </script>';
+        </script>';
         // return ajax here.
         $ajax_response->addCommand(new HtmlCommand('#js-holder', $inject_script));
         return $ajax_response;
@@ -511,18 +517,24 @@ class StudioBridgeLiveShootingForm extends FormBase {
 
     $block = '<div id="imagecontainer" name="imagecontainer" class="ui-sortable">';
     $i = 1;
+    if(!empty($images)){
     foreach ($images as $fid => $src) {
-      $block .= '<div class="bulkviewfiles imagefile ui-sortable-handle" id="warpper-img-' . $fid . '">';
+      $block .= '<div class="bulkviewfiles imagefile" id="warpper-img-' . $fid . '">';
 
       if ($src['tag'] !== 1) {
-        $block .= '<div class="ribbon"><span class="for-tag" id="seq-' . $fid . '">' . $i . '</span></div>';
+        $block .= '<div class="ribbon" id="ribboncontainer"><span class="for-tag" id="seq-' . $fid . '" name="' . $i . '">' . $i . '</span></div>';
       }
       else {
-        $block .= '<div class="ribbon"><span class="for-tag tag" id="seq-' . $fid . '">Tag</span></div>';
+        $block .= '<div class="ribbon" id="ribboncontainer"><span class="for-tag tag" id="seq-' . $fid . '" name="' . $i . '"><i class="fa fa-lg fa-barcode txt-color-white"></i></span></div>';
       }
 
-      $block .= '<div class="scancontainer">';
-      $block .= '<img src="' . $src['uri'] . '" class="scanpicture">';
+      $block .= '<div class="scancontainer"> <div class="hovereffect">';
+      $block .= '<img src="' . $src['uri'] . '" class="scanpicture" data-imageid="' . $fid . '">';
+      $block .= '<div class="overlay">
+      <input type="checkbox" class="form-checkbox" id="del-img-' . $fid . '" hidden value="' . $fid . '">
+      <a class="info select-delete" data-id="' . $fid . '" data-click="no">Select image</a>
+      </div>';
+
       $block .= '</div>';
 
       $block .= '<div class="file-name">';
@@ -530,42 +542,33 @@ class StudioBridgeLiveShootingForm extends FormBase {
 
       $block .= '<div class="row">';
 
-      $block .= '<div class="col col-sm-8">
-  <span id= "' . $fid . '" >
-  <a class="label label-info"><i class="fa fa-lg fa-fw fa-arrows-alt"></i></a>
-  <a class="label label-warning studio-img-tag" ><i class="fa fa-lg fa-fw fa-tag"></i></a>
-  <a class="label label-success studio-img-fullshot"><i class="fa fa-lg fa-fw fa-copy"></i></a>
-  </span>
-  </div>';
-      $block .= '                    <div class="col col-sm-4">
-  <div class="onoffswitch2 pull-right">
-  <span id="' . $fid . '">
-  <input type="checkbox" name="onoffswitch" class="onoffswitch-checkbox form-checkbox" id="del-img-' . $fid . '" value="' . $fid . '">
-  <label class="onoffswitch-label" for="del-img-' . $fid . '">
-  <span class="onoffswitch-inner"></span>
-  <span class="onoffswitch-switch"></span>
-  </label>
-  </span>
-  </div>
-  </div>';
+      $block .= '<div class="col col-sm-12">
+      <span id= "' . $fid . '" >
+      <a class="col-sm-4 text-info"><i class="fa fa-lg fa-fw fa-search"></i></a>
+      <a class="col-sm-4 studio-img-fullshot text-info"><i class="fa fa-lg fa-fw fa-copy"></i></a>
+      <a class=" col-sm-4 studio-img-tag text-info" ><i class="fa fa-lg fa-fw fa-barcode"></i></a>
+        </span>
+        </div>';
 
+      $block .= '</div>';
       $block .= '</div>';
       $block .= '</div>';
       $block .= '<div class="studio-img-weight"><input type="hidden" value="' . $fid . '"></div>';
       $block .= '</div>';
       $i++;
     }
+  }
     $block .= '</div>';
 
-    $sort_js = '<script>!function(e){e(function(){e("#imagecontainer").sortable(({
-  tolerance: \'pointer\',
-  start: function(event, ui){
-    ui.placeholder.html("<div class=\'bulkviewfiles file gray-bkground\' style=\'width: 200px; height: 250px; background: #D2D2D2;\'></div>");
-  },
-  stop: function(event, ui){
-    ui.placeholder.html("");
-  }
-})),e("#imagecontainer").disableSelection()})}(jQuery);</script>';
+    // $sort_js = '<script>!function(e){e(function(){e("#imagecontainer").sortable(({
+    //   tolerance: \'pointer\',
+    //   start: function(event, ui){
+    //     ui.placeholder.html("<div class=\'bulkviewfiles file gray-bkground\' style=\'width: 200px; height: 250px; background: #D2D2D2;\'></div>");
+    //   },
+    //   stop: function(event, ui){
+    //     ui.placeholder.html("");
+    //   }
+    // })),e("#imagecontainer").disableSelection()})}(jQuery);</script>';
 
     $ajax_response->addCommand(new HtmlCommand('#imagecontainer-wrapper', $block));
     $ajax_response->addCommand(new HtmlCommand('#studio-img-container', ''));
@@ -576,7 +579,7 @@ class StudioBridgeLiveShootingForm extends FormBase {
     $ajax_response->addCommand(new InvokeCommand('#edit-identifier-hidden', 'change'));
 
 
-// update in product details section   todo : later remove it @ ashar
+    // update in product details section   todo : later remove it @ ashar
 
     $productdetails = $StudioProducts->getProductInformation($identifier);
 
@@ -584,15 +587,21 @@ class StudioBridgeLiveShootingForm extends FormBase {
       $session = $nodeStorage->load($session_id);
       $session_products = $session->field_product->getValue();
 
+      if(strtolower($productdetails['concept']) == 'unmapped'){
+        $concept_image = '<strong>Not Available</strong>';
+      } else {
+        $concept_image = "<img src='/sbtest/themes/studiobridge/images/brands/brand_logo_".strtolower($productdetails['concept']).".png' height='20px'>";
+      }
+
 
       $ajax_response->addCommand(new HtmlCommand('#dd-identifier', $identifier));
-      $ajax_response->addCommand(new HtmlCommand('#dd-styleno', $productdetails['styleno']));
-      $ajax_response->addCommand(new HtmlCommand('#dd-concept', $productdetails['concept']));
-      $ajax_response->addCommand(new HtmlCommand('#dd-colorvariant', $productdetails['colorvariant']));
-      $ajax_response->addCommand(new HtmlCommand('#dd-gender', $productdetails['gender']));
-      $ajax_response->addCommand(new HtmlCommand('#dd-color', $productdetails['color']));
-      $ajax_response->addCommand(new HtmlCommand('#dd-description', $productdetails['description']));
-      $ajax_response->addCommand(new HtmlCommand('#product-img-count', $productdetails['image_count']));
+        $ajax_response->addCommand(new HtmlCommand('#dd-styleno', $productdetails['styleno']));
+        $ajax_response->addCommand(new HtmlCommand('#dd-concept', $concept_image));
+        $ajax_response->addCommand(new HtmlCommand('#dd-colorvariant', $productdetails['colorvariant']));
+        $ajax_response->addCommand(new HtmlCommand('#dd-gender', $productdetails['gender']));
+        $ajax_response->addCommand(new HtmlCommand('#dd-color', $productdetails['color']));
+        $ajax_response->addCommand(new HtmlCommand('#dd-description', $productdetails['description']));
+        $ajax_response->addCommand(new HtmlCommand('#product-img-count', $productdetails['image_count']));
       $ajax_response->addCommand(new HtmlCommand('#session-total-products', count($session_products)));
       $ajax_response->addCommand(new HtmlCommand('#smartnotification', $inject_script_mapping));
 

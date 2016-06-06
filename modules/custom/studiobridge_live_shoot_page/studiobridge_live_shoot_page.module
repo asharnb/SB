@@ -4,21 +4,53 @@ function studiobridge_live_shoot_page_theme() {
   return array(
     'sbtheme_page' => array(
         'variables' => array(
-            'form' => array(),
+          'form' => array(
+          //     'productdetails' => array(
+          //       'concept' => NULL,
+          //       'styleno' => NULL,
+          //       'colorvariant' => NULL,
+          //       'gender' => NULL,
+          //       'color' => NULL,
+          //       'description' => NULL,
+          //       'identifier' => NULL,
+          //       'image_count' => NULL,
+          //       'total_products' => NULL,
+          //   ),
+          //   'images' => array(
+          //     'url' => NULL,
+          //     'name' => NULL,
+          //     'fid' => NULL,
+          //     'id' => NULL,
+          //     'tag' => NULL,
+          // ),
+            ),
+
 
         ),
       'template' => 'sbtheme_page_view'
 
     ),
 
-      'sbtheme_page_test' => array(
-          'variables' => array(
-              'form' => array(),
-
-          ),
-          'template' => 'sbtheme_test'
-
-      ),
+      // 'sbtheme_page_test' => array(
+      //     'variables' => array(
+      //         'form' => array(
+      //           '#productdetails' => array(
+      //             '#concept' => NULL,
+      //             '#styleno' => NULL,
+      //             '#colorvariant' => NULL,
+      //             '#gender' => NULL,
+      //             '#color' => NULL,
+      //             '#description' => NULL,
+      //             '#identifier' => NULL,
+      //             '#image_count' => NULL,
+      //             '#total_products' => NULL,
+      //         ),
+      //         ),
+      //
+      //     ),
+      //     'template' => 'sbtheme_test'
+      //
+      // ),
 
   );
 

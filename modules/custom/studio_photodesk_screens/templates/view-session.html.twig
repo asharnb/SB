@@ -45,19 +45,22 @@ total_images: Total no.of images in this session - {{ total_images }} * * * @ing
 {% elseif session.field_status.0.value == 'closed' and result.unmapped.0.unmappedcount > 0   %}
   {% set status_class = '<span class="text-danger"><i class=""></i>'~ result.unmapped.0.unmappedcount ~' items are unmapped</span>' %}
 {% elseif session.field_status.0.value == 'closed' and result.unmapped.0.unmappedcount == 0  and total_count > 0 %}
-    {% set status_class = '<span class="text-warning"><i class=""></i> Shootlist email is pending</span>' %}
+    {% set status_class = '<span class="text-success"><i class=""></i> Session Complete</span>' %}
 {% endif %}
+
 
 {#Header#}
 <div class="row">
-  <div class="col-sm-12 col-md-8">
 
+  <div class="col-sm-12 col-md-8">
     <h3 class='no-margins p-b-sm'>Session Details</h3>
-    <h4 class="no-margins">View all your photography sessions and add session</h4>
+    <h4 class="no-margins">View all primary details of your session</h4>
   </div>
   <div class="col-sm-12 col-md-4 m-t-md">
-    <a class="btn btn-primary pull-right p-t-10" href="/sbtest/live-shooting-page1">
+    {% if session.field_status.0.value == 'open' %}
+    <a class="btn btn-primary pull-right p-t-10" id="import-products" data-id="{{total_count}}">
       Add Products</a>
+    {% endif %}
     </div>
   </div>
 
@@ -72,7 +75,7 @@ total_images: Total no.of images in this session - {{ total_images }} * * * @ing
             <div class="col-sm-5">
               <address>
                 <strong class="text-success">{{status_class|raw}}</strong><br>
-                <em class="text-muted">Started at Jan 12th, 2016 12:05 pm</em>
+                <small class="text-muted"><em>Started at {{session.created.0.value|date('F jS, Y, g:i a')}}</em></small>
               </address>
 
             </div>
@@ -83,12 +86,14 @@ total_images: Total no.of images in this session - {{ total_images }} * * * @ing
                 <h6 class="no-margins no-padding">Total Session Time</h6>
               </span>
               <span class="pull-right  m-r-md">
-                <a id="close-session" class="btn btn-sm border-blue text-complete" data-id="{{ session.nid.0.value }}">Finish</a>
-
+                {% if  session.field_status.0.value == 'open' %}
+                  <a id="close-session" class="btn btn-sm border-blue text-complete" data-id="{{ session.nid.0.value }}">Finish</a>
+                {% endif %}
               </span>
               <span class="pull-right  m-r-sm">
-                <a class="text-info btn btn-sm">Pause</a>
-
+                {% if session.field_status.0.value == 'open' %}
+                  <a class="text-info btn btn-sm">Pause</a>
+                {% endif %}
               </span>
 
             </div>
@@ -114,32 +119,27 @@ total_images: Total no.of images in this session - {{ total_images }} * * * @ing
             <div class="col-sm-4">
               <table class="table table-stripped small no-margins no-padding">
                 <tbody>
-                  <tr class="no-margins no-padding text-danger ">
+                  {% if unmapped_products|length > 0 %}
+
+                  <tr class="no-margins no-padding text-danger border-bottom-dotted">
                     <td>
                       <h5 class="no-margins ">Unmapped</h5>
                     </td>
                     <td class="pull-right">
-                      <h5 class="no-margins semi-bold">7</h5>
+                      <h5 class="no-margins semi-bold">{{unmapped_products|length}}</h5>
                     </td>
                   </tr>
-
-                  <tr class="no-margins no-padding">
+                  {% endif %}
+                  {% for item in grouped_concepts %}
+                  <tr class="no-margins no-padding border-bottom-dotted">
                     <td>
-                      <h5 class="no-margins ">Shoemart</h5>
+                      <h5 class="no-margins ">{{item.concept|title}}</h5>
                     </td>
                     <td class="pull-right">
-                      <h5 class="no-margins semi-bold">1</h5>
+                      <h5 class="no-margins semi-bold">{{item.product_count}}</h5>
                     </td>
                   </tr>
-
-                  <tr class="no-margins no-padding">
-                    <td>
-                      <h5 class="no-margins ">Lifestyle</h5>
-                    </td>
-                    <td class="pull-right">
-                      <h5 class="no-margins semi-bold">2</h5>
-                    </td>
-                  </tr>
+                  {% endfor %}
                 </tbody>
               </table>
 
@@ -159,7 +159,7 @@ total_images: Total no.of images in this session - {{ total_images }} * * * @ing
         </div>
 
         <div class="panel-body p-xs-imp m-t-n">
-
+          {% if not session_users.photographer == ''%}
           <div class="col-sm-6 no-padding">
             <div class="social-avatar">
               <a href="" class="pull-left">
@@ -167,12 +167,14 @@ total_images: Total no.of images in this session - {{ total_images }} * * * @ing
               </a>
               <div class="media-body p-xs">
                 <h6 class="no-margins bold">
-                  Niranjan
+                  {{session_users.photographer|title}}
                 </h6>
                 <small class="text-muted">Photographer</small>
               </div>
             </div>
           </div>
+          {% endif %}
+          {% if not session_users.stylist == ''%}
           <div class="col-sm-6 no-padding">
             <div class="social-avatar">
               <a href="" class="pull-left m-r-5">
@@ -180,12 +182,14 @@ total_images: Total no.of images in this session - {{ total_images }} * * * @ing
               </a>
               <div class="media-body p-xs">
                 <h6 class="no-margins bold">
-                  Rebecca
+                  {{session_users.stylist|title}}
                 </h6>
                 <small class="text-muted">Stylist</small>
               </div>
             </div>
           </div>
+          {% endif %}
+          {% if not session_users.vm == ''%}
           <div class="col-sm-6 no-padding">
             <div class="social-avatar">
               <a href="" class="pull-left">
@@ -193,12 +197,13 @@ total_images: Total no.of images in this session - {{ total_images }} * * * @ing
               </a>
               <div class="media-body p-xs">
                 <h6 class="no-margins bold">
-                  Cia
+                  {{session_users.vm|title}}
                 </h6>
                 <small class="text-muted">Visual Merchandiser</small>
               </div>
             </div>
           </div>
+          {% endif %}
         </div>
 
       </div>
@@ -229,14 +234,18 @@ total_images: Total no.of images in this session - {{ total_images }} * * * @ing
       <li class="">
         <a href="#tab-reports" data-toggle="tab" aria-expanded="false">Report(s)</a>
       </li>
-      <li class="">
+      <!-- <li class="">
         <a href="#tab-log" data-toggle="tab" aria-expanded="true">Log</a>
-      </li>
+      </li> -->
 
     </ul>
 
     <div class="tab-content">
+
       <div class="tab-pane active" id="tab-mapped">
+        {% if mapped_products|length == 0%}
+        <h2 class="text-center">No mapped products available in this session.</h2>
+        {% else %}
         <table id="dt_mapped" class="table table-responsive table-hover" width="100%">
           <thead>
             <tr>
@@ -252,14 +261,14 @@ total_images: Total no.of images in this session - {{ total_images }} * * * @ing
           <tbody>
             {% for item in mapped_products %}
 
-            {% if item.field_draft.0. value == 0 %}
+            {% if item.field_draft.0.value == 0 %}
 
             {% if item.field_images | length == 0 %}
-            {% set image_count_class = 'text-align-center bold text-danger' %}
+            {% set image_count_class = 'bold text-danger' %}
             {% elseif item.field_images | length >= 7 %}
-            {% set image_count_class = 'text-align-center bold text-warning' %}
+            {% set image_count_class = 'bold text-warning' %}
             {% else %}
-            {% set image_count_class = 'text-align-center bold text-success' %}
+            {% set image_count_class = 'bold text-success' %}
             {% endif %}
             <tr>
               <td>
@@ -279,7 +288,7 @@ total_images: Total no.of images in this session - {{ total_images }} * * * @ing
                 <td class="{{ image_count_class }}">{{ item.field_images|length }}</td>
 
                 <td class="text-align-center">
-                  <a target="_blank" class="btn btn-primary" href="/sbtest/view-product/{{item.nid.0.value }}">View</a>
+                  <a target="_blank" class="btn btn-xs" href="/sbtest/view-product/{{item.nid.0.value }}">View</a>
                 </td>
 
               </tr>
@@ -288,17 +297,21 @@ total_images: Total no.of images in this session - {{ total_images }} * * * @ing
 
             </tbody>
           </table>
+
+          {% endif %}
         </div>
 
         <div class="tab-pane" id="tab-unmapped">
-
+          {% if unmapped_products|length == 0%}
+          <h2 class="text-center">No unmapped products available in this session.</h2>
+          {% else %}
           <table id="dt_unmapped" class="table table-responsive table-hover" width="100%">
             <thead>
               <tr>
                 <th>Concept</th>
                 <th>Identifier</th>
                 <th>State</th>
-                <th>Raw Count</th>
+                <th>Image Count</th>
                 <th></th>
               </tr>
             </thead>
@@ -308,15 +321,15 @@ total_images: Total no.of images in this session - {{ total_images }} * * * @ing
               {% if item.field_draft.0. value == 0 %}
 
               {% if item.field_images | length == 0 %}
-              {% set image_count_class = 'text-align-center bold text-danger' %}
+              {% set image_count_class = 'bold text-danger' %}
               {% elseif item.field_images | length >= 7 %}
-              {% set image_count_class = 'text-align-center bold text-warning' %}
+              {% set image_count_class = 'bold text-warning' %}
               {% else %}
 
-              {% set image_count_class = 'text-align-center bold text-success' %}
+              {% set image_count_class = 'bold text-success' %}
               {% endif %}
               <tr>
-                <td><img src="/sbtest/{{ directory }}/images/brands/brand_logo_.png" height="20px"></td>
+                <td>Not Available</td>
                 <td>{{ item.title.0.value }}</td>
                 <td>
                   {% if item.nid.0. value in session.field_reshoot_product | json_encode() %}
@@ -328,7 +341,7 @@ total_images: Total no.of images in this session - {{ total_images }} * * * @ing
                 <td class="{{ image_count_class }}">{{ item.field_images|length }}</td>
 
                 <td class="text-align-center">
-                  <a target="_blank" class="btn btn-primary" href="/sbtest/view-product/{{item.nid.0.value }}">View</a>
+                  <a target="_blank" class="btn btn-xs" href="/sbtest/view-product/{{item.nid.0.value }}">View</a>
                 </td>
 
               </tr>
@@ -337,17 +350,20 @@ total_images: Total no.of images in this session - {{ total_images }} * * * @ing
 
             </tbody>
           </table>
+          {% endif %}
         </div>
 
         <div class="tab-pane" id="tab-dropped">
+
+
           <table id="dt_drops" class="table table-responsive table-hover" width="100%">
             <thead>
               <tr>
                 <th>Concept</th>
-                <th>Style Family</th>
+                <th>Style ID</th>
                 <th>Color Variant</th>
                 <th>State</th>
-                <th>Raw Count</th>
+                <th>Image Count</th>
                 <th></th>
                 <th></th>
               </tr>
@@ -355,14 +371,14 @@ total_images: Total no.of images in this session - {{ total_images }} * * * @ing
             <tbody>
               {% for item in mapped_products %}
 
-              {% if item.field_draft.0. value == 1 %}
+              {% if item.field_draft.0.value == 1 %}
 
               {% if item.field_images | length == 0 %}
-              {% set image_count_class = 'text-align-center bold text-danger' %}
+              {% set image_count_class = 'bold text-danger' %}
               {% elseif item.field_images | length >= 7 %}
-              {% set image_count_class = 'text-align-center bold text-warning' %}
+              {% set image_count_class = 'bold text-warning' %}
               {% else %}
-              {% set image_count_class = 'text-align-center bold text-success' %}
+              {% set image_count_class = 'bold text-success' %}
               {% endif %}
               <tr>
                 <td>
@@ -376,10 +392,10 @@ total_images: Total no.of images in this session - {{ total_images }} * * * @ing
                   <td class="{{ image_count_class }}">{{ item.field_images|length }}</td>
 
                   <td class="text-align-center">
-                    <a target="_blank" class="btn btn-primary" href="/sbtest/view-product/{{item.nid.0.value }}">View</a>
+                    <a target="_blank" class="btn btn-xs" href="/sbtest/view-product/{{item.nid.0.value }}">View</a>
                   </td>
                   <td class="text-align-center">
-                    <a target="_blank" class="btn btn-success" href="/sbtest/view-product/{{item.nid.0.value }}">Undo</a>
+                    <a target="_blank" class="btn btn-xs" href="/sbtest/view-product/{{item.nid.0.value }}">Undo</a>
                   </td>
 
                 </tr>
@@ -423,39 +439,34 @@ total_images: Total no.of images in this session - {{ total_images }} * * * @ing
             </div>
 
             <div class="tab-pane" id="tab-reports">
-              <div class="attachment">
-                <div class="file-box">
-                  <div class="file">
-                    <a href="#">
-                      <span class="corner"></span>
-                      <div class="icon">
-                        <i class="fa fa-file-excel-o text-success"></i>
-                      </div>
-                    </a>
-                    <div class="file-name">
-                      <a target="_blank">Shoot List</a>
-                      <br>
-                    </div>
-                  </div>
-                </div>
-                <div class="file-box">
-                  <div class="file">
-                    <a href="#">
-                      <span class="corner"></span>
+              {% if grouped_concepts|length == 0%}
+              <h2 class="text-center">No reports are available in this session.</h2>
+              {% endif %}
+              {% for item in grouped_concepts %}
+              <div class="col-md-6">
 
-                      <div class="icon">
-                        <i class="fa fa-file-pdf-o text-danger"></i>
-                      </div>
-                      <div class="file-name">
-                        Analysis
-                        <br>
-                      </div>
-                    </a>
-                  </div>
+                                  <div class="profile-image">
+                                      <img src="/sbtest/themes/studiobridge/images/excel.png" class="m-b-md" alt="profile">
+                                  </div>
+                                  <div class="profile-info">
+                                      <div class="">
+                                          <div>
+                                              <h2 class="m-t-sm">
+                                                  {{item.concept|title}} Shoot List
+                                              </h2>
 
-                </div>
-                <div class="clearfix"></div>
-              </div>
+                                              <small>
+
+                                                  <a href="/sbtest/shootlist/{{session.nid.0.value}}/download.csv" class="btn">Download</a>
+                                              </small>
+
+                                          </div>
+                                      </div>
+                                  </div>
+                              </div>
+              {% endfor %}
+
+
 
             </div>
 
@@ -508,8 +519,6 @@ total_images: Total no.of images in this session - {{ total_images }} * * * @ing
 {% if unmapped_products|length > 0 %}
 <div class="company-stat-boxes">
 <div data-index="" class="company-stat-box mb-10  active padding-10 bg-master-lightest">
-
-
 
 <p class="company-name pull-left text-uppercase bold no-margin">
 <img src="/sbtest/{{ directory }}/images/brands/brand_logo_.png"

@@ -1,4 +1,4 @@
-{{kint(form)}}
+{{ attach_library('studiobridge/iCheck') }}
 <div class="row">
   <div class="col-sm-12">
     <h3 class="no-margins p-b-sm">Add New Session</span></h3>
@@ -11,13 +11,13 @@
 <form>
   {{ form.form_build_id }}
   {{ form.form_id }}
+  {{form.form_token}}
   <div class="panel-body">
     <div class="col-lg-8 col-md-9 col-sm-9 col-xs-12 m-l-n">
+     <!-- <div class="col-sm-6 m-b-10">
+      </div> -->
       <div class="col-sm-6 m-b-10">
-        {{form.title}}
-      </div>
-      <div class="col-sm-6 m-b-10">
-        {{form.field_photographer}}
+      {{form.field_photographer}}
       </div>
       <br>
       <div class="col-sm-6 m-b-10">
@@ -28,7 +28,8 @@
       </div>
       <br>
       <div class="col-sm-6 m-b-10">
-      {{form.field_shoot_class}}
+        {{form.field_shoot_class}}
+
 
       </div>
       <br>
@@ -38,10 +39,11 @@
       </div>
       <br>
 
-      {{form.actions.submit}}
+      <div class="col-sm-12 m-t-10">
+          <button type="submit"   class="btn btn-complete">Start this session</button>
+      </div>
 
     </div>
-
 
 
   </div>

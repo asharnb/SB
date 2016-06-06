@@ -29,6 +29,27 @@
     }
   };
 
+  Drupal.behaviors.productstable = {
+    attach: function(context) {
+       var oTable = $('#dt_viewproducts').DataTable( {
+        "bSort": true,
+        "bDestroy": true,
+        "iDisplayLength": 30,
+        "order": [[0 , 'desc']],
+        "autoWidth" : true
+      } );
+      $('#dt_search_box').keyup(function(){
+            oTable.search($(this).val()).draw() ;
+      })
+
+      $('#btn_search_reset').click(function(){
+            document.getElementById('dt_search_box').value = "";
+              oTable.search('').draw() ;
+      })
+
+      $('#dt_viewproducts_wrapper').addClass('m-t-n');
+    }
+  };
 
 
   Drupal.behaviors.closesession = {
@@ -36,12 +57,12 @@
       $("#close-session", context).click(function () {
         var id = $("#close-session").attr('data-id');
         swal({
-          title: "Close Session?",
-          text: "Are you sure you want to close this session?",
+          title: "Finish Session?",
+          text: "You will not be able to add any more products into this session after it has been closed. Do you wish to continue?",
           type: "question",
           showCancelButton: true,
-          confirmButtonColor: "#DD6B55",
-          confirmButtonText: "Close Session",
+          confirmButtonColor: "#00b9e5",
+          confirmButtonText: "Continue",
           closeOnConfirm: true
         }, function () {
           window.location = "/sbtest/close-session/"+id+"/1";
@@ -59,14 +80,14 @@
 
           swal({
             title: "White Balance Check",
-            text: "Please make sure that you have white balanced your camera before shooting any products.",
+            text: "Please make sure that you have properly white balanced your camera before shooting any products.",
             //type: "info",
             imageUrl: '/sbtest/themes/studiobridge/images/whitebalance.png',
             imageWidth: 400,
             imageHeight: 200,
             showCancelButton: false,
-            confirmButtonColor: "#DD6B55",
-            confirmButtonText: "I agree",
+            confirmButtonColor: "#00b9e5",
+            confirmButtonText: "I have white balanced my camera",
             closeOnConfirm: true
           }, function () {
             window.location = "/sbtest/live-shooting-page1";

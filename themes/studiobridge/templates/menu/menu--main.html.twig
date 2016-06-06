@@ -31,8 +31,7 @@
 
 
         <!-- PLACE YOUR LOGO HERE -->
-        <!-- <span id="logo"> <img src="/sbtest/{{ directory }}/images/Drawing.png" alt="Studio Bridge"> </span> -->
-        <h3 class="text-white"><i class="fa fa-creative-commons text-white"></i>  Content Central</h3>
+        <span id="logo"> <img src="/sbtest/{{ directory }}/images/cc.png" alt="Studio Bridge"> </span>
         <!-- END LOGO PLACEHOLDER -->
 
 
@@ -49,14 +48,14 @@
 
                     {% if item.title|lower == 'dashboard' %}
 
-                        {% set icon_class = 'fa-lg sl-screen-desktop' %}
+                        {% set icon_class = 'fa fa-lg sl-screen-desktop' %}
 
                     {% elseif item.title|lower == 'photography desk' %}
 
-                        {% set icon_class = 'fa-lg sl-camera' %}
+                        {% set icon_class = 'fa fa-lg fa-camera' %}
                     {% elseif item.title|lower == 'warehouse desk' %}
 
-                        {% set icon_class = 'fa-lg sl-social-dropbox' %}
+                        {% set icon_class = 'fa fa-lg fa-truck' %}
                     {% else %}
 
                         {% set icon_class = '' %}
@@ -103,4 +102,32 @@
         {% endmacro %}
     </ul>
     </nav>
+
+
+
+  <div class="userlogged clearfix">
+    <img src="/sbtest/themes/studiobridge/images/users/vikas.jpg" alt="me" class="img-circle ">
+    <div class="pull-left p-r-10 p-t-5 m-l-10 fs-16 font-heading">
+        <span class="semi-bold">{{user.account.name|title}}</span><br>
+        <span class="text-master">Photographer</span>
+    </div>
+      <div class="dropdown pull-right">
+          <button class="profile-dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true"
+                  aria-expanded="false">
+          </button>
+          <ul class="dropdown-menu profile-dropdown" role="menu">
+              <li><a href="/sbtest/user/" data-drupal-link-system-path="user/"><i class="fa fa-lg fa-user"></i> My Profile</a>
+              </li>
+              <li class="bg-master-lighter">
+                  <a href="/sbtest/user/logout" data-drupal-link-system-path="user/logout" class="clearfix">
+
+                      <span class="pull-left">Logout</span>
+                      <span class="pull-right"><i class="fa fa-lg fa-power"></i></span>
+                  </a>
+              </li>
+          </ul>
+      </div>
+  </div>
+
+
 </aside>

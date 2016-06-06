@@ -311,32 +311,6 @@ function studiobridge_store_images_get_open_product($session_id) {
   return FALSE;
 }
 
-/*
-*  Implements hook_form_alter().
-*/
-function studiobridge_store_images_form_alter(&$form, \Drupal\Core\Form\FormStateInterface $form_state, $form_id) {
-  // current logged in user object.
-  $user = \Drupal::currentUser();
-  // uid of current logged in user.
-  $uid = $user->id();
-
-  // Validate in node/add/sessions page to avoid creating multiple open sessions.
-  if ($form_id == 'node_sessions_form') {
-    $form['field_photographer']['widget'][0]['target_id']['#default_value'] = User::load(Drupal::currentUser()->id());
-
-    // Get session of logged in user.
-    $result = Sessions::getSessionByUid($uid);
-    if (count($result)) {
-
-      // redirect to sessions page.
-      $response = new Symfony\Component\HttpFoundation\RedirectResponse(base_path() . 'view-sessions2');
-      drupal_set_message('There is a open session, please close it to add new session', 'error');
-      $response->send();
-      exit;
-    }
-  }
-
-}
 
 /*
 *  Implements hook_FORM_ID_form_alter().
@@ -561,26 +535,11 @@ function studiobridge_store_images_entity_update(Drupal\Core\Entity\EntityInterf
       }
     }
 
-    //    if($tag){
-    //      // Get current session
-    //      $session_id = Sessions::openSessionRecent();
-    //      $old_tag_img = \Drupal::state()->get('Image_tag' . '_' . $session_id,false);
-    //      if($tag[0]['value'] && $entity->id() != $old_tag_img){
-    //
-    //        \Drupal::state()->set('Image_tag' . '_' . $session_id, $entity->id());
-    //        if($old_tag_img){
-    //          StudioImages::TagImage($old_tag_img,0, $session_id);
-    //        }
-    //
-    //        //\Drupal::logger('Img entity update YYY')->notice('<pre>'.print_r($tag,true).'<pre>');
-    //
-    //      }
-    //    }
+
 
   }
 
 }
-
 /*
  * Implements hook_user_logout().
  */
@@ -595,6 +554,57 @@ function studiobridge_store_images_user_login($account){
   // Get roles to check for photographer role.
   $roles  = $account->getRoles();
   if(in_array('photographer',$roles)){
-    return (new RedirectResponse('/view-sessions2'))->send();
+    return (new RedirectResponse('/sbtest/view-sessions2'))->send();
   }
+}
+/*
+*  Implements hook_form_alter().
+*/
+function studiobridge_store_images_form_alter(&$form, \Drupal\Core\Form\FormStateInterface $form_state, $form_id) {
+  // current logged in user object.
+  $user = \Drupal::currentUser();
+  // uid of current logged in user.
+  $uid = $user->id();
+
+  // Validate in node/add/sessions page to avoid creating multiple open sessions.
+  if ($form_id == 'node_sessions_form') {
+    $form['field_photographer']['widget'][0]['target_id']['#default_value'] = User::load(Drupal::currentUser()->id());
+    $form['field_photographer']['#disabled'] = TRUE;
+
+    $form['title']['widget'][0]['value']['#value'] = 'Session';
+    $form['title']['#disabled'] = TRUE;
+
+
+    $form['field_shoot_class']['widget']['#default_value'] = 'mix_shoot';
+    //$form['field_shoot_class']['#theme_wrappers'][0] = 'form_element';
+    // Get session of logged in user.
+    $result = Sessions::getSessionByUid($uid);
+    if (count($result)) {
+
+      // redirect to sessions page.
+      $response = new Symfony\Component\HttpFoundation\RedirectResponse(base_path() . 'view-sessions2');
+      drupal_set_message('There is a open session, please close it to add new session', 'error');
+
+      $response->send();
+
+
+      exit;
+    }
+
+    $form_state->setRedirect('/sbtest/view-sessions2');
+  }
+
+  if ($form_id == 'user_login_form') {
+    $form['name']['#attributes']['placeholder'] = t( 'Username' );
+    $form['pass']['#attributes']['placeholder'] = t( 'Password' );
+
+    $form['name']['#title_display'] = 'invisible';
+    $form['pass']['#title_display'] = 'invisible';
+    //$form['title']['widget'][0]['target_id']['#default_value'] = 'New Session';
+
+  }
+}
+
+function add_session_handler(&$form, &$form_state) {
+  $form_state['redirect'] = '/sbtest/view-sessions2';
 }

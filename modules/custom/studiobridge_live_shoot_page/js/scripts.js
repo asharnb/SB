@@ -4,12 +4,14 @@
 
   'use strict';
 
-  Drupal.behaviors.tagfordelete = {
+  Drupal.behaviors.liveshootpage = {
     attach: function(context, settings) {
 
-      var selected = 0
+      var selected = 0;
 
       $( ".select-delete" ).click(function() {
+        //alert('yes');
+        console.log('clieck');
         var id = $(this).attr("data-id")
         var clicked = $(this).attr("data-click")
         var container = document.getElementById( "warpper-img-"+id );
@@ -37,23 +39,41 @@
           $('#studio-delete-bt').addClass('border-blue text-complete');
         }
 
+
+
+
       });
 
+
     }
+
+
   };
 
-  Drupal.behaviors.tagfordelete2 = {
+
+  Drupal.behaviors.sortable = {
     attach: function(context, settings) {
-      // $(".scanpicture").ondblclick(function(){
-      //   // var closeelement = var id = $(this).parents('span').attr('data-imageid');
-      //   console.log('yes');
-      // });
 
-      $(".select-delete", context).click = function() { console.log("ondblclick event detected!"); };
+      $("#imagecontainer").sortable({
+          tolerance: 'pointer',
+          start: function(event, ui){
+              ui.placeholder.html("<div class='bulkviewfiles file gray-bkground' style='width: 200px; height: 200px; background: #D2D2D2;'></div>");
+          },
+          change: function (event, ui){
+
+          },
+          stop: function(event, ui){
+              ui.placeholder.html("");
+              $('#studio-resequence-bt').removeAttr("disabled");
+              $('#studio-resequence-bt').addClass('border-blue text-complete');
+          }
+      });
+
+
+      $( "#imagecontainer" ).disableSelection();
     }
+
+
   };
-
-
-
 
 }(jQuery));

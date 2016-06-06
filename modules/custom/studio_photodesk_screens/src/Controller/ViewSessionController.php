@@ -194,7 +194,6 @@ class ViewSessionController extends ControllerBase
     unset($concept);
 
 
-
     return [
       '#theme' => 'view_session',
       '#cache' => ['max-age' => 0],
@@ -207,8 +206,8 @@ class ViewSessionController extends ControllerBase
       '#period' => $product_period,
       '#session_time' => $session_time,
       '#period_chart' => self::product_analysis($product_period),
-      '#mapped_dropped_products' => $mapped_dropped_products,
-      '#unmapped_dropped_products' => $unmapped_dropped_products,
+      // '#mapped_dropped_products' => $mapped_dropped_products,
+      // '#unmapped_dropped_products' => $unmapped_dropped_products,
       '#attached' => array(
         'library' => array(
           'studio_photodesk_screens/studiobridge-sessions',
