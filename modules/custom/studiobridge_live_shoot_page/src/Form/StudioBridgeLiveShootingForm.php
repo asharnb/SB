@@ -238,6 +238,30 @@ class StudioBridgeLiveShootingForm extends FormBase {
     if ($productdetails) {
       $session = $this->nodeStorage->load($session_id);
       $session_products = $session->field_product->getValue();
+      $pids = array();
+      $p_drafts = array();
+      $unm = array();
+      if($session_products){
+        foreach($session_products as $v){
+          $pids[] = $v['target_id'];
+        }
+      }
+
+
+      if($pids){
+        $db = \Drupal::database();
+        $p_drafts = $db->select('node__field_draft', 'c')
+          ->fields('c')
+          ->condition('field_draft_value', 1)
+          ->condition('entity_id',$pids,'IN')
+          ->execute()->fetchAll();
+
+        $unm = $db->select('node', 'c')
+          ->fields('c')
+          ->condition('type', 'unmapped_products')
+          ->condition('nid',$pids,'IN')
+          ->execute()->fetchAll();
+      }
 
       $form['productdetails'] = array(
         '#concept' => $productdetails['concept'],
@@ -249,7 +273,8 @@ class StudioBridgeLiveShootingForm extends FormBase {
         '#identifier' => $identifier,
         '#image_count' => $productdetails['image_count'],
         '#total_products' => count($session_products),
-        '#unmapped_products' => '0',
+        '#dropped_products' => count($p_drafts),
+        '#unmapped_products' => count($unm),
       );
     }
 
@@ -609,6 +634,32 @@ class StudioBridgeLiveShootingForm extends FormBase {
       }
 
 
+      $pids = array();
+      $p_drafts = array();
+      $unm = array();
+      if($session_products){
+        foreach($session_products as $v){
+          $pids[] = $v['target_id'];
+        }
+      }
+
+
+      if($pids){
+        $db = \Drupal::database();
+        $p_drafts = $db->select('node__field_draft', 'c')
+          ->fields('c')
+          ->condition('field_draft_value', 1)
+          ->condition('entity_id',$pids,'IN')
+          ->execute()->fetchAll();
+
+        $unm = $db->select('node', 'c')
+          ->fields('c')
+          ->condition('type', 'unmapped_products')
+          ->condition('nid',$pids,'IN')
+          ->execute()->fetchAll();
+      }
+
+
       $ajax_response->addCommand(new HtmlCommand('#dd-identifier', $identifier));
         $ajax_response->addCommand(new HtmlCommand('#dd-styleno', $productdetails['styleno']));
         $ajax_response->addCommand(new HtmlCommand('#dd-concept', $concept_image));
@@ -618,6 +669,10 @@ class StudioBridgeLiveShootingForm extends FormBase {
         $ajax_response->addCommand(new HtmlCommand('#dd-description', $productdetails['description']));
         $ajax_response->addCommand(new HtmlCommand('#product-img-count', $productdetails['image_count']));
       $ajax_response->addCommand(new HtmlCommand('#session-total-products', count($session_products)));
+
+      $ajax_response->addCommand(new HtmlCommand('#liveshoot-Unmapped', count($unm)));
+      $ajax_response->addCommand(new HtmlCommand('#liveshoot-drop', count($p_drafts)));
+
       $ajax_response->addCommand(new HtmlCommand('#smartnotification', $inject_script_mapping));
 
     }

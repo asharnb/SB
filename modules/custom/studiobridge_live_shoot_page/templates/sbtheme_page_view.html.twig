@@ -22,33 +22,33 @@
                     <div class="col-lg-6">
                         <dl class="dl-horizontal">
                           <dt>Concept </dt>
-                          {% if form.productdetails.concept == 'Unmapped' %}
+                          {% if form.productdetails['#concept'] == 'Unmapped' %}
                               <dd id="dd-concept"><span class="bold">Unmapped</span></dd>
                           {% else %}
                               <dd id="dd-concept" class="mb-10"><img
-                                          src="/sb/{{ directory }}/images/brands/brand_logo_{{ form.productdetails.concept|lower }}.png"
+                                          src="/sb/{{ directory }}/images/brands/brand_logo_{{ form.productdetails['#concept']|lower }}.png"
                                           height="20px"></dd>
                           {% endif %}
                             <dt>Identifier</dt>
-                            <dd id="dd-identifier">{{ form.productdetails.identifier }}</dd>
+                            <dd id="dd-identifier">{{ form.productdetails['#identifier'] }}</dd>
                             <dt>Style No</dt>
-                            <dd id="dd-styleno">{{ form.productdetails.styleno }}</dd>
+                            <dd id="dd-styleno">{{ form.productdetails['#styleno'] }}</dd>
 
                             <!-- <dt>Season</dt>
                             <dd></dd> -->
 
                             <dt>Description</dt>
-                            <dd id="dd-description">{{ form.productdetails.description }}</dd>
+                            <dd id="dd-description">{{ form.productdetails['#description'] }}</dd>
                         </dl>
                     </div>
                     <div class="col-lg-6">
                         <dl class="dl-horizontal">
                           <dt>Color Variant</dt>
-                          <dd><strong>{{ form.productdetails.colorvariant|raw }}</strong></dd>
+                          <dd><strong>{{ form.productdetails['#colorvariant']|raw }}</strong></dd>
                             <dt>Gender</dt>
-                            <dd><strong id="dd-gender">{{ form.productdetails.gender }}</strong></dd>
+                            <dd><strong id="dd-gender">{{ form.productdetails['#gender'] }}</strong></dd>
                             <dt>Color</dt>
-                            <dd id="dd-color">{{ form.productdetails.color }}</dd>
+                            <dd id="dd-color">{{ form.productdetails['#color'] }}</dd>
                             <!-- <dt>Size</dt>
                             <dd></dd> -->
 
@@ -130,11 +130,11 @@
                   </div>
                   <div class="col-sm-4 text-warning">
                     <h5 class="semi-bold">Unmapped</h5>
-                    <h1 class="m-xs no-of-products">{{ form.productdetails.unmapped_products|length >0 ? form.productdetails.unmapped_products : '0' }}</h1>
+                    <h1 class="m-xs no-of-products" id="liveshoot-Unmapped">{{ form.productdetails['#unmapped_products']|length >0 ? form.productdetails['#unmapped_products'] : '0' }}</h1>
                   </div>
                   <div class="col-sm-4 text-danger">
                     <h5 class="semi-bold">Dropped</h5>
-                    <h1 class="m-xs no-of-products">{{ form.productdetails.unmapped_products|length >0 ? form.productdetails.dropped_products : '0' }}</h1>
+                    <h1 class="m-xs no-of-products" id="liveshoot-drop">{{ form.productdetails['#dropped_products']|length >0 ? form.productdetails['#dropped_products'] : '0' }}</h1>
                   </div>
 
         </div>
@@ -177,7 +177,7 @@
                 <h5 >Images Shot</h5>
               </div>
               <div class="col-sm-6 text-right bold">
-                <h5 class="bold">{{ form.productdetails.image_count ? form.productdetails.image_count : '0' }}</h5>
+                <h5 class="bold">{{ form.productdetails['#image_count'] ? form.productdetails['#image_count'] : '0' }}</h5>
               </div>
 
               <div class="col-sm-6 ">
