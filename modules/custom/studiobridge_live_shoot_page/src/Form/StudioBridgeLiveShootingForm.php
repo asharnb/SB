@@ -441,12 +441,27 @@ class StudioBridgeLiveShootingForm extends FormBase {
       ->condition('bundle', 'sessions')
       ->execute()->fetchAll();
 
+      $sessions_nids_in_reshoot_field = $db->select('node__field_reshoot_product', 'c')
+        ->fields('c')
+        ->condition('field_reshoot_product_target_id', $new_or_old_product_nid)
+        ->condition('bundle', 'sessions')
+        ->execute()->fetchAll();
+
       // todo : if count is more than 1
       if (count($sessions_nids)) {
         // $session_id
         foreach ($sessions_nids as $field) {
           if ($field->entity_id != $session_id) {
             $reshoot = TRUE;
+            break;
+          }
+        }
+      }
+      if (count($sessions_nids_in_reshoot_field)) {
+        // $session_id
+        foreach ($sessions_nids_in_reshoot_field as $field1) {
+          if ($field1->entity_id == $session_id) {
+            $reshoot = FALSE;
             break;
           }
         }

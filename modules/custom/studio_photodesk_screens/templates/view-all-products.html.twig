@@ -50,7 +50,13 @@
 
 
         <tr>
-
+          {% if result.field_images | length == 0 %}
+          {% set image_count_class = 'bold text-warning' %}
+          {% elseif result.field_images | length >= 7 %}
+          {% set image_count_class = 'bold text-warning' %}
+          {% else %}
+          {% set image_count_class = 'bold text-info' %}
+          {% endif %}
           <td>{{ result.nid.0.value }}</td>
           <td>
             {% if result.field_concept_name.0.value == '' %}
@@ -63,7 +69,8 @@
           <td>{{ result.title.0.value }}</td>
 
           <td>{{ result.field_color_variant.0.value }}</td>
-          <td>{{ result.field_images|length }}</td>
+
+          <td class="{{ image_count_class }}">{{ result.field_images|length }}</td>
           <td>
             <a class="btn btn-xs " href="/sbtest/view-session/{{ result.id }}">View</a>
           </td>
