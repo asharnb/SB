@@ -32,6 +32,9 @@
                     closeOnConfirm: true,
                     //timer: 1500
                 });
+                var dcount = document.getElementById('liveshoot-drop').innerHTML;
+                dcount++;
+                document.getElementById('liveshoot-drop').innerHTML = dcount;
             },
             error: function(){
                 alert('Failed! Try after sometime or Refresh the page.');

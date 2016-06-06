@@ -328,9 +328,16 @@ function studiobridge_store_images_form_node_sessions_form_alter(&$form, FormSta
 */
 function studiobridge_store_images_upload_enabled_types_submit($form, FormStateInterface $form_state) {
   // Redirect to home page after creating session.
-  $response = new Symfony\Component\HttpFoundation\RedirectResponse(base_path());
-  $response->send();
-  exit;
+  $nid = $form_state->getValue('nid');
+  if($nid){
+    $response = new Symfony\Component\HttpFoundation\RedirectResponse(base_path().'view-session/'.$nid);
+    $response->send();
+    exit;
+  }else{
+    $response = new Symfony\Component\HttpFoundation\RedirectResponse(base_path().'view-sessions2');
+    $response->send();
+    exit;
+  }
 }
 
 /*
