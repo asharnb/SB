@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg width="398px" height="111px" viewBox="0 0 398 111" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 3.8.3 (29802) - http://www.bohemiancoding.com/sketch -->
+    <title>CC_Logo-black@1x</title>
+    <desc>Created with Sketch.</desc>
+    <defs>
+        <linearGradient x1="50%" y1="0%" x2="50%" y2="100%" id="linearGradient-1">
+            <stop stop-color="#8A3BDE" offset="0%"></stop>
+            <stop stop-color="#1B38BA" offset="100%"></stop>
+        </linearGradient>
+        <linearGradient x1="50%" y1="0%" x2="50%" y2="100%" id="linearGradient-2">
+            <stop stop-color="#00ECCB" offset="0%"></stop>
+            <stop stop-color="#0097E4" offset="100%"></stop>
+        </linearGradient>
+    </defs>
+    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="Option-2-Copy" transform="translate(-100.000000, -1290.000000)">
+            <g id="CC_Logo-black" transform="translate(100.000000, 1272.000000)">
+                <g id="logo-3.2" transform="translate(0.000000, 28.000000)">
+                    <g id="Group">
+                        <path d="M98.9998188,60 C94.3671155,82.8224032 74.1895791,100 50,100 C22.3857625,100 0,77.6142375 0,50 C0,22.3857625 22.3857625,0 50,0 C74.1895791,0 94.3671155,17.1775968 98.9998188,40 L78.2929429,40 C74.1745788,28.3480763 63.0621883,20 50,20 C33.4314575,20 20,33.4314575 20,50 C20,66.5685425 33.4314575,80 50,80 C63.0621883,80 74.1745788,71.6519237 78.2929429,60 L98.9998188,60 Z" id="Combined-Shape" fill="url(#linearGradient-1)"></path>
+                        <path d="M134.999819,60 C130.367116,82.8224032 110.189579,100 86,100 C58.3857625,100 36,77.6142375 36,50 C36,22.3857625 58.3857625,0 86,0 C110.189579,0 130.367116,17.1775968 134.999819,40 L114.292943,40 C110.174579,28.3480763 99.0621883,20 86,20 C69.4314575,20 56,33.4314575 56,50 C56,66.5685425 69.4314575,80 86,80 C99.0621883,80 110.174579,71.6519237 114.292943,60 L134.999819,60 Z" id="Combined-Shape-Copy" fill="url(#linearGradient-2)"></path>
+                        <path d="M98.9998188,60 C94.3671155,82.8224032 74.1895791,100 50,100 C22.3857625,100 0,77.6142375 0,50 C0,22.3857625 22.3857625,0 50,0 C51.687497,0 53.3554688,0.0835972113 55,0.246876213 L45,0.246876213 L45,20.4147922 C30.8114333,22.7951827 20,35.1350186 20,50 C20,66.5685425 33.4314575,80 50,80 C63.0621883,80 74.1745788,71.6519237 78.2929429,60 L98.9998188,60 Z" id="Combined-Shape" fill="url(#linearGradient-1)"></path>
+                    </g>
+                </g>
+                <g id="Group-10" transform="translate(155.000000, 0.000000)" font-size="68" font-family="MyanmarMN, Myanmar MN" fill="#424242" font-weight="normal">
+                    <text id="content">
+                        <tspan x="0" y="66">content</tspan>
+                    </text>
+                    <text id="central" letter-spacing="0.485714257">
+                        <tspan x="0" y="128">central</tspan>
+                    </text>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>

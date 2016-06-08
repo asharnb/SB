@@ -284,11 +284,11 @@ class StudioBridgeLiveShootingForm extends FormBase {
     foreach ($images as $fid => $src) {
 
       $array_images[] = array(
-        '#url' => $src['uri'],
-        '#name' => $src['name'],
-        '#fid' => $fid,
-        '#id' => $i,
-        '#tag' => $src['tag'],
+        'url' => $src['uri'],
+        'name' => $src['name'],
+        'fid' => $fid,
+        'id' => $i,
+        'tag' => $src['tag'],
       );
       $i++;
 
