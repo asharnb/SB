@@ -26,7 +26,7 @@ total_images: Total no.of images in this session - {{ total_images }} * * * @ing
 {# calculate counts adjusted for drops #}
 {% set adjusted_mapped = mapped_products | length - mapped_dropped_products | length %}
 {% set adjusted_unmapped = unmapped_products | length - unmapped_dropped_products | length %}
-{% set total_dropped = unmapped_dropped_products | length + mapped_dropped_products | length %}
+{% set total_dropped = drops | length %}
 
 {% set total_count = adjusted_mapped + adjusted_unmapped + total_dropped %}
 
@@ -369,21 +369,21 @@ total_images: Total no.of images in this session - {{ total_images }} * * * @ing
               </tr>
             </thead>
             <tbody>
-              {% for item in mapped_products %}
+              {% for item in drops %}
 
-              {% if item.field_draft.0.value == 1 %}
+              {#{% if item.field_draft.0.value == 1 %}#}
 
-              {% if item.field_images | length == 0 %}
+              {% if item.image_count == 0 %}
               {% set image_count_class = 'bold text-danger' %}
-              {% elseif item.field_images | length >= 7 %}
+              {% elseif item.image_count >= 7 %}
               {% set image_count_class = 'bold text-warning' %}
               {% else %}
               {% set image_count_class = 'bold text-success' %}
               {% endif %}
               <tr>
                 <td>
-                  <img src="/sbtest/{{ directory }}/images/brands/brand_logo_{{ item.field_concept_name.0.value|lower }}.png" height="20px"></td>
-                  <td>{{ item.field_style_family.0.value }}</td>
+                  <img src="/sbtest/{{ directory }}/images/brands/brand_logo_{{ item.concept|lower }}.png" height="20px"></td>
+                  <td>{{ item.styleno }}</td>
                   <td>{{ item.title.0.value }}</td>
                   <td>
                     <span class="text-danger semi-bold">Dropped</span>
@@ -392,49 +392,49 @@ total_images: Total no.of images in this session - {{ total_images }} * * * @ing
                   <td class="{{ image_count_class }}">{{ item.field_images|length }}</td>
 
                   <td class="text-align-center">
-                    <a target="_blank" class="btn btn-xs" href="/sbtest/view-product/{{item.nid.0.value }}">View</a>
+                    <a target="_blank" class="btn btn-xs" href="/sbtest/view-product/{{item.nid}}">View</a>
                   </td>
                   <td class="text-align-center">
-                    <a target="_blank" class="btn btn-xs" href="/sbtest/view-product/{{item.nid.0.value }}">Undo</a>
+                    <a target="_blank" class="btn btn-xs" href="/sbtest/view-product/{{item.nid}}">Undo</a>
                   </td>
 
                 </tr>
-                {% endif %}
+                {#{% endif %}#}
                 {% endfor %}
 
-                {% for item in unmapped_products %}
+                {#{% for item in unmapped_products %}#}
 
-                {% if item.field_draft.0. value == 1 %}
+                {#{% if item.field_draft.0. value == 1 %}#}
 
-                {% if item.field_images | length == 0 %}
-                {% set image_count_class = 'text-align-center bold text-danger' %}
-                {% elseif item.field_images | length >= 7 %}
-                {% set image_count_class = 'text-align-center bold text-warning' %}
-                {% else %}
-                {% set image_count_class = 'text-align-center bold text-success' %}
-                {% endif %}
-                <tr>
-                  <td>
-                    <img src="/sbtest/{{ directory }}/images/brands/brand_logo_{{ item.field_concept_name.0.value|lower }}.png" height="20px"></td>
-                    <td>{{ item.field_style_family.0.value }}</td>
-                    <td>{{ item.title.0.value }}</td>
-                    <td>
-                      <span class="text-danger semi-bold">Dropped</span>
+                {#{% if item.field_images | length == 0 %}#}
+                {#{% set image_count_class = 'text-align-center bold text-danger' %}#}
+                {#{% elseif item.field_images | length >= 7 %}#}
+                {#{% set image_count_class = 'text-align-center bold text-warning' %}#}
+                {#{% else %}#}
+                {#{% set image_count_class = 'text-align-center bold text-success' %}#}
+                {#{% endif %}#}
+                {#<tr>#}
+                  {#<td>#}
+                    {#<img src="/sbtest/{{ directory }}/images/brands/brand_logo_{{ item.field_concept_name.0.value|lower }}.png" height="20px"></td>#}
+                    {#<td>{{ item.field_style_family.0.value }}</td>#}
+                    {#<td>{{ item.title.0.value }}</td>#}
+                    {#<td>#}
+                      {#<span class="text-danger semi-bold">Dropped</span>#}
 
-                    </td>
-                    <td class="{{ image_count_class }}">{{ item.field_images|length }}</td>
+                    {#</td>#}
+                    {#<td class="{{ image_count_class }}">{{ item.field_images|length }}</td>#}
 
-                    <td class="text-align-center">
-                      <a target="_blank" class="btn btn-primary" href="/sbtest/view-product/{{item.nid.0.value }}">View</a>
-                    </td>
-                    <td class="text-align-center">
-                      <a target="_blank" class="btn btn-success" href="/sbtest/view-product/{{item.nid.0.value }}">Undo</a>
-                    </td>
+                    {#<td class="text-align-center">#}
+                      {#<a target="_blank" class="btn btn-primary" href="/sbtest/view-product/{{item.nid.0.value }}">View</a>#}
+                    {#</td>#}
+                    {#<td class="text-align-center">#}
+                      {#<a target="_blank" class="btn btn-success" href="/sbtest/view-product/{{item.nid.0.value }}">Undo</a>#}
+                    {#</td>#}
 
-                  </tr>
-                  {% endif %}
-                  {% endfor %}
-                </tbody>
+                  {#</tr>#}
+                  {#{% endif %}#}
+                  {#{% endfor %}#}
+                {#</tbody>#}
               </table>
             </div>
 

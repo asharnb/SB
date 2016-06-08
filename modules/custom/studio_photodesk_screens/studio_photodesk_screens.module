@@ -40,7 +40,8 @@ function studio_photodesk_screens_theme($existing, $type, $theme, $path) {
         'session_time' => NULL,
         'period_chart' => NULL,
         'mapped_dropped_products' => NULL,
-        'unmapped_dropped_products' => NULL
+        'unmapped_dropped_products' => NULL,
+        'drops' => NULL
       ),
     ),
     'view_product' => array(

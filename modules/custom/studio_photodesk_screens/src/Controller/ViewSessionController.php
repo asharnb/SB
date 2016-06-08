@@ -108,6 +108,10 @@ class ViewSessionController extends ControllerBase
     $session_users = array('photographer' => $photographer, 'stylist' => $stylist, 'vm' => $vm);
 
     $products_ids = $session->field_product->getValue();
+
+    $session_state = $session->field_status->getValue();
+    $session_state = $session_state[0]['value'];
+
     $products = [];
     $unmapped_products = [];
     $dropped_products = [];
@@ -115,6 +119,16 @@ class ViewSessionController extends ControllerBase
     $grouped_concepts_count = [];
     $product_period = [];
     $total_images = 0;
+
+    $concept = '';
+    $style_no = '';
+    $color_variant = '';
+    $state = '';
+    $title = '';
+    $drops = array();
+    $mapped_dropped_products = array();
+    $unmapped_dropped_products = array();
+
 
     // Build unmapped & mapped products
     foreach ($products_ids as $product) {
@@ -134,6 +148,7 @@ class ViewSessionController extends ControllerBase
 
 
       $current_product = $this->nodeStorage->load($product['target_id']);
+
       //$products[] = $current_product;
 
       if(!$current_product) continue;
@@ -150,9 +165,48 @@ class ViewSessionController extends ControllerBase
 
         // Get Concept
         $concept = $current_product->field_concept_name->getValue();
+
         if($drop['0']['value'] == 1){
           //if the product is dropped add it to dropped products list
           $mapped_dropped_products[] = array('nid' => $current_product->id());
+        }
+
+        if($drop['0']['value'] == 1 && $session_state !== 'closed'){
+
+          $product_concept = $current_product->field_concept_name->getValue();
+          if($product_concept){
+            $concept = $product_concept[0]['value'];
+          }
+
+          $product_style_no = $current_product->field_style_family->getValue();
+          if($product_style_no){
+            $style_no = $product_style_no[0]['value'];
+          }
+          $product_color_variant = $current_product->field_color_variant->getValue();
+          if($product_color_variant){
+            $color_variant = $product_color_variant[0]['value'];
+          }
+
+          $product_state = $current_product->field_state->getValue();
+          if($product_state){
+            $state = $product_state[0]['value'];
+          }
+
+          $product_title = $current_product->title->getValue();
+          if($product_title){
+            $title = $product_title[0]['value'];
+          }
+
+          $drops[$current_product->id()] = array("concept" => $concept,
+            "styleno" => $style_no,
+            "colorvariant" => $color_variant,
+            "image_count" => count($cp['field_images']),
+            "state" => $state,
+            "identifier" => $title,
+            "nid" => $current_product->id()
+          );
+
+
 
         }
         if ($concept) {
@@ -182,6 +236,30 @@ class ViewSessionController extends ControllerBase
         if($drop['0']['value'] == 1){
           //if the product is dropped add it to dropped products list
           $unmapped_dropped_products[] = array('nid' => $current_product->id());
+        }
+        if($drop['0']['value'] == 1 && $session_state !== 'closed'){
+
+          $concept = 'Unmapped';
+
+          $product_state = $current_product->field_state->getValue();
+          if($product_state){
+            $state = $product_state[0]['value'];
+          }
+
+          $product_title = $current_product->title->getValue();
+          if($product_title){
+            $title = $product_title[0]['value'];
+          }
+
+          $drops[$current_product->id()] = array("concept" => $concept,
+            "styleno" => 'N/A',
+            "colorvariant" => 'N/A',
+            "image_count" => count($cpu['field_images']),
+            "state" => $state,
+            "identifier" => $title,
+            "nid" => $current_product->id()
+          );
+
 
         }
         $total_images += count($cpu['field_images']);
@@ -193,6 +271,56 @@ class ViewSessionController extends ControllerBase
 
     unset($concept);
 
+    if($session_state == 'closed'){
+     // $db = \Drupal::database();
+      $p_drafts = $this->database->select('node__field_session', 's')
+        ->fields('s',array('entity_id'))
+        ->condition('bundle', 'dropped_products')
+        ->condition('field_session_target_id',$nid)
+        ->execute()->fetchAll();
+      if($p_drafts){
+        $deleted_pids = array();
+        foreach($p_drafts as $id){
+          $deleted_pids[] = $id->entity_id;
+        }
+        $deleted_products = $this->nodeStorage->loadMultiple($deleted_pids);
+
+        foreach($deleted_products as $d_product){
+          $product_concept = $d_product->field_concept_name->getValue();
+          if($product_concept){
+            $concept = $product_concept[0]['value'];
+          }
+
+          $product_style_no = $d_product->field_style_family->getValue();
+          if($product_style_no){
+            $style_no = $product_style_no[0]['value'];
+          }
+          $product_color_variant = $d_product->field_color_variant->getValue();
+          if($product_color_variant){
+            $color_variant = $product_color_variant[0]['value'];
+          }
+
+
+          $product_title = $d_product->title->getValue();
+          if($product_title){
+            $title = $product_title[0]['value'];
+          }
+          if(!$concept){
+            $concept = $title;
+          }
+
+          $drops[$d_product->id()] = array("concept" => $concept,
+            "styleno" => $style_no,
+            "colorvariant" => $color_variant,
+            "image_count" => 0,
+            "state" => 'N/A',
+            "identifier" => $title,
+            "nid" => $d_product->id()
+          );
+        }
+
+      }
+    }
 
     return [
       '#theme' => 'view_session',
@@ -206,8 +334,9 @@ class ViewSessionController extends ControllerBase
       '#period' => $product_period,
       '#session_time' => $session_time,
       '#period_chart' => self::product_analysis($product_period),
-      // '#mapped_dropped_products' => $mapped_dropped_products,
-      // '#unmapped_dropped_products' => $unmapped_dropped_products,
+      '#drops' => $drops,
+      '#mapped_dropped_products' => $mapped_dropped_products,
+      '#unmapped_dropped_products' => $unmapped_dropped_products,
       '#attached' => array(
         'library' => array(
           'studio_photodesk_screens/studiobridge-sessions',
