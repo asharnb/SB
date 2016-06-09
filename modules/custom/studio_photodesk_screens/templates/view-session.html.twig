@@ -415,20 +415,17 @@ total_images: Total no.of images in this session - {{ total_images }} * * * @ing
                 {% endif %}
                 <tr>
                   <td>
-                    <img src="/sbtest/{{ directory }}/images/brands/brand_logo_{{ item.field_concept_name.0.value|lower }}.png" height="20px"></td>
+                    Not Available</td>
                     <td>{{ item.field_style_family.0.value }}</td>
                     <td>{{ item.title.0.value }}</td>
                     <td>
-                      <span class="text-danger semi-bold">Dropped</span>
+                      <span class="text-warning semi-bold">Dropped</span>
 
                     </td>
                     <td class="{{ image_count_class }}">{{ item.field_images|length }}</td>
 
                     <td class="text-align-center">
                       <a target="_blank" class="btn btn-primary" href="/sbtest/view-product/{{item.nid.0.value }}">View</a>
-                    </td>
-                    <td class="text-align-center">
-                      <a target="_blank" class="btn btn-success" href="/sbtest/view-product/{{item.nid.0.value }}">Undo</a>
                     </td>
 
                   </tr>

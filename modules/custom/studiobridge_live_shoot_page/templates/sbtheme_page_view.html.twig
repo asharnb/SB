@@ -92,7 +92,7 @@
 
                             <div class="col-sm-12">
                             <span  id = {{ image.fid }}>
-                                <a class="col-sm-4 text-info"><i class="fa fa-lg fa-fw fa-search"></i></a>
+                                <a target="_blank" href="{{ image.url }}" class="col-sm-4 text-info"><i class="fa fa-lg fa-fw fa-search"></i></a>
                                 <a class="col-sm-4 studio-img-fullshot text-info"><i class="fa fa-lg fa-fw fa-copy"></i></a>
                                 <a class=" col-sm-4 studio-img-tag text-info" ><i class="fa fa-lg fa-fw fa-barcode"></i></a>
 
@@ -146,7 +146,7 @@
                 <h5 class="bold">Session ID</h5>
               </div>
               <div class="col-sm-6 text-right bold">
-              <h5 class="bold">{{form.identifier_nid['#value']}}</h5>
+              <h5 class="bold"><a href="/sbtest/view-session/{{form.session['#value']}}">{{form.session['#value']}}</a></h5>
               </div>
 
               <div class="col-sm-6">
@@ -201,14 +201,14 @@
               <div class="col-sm-6 ">
                 <h5 >Image sequence</h5>
               </div>
-              <div class="col-sm-6 text-right text-success bold">
+              <div class="col-sm-6 text-right text-muted bold">
                 <h5 class="bold"><i class="fa fw fa-square-o"></i></h5>
               </div>
 
               <div class="col-sm-6 ">
                 <h5>Tag Image</h5>
               </div>
-              <div class="col-sm-6 text-right bold text-success">
+              <div class="col-sm-6 text-right bold text-muted">
                 <h5 class="bold"><i class="fa fw fa-square-o"></i></h5>
               </div>
     </div>

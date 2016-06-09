@@ -6,50 +6,45 @@
 
   Drupal.behaviors.liveshootpage = {
     attach: function(context, settings) {
+    }
+  };
 
-      var selected = 0;
+  var selected = 0;
 
-      $( ".select-delete" ).click(function() {
-        //alert('yes');
-        console.log('clieck');
-        var id = $(this).attr("data-id")
-        var clicked = $(this).attr("data-click")
-        var container = document.getElementById( "warpper-img-"+id );
+  $( ".select-delete" ).click(function() {
+    //alert('no');
+    console.log('clieck');
+    var id = $(this).attr("data-id")
+    var clicked = $(this).attr("data-click")
+    var container = document.getElementById( "warpper-img-"+id );
 
-        if(clicked==='yes'){
-          $("#warpper-img-"+id).removeClass('border-selected');
-          $(this).attr("data-click","no")
-          $(this).html("Select Image")
-          $('#del-img-'+id).prop('checked', false);
-          selected--
-        }else{
-          $("#warpper-img-"+id).addClass('border-selected');
-          $(this).attr("data-click","yes")
-          $(this).html("Unselect Image")
-          $('#del-img-'+id).prop('checked', true);
-          selected++
-        }
+    if(clicked==='yes'){
+      $("#warpper-img-"+id).removeClass('border-selected');
+      $(this).attr("data-click","no")
+      $(this).html("Select Image")
+      $('#del-img-'+id).prop('checked', false);
+      selected--
+    }else{
+      $("#warpper-img-"+id).addClass('border-selected');
+      $(this).attr("data-click","yes")
+      $(this).html("Unselect Image")
+      $('#del-img-'+id).prop('checked', true);
+      selected++
+    }
 
-        if(selected === 0){
-          $('#studio-delete-bt').attr('disabled', 'disabled');
-          $('#studio-delete-bt').removeClass('border-blue text-complete');
+    if(selected === 0){
+      $('#studio-delete-bt').attr('disabled', 'disabled');
+      $('#studio-delete-bt').removeClass('border-blue text-complete');
 
-        }else{
-          $('#studio-delete-bt').removeAttr("disabled");
-          $('#studio-delete-bt').addClass('border-blue text-complete');
-        }
-
-
-
-
-      });
-
-
+    }else{
+      $('#studio-delete-bt').removeAttr("disabled");
+      $('#studio-delete-bt').addClass('border-blue text-complete');
     }
 
 
-  };
 
+
+  });
 
   Drupal.behaviors.sortable = {
     attach: function(context, settings) {

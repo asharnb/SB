@@ -8,6 +8,7 @@
 <hr class="simple">
 
 <div class="panel panel-default">
+
 <form>
   {{ form.form_build_id }}
   {{ form.form_id }}
@@ -17,7 +18,7 @@
      <!-- <div class="col-sm-6 m-b-10">
       </div> -->
       <div class="col-sm-6 m-b-10">
-      {{form.field_photographer}}
+        {{form.field_photographer}}
       </div>
       <br>
       <div class="col-sm-6 m-b-10">
@@ -28,8 +29,12 @@
       </div>
       <br>
       <div class="col-sm-6 m-b-10">
-        {{form.field_shoot_class}}
-
+        <h4 style="margin-top: 1px;font-weight: 600;font-size: 14px;">Shoot Class</h4>
+        {% for key, options in form.field_shoot_class.widget['#options'] %}
+        <div class="col-sm-4 m-l-n">
+          <input type="radio" name="iCheck" value="{{key}}">  {{options}}
+        </div>
+        {% endfor %}
 
       </div>
       <br>
