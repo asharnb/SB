@@ -73,7 +73,7 @@
 
         {#rules for status stages#}
             {% if result.shootdate.0.value|date('Y-m-d') == "now"|date("Y-m-d") %}
-              {% set date_class = 'text-success' %}
+              {% set date_class = '' %}
               {% set date_text = 'Today, ' ~ result.shootdate.0.value|date("h:m a") %}
             {% elseif result.shootdate.0.value|date('Y-m-d') == "now"|date_modify("-1 day")|date("Y-m-d") %}
               {% set date_class = '' %}

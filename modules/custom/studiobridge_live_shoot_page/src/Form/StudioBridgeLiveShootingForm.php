@@ -184,6 +184,7 @@ class StudioBridgeLiveShootingForm extends FormBase {
       '#default_value' => $identifier,
       '#title' => t(''),
 
+
     );
 
     $form['identifier_hidden'] = array(
@@ -284,11 +285,11 @@ class StudioBridgeLiveShootingForm extends FormBase {
     foreach ($images as $fid => $src) {
 
       $array_images[] = array(
-        'url' => $src['uri'],
-        'name' => $src['name'],
-        'fid' => $fid,
-        'id' => $i,
-        'tag' => $src['tag'],
+        '#url' => $src['uri'],
+        '#name' => $src['name'],
+        '#fid' => $fid,
+        '#id' => $i,
+        '#tag' => $src['tag'],
       );
       $i++;
 
@@ -383,7 +384,7 @@ class StudioBridgeLiveShootingForm extends FormBase {
     $result = $StudioProducts->getProductByIdentifier($identifier);
 
     $state->set('productscan_' . $session_id, TRUE);
-
+    $inject_script_mapping = '';
     if (!$result) {
 
       // Get product from server
@@ -585,7 +586,7 @@ class StudioBridgeLiveShootingForm extends FormBase {
       $block .= '<div class="col col-sm-12">
       <span id= "' . $fid . '" >
       <a class="col-sm-4 text-info"><i class="fa fa-lg fa-fw fa-search"></i></a>
-      <a class="col-sm-4 studio-img-fullshot text-info"><i class="fa fa-lg fa-fw fa-copy"></i></a>
+      <a class="col-sm-4 studio-img-fullshot text-info"><i class="fa fa-lg fa-fw fa-copy"></i>A</a>
       <a class=" col-sm-4 studio-img-tag text-info" ><i class="fa fa-lg fa-fw fa-barcode"></i></a>
         </span>
         </div>';
@@ -600,20 +601,9 @@ class StudioBridgeLiveShootingForm extends FormBase {
   }
     $block .= '</div>';
 
-    // $sort_js = '<script>!function(e){e(function(){e("#imagecontainer").sortable(({
-    //   tolerance: \'pointer\',
-    //   start: function(event, ui){
-    //     ui.placeholder.html("<div class=\'bulkviewfiles file gray-bkground\' style=\'width: 200px; height: 250px; background: #D2D2D2;\'></div>");
-    //   },
-    //   stop: function(event, ui){
-    //     ui.placeholder.html("");
-    //   }
-    // })),e("#imagecontainer").disableSelection()})}(jQuery);</script>';
 
     $ajax_response->addCommand(new HtmlCommand('#imagecontainer-wrapper', $block));
     $ajax_response->addCommand(new HtmlCommand('#studio-img-container', ''));
-    $ajax_response->addCommand(new HtmlCommand('#js-holder', $sort_js));
-    //$ajax_response->addCommand(new HtmlCommand('#sortable', $block));
     $ajax_response->addCommand(new InvokeCommand('#edit-identifier-hidden', 'val', array($identifier)));
     $ajax_response->addCommand(new InvokeCommand('#edit-identifier-nid', 'val', array($new_or_old_product_nid)));
     $ajax_response->addCommand(new InvokeCommand('#edit-identifier-hidden', 'change'));
