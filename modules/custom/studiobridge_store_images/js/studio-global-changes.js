@@ -18,10 +18,12 @@
         document.getElementById('edit-field-stylish-0-target-id').value = s;
     });
 
-    var p = document.getElementById('edit-field-photographer-0-target-id').value;
-    p = p.replace(/\((.+?)\)/, '');
-    p = p.trim();
-    document.getElementById('edit-field-photographer-0-target-id').value = p;
+    var p = $( "#edit-field-stylish-0-target-id" ).val();
+  if(p){
+      p = p.replace(/\((.+?)\)/, '');
+      p = p.trim();
+      document.getElementById('edit-field-photographer-0-target-id').value = p;
+  }
 
 })(jQuery);
 ///var/www/html/tmp/studiobridge-drupal/modules/custom/studiobridge_store_images/js/studio-global-changes.js

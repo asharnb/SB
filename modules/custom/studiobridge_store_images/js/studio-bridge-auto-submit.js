@@ -105,6 +105,10 @@
 
         li.innerHTML = block;
         ul.appendChild(li);
+
+        var dcount = document.getElementById('product-img-count').innerHTML;
+        dcount++;
+        document.getElementById('product-img-count').innerHTML = dcount;
     }
 
     $(function() {

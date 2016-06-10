@@ -70,6 +70,10 @@
                     document.getElementById('seq-'+inputs2[index2].value).innerHTML = index2 + 1;
                     //document.getElementById("warpper-img-453").remove();
 
+                    var dcount = document.getElementById('product-img-count-deleted').innerHTML;
+                    dcount++;
+                    document.getElementById('product-img-count-deleted').innerHTML = dcount;
+
                     // todo : get img file name
                     var rand = Math.floor((Math.random() * 1000000) + 1);
                     var fid =  inputs2[index2].value;
