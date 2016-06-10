@@ -359,7 +359,8 @@ class ViewSessionController extends ControllerBase
     //data collection
 
     $period_product = $productperiod;
-
+    $data[] = '';
+    
   	foreach ($period_product as $key => $period) {
   		$data[] = array(
   			'label'       => $key,
