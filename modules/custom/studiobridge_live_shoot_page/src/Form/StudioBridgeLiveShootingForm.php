@@ -273,7 +273,7 @@ class StudioBridgeLiveShootingForm extends FormBase {
         $product_obj = $this->nodeStorage->load($new_or_old_product_nid);
         // Get product state.
         $product_state = 'New';
-        $duplicates = $this->StudioProducts->checkProductDuplicate($new_or_old_product_nid, array('products','unmapped_products'));
+        $duplicates = $this->StudioProducts->checkProductDuplicate($new_or_old_product_nid, array('sessions'));
         if(count($duplicates) > 1){
           $product_state = 'Reshoot';
         }
@@ -682,7 +682,7 @@ class StudioBridgeLiveShootingForm extends FormBase {
         $product_obj = $nodeStorage->load($new_or_old_product_nid);
         // Get product state.
         $product_state = 'New';
-        $duplicates = $StudioProducts->checkProductDuplicate($new_or_old_product_nid, array('products','unmapped_products'));
+        $duplicates = $StudioProducts->checkProductDuplicate($new_or_old_product_nid, array('sessions'));
         if(count($duplicates) > 1){
           $product_state = 'Reshoot';
         }
