@@ -4,21 +4,17 @@
 
   'use strict';
 
-  Drupal.behaviors.liveshootpage = {
-    attach: function(context, settings) {
-    }
-  };
-
   var selected = 0;
 
-  $( ".select-delete" ).click(function() {
+  $(document).on("click",".select-delete",function(){
     //alert('no');
-    console.log('clieck');
+    console.log($(this));
     var id = $(this).attr("data-id")
     var clicked = $(this).attr("data-click")
     var container = document.getElementById( "warpper-img-"+id );
 
     if(clicked==='yes'){
+      console.log(id);
       $("#warpper-img-"+id).removeClass('border-selected');
       $(this).attr("data-click","no")
       $(this).html("Select Image")
@@ -26,6 +22,7 @@
       selected--
     }else{
       $("#warpper-img-"+id).addClass('border-selected');
+      console.log(id);
       $(this).attr("data-click","yes")
       $(this).html("Unselect Image")
       $('#del-img-'+id).prop('checked', true);
@@ -45,6 +42,14 @@
 
 
   });
+  
+  Drupal.behaviors.liveshootpage = {
+    attach: function(context, settings) {
+
+
+    }
+  };
+
 
   Drupal.behaviors.sortable = {
     attach: function(context, settings) {

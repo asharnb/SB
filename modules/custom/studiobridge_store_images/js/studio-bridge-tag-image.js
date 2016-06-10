@@ -94,7 +94,8 @@
         });
     }
 
-    $(".studio-img-tag").click(function () {
+$(document).on("click",".studio-img-tag",function(){
+    // $(".studio-img-tag").click(function () {
 
         var id = $(this).parents('span').attr('id');
         console.log('fullshot'+id);

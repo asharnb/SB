@@ -93,7 +93,7 @@ class UserLoginForm extends FormBase {
       '#title' => $this->t('Username'),
       '#size' => 60,
       '#maxlength' => USERNAME_MAX_LENGTH,
-      '#description' => $this->t('Enter your @s username.', array('@s' => $config->get('name'))),
+      //'#description' => $this->t('Enter your @s username.', array('@s' => $config->get('name'))),
       '#required' => TRUE,
       '#attributes' => array(
         'autocorrect' => 'none',
@@ -107,7 +107,7 @@ class UserLoginForm extends FormBase {
       '#type' => 'password',
       '#title' => $this->t('Password'),
       '#size' => 60,
-      '#description' => $this->t('Enter the password that accompanies your username.'),
+      //'#description' => $this->t('Enter the password that accompanies your username.'),
       '#required' => TRUE,
     );
 

@@ -13,7 +13,7 @@
 
         $.get(Drupal.url('filename/'+ fid +'/'+ Math.floor((Math.random() * 1000000) + 1) +'?_format=json'))
             .done(function (data) {
-                document.getElementById('seq-img-'+ fid).innerHTML = data.filename;
+                //document.getElementById('seq-img-'+ fid).innerHTML = data.filename;
                 callback(data.filename);
             });
     }
