@@ -268,6 +268,23 @@ class StudioBridgeLiveShootingForm extends FormBase {
           ->execute()->fetchAll();
       }
 
+      $product_state =  '';
+      if($new_or_old_product_nid){
+        $product_obj = $this->nodeStorage->load($new_or_old_product_nid);
+        // Get product state.
+        $product_state = 'New';
+        $duplicates = $this->StudioProducts->checkProductDuplicate($new_or_old_product_nid, array('products','unmapped_products'));
+        if(count($duplicates) > 1){
+          $product_state = 'Reshoot';
+        }
+        $field_draft = $product_obj->field_draft->getValue();
+        if($field_draft){
+          if($field_draft[0]['value']){
+            $product_state = 'Dropped';
+          }
+        }
+      }
+
       $form['productdetails'] = array(
         '#concept' => $productdetails['concept'],
         '#styleno' => $productdetails['styleno'],
@@ -281,6 +298,7 @@ class StudioBridgeLiveShootingForm extends FormBase {
         '#total_products' => count($session_products),
         '#dropped_products' => count($p_drafts),
         '#unmapped_products' => count($unm),
+        '#product_state' => $product_state,
       );
     }
 
@@ -657,6 +675,24 @@ class StudioBridgeLiveShootingForm extends FormBase {
 
       $imgs_deleted = $StudioImgs->getDeletedImgsCount($new_or_old_product_nid);
 
+
+      $product_state =  'New';
+      if($new_or_old_product_nid){
+        $product_obj = $nodeStorage->load($new_or_old_product_nid);
+        // Get product state.
+        $product_state = 'New';
+        $duplicates = $StudioProducts->checkProductDuplicate($new_or_old_product_nid, array('products','unmapped_products'));
+        if(count($duplicates) > 1){
+          $product_state = 'Reshoot';
+        }
+        $field_draft = $product_obj->field_draft->getValue();
+        if($field_draft){
+          if($field_draft[0]['value']){
+            $product_state = 'Dropped';
+          }
+        }
+      }
+
       $ajax_response->addCommand(new HtmlCommand('#dd-identifier', $identifier));
         $ajax_response->addCommand(new HtmlCommand('#dd-styleno', $productdetails['styleno']));
         $ajax_response->addCommand(new HtmlCommand('#dd-concept', $concept_image));
@@ -671,6 +707,8 @@ class StudioBridgeLiveShootingForm extends FormBase {
 
       $ajax_response->addCommand(new InvokeCommand('#product-img-count', 'html', array($productdetails['image_count'])));
       $ajax_response->addCommand(new InvokeCommand('#product-img-count-deleted', 'html', array($imgs_deleted)));
+      $ajax_response->addCommand(new InvokeCommand('#product-state', 'html', array($product_state)));
+
       $ajax_response->addCommand(new HtmlCommand('#smartnotification', $inject_script_mapping));
 
     }

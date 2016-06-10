@@ -35,6 +35,7 @@
                 var dcount = document.getElementById('liveshoot-drop').innerHTML;
                 dcount++;
                 document.getElementById('liveshoot-drop').innerHTML = dcount;
+                document.getElementById('product-state').innerHTML = 'Dropped';
             },
             error: function(){
                 alert('Failed! Try after sometime or Refresh the page.');
