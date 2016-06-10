@@ -290,10 +290,11 @@
     position: absolute;
     margin-bottom: 0;
     margin-bottom: 20px;
-    margin-left: 10px;
-    padding: 5px 10px 0 10px;
+    /* margin-left: 10px; */
+    /* padding: 5px 10px 0 10px; */
     zoom: 0.9;
     bottom: 0;
+    width: 100%;
 }
 .userlogged > i {
     float: left;
@@ -517,4 +518,12 @@ img.circle-border {
 }
 .no-of-products{
   font-size: 40px;
+}
+
+nav ul li.open>a.account {
+    padding-bottom: 60px;
+}
+
+nav ul li.open.account {
+    border-left: none !important;
 }

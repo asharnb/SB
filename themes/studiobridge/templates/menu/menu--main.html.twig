@@ -100,34 +100,39 @@
             {% endif %} {#end if items#}
 
         {% endmacro %}
-    </ul>
-    </nav>
-
 
 
   <div class="userlogged clearfix">
-    <img src="/sbtest/themes/studiobridge/images/users/niranjan.jpg" alt="me" class="img-circle ">
-    <div class="pull-left p-r-10 p-t-5 m-l-10 font-heading">
-        <span class="semi-bold">{{user.account.name|title}}</span><br>
-        <span class="text-master">Photographer</span>
-    </div>
-      <div class="dropdown pull-right">
-          <button class="profile-dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true"
-                  aria-expanded="false">
-          </button>
-          <ul class="dropdown-menu profile-dropdown" role="menu">
-              <li><a href="/sbtest/user/" data-drupal-link-system-path="user/"><i class="fa fa-lg fa-user"></i> My Profile</a>
-              </li>
-              <li class="bg-master-lighter">
-                  <a href="/sbtest/user/logout" data-drupal-link-system-path="user/logout" class="clearfix">
 
-                      <span class="pull-left">Logout</span>
-                      <span class="pull-right"><i class="fa fa-lg fa-power"></i></span>
-                  </a>
-              </li>
-          </ul>
-      </div>
+    <li class="account">
+        <a class="account">
+          <img src="/sbtest/themes/studiobridge/images/users/niranjan.jpg" alt="me" class="img-circle ">
+          <div class="pull-left p-r-10 p-t-5 m-l-10 font-heading">
+              <span class="semi-bold">{{user.account.name|title}}<br>
+              <span class="text-master">Photographer</span>
+
+          </div>
+</a>
+
+<ul class="children" style="display: none;">
+    <li>
+
+        <a href="/sbtest/user/edit"><i class="fa fa-user fw"></i> <span class=
+        "menu-item-parent">My Profile</span></a>
+    </li>
+    <li>
+
+        <a href="/sbtest/user/logout"><i class="fa fa-sign-out fw"></i><span class=
+        "menu-item-parent">Sign out</span></a>
+    </li>
+</ul>
+    </li>
+
   </div>
+
+</ul>
+</nav>
+
 
 
 </aside>

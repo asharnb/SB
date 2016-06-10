@@ -1,4 +1,4 @@
 enable_redirect: true
-redirect_url: user/login
+redirect_url: /sbtest/user/login
 _core:
   default_config_hash: Isi-WZEyAW2Cq1x-wMweSS7qbG2-acsrXk1zdExwkmk

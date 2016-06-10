@@ -551,7 +551,7 @@ function studiobridge_store_images_entity_update(Drupal\Core\Entity\EntityInterf
  * Implements hook_user_logout().
  */
 function studiobridge_store_images_user_logout($account){
-  return (new RedirectResponse('/user/login'))->send();
+  return (new RedirectResponse('/sbtest//user/login'))->send();
 }
 
 /*
