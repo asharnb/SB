@@ -51,14 +51,14 @@ total_images: Total no.of images in this session - {{ total_images }} * * * @ing
 
 {#Header#}
 <div class="row">
-{{kint()}}
+
   <div class="col-sm-12 col-md-8">
     <h3 class='no-margins p-b-sm'>Session Details</h3>
     <h4 class="no-margins">View all primary details of your session</h4>
   </div>
   <div class="col-sm-12 col-md-4 m-t-md">
     {% if session.field_status.0.value == 'open' %}
-    <a class="btn btn-primary pull-right p-t-10" id="import-products" data-id="{{total_count}}">
+    <a class="btn btn-primary btn-cons pull-right" id="import-products" data-id="{{total_count}}">
       Add Products</a>
     {% endif %}
     </div>
@@ -92,7 +92,7 @@ total_images: Total no.of images in this session - {{ total_images }} * * * @ing
               </span>
               <span class="pull-right  m-r-sm">
                 {% if session.field_status.0.value == 'open' %}
-                  <a class="text-info btn btn-sm">Pause</a>
+                  <a id="pause-session" class="text-info btn btn-sm">Pause</a>
                 {% endif %}
               </span>
 
