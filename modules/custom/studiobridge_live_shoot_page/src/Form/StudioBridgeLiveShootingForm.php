@@ -40,6 +40,8 @@ class StudioBridgeLiveShootingForm extends FormBase {
 
   protected $StudioCommons;
 
+  protected $StudioImgs;
+
   /**
   * The state.
   *
@@ -66,7 +68,7 @@ class StudioBridgeLiveShootingForm extends FormBase {
 
     $this->StudioProducts = $container->get('studio.products');
     $this->StudioSessions = $container->get('studio.sessions');
-    //$this->StudioCommons =  $container->get('studio.commons');
+    $this->StudioImgs =  $container->get('studio.imgs');
 
     $this->state = $container->get('state');
   }
@@ -234,6 +236,8 @@ class StudioBridgeLiveShootingForm extends FormBase {
       ),
     );
 
+    $deleted_imgs_count = $this->StudioImgs->getDeletedImgsCount($new_or_old_product_nid);
+
     $productdetails = $this->StudioProducts->getProductInformation($identifier_hidden);
 
     if ($productdetails) {
@@ -273,6 +277,7 @@ class StudioBridgeLiveShootingForm extends FormBase {
         '#description' => $productdetails['description'],
         '#identifier' => $identifier,
         '#image_count' => $productdetails['image_count'],
+        '#image_count_deleted' => $deleted_imgs_count,
         '#total_products' => count($session_products),
         '#dropped_products' => count($p_drafts),
         '#unmapped_products' => count($unm),
@@ -651,6 +656,7 @@ class StudioBridgeLiveShootingForm extends FormBase {
           ->execute()->fetchAll();
       }
 
+      $imgs_deleted = $StudioImgs->getDeletedImgsCount($new_or_old_product_nid);
 
       $ajax_response->addCommand(new HtmlCommand('#dd-identifier', $identifier));
         $ajax_response->addCommand(new HtmlCommand('#dd-styleno', $productdetails['styleno']));
@@ -659,12 +665,13 @@ class StudioBridgeLiveShootingForm extends FormBase {
         $ajax_response->addCommand(new HtmlCommand('#dd-gender', $productdetails['gender']));
         $ajax_response->addCommand(new HtmlCommand('#dd-color', $productdetails['color']));
         $ajax_response->addCommand(new HtmlCommand('#dd-description', $productdetails['description']));
-        $ajax_response->addCommand(new HtmlCommand('#product-img-count', $productdetails['image_count']));
       $ajax_response->addCommand(new HtmlCommand('#session-total-products', count($session_products)));
 
       $ajax_response->addCommand(new HtmlCommand('#liveshoot-Unmapped', count($unm)));
       $ajax_response->addCommand(new InvokeCommand('#liveshoot-drop', 'val', array(count($p_drafts))));
 
+      $ajax_response->addCommand(new InvokeCommand('#product-img-count', 'html', array($productdetails['image_count'])));
+      $ajax_response->addCommand(new InvokeCommand('#product-img-count-deleted', 'html', array($imgs_deleted)));
       $ajax_response->addCommand(new HtmlCommand('#smartnotification', $inject_script_mapping));
 
     }

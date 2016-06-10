@@ -215,4 +215,26 @@ class StudioImgs implements StudioImgsInterface {
 
   }
 
+  /*
+   * Helper function to get deleted images count.
+   *
+   * @param pid
+   *  product pid
+   */
+  public function getDeletedImgsCount($pid){
+    $product = $this->nodeStorage->load($pid);
+    if($product){
+      $images = $product->field_images->getValue();
+      $images_count = count($images);
+
+      $result = $this->database->select('studio_file_transfers', 'spsp')
+        ->fields('spsp', array('id'))
+        ->condition('spsp.pid', $pid);
+      $result = $result->execute()->fetchAll();
+      $result_count = count($result);
+      return $result_count - $images_count;
+    }
+    return 0;
+  }
+
 }
