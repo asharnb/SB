@@ -558,11 +558,12 @@ class StudioBridgeLiveShootingForm extends FormBase {
 
     $block = '<div id="imagecontainer" name="imagecontainer" class="ui-sortable">';
     $i = 1;
+
     if(!empty($images)){
     foreach ($images as $fid => $src) {
       $block .= '<div class="bulkviewfiles imagefile" id="warpper-img-' . $fid . '">';
 
-      if ($src['tag'] !== 1) {
+      if ($src['tag'] != 1) {
         $block .= '<div class="ribbon" id="ribboncontainer"><span class="for-tag" id="seq-' . $fid . '" name="' . $i . '">' . $i . '</span></div>';
       }
       else {
@@ -586,7 +587,7 @@ class StudioBridgeLiveShootingForm extends FormBase {
       $block .= '<div class="col col-sm-12">
       <span id= "' . $fid . '" >
       <a class="col-sm-4 text-info"><i class="fa fa-lg fa-fw fa-search"></i></a>
-      <a class="col-sm-4 studio-img-fullshot text-info"><i class="fa fa-lg fa-fw fa-copy"></i>A</a>
+      <a class="col-sm-4 studio-img-fullshot text-info"><i class="fa fa-lg fa-fw fa-copy"></i></a>
       <a class=" col-sm-4 studio-img-tag text-info" ><i class="fa fa-lg fa-fw fa-barcode"></i></a>
         </span>
         </div>';
@@ -668,6 +669,7 @@ class StudioBridgeLiveShootingForm extends FormBase {
     }
 
     $state->set('productscan_' . $session_id, FALSE);
+
     return $ajax_response;
   }
 

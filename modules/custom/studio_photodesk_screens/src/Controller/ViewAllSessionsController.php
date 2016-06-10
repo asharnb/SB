@@ -65,6 +65,7 @@ public function content()
   $user = \Drupal::currentUser();
   // Get uid of user.
   $uid = $user->id();
+  $session_data[] = '';
 
   //get all nodes of session type
   $result = \Drupal::entityQuery('node')
