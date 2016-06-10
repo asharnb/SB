@@ -71,7 +71,7 @@ class ViewProductController extends ControllerBase {
     }
     elseif(!in_array($bundle = $product->bundle(),array('products','unmapped_products'))){
       drupal_set_message('Invalid product id '.$nid, 'warning');
-      return new RedirectResponse(base_path() . 'products');
+      return new RedirectResponse(base_path() . 'view-products2');
     }
 
     $values = $product->toArray();

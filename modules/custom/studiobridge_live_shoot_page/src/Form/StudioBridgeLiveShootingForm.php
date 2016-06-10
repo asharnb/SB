@@ -662,7 +662,7 @@ class StudioBridgeLiveShootingForm extends FormBase {
       $ajax_response->addCommand(new HtmlCommand('#session-total-products', count($session_products)));
 
       $ajax_response->addCommand(new HtmlCommand('#liveshoot-Unmapped', count($unm)));
-      $ajax_response->addCommand(new HtmlCommand('#liveshoot-drop', count($p_drafts)));
+      $ajax_response->addCommand(new InvokeCommand('#liveshoot-drop', 'val', array(count($p_drafts))));
 
       $ajax_response->addCommand(new HtmlCommand('#smartnotification', $inject_script_mapping));
 

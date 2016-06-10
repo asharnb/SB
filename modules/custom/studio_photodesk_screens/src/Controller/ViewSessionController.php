@@ -84,6 +84,12 @@ class ViewSessionController extends ControllerBase
     if (!$session) {
       drupal_set_message('Invalid session id ' . $nid, 'warning');
       return new RedirectResponse(base_path() . 'view-sessions2');
+    }else{
+      $session_bundle_check = $session->bundle();
+      if($session_bundle_check !== 'sessions'){
+        drupal_set_message('Invalid session id ' . $nid, 'warning');
+        return new RedirectResponse(base_path() . 'view-sessions2');
+      }
     }
 
     // Convert node object to readable array format for twig file.
