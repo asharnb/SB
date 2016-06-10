@@ -59,7 +59,7 @@
         swal({
           title: "Finish Session?",
           text: "You will not be able to add any more products into this session after it has been closed. Do you wish to continue?",
-          type: "question",
+          //type: "question",
           showCancelButton: true,
           confirmButtonColor: "#00b9e5",
           confirmButtonText: "Continue",
