@@ -7,7 +7,6 @@ studiobridge-sessions:
   js:
     js/bootstrap/bootstrap.min.js: {}
     js/datatables/dataTables.min.js: {}
-    js/datatables/dataTables.colVis.min.js: {}
     js/datatables/dataTables.tableTools.min.js: {}
     js/datatable-responsive/datatables.responsive.min.js: {}
     js/scripts.js: {}
