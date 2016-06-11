@@ -559,10 +559,11 @@ function studiobridge_store_images_user_logout($account){
  */
 function studiobridge_store_images_user_login($account){
   // Get roles to check for photographer role.
-  $roles  = $account->getRoles();
-  if(in_array('photographer',$roles)){
-    return (new RedirectResponse('/sbtest/view-sessions2'))->send();
-  }
+  // $roles  = $account->getRoles();
+  // if(in_array('photographer',$roles)){
+  //   return (new RedirectResponse('/sbtest/view-sessions2'))->send();
+  // }
+  return (new RedirectResponse('/sbtest/view-sessions2'))->send();
 }
 /*
 *  Implements hook_form_alter().

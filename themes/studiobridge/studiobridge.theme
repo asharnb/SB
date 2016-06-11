@@ -18,6 +18,14 @@ function studiobridge_theme(&$existing, $type, $theme, $path) {
         'render element' => 'form',
         'template' => 'customtemplates/add-session',
     );
+    $hooks['user_pass'] = array(
+        'render element' => 'form',
+        'template' => 'customtemplates/user-password-reset',
+    );
+    $hooks['user_edit'] = array(
+        'render element' => 'form',
+        'template' => 'customtemplates/user-edit',
+    );
     return $hooks;
 };
 
