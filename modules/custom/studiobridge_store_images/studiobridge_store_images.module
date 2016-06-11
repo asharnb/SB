@@ -551,7 +551,7 @@ function studiobridge_store_images_entity_update(Drupal\Core\Entity\EntityInterf
  * Implements hook_user_logout().
  */
 function studiobridge_store_images_user_logout($account){
-  return (new RedirectResponse('/sbtest//user/login'))->send();
+  return (new RedirectResponse('//user/login'))->send();
 }
 
 /*
@@ -561,9 +561,9 @@ function studiobridge_store_images_user_login($account){
   // Get roles to check for photographer role.
   // $roles  = $account->getRoles();
   // if(in_array('photographer',$roles)){
-  //   return (new RedirectResponse('/sbtest/view-sessions2'))->send();
+  //   return (new RedirectResponse('/view-sessions2'))->send();
   // }
-  return (new RedirectResponse('/sbtest/view-sessions2'))->send();
+  return (new RedirectResponse('/view-sessions2'))->send();
 }
 /*
 *  Implements hook_form_alter().
@@ -599,7 +599,7 @@ function studiobridge_store_images_form_alter(&$form, \Drupal\Core\Form\FormStat
       exit;
     }
 
-    $form_state->setRedirect('/sbtest/view-sessions2');
+    $form_state->setRedirect('/view-sessions2');
   }
 
   if ($form_id == 'user_login_form') {
@@ -614,5 +614,5 @@ function studiobridge_store_images_form_alter(&$form, \Drupal\Core\Form\FormStat
 }
 
 function add_session_handler(&$form, &$form_state) {
-  $form_state['redirect'] = '/sbtest/view-sessions2';
+  $form_state['redirect'] = '/view-sessions2';
 }

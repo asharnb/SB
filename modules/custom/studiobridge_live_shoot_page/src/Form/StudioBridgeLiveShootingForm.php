@@ -645,7 +645,7 @@ class StudioBridgeLiveShootingForm extends FormBase {
       if(strtolower($productdetails['concept']) == 'unmapped'){
         $concept_image = '<strong>Not Available</strong>';
       } else {
-        $concept_image = "<img src='/sbtest/themes/studiobridge/images/brands/brand_logo_".strtolower($productdetails['concept']).".png' height='20px'>";
+        $concept_image = "<img src='/themes/studiobridge/images/brands/brand_logo_".strtolower($productdetails['concept']).".png' height='20px'>";
       }
 
 

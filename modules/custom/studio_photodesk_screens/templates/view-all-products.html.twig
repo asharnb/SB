@@ -62,7 +62,7 @@
             {% if result.field_concept_name.0.value == '' %}
             Not Available
             {% else %}
-            <img src="/sbtest/{{directory}}/images/brands/brand_logo_{{result.field_concept_name.0.value|lower}}.png" height="20px">
+            <img src="/{{directory}}/images/brands/brand_logo_{{result.field_concept_name.0.value|lower}}.png" height="20px">
             <span style="display:none;">{{result.field_concept_name.0.value}}</span>
             {% endif %}
           </td>
@@ -72,7 +72,7 @@
 
           <td class="{{ image_count_class }}">{{ result.field_images|length }}</td>
           <td>
-            <a class="btn btn-xs " href="/sbtest/view-session/{{ result.id }}">View</a>
+            <a class="btn btn-xs " href="/view-session/{{ result.id }}">View</a>
           </td>
 
         </tr>

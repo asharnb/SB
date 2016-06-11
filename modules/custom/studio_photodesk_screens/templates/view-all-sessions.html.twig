@@ -6,7 +6,7 @@
     <h4 class="no-margins">View and track all your sessions or add a new session</h4>
   </div>
   <div class="col-sm-12 col-md-4 m-t-md">
-    <a class="btn btn-primary btn-cons pull-right" href="/sbtest/node/add/sessions">Add New Session</a>
+    <a class="btn btn-primary btn-cons pull-right" href="/node/add/sessions">Add New Session</a>
   </div>
 </div>
 <hr class="simple">
@@ -97,24 +97,24 @@
 
             {% elseif result.concepts|length == 1 %}
 
-                <img src="/sbtest/{{directory}}/images/brands/brand_logo_{{result.concepts.0.concept|lower}}.png" height="20px" alt="{{result.concepts.0.concept|lower}}">
+                <img src="/{{directory}}/images/brands/brand_logo_{{result.concepts.0.concept|lower}}.png" height="20px" alt="{{result.concepts.0.concept|lower}}">
                 <span style="display:none;">{% for item in result.concepts %}{{item.concept}}{% endfor %}</span>
             {% elseif result.concepts|length >= 2 %}
 
-                <img src="/sbtest/{{directory}}/images/brands/brand_logo_{{result.concepts.0.concept|lower}}.png" height="20px" alt="{{result.concepts.0.concept|lower}}">
+                <img src="/{{directory}}/images/brands/brand_logo_{{result.concepts.0.concept|lower}}.png" height="20px" alt="{{result.concepts.0.concept|lower}}">
                 <span class="text text-complete bold" data-toggle="tooltip" title="{% for item in result.concepts|slice(1) %}{{item.concept|title}}{% if not loop.last %},{% endif %}{% endfor %}">   +{{result.concepts|length -1}}</span>
                 <span style="display:none;">{% for item in result.concepts %}{{item.concept}}{% endfor %}</span>
             {% endif %}
           </td>
           <td>
-            <img src="/sbtest/{{directory}}/images/users/{{ random(['niranjan', 'vikas', 'anahita', 'moosa', 'azhar']) }}.jpg" class="img-circle-table " alt="niranjan">
+            <img src="/{{directory}}/images/users/{{ random(['niranjan', 'vikas', 'anahita', 'moosa', 'azhar']) }}.jpg" class="img-circle-table " alt="niranjan">
             <span style="display:none;">{{ result.photographer }}</span>
             {% if not result.vm == '' %}
-              <img src="/sbtest/{{directory}}/images/users/{{ random(['disha', 'rebecca']) }}.jpg" class="img-circle-table " alt="ashar">
+              <img src="/{{directory}}/images/users/{{ random(['disha', 'rebecca']) }}.jpg" class="img-circle-table " alt="ashar">
               <span style="display:none;">{{ result.vm }}</span>
             {% endif %}
             {% if not result.stylist == '' %}
-              <img src="/sbtest/{{directory}}/images/users/{{ random(['althea', 'rinki']) }}.jpg" class="img-circle-table " alt="aqeel">
+              <img src="/{{directory}}/images/users/{{ random(['althea', 'rinki']) }}.jpg" class="img-circle-table " alt="aqeel">
               <span style="display:none;">{{ result.stylist }}</span>
             {% endif %}
           </td>
@@ -122,7 +122,7 @@
 
           <td class="bold">{{total_count}}</td>
           <td>
-            <a class="btn btn-xs " href="/sbtest/view-session/{{ result.id }}">View</a>
+            <a class="btn btn-xs " href="/view-session/{{ result.id }}">View</a>
           </td>
 
         </tr>

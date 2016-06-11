@@ -65,7 +65,7 @@
           confirmButtonText: "Continue",
           closeOnConfirm: true
         }, function () {
-          window.location = "/sbtest/close-session/"+id+"/1";
+          window.location = "/close-session/"+id+"/1";
         });
       });
     }
@@ -82,7 +82,7 @@
             title: "White Balance Check",
             text: "Please make sure that you have properly white balanced your camera before shooting any products.",
             //type: "info",
-            imageUrl: '/sbtest/themes/studiobridge/images/whitebalance.png',
+            imageUrl: '/themes/studiobridge/images/whitebalance.png',
             imageWidth: 400,
             imageHeight: 200,
             showCancelButton: false,
@@ -90,12 +90,12 @@
             confirmButtonText: "I have white balanced my camera",
             closeOnConfirm: true
           }, function () {
-            window.location = "/sbtest/live-shooting-page1";
+            window.location = "/live-shooting-page1";
           });
 
 
         } else{
-          window.location = "/sbtest/live-shooting-page1";
+          window.location = "/live-shooting-page1";
 
         }
 

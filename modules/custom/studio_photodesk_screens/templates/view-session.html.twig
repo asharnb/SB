@@ -163,7 +163,7 @@ total_images: Total no.of images in this session - {{ total_images }} * * * @ing
           <div class="col-sm-6 no-padding">
             <div class="social-avatar">
               <a href="" class="pull-left">
-                <img src="/sbtest/{{directory}}/images/users/niranjan.jpg" class="img-circle" alt="profile">
+                <img src="/{{directory}}/images/users/niranjan.jpg" class="img-circle" alt="profile">
               </a>
               <div class="media-body p-xs">
                 <h6 class="no-margins bold">
@@ -178,7 +178,7 @@ total_images: Total no.of images in this session - {{ total_images }} * * * @ing
           <div class="col-sm-6 no-padding">
             <div class="social-avatar">
               <a href="" class="pull-left m-r-5">
-                <img src="/sbtest/{{directory}}/images/users/rebecca.jpg" class="img-circle" alt="profile">
+                <img src="/{{directory}}/images/users/rebecca.jpg" class="img-circle" alt="profile">
               </a>
               <div class="media-body p-xs">
                 <h6 class="no-margins bold">
@@ -193,7 +193,7 @@ total_images: Total no.of images in this session - {{ total_images }} * * * @ing
           <div class="col-sm-6 no-padding">
             <div class="social-avatar">
               <a href="" class="pull-left">
-                <img src="/sbtest/{{directory}}/images/users/cia.jpg" class="img-circle" alt="profile">
+                <img src="/{{directory}}/images/users/cia.jpg" class="img-circle" alt="profile">
               </a>
               <div class="media-body p-xs">
                 <h6 class="no-margins bold">
@@ -272,7 +272,7 @@ total_images: Total no.of images in this session - {{ total_images }} * * * @ing
             {% endif %}
             <tr>
               <td>
-                <img src="/sbtest/{{ directory }}/images/brands/brand_logo_{{ item.field_concept_name.0.value|lower }}.png" height="20px"></td>
+                <img src="/{{ directory }}/images/brands/brand_logo_{{ item.field_concept_name.0.value|lower }}.png" height="20px"></td>
                 <td>{{ item.field_style_family.0.value }}</td>
                 <td>{{ item.title.0.value }}</td>
                 <td>
@@ -288,7 +288,7 @@ total_images: Total no.of images in this session - {{ total_images }} * * * @ing
                 <td class="{{ image_count_class }}">{{ item.field_images|length }}</td>
 
                 <td class="text-align-center">
-                  <a target="_blank" class="btn btn-xs" href="/sbtest/view-product/{{item.nid.0.value }}">View</a>
+                  <a target="_blank" class="btn btn-xs" href="/view-product/{{item.nid.0.value }}">View</a>
                 </td>
 
               </tr>
@@ -341,7 +341,7 @@ total_images: Total no.of images in this session - {{ total_images }} * * * @ing
                 <td class="{{ image_count_class }}">{{ item.field_images|length }}</td>
 
                 <td class="text-align-center">
-                  <a target="_blank" class="btn btn-xs" href="/sbtest/view-product/{{item.nid.0.value }}">View</a>
+                  <a target="_blank" class="btn btn-xs" href="/view-product/{{item.nid.0.value }}">View</a>
                 </td>
 
               </tr>
@@ -382,7 +382,7 @@ total_images: Total no.of images in this session - {{ total_images }} * * * @ing
               {% endif %}
               <tr>
                 <td>
-                  <img src="/sbtest/{{ directory }}/images/brands/brand_logo_{{ item.concept|lower }}.png" height="20px"></td>
+                  <img src="/{{ directory }}/images/brands/brand_logo_{{ item.concept|lower }}.png" height="20px"></td>
                   <td>{{ item.styleno }}</td>
                   <td>{{ item.title.0.value }}</td>
                   <td>
@@ -392,10 +392,10 @@ total_images: Total no.of images in this session - {{ total_images }} * * * @ing
                   <td class="{{ image_count_class }}">{{ item.field_images|length }}</td>
 
                   <td class="text-align-center">
-                    <a target="_blank" class="btn btn-xs" href="/sbtest/view-product/{{item.nid}}">View</a>
+                    <a target="_blank" class="btn btn-xs" href="/view-product/{{item.nid}}">View</a>
                   </td>
                   <td class="text-align-center">
-                    <a target="_blank" class="btn btn-xs" href="/sbtest/view-product/{{item.nid}}">Undo</a>
+                    <a target="_blank" class="btn btn-xs" href="/view-product/{{item.nid}}">Undo</a>
                   </td>
 
                 </tr>
@@ -415,7 +415,7 @@ total_images: Total no.of images in this session - {{ total_images }} * * * @ing
                 {#{% endif %}#}
                 {#<tr>#}
                   {#<td>#}
-                    {#<img src="/sbtest/{{ directory }}/images/brands/brand_logo_{{ item.field_concept_name.0.value|lower }}.png" height="20px"></td>#}
+                    {#<img src="/{{ directory }}/images/brands/brand_logo_{{ item.field_concept_name.0.value|lower }}.png" height="20px"></td>#}
                     {#<td>{{ item.field_style_family.0.value }}</td>#}
                     {#<td>{{ item.title.0.value }}</td>#}
                     {#<td>#}
@@ -425,10 +425,10 @@ total_images: Total no.of images in this session - {{ total_images }} * * * @ing
                     {#<td class="{{ image_count_class }}">{{ item.field_images|length }}</td>#}
 
                     {#<td class="text-align-center">#}
-                      {#<a target="_blank" class="btn btn-primary" href="/sbtest/view-product/{{item.nid.0.value }}">View</a>#}
+                      {#<a target="_blank" class="btn btn-primary" href="/view-product/{{item.nid.0.value }}">View</a>#}
                     {#</td>#}
                     {#<td class="text-align-center">#}
-                      {#<a target="_blank" class="btn btn-success" href="/sbtest/view-product/{{item.nid.0.value }}">Undo</a>#}
+                      {#<a target="_blank" class="btn btn-success" href="/view-product/{{item.nid.0.value }}">Undo</a>#}
                     {#</td>#}
 
                   {#</tr>#}
@@ -458,7 +458,7 @@ total_images: Total no.of images in this session - {{ total_images }} * * * @ing
                     {#<td class="{{ image_count_class }}">{{ item.field_images|length }}</td>#}
 
                     {#<td class="text-align-center">#}
-                      {#<a target="_blank" class="btn btn-primary" href="/sbtest/view-product/{{item.nid.0.value }}">View</a>#}
+                      {#<a target="_blank" class="btn btn-primary" href="/view-product/{{item.nid.0.value }}">View</a>#}
                     {#</td>#}
 
                   {#</tr>#}
@@ -476,7 +476,7 @@ total_images: Total no.of images in this session - {{ total_images }} * * * @ing
               <div class="col-md-6">
 
                                   <div class="profile-image">
-                                      <img src="/sbtest/themes/studiobridge/images/excel.png" class="m-b-md" alt="profile">
+                                      <img src="/themes/studiobridge/images/excel.png" class="m-b-md" alt="profile">
                                   </div>
                                   <div class="profile-info">
                                       <div class="">
@@ -487,7 +487,7 @@ total_images: Total no.of images in this session - {{ total_images }} * * * @ing
 
                                               <small>
 
-                                                  <a href="/sbtest/shootlist/{{session.nid.0.value}}/download.csv" class="btn">Download</a>
+                                                  <a href="/shootlist/{{session.nid.0.value}}/download.csv" class="btn">Download</a>
                                               </small>
 
                                           </div>
@@ -528,7 +528,7 @@ total_images: Total no.of images in this session - {{ total_images }} * * * @ing
 
 
         <p class="company-name pull-left text-uppercase bold no-margin">
-        <img src="/sbtest/{{ directory }}/images/brands/brand_logo_{{ item.concept|lower }}.png"
+        <img src="/{{ directory }}/images/brands/brand_logo_{{ item.concept|lower }}.png"
         height="15px">
         <div class="pull-right">
         <span class=" label label-primary p-t-5 m-l-5 p-b-5 inline fs-12">{{ item.product_count }}
@@ -551,7 +551,7 @@ total_images: Total no.of images in this session - {{ total_images }} * * * @ing
 <div data-index="" class="company-stat-box mb-10  active padding-10 bg-master-lightest">
 
 <p class="company-name pull-left text-uppercase bold no-margin">
-<img src="/sbtest/{{ directory }}/images/brands/brand_logo_.png"
+<img src="/{{ directory }}/images/brands/brand_logo_.png"
 height="15px">
 <div class="pull-right">
 <span class=" label label-danger p-t-5 m-l-5 p-b-5 inline fs-12">{{ unmapped_products|length }}

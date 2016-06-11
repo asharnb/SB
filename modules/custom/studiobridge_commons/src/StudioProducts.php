@@ -346,7 +346,7 @@ class StudioProducts implements StudioProductsInterface {
     // todo : multiple search, means if product not found with sku_id then look for color variant.
     // todo : for now external resource is public, but it might be changed to auth.
 
-    $url = "http://alpha.cms2.dreamcms.me/service/product-data?_format=json&product_identifier=$input";
+    $url = "http://beta.contentcentral.co/service/product-data?_format=json&product_identifier=$input";
     //$url = "http://staging.dreamcms.me/service/product-data?sku_id=$input";
     $response = \Drupal::httpClient()
       ->get($url, [
