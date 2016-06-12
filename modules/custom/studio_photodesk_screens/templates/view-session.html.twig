@@ -360,8 +360,7 @@ total_images: Total no.of images in this session - {{ total_images }} * * * @ing
             <thead>
               <tr>
                 <th>Concept</th>
-                <th>Style ID</th>
-                <th>Color Variant</th>
+                <th>Color Variant/Identifier</th>
                 <th>State</th>
                 <th>Image Count</th>
                 <th></th>
@@ -370,8 +369,6 @@ total_images: Total no.of images in this session - {{ total_images }} * * * @ing
             </thead>
             <tbody>
               {% for item in drops %}
-
-              {#{% if item.field_draft.0.value == 1 %}#}
 
               {% if item.image_count == 0 %}
               {% set image_count_class = 'bold text-danger' %}
@@ -382,9 +379,13 @@ total_images: Total no.of images in this session - {{ total_images }} * * * @ing
               {% endif %}
               <tr>
                 <td>
-                  <img src="/{{ directory }}/images/brands/brand_logo_{{ item.concept|lower }}.png" height="20px"></td>
-                  <td>{{ item.styleno }}</td>
-                  <td>{{ item.title.0.value }}</td>
+                  {% if item.concept|lower == 'unmapped' %}
+                  Not Available
+                  {% else %}
+                  <img src="/{{ directory }}/images/brands/brand_logo_{{ item.concept|lower }}.png" height="20px">
+                  {% endif %}
+                </td>
+                  <td>{{ item.field_color_variant }}</td>
                   <td>
                     <span class="text-danger semi-bold">Dropped</span>
 
@@ -399,71 +400,10 @@ total_images: Total no.of images in this session - {{ total_images }} * * * @ing
                   </td>
 
                 </tr>
-                {#{% endif %}#}
+
                 {% endfor %}
 
-                {#{% for item in unmapped_products %}#}
 
-                {#{% if item.field_draft.0. value == 1 %}#}
-
-                {#{% if item.field_images | length == 0 %}#}
-                {#{% set image_count_class = 'text-align-center bold text-danger' %}#}
-                {#{% elseif item.field_images | length >= 7 %}#}
-                {#{% set image_count_class = 'text-align-center bold text-warning' %}#}
-                {#{% else %}#}
-                {#{% set image_count_class = 'text-align-center bold text-success' %}#}
-                {#{% endif %}#}
-                {#<tr>#}
-                  {#<td>#}
-                    {#<img src="/{{ directory }}/images/brands/brand_logo_{{ item.field_concept_name.0.value|lower }}.png" height="20px"></td>#}
-                    {#<td>{{ item.field_style_family.0.value }}</td>#}
-                    {#<td>{{ item.title.0.value }}</td>#}
-                    {#<td>#}
-                      {#<span class="text-danger semi-bold">Dropped</span>#}
-
-                    {#</td>#}
-                    {#<td class="{{ image_count_class }}">{{ item.field_images|length }}</td>#}
-
-                    {#<td class="text-align-center">#}
-                      {#<a target="_blank" class="btn btn-primary" href="/view-product/{{item.nid.0.value }}">View</a>#}
-                    {#</td>#}
-                    {#<td class="text-align-center">#}
-                      {#<a target="_blank" class="btn btn-success" href="/view-product/{{item.nid.0.value }}">Undo</a>#}
-                    {#</td>#}
-
-                  {#</tr>#}
-                  {#{% endif %}#}
-                  {#{% endfor %}#}
-                {#</tbody>#}
-                {#{% for item in unmapped_products %}#}
-
-                {#{% if item.field_draft.0. value == 1 %}#}
-
-                {#{% if item.field_images | length == 0 %}#}
-                {#{% set image_count_class = 'text-align-center bold text-danger' %}#}
-                {#{% elseif item.field_images | length >= 7 %}#}
-                {#{% set image_count_class = 'text-align-center bold text-warning' %}#}
-                {#{% else %}#}
-                {#{% set image_count_class = 'text-align-center bold text-success' %}#}
-                {#{% endif %}#}
-                {#<tr>#}
-                  {#<td>#}
-                    {#Not Available</td>#}
-                    {#<td>{{ item.field_style_family.0.value }}</td>#}
-                    {#<td>{{ item.title.0.value }}</td>#}
-                    {#<td>#}
-                      {#<span class="text-warning semi-bold">Dropped</span>#}
-
-                    {#</td>#}
-                    {#<td class="{{ image_count_class }}">{{ item.field_images|length }}</td>#}
-
-                    {#<td class="text-align-center">#}
-                      {#<a target="_blank" class="btn btn-primary" href="/view-product/{{item.nid.0.value }}">View</a>#}
-                    {#</td>#}
-
-                  {#</tr>#}
-                  {#{% endif %}#}
-                  {#{% endfor %}#}
                 </tbody>
               </table>
             </div>
