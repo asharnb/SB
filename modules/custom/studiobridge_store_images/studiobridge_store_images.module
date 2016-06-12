@@ -421,7 +421,7 @@ function studiobridge_store_images_entity_presave(Drupal\Core\Entity\EntityInter
     $images = $entity->field_images->getValue();
 
     // make sure both values are set.
-    if ($field_base_product_id && $images) {
+    if ($color_variant && $images) {
       $i = 1;
       foreach ($images as $img) {
         // load file entity.
@@ -442,7 +442,7 @@ function studiobridge_store_images_entity_presave(Drupal\Core\Entity\EntityInter
           }
           // todo : filemime will be wrong
           // change file name as per sequence number and base product_id value.
-          $filename = $field_base_product_id . '_' . $i . ".$filemime";
+          $filename = $color_variant . '_' . $i . ".$filemime";
           //$file_uri = $file->uri->getValue();
           //$x = 'public://'.'xyz/_krishna_'.time();
 
@@ -551,7 +551,7 @@ function studiobridge_store_images_entity_update(Drupal\Core\Entity\EntityInterf
  * Implements hook_user_logout().
  */
 function studiobridge_store_images_user_logout($account){
-  return (new RedirectResponse('//user/login'))->send();
+  return (new RedirectResponse('/user/login'))->send();
 }
 
 /*
