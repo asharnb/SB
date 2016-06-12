@@ -34,6 +34,9 @@
                     closeOnConfirm: true,
                     timer:1500
                 });
+                var r = '<i class="fa fa-lg fa-barcode txt-color-white"></i>';
+                document.getElementById('seq-' + fid).className += ' tag';
+                document.getElementById('seq-'+ fid).innerHTML = r;
 
 
             },
