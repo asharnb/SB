@@ -50,6 +50,8 @@
 
         {% for result in results %}
 
+        {% if not result.id == '' %}
+
         {% set total_count = result.mapped.0.mappedcount + result.unmapped.0.unmappedcount %}
 
         {#rules for status stages#}
@@ -127,6 +129,7 @@
 
         </tr>
 
+          {% endif %}
         {% endfor %}
 
 
