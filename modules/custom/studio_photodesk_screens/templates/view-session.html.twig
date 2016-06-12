@@ -355,12 +355,13 @@ total_images: Total no.of images in this session - {{ total_images }} * * * @ing
 
         <div class="tab-pane" id="tab-dropped">
 
-
           <table id="dt_drops" class="table table-responsive table-hover" width="100%">
+
             <thead>
               <tr>
                 <th>Concept</th>
-                <th>Color Variant/Identifier</th>
+                <th>Color Variant</th>
+                <th>Identifier</th>
                 <th>State</th>
                 <th>Image Count</th>
                 <th></th>
@@ -385,7 +386,8 @@ total_images: Total no.of images in this session - {{ total_images }} * * * @ing
                   <img src="/{{ directory }}/images/brands/brand_logo_{{ item.concept|lower }}.png" height="20px">
                   {% endif %}
                 </td>
-                  <td>{{ item.field_color_variant }}</td>
+                  <td>{{ item.identifier }}</td>
+                  <td>{{ item.colorvariant }}</td>
                   <td>
                     <span class="text-danger semi-bold">Dropped</span>
 
