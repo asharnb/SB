@@ -54,9 +54,6 @@
 
         });
 
-        setTimeout(function(){
-            document.getElementById('msg-up').innerHTML = '';
-        }, 3300);
 
     }
 

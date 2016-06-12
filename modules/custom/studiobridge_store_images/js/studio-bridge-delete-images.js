@@ -85,8 +85,18 @@
                 }
 
             },
-            error: function(){
-                alert('Failed!');
+            error: function(xhr, status, error) {
+              var err = eval("(" + xhr.responseText + ")");
+              alert(err.Message);
+              // swal({
+              //     title: "Delete Failed",
+              //     text: "There was an error deleting, please try again.",
+              //     type: "error",
+              //     showCancelButton: false,
+              //     confirmButtonColor: "#DD6B55",
+              //     confirmButtonText: "OK",
+              //     closeOnConfirm: true
+              // });
             }
 
         });
