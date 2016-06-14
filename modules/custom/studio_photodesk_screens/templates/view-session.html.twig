@@ -234,8 +234,11 @@ total_images: Total no.of images in this session - {{ total_images }} * * * @ing
       <li class="">
         <a href="#tab-reports" data-toggle="tab" aria-expanded="false">Report(s)</a>
       </li>
+      {% if user.hasPermission('administrator') == true %}
+          <a href="#tab-analysis" data-toggle="tab" aria-expanded="true">Analysis</a>
+      {% endif %}
       <!-- <li class="">
-        <a href="#tab-log" data-toggle="tab" aria-expanded="true">Log</a>
+
       </li> -->
 
     </ul>
@@ -386,8 +389,8 @@ total_images: Total no.of images in this session - {{ total_images }} * * * @ing
                   <img src="/{{ directory }}/images/brands/brand_logo_{{ item.concept|lower }}.png" height="20px">
                   {% endif %}
                 </td>
-                  <td>{{ item.identifier }}</td>
                   <td>{{ item.colorvariant }}</td>
+                  <td>{{ item.identifier }}</td>
                   <td>
                     <span class="text-danger semi-bold">Dropped</span>
 
