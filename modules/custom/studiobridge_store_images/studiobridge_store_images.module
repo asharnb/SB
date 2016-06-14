@@ -156,7 +156,7 @@ function studiobridge_store_images_entity_insert(Drupal\Core\Entity\EntityInterf
     }
 
 
-    \Drupal::logger('Img count')->notice('<pre>'.print_r($images,true).'<pre>');
+    //\Drupal::logger('Img count')->notice('<pre>'.print_r($images,true).'<pre>');
 
     // Update file name for resequence.
     //    if ($field_base_product_id) {
