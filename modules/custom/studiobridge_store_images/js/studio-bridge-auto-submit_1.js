@@ -3,29 +3,45 @@
      var identifier = document.getElementById('edit-identifier-hidden').value;
         //alert(identifier)
      if(identifier != ''){
-        setInterval(function() {
+        //setInterval(function() {
             var rand = Math.floor((Math.random() * 1000000) + 1);
             var identifier = document.getElementById('edit-identifier-hidden').value;
-            triggerit(identifier, rand);
+            //triggerit(identifier, rand);
+            trigger_first();
             //document.getElementById('views-exposed-form-individual-project-view-page-1').submit();
 
-        }, 250);
+        //}, 100);
          var rand = Math.floor((Math.random() * 1000000) + 1);
-         triggerit(identifier, rand);
+         //triggerit(identifier, rand);
 
      }else{
          //document.getElementById('studio-img-container').innerHTML = 'No Product Scanned';
-         setInterval(function() {
+         //setInterval(function() {
 
              var identifier = document.getElementById('edit-identifier-hidden').value;
              if(identifier != ''){
                 var rand = Math.floor((Math.random() * 1000000) + 1);
-                triggerit(identifier, rand);
+                //triggerit(identifier, rand);
+                 trigger_first();
              }
 
-         }, 250);
+         //}, 100);
      }
+
+
+
     });
+
+    function trigger_first(){
+
+        setTimeout(just,200);
+    }
+
+    function just(){
+        var rand = Math.floor((Math.random() * 1000000) + 1);
+        var identifier = document.getElementById('edit-identifier-hidden').value;
+        triggerit(identifier, rand);
+    }
 
     function triggerit(identifier, rand){
         $.get(Drupal.url('live-shoot-image-container/' + identifier + "/"+ rand +"?_format=json"), function(data, status){
@@ -54,7 +70,7 @@
 
             //console.log(data.content);
         });
-
+        trigger_first();
     }
 
     function append_img(img,fid) {
