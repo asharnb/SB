@@ -319,7 +319,7 @@ class StudioBridgeLiveShootingForm extends FormBase {
 
 
       }
-    }  
+    }
 
     $form['images'] = array(
       '#images' => $array_images,

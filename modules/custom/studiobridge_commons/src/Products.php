@@ -146,18 +146,25 @@ Class Products {
     // Get uid of logged in user.
     $uid = $user->id();
     if (is_object($product)) {
+
+      //todo:Remove this fix after resolved
+      //Temp Fix for Space to hyphen
+      $temp_fix_base_product_id = str_replace(" ", "-","$product->base_product_id");
+      $temp_fix_color_variant = str_replace(" ", "-","$product->color_variant");
+
+
       $values = array(
         'nid' => NULL,
         'type' => 'products',
         'title' => $identifier,
         'uid' => $uid,
         'status' => TRUE,
-        'field_base_product_id' => array('value' => $product->base_product_id),
+        'field_base_product_id' => array('value' => $temp_fix_base_product_id),
         'field_style_family' => array('value' => $product->style_no),
         'field_concept_name' => array('value' => $product->concept),
         'field_gender' => array('value' => $product->gender),
         'field_description' => array('value' => $product->description),
-        'field_color_variant' => array('value' => $product->color_variant), // todo: may be multiple
+        'field_color_variant' => array('value' => $temp_fix_color_variant), // todo: may be multiple
         'field_color_name' => array('value' => $product->color_name), //  todo: may be multiple
         'field_size_name' => array('value' => $product->size_name), // todo: may be multiple
         'field_size_variant' => array('value' => $product->size_variant), // todo: may be multiple

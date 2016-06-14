@@ -42,9 +42,9 @@ total_images: Total no.of images in this session - {{ total_images }} * * * @ing
 
 {% if session.field_status.0.value == 'closed' and total_count == 0  %}
   {% set status_class = '<span class="text-danger"><i class=""></i> Session Cancelled</span>' %}
-{% elseif session.field_status.0.value == 'closed' and result.unmapped.0.unmappedcount > 0   %}
-  {% set status_class = '<span class="text-danger"><i class=""></i>'~ result.unmapped.0.unmappedcount ~' items are unmapped</span>' %}
-{% elseif session.field_status.0.value == 'closed' and result.unmapped.0.unmappedcount == 0  and total_count > 0 %}
+{% elseif session.field_status.0.value == 'closed' and unmapped_products|length > 0   %}
+  {% set status_class = '<span class="text-danger"><i class=""></i>'~ unmapped_products|length ~' items are unmapped</span>' %}
+{% elseif session.field_status.0.value == 'closed' and unmapped_products|length == 0  and total_count > 0 %}
     {% set status_class = '<span class="text-success"><i class=""></i> Session Complete</span>' %}
 {% endif %}
 

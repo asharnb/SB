@@ -347,7 +347,6 @@ class StudioProducts implements StudioProductsInterface {
     // todo : for now external resource is public, but it might be changed to auth.
 
     $url = "http://beta.contentcentral.co/service/product-data?_format=json&product_identifier=$input";
-    //$url = "http://staging.dreamcms.me/service/product-data?sku_id=$input";
     $response = \Drupal::httpClient()
       ->get($url, [
         'auth' => ['demouser', 'demouser'],
