@@ -109,14 +109,14 @@
             {% endif %}
           </td>
           <td>
-            <img src="/{{directory}}/images/users/{{ random(['niranjan', 'vikas', 'anahita', 'moosa', 'azhar']) }}.jpg" class="img-circle-table " alt="niranjan">
+            <img src="/{{directory}}/images/users/{{result.photographer|lower|replace({".": "_" , " " : "_"})}}.jpg" class="img-circle-table " alt="{{ result.photographer }}">
             <span style="display:none;">{{ result.photographer }}</span>
             {% if not result.vm == '' %}
-              <img src="/{{directory}}/images/users/{{ random(['disha', 'rebecca']) }}.jpg" class="img-circle-table " alt="ashar">
+              <img src="/{{directory}}/images/users/{{result.vm|lower|replace({".": "_" , " " : "_"})}}.jpg" class="img-circle-table " alt="{{ result.vm }}">
               <span style="display:none;">{{ result.vm }}</span>
             {% endif %}
             {% if not result.stylist == '' %}
-              <img src="/{{directory}}/images/users/{{ random(['althea', 'rinki']) }}.jpg" class="img-circle-table " alt="aqeel">
+              <img src="/{{directory}}/images/users/{{result.stylist|lower|replace({".": "_" , " " : "_"})}}.jpg" class="img-circle-table " alt="{{ result.stylist }}">
               <span style="display:none;">{{ result.stylist }}</span>
             {% endif %}
           </td>

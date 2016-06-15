@@ -163,7 +163,7 @@ total_images: Total no.of images in this session - {{ total_images }} * * * @ing
           <div class="col-sm-6 no-padding">
             <div class="social-avatar">
               <a href="" class="pull-left">
-                <img src="/{{directory}}/images/users/niranjan.jpg" class="img-circle" alt="profile">
+                <img src="/{{directory}}/images/users/{{session_users.photographer|lower|replace({".": "_" , " " : "_"})}}.jpg" class="img-circle" alt="{{session_users.photographer|title}}">
               </a>
               <div class="media-body p-xs">
                 <h6 class="no-margins bold">
@@ -178,7 +178,7 @@ total_images: Total no.of images in this session - {{ total_images }} * * * @ing
           <div class="col-sm-6 no-padding">
             <div class="social-avatar">
               <a href="" class="pull-left m-r-5">
-                <img src="/{{directory}}/images/users/rebecca.jpg" class="img-circle" alt="profile">
+                <img src="/{{directory}}/images/users/{{session_users.stylist|lower|replace({".": "_" , " " : "_"})}}.jpg" class="img-circle" alt="{{session_users.stylist|title}}">
               </a>
               <div class="media-body p-xs">
                 <h6 class="no-margins bold">
@@ -193,7 +193,7 @@ total_images: Total no.of images in this session - {{ total_images }} * * * @ing
           <div class="col-sm-6 no-padding">
             <div class="social-avatar">
               <a href="" class="pull-left">
-                <img src="/{{directory}}/images/users/cia.jpg" class="img-circle" alt="profile">
+                <img src="/{{directory}}/images/users/{{session_users.vm|lower|replace({".": "_" , " " : "_"})}}.jpg" class="img-circle" alt="{{session_users.vm|title}}">
               </a>
               <div class="media-body p-xs">
                 <h6 class="no-margins bold">
