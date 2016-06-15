@@ -90,14 +90,13 @@
 
 
   <div class="userlogged clearfix">
-
+    {{kint(user)}}
     <li class="account">
         <a class="account">
           <img src="/themes/studiobridge/images/users/{{ user.account.name|lower|replace({".": "_" , " " : "_"}) }}.jpg" alt="me" class="img-circle ">
           <div class="pull-left p-r-10 p-t-5 m-l-10 font-heading">
               <span class="semi-bold">{{ user.account.name|title|replace({".": " " , "_" : " "}) }}<br>
               <span class="text-master">{{ user.roles.1|title|replace({".": " " , "_" : " "}) }}</span>
-
           </div>
 </a>
 
