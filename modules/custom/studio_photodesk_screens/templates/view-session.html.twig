@@ -167,7 +167,7 @@ total_images: Total no.of images in this session - {{ total_images }} * * * @ing
               </a>
               <div class="media-body p-xs">
                 <h6 class="no-margins bold">
-                  {{session_users.photographer|title}}
+                  {{session_users.photographer|replace({".": " " , "_" : " "})|title}}
                 </h6>
                 <small class="text-muted">Photographer</small>
               </div>
@@ -182,7 +182,7 @@ total_images: Total no.of images in this session - {{ total_images }} * * * @ing
               </a>
               <div class="media-body p-xs">
                 <h6 class="no-margins bold">
-                  {{session_users.stylist|title}}
+                  {{session_users.stylist|replace({".": " " , "_" : " "})|title}}
                 </h6>
                 <small class="text-muted">Stylist</small>
               </div>
@@ -197,7 +197,7 @@ total_images: Total no.of images in this session - {{ total_images }} * * * @ing
               </a>
               <div class="media-body p-xs">
                 <h6 class="no-margins bold">
-                  {{session_users.vm|title}}
+                  {{session_users.vm|replace({".": " " , "_" : " "})|title}}
                 </h6>
                 <small class="text-muted">Visual Merchandiser</small>
               </div>

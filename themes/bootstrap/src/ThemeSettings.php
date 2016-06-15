@@ -187,7 +187,7 @@ class ThemeSettings extends Config {
 
     // Generate the path to the favicon.
     if ($config->get('features.favicon')) {
-      $favicon_url = $theme->getPath() . '/favicon.ico';
+      $favicon_url = $theme->getPath() . '/favicon.ico?v=2';
       if ($config->get('favicon.use_default') && file_exists($favicon_url)) {
         $config->set('favicon.url', file_create_url($favicon_url));
       }
