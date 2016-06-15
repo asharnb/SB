@@ -70,7 +70,7 @@ public function content()
   //get all nodes of session type
   $result = \Drupal::entityQuery('node')
   ->condition('type', 'sessions')
-  ->condition('field_photographer', $uid)
+  //->condition('field_photographer', $uid)
   ->sort('created', 'DESC')
   ->range(0, 10000)
   ->execute();
