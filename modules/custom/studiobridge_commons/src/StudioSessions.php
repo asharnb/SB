@@ -427,4 +427,54 @@ class StudioSessions implements StudioSessionsInterface {
     return $secs;
   }
 
+  /*
+ * Helper functions to get products of sessions.
+ */
+  public function GetTodaySessions(){
+    $day_start = strtotime(date('Y-m-d 00:00:00', time()));
+    $day_end = strtotime(date('Y-m-d 23:59:59', time()));
+
+    $result = \Drupal::entityQuery('node')
+      ->condition('type', array('sessions'), 'IN')
+      ->sort('created', 'DESC')
+      ->condition('created', array($day_start, $day_end), 'BETWEEN')
+      ->range(0, 1)
+      ->execute();
+
+    return $result;
+  }
+
+  /*
+   * Helper function, to get unmapped products from today sessions.
+   */
+  public function GetTodaySessionUnMappedProducts(){
+    $sessions = $this->GetTodaySessions();
+    $unmapped_products = array();
+    if($sessions){
+      $sessions = $this->nodeStorage->loadMultiple($sessions);
+      $pids = array();
+      foreach($sessions as $session){
+        $products = $session->field_product->getValue();
+        foreach($products as $product){
+          $pids[] = $product['target_id'];
+        }
+      }
+      unset($product);
+      $product_objs = array();
+      if($pids){
+        $product_objs = $this->nodeStorage->loadMultiple($pids);
+      }
+      if($product_objs){
+        foreach($product_objs as $product){
+          $bundle = $product->bundle();
+          if($bundle == 'unmapped_products'){
+            $unmapped_products[] = $product;
+          }
+        }
+      }
+    }
+
+    return $unmapped_products;
+  }
+
 }

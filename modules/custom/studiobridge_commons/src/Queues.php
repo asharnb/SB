@@ -44,6 +44,16 @@ class Queues {
     $queue->createItem($item);
   }
 
+  public static function CreateQueueProductMappingWithoutServer($sid, $server_product, $pid){
+    $queue_factory = \Drupal::service('queue');
+    /** @var QueueInterface $queue */
+    $queue = $queue_factory->get('studio_product_mapping_queue_'.$sid);
+    $item = new \stdClass();
+    $item->item = array('sid' => $sid,'server_product'=>$server_product, 'pid'=>$pid);
+    $item->operation =
+      $queue->createItem($item);
+  }
+
   public static function RunMappingQueues($sid){
     /** @var QueueInterface $queue */
     //$queue = $this->queueFactory->get('manual_node_publisher');
