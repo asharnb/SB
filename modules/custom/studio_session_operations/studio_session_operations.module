@@ -6,6 +6,7 @@
  */
 
 use Drupal\Core\Routing\RouteMatchInterface;
+use Drupal\studiobridge_commons\Queues;
 
 /**
  * Implements hook_help().
@@ -36,9 +37,69 @@ function studio_session_operations_mail($key, &$message, $params) {
   switch ($key) {
     case 'shootlist':
       $message['from'] = \Drupal::config('system.site')->get('mail');
-//      $message['subject'] = t('Article created: @title', array('@title' => $params['node_title']), $options);
+      // $message['subject'] = t('Article created: @title', array('@title' => $params['node_title']), $options);
       $message['subject'] = t('Session closed: @title', array('@title' => $params['node_title']), $options);
       $message['body'][] = $params['message'];
       break;
+  }
+}
+
+/**
+ * Implements hook_cron().
+ *
+ */
+function studio_session_operations_cron(){
+
+  // Get products of today sessions
+  // Load services as it is object context.
+  $StudioSessions = \Drupal::service('studio.sessions');
+  $today_products = $StudioSessions->GetTodaySessionUnMappedProducts();
+
+  // Build queues
+  $sid = rand(100000,999999);
+  studio_session_operations_build_queues($today_products, $sid);
+
+  // Run queues
+  Queues::RunMappingQueues($sid);
+}
+
+/*
+ * Helper functions to get products of sessions.
+ */
+function studio_session_operations_build_queues($unmapped_products, $sid){
+  $identifier = false;
+  if($unmapped_products){
+    foreach($unmapped_products as $product){
+
+      $title = $product->title->getValue();
+      if ($title) {
+        $identifier = $title[0]['value'];
+      }
+
+      if($identifier){
+        $StudioProducts = \Drupal::service('studio.products');
+        //$server_product = Products::getProductExternal($identifier);
+        $server_product = $StudioProducts->getProductExternal($identifier);
+        $server_product = json_decode($server_product);
+        if (!isset($server_product->msg)){
+
+          if (is_object($server_product)) {
+            studio_session_operations_node_covert($product,$server_product);
+            Queues::CreateQueueProductMapping($sid, $server_product, $product->id());
+          }
+
+        }
+      }
+    }
+  }
+}
+
+/*
+ * Helper function to convert unmapped to mapped products.
+ */
+function studio_session_operations_node_covert($unmappedProduct,$server_product){
+  if (is_object($server_product)) {
+    $unmappedProduct->type->setValue('products');
+    $unmappedProduct->save();
   }
 }
