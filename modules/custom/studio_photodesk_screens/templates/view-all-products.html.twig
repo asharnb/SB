@@ -62,7 +62,7 @@
             {% if result.field_concept_name.0.value == '' %}
             Not Available
             {% else %}
-            <img src="/{{directory}}/images/brands/brand_logo_{{result.field_concept_name.0.value|lower}}.png" height="20px">
+            <img src="/{{directory}}/images/brands/brand_logo_{{result.field_concept_name.0.value|lower|replace({" ": ""})}}.png" height="20px">
             <span style="display:none;">{{result.field_concept_name.0.value}}</span>
             {% endif %}
           </td>
