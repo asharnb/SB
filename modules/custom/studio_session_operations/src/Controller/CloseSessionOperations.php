@@ -183,14 +183,14 @@ class CloseSessionOperations extends ControllerBase {
     // Mapping of UnMapped Products
     $this->MapUnmappedProductsOperations();
 
-    // Images physical naming & folder structure
-    $this->ImageNameOperations($this->sid);
-
     // Automated emails  // Create shootlist
     $this->operations[] = array(array(get_class($this), 'AutomaticEmails'), array($this->sid, $this->session_node));
 
 
     $this->operations[] = array(array(get_class($this), 'closeSession'), array($this->session_node));
+
+    // Images physical naming & folder structure
+    $this->ImageNameOperations($this->sid);
 
     // Update end time to last scanned product.
     // todo: if last scanned product marked as draft ??
@@ -342,7 +342,7 @@ class CloseSessionOperations extends ControllerBase {
 
   public function ImageNameOperations($sid){
     foreach($this->products as $product){
-      $this->operations[] = array(array(get_class($this), 'PhysicalImageName'), array($product, $sid));
+      $this->operations[] = array(array(get_class($this), 'PhysicalImageName'), array($product->id(), $sid));
     }
   }
 
@@ -350,7 +350,7 @@ class CloseSessionOperations extends ControllerBase {
    *
    */
   public function PhysicalImageName($product, $sid){
-
+    $product = Node::load($product);
 
     $concept = 'InValidConcept';
     $color_variant = 'InValidColorVariant';

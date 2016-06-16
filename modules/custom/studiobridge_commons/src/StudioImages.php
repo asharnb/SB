@@ -158,4 +158,90 @@ Class StudioImages {
 
   }
 
+
+  public static function PhysicalImageName($product, $sid){
+
+    // $this->products = $this->nodeStorage->loadMultiple($this->pids);
+
+    $concept = 'InValidConcept';
+    $color_variant = 'InValidColorVariant';
+    $product_bundle = $product->bundle();
+
+    // Get base product id from mapped product.
+    // Get identifier from unmapped product.
+    if ($product_bundle == 'products') {
+      $field_base_product_id = $product->field_base_product_id->getValue();
+      if ($field_base_product_id) {
+        $field_base_product_id = $field_base_product_id[0]['value'];
+      }
+
+      $product_concept = $product->field_concept_name->getValue();
+      if($product_concept){
+        $concept = $product_concept[0]['value'];
+      }
+
+      $product_color_variant = $product->field_color_variant->getValue();
+      if($product_color_variant){
+        $color_variant = $product_color_variant[0]['value'];
+      }else{
+        $color_variant = $field_base_product_id;
+      }
+    }
+    elseif ($product_bundle == 'unmapped_products') {
+      $field_identifier = $product->field_identifier->getValue();
+      $title = $product->title->getValue();
+      if ($field_identifier) {
+        $field_base_product_id = $field_identifier[0]['value'];
+      }elseif ($title) {
+        $field_base_product_id = $title[0]['value'];
+      }
+
+      $concept = 'Unmapped';
+      $color_variant = $field_base_product_id;
+    }
+
+    // Get images field from product.
+    $images = $product->field_images->getValue();
+
+    // push to last in row.
+    $tag_img = \Drupal::state()->get('Image_tag' . '_' . $sid,false);
+
+    // make sure both values are set.
+    if ($field_base_product_id && $images) {
+      $i = 1;
+      foreach ($images as $img) {
+        // load file entity.
+        $file = File::load($img['target_id']);
+
+        $session_id = $sid;
+
+        if ($file && $session_id) {
+
+          $tag = $file->field_tag->getValue();
+          $tagged = $tag[0]['value'];
+
+          //$file_name = $file->filename->getValue();
+          if($tagged){
+            StudioImages::ImgUpdate($file, $sid,$field_base_product_id,$i,$concept, $color_variant, true);
+            continue;
+          }else{
+            StudioImages::ImgUpdate($file, $session_id,$field_base_product_id,$i,$concept, $color_variant,false);
+            $i++;
+          }
+
+        }
+      }
+
+//      // update tag image to last.
+      $a =1;
+//      if($tag_img){
+//        StudioImages::ImgUpdate(File::load($tag_img), $sid,$field_base_product_id,$i,$concept, $color_variant, true);
+//      }
+
+    }
+
+
+  }
+
+
 }
