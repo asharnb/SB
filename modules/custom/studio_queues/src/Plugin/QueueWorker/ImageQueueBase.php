@@ -51,7 +51,7 @@ abstract class ImageQueueBase extends QueueWorkerBase implements ContainerFactor
   public function processItem($data, $fids = array()) {
     //    $item->item = array('sid' => $sid,'server_product'=>$server_product, $pid);
     $this->ConvertNode($data->item['sid'],$data->item['server_product'],$data->item['pid']);
-    drupal_set_message('Yes called here in queue base.');
+    //drupal_set_message('Yes called here in queue base.');
   }
 
   public function ConvertNode($sid, $server_product, $pid){

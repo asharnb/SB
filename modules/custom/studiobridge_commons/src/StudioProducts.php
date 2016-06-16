@@ -515,6 +515,10 @@ class StudioProducts implements StudioProductsInterface {
       $session_id = $check_sid;
     }
 
+    if(!$session_id){
+      return;
+    }
+
     $session = array(array('target_id' => $session_id));
     $color_variant = NULL;
     $concept = NULL;
