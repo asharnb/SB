@@ -99,11 +99,11 @@
 
             {% elseif result.concepts|length == 1 %}
 
-                <img src="/{{directory}}/images/brands/brand_logo_{{result.concepts.0.concept|lower}}.png" height="20px" alt="{{result.concepts.0.concept|lower}}">
+                <img src="/{{directory}}/images/brands/brand_logo_{{result.concepts.0.concept|lower}}.png" height="20px" alt="{{result.concepts.0.concept|lower|replace({" ": ""})}}">
                 <span style="display:none;">{% for item in result.concepts %}{{item.concept}}{% endfor %}</span>
             {% elseif result.concepts|length >= 2 %}
 
-                <img src="/{{directory}}/images/brands/brand_logo_{{result.concepts.0.concept|lower}}.png" height="20px" alt="{{result.concepts.0.concept|lower}}">
+                <img src="/{{directory}}/images/brands/brand_logo_{{result.concepts.0.concept|lower}}.png" height="20px" alt="{{result.concepts.0.concept|lower|replace({" ": ""})}}">
                 <span class="text text-complete bold" data-toggle="tooltip" title="{% for item in result.concepts|slice(1) %}{{item.concept|title}}{% if not loop.last %},{% endif %}{% endfor %}">   +{{result.concepts|length -1}}</span>
                 <span style="display:none;">{% for item in result.concepts %}{{item.concept}}{% endfor %}</span>
             {% endif %}
