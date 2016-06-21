@@ -1,7 +1,7 @@
 favicon:
   mimetype: image/vnd.microsoft.icon
   path: ''
-  url: 'http://studiobridge.old/themes/studiobridge/favicon.ico'
+  url: 'http://localhost/sbtest/themes/studiobridge/favicon.ico'
   use_default: 1
 schema: '8000'
 features:
@@ -14,3 +14,4 @@ logo:
   url: ''
   use_default: 1
 cdn_provider: ''
+forms_required_has_error: 0
