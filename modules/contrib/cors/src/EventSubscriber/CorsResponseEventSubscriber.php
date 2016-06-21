@@ -79,40 +79,38 @@ class CorsResponseEventSubscriber implements EventSubscriberInterface {
         'Access-Control-Allow-Headers' => array(),
       ),
     );
-if($domains){
-  foreach ($domains as $path => $settings) {
-    $settings = explode("|", $settings);
-    $page_match = $this->pathMatcher->matchPath($current_path, $path);
-    if ($current_path != $path_info) {
-      $page_match = $page_match || $this->pathMatcher->matchPath($path_info, $path);
-    }
-    if ($page_match) {
-      if (!empty($settings[0])) {
-        $origins = explode(',', trim($settings[0]));
-        foreach ($origins as $origin) {
-          if ($origin === '<mirror>') {
-            if (!empty($request_headers['Origin'])) {
-              $headers['all']['Access-Control-Allow-Origin'][] = $request_headers['Origin'];
+    foreach ($domains as $path => $settings) {
+      $settings = explode("|", $settings);
+      $page_match = $this->pathMatcher->matchPath($current_path, $path);
+      if ($current_path != $path_info) {
+        $page_match = $page_match || $this->pathMatcher->matchPath($path_info, $path);
+      }
+      if ($page_match) {
+        if (!empty($settings[0])) {
+          $origins = explode(',', trim($settings[0]));
+          foreach ($origins as $origin) {
+            if ($origin === '<mirror>') {
+              if (!empty($request_headers['Origin'])) {
+                $headers['all']['Access-Control-Allow-Origin'][] = $request_headers['Origin'];
+              }
+            }
+            else {
+              $headers['all']['Access-Control-Allow-Origin'][] = $origin;
             }
           }
-          else {
-            $headers['all']['Access-Control-Allow-Origin'][] = $origin;
-          }
-        }
 
-      }
-      if (!empty($settings[1])) {
-        $headers['OPTIONS']['Access-Control-Allow-Methods'] = explode(',', trim($settings[1]));
-      }
-      if (!empty($settings[2])) {
-        $headers['OPTIONS']['Access-Control-Allow-Headers'] = explode(',', trim($settings[2]));
-      }
-      if (!empty($settings[3])) {
-        $headers['all']['Access-Control-Allow-Credentials'] = explode(',', trim($settings[3]));
+        }
+        if (!empty($settings[1])) {
+          $headers['OPTIONS']['Access-Control-Allow-Methods'] = explode(',', trim($settings[1]));
+        }
+        if (!empty($settings[2])) {
+          $headers['OPTIONS']['Access-Control-Allow-Headers'] = explode(',', trim($settings[2]));
+        }
+        if (!empty($settings[3])) {
+          $headers['all']['Access-Control-Allow-Credentials'] = explode(',', trim($settings[3]));
+        }
       }
     }
-  }
-}
 
     $response = $event->getResponse();
 
@@ -131,7 +129,7 @@ if($domains){
     }
 
     //\Drupal::logger('studiobridge_store_images')->notice('<pre>'.print_r($headers,true).'<pre>');
-    //$response->headers->set('Access-Control-Allow-Origin', '*', TRUE);
+    $response->headers->set('Access-Control-Allow-Origin', '*', TRUE);
 
   }
 
