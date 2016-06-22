@@ -48,11 +48,6 @@
 
                 var imgWrapper = imgContainer(img,id);
 
-                //img.addEventListener("click", myFunction);
-
-                // Add the new image to the film roll
-                //filmroll.appendChild(img)
-
                 filmroll.appendChild(imgWrapper);
 
                 var fullview = document.getElementById('warehouse-fullview-'+id);

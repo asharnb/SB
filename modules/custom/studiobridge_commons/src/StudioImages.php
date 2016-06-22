@@ -139,7 +139,7 @@ Class StudioImages {
     if($tag){
       $filename = 'Tag.jpg';
     }else{
-      $filename = $field_base_product_id . '_' . $i . ".$filemime";
+      $filename = $color_variant . '_' . $i . ".$filemime";
     }
 
     $dir = $session_id.'/'.$concept.'/'.$color_variant;
