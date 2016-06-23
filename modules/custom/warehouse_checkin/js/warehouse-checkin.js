@@ -194,7 +194,7 @@
 
             },
             error: function(){
-                alert('Failed! there was an issue in server, try to reload the page. Please contact administrator if fialed again.');
+                alert('Failed! there was an issue in server, try to reload the page. Please contact administrator if it fails again.');
             }
 
         });

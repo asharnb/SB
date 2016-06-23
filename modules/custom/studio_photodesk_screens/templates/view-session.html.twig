@@ -234,12 +234,12 @@ total_images: Total no.of images in this session - {{ total_images }} * * * @ing
       <li class="">
         <a href="#tab-reports" data-toggle="tab" aria-expanded="false">Report(s)</a>
       </li>
+      <li class="">
       {% if user.hasPermission('administrator') == true %}
           <a href="#tab-analysis" data-toggle="tab" aria-expanded="true">Analysis</a>
       {% endif %}
-      <!-- <li class="">
 
-      </li> -->
+      </li>
 
     </ul>
 
@@ -252,6 +252,7 @@ total_images: Total no.of images in this session - {{ total_images }} * * * @ing
         <table id="dt_mapped" class="table table-responsive table-hover" width="100%">
           <thead>
             <tr>
+              <th></th>
               <th>Concept</th>
               <th>Style ID</th>
               <th>Color Variant</th>
@@ -259,6 +260,7 @@ total_images: Total no.of images in this session - {{ total_images }} * * * @ing
               <th>QC Status</th>
               <th>Image Count</th>
               <th></th>
+
             </tr>
           </thead>
           <tbody>
@@ -274,8 +276,8 @@ total_images: Total no.of images in this session - {{ total_images }} * * * @ing
             {% set image_count_class = 'bold text-success' %}
             {% endif %}
             <tr>
-              <td>
-                <img src="/{{ directory }}/images/brands/brand_logo_{{ item.field_concept_name.0.value|lower|replace({" ": ""}) }}.png" height="20px"></td>
+                <td><i class="fa fa-circle {{image_count_class}}"></i></td>
+                <td><img src="/{{ directory }}/images/brands/brand_logo_{{ item.field_concept_name.0.value|lower|replace({" ": ""}) }}.png" height="20px"></td>
                 <td>{{ item.field_style_family.0.value }}</td>
                 <td>{{ item.title.0.value }}</td>
                 <td>
@@ -293,6 +295,8 @@ total_images: Total no.of images in this session - {{ total_images }} * * * @ing
                 <td class="text-align-center">
                   <a target="_blank" class="btn btn-xs" href="/view-product/{{item.nid.0.value }}">View</a>
                 </td>
+
+
 
               </tr>
               {% endif %}
