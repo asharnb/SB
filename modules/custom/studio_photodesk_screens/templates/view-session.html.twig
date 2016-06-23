@@ -276,7 +276,7 @@ total_images: Total no.of images in this session - {{ total_images }} * * * @ing
             {% set image_count_class = 'bold text-success' %}
             {% endif %}
             <tr>
-                <td><i class="fa fa-circle text-success"></i></td>
+                <td><i class="fa fa-circle {{image_count_class}}"></i></td>
                 <td><img src="/{{ directory }}/images/brands/brand_logo_{{ item.field_concept_name.0.value|lower|replace({" ": ""}) }}.png" height="20px"></td>
                 <td>{{ item.field_style_family.0.value }}</td>
                 <td>{{ item.title.0.value }}</td>
