@@ -64,7 +64,8 @@
             });
 
             function videoError(e) {
-                // do something
+                  
+
             }
 
         }
