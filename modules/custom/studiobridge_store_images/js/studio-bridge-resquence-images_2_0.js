@@ -18,8 +18,7 @@
     }
 
 
-    function patchNode(csrfToken, node, nid) {
-        //console.log(node);
+    function patchNode(csrfToken, node, nid, unwanted) {
         $.ajax({
             url: Drupal.url('node/' + nid + '?_format=hal_json'),
             method: 'PATCH',
@@ -37,36 +36,9 @@
                     closeOnConfirm: true,
                     timer: 1000
                 });
-                // update whole img container
-                var container, inputs, index;
-                var dup_holder = [];
 
-                // Get the container element
-                container = document.getElementById('imagecontainer');
-
-                // Find its child `input` elements
-                inputs = container.getElementsByTagName('input');
-
-                var inc = 1;
-                for (index = 0; index < inputs.length; ++index) {
-                    // deal with inputs[index] element.
-                    if(inputs[index].type == 'hidden'){
-
-                        if(dup_holder.indexOf(inputs[index].value) == '-1'){
-                            var seq = document.getElementById('seq-'+inputs[index].value);
-                            if(seq){
-                                document.getElementById('seq-'+inputs[index].value).innerHTML = inc;
-                                ++inc;
-
-                                // todo : get img file name
-                                var rand = Math.floor((Math.random() * 1000000) + 1);
-                                var fid =  inputs[index].value;
-                            }
-
-                        }
-                        dup_holder.push(inputs[index].value);
-                    }
-                }
+                deleteUnWanted(unwanted);
+                reSeq();
 
             },
             error: function(){
@@ -90,7 +62,6 @@
         inputs = container.getElementsByTagName('input');
         for (index = 0; index < inputs.length; ++index) {
             // deal with inputs[index] element.
-            //console.log(inputs[index].value);
             if(inputs[index].type == 'hidden'){
                 if(dup_holder.indexOf(inputs[index].value) == '-1'){
                     if(inputs[index].value){
@@ -107,20 +78,13 @@
 
             var fids_comma = imgsOriginal.join();
             var rand = Math.floor((Math.random() * 1000000) + 1);
-            //console.log(fids_comma);
 
             checkFilesExist(function (fileObj) {
 
-                console.log('first here ----');
-                console.log(fileObj);
-                //document.getElementById('seq-img-'+ fid).innerHTML = filename;
-
                 var imgs = [];
                 var fids = fileObj.fids;
-//                for (index = 0; index < Object.keys(fids).length; ++index) {
-//                    var fid =  fids[index];
-//                    imgs.push({"target_id": fid});
-//                }
+                var unwanted = fileObj.unwanted;
+
 
                 for(var index in fids) {
                     if (fids.hasOwnProperty(index)) {
@@ -130,7 +94,6 @@
                     }
                 }
 
-                console.log(imgs);
                 if(imgs.length > 1){
                     var Node1 = {
                         _links: {
@@ -145,7 +108,7 @@
                     };
 
 
-                    post_now(Node1);
+                    post_now(Node1, unwanted);
 
                 }
                 else{
@@ -159,6 +122,8 @@
                         closeOnConfirm: true
                     });
 
+                    deleteUnWanted(unwanted);
+                    reSeq();
                 }
 
             }, rand, fids_comma);
@@ -182,16 +147,55 @@
         update_w();
     });
 
-    function post_now(Node1){
-        console.log(Node1);
+    function post_now(Node1, unwanted){
+        //console.log(Node1);
         getCsrfToken(function (csrfToken) {
             var nid = document.getElementById('edit-identifier-nid').value;
             if (nid) {
-                console.log(nid+'kkkkkk');
-                patchNode(csrfToken, Node1, nid);
-
+                patchNode(csrfToken, Node1, nid, unwanted);
             }
         });
     }
+
+    function deleteUnWanted(unwanted){
+        var del = [];
+        unwanted.forEach(function(entry) {
+            document.getElementById("warpper-img-"+entry).remove();
+        });
+    }
+
+    function reSeq(){
+        // update whole img container
+        var container, inputs, index;
+        var dup_holder = [];
+
+        // Get the container element
+        container = document.getElementById('imagecontainer');
+
+        // Find its child `input` elements
+        inputs = container.getElementsByTagName('input');
+
+        var inc = 1;
+        for (index = 0; index < inputs.length; ++index) {
+            // deal with inputs[index] element.
+            if(inputs[index].type == 'hidden'){
+
+                if(dup_holder.indexOf(inputs[index].value) == '-1'){
+                    var seq = document.getElementById('seq-'+inputs[index].value);
+                    if(seq){
+                        document.getElementById('seq-'+inputs[index].value).innerHTML = inc;
+                        ++inc;
+
+                        // todo : get img file name
+                        var rand = Math.floor((Math.random() * 1000000) + 1);
+                        var fid =  inputs[index].value;
+                    }
+
+                }
+                dup_holder.push(inputs[index].value);
+            }
+        }
+    }
+
 
 })(jQuery);

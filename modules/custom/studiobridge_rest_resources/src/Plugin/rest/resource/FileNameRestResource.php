@@ -115,6 +115,7 @@ class FileNameRestResource extends ResourceBase {
         $record = $this->database->select('file_managed', 'f')->fields('f', ['fid'])->condition('f.fid', $fids_get, 'IN')->execute();
         $records = $record->fetchAll();
         $fids = array();
+        $unwanted = array();
         $fids_final = $fids_get;
 
         if($record){
@@ -125,13 +126,14 @@ class FileNameRestResource extends ResourceBase {
         if($fids){
           foreach($fids_get as $key=>$f){
             if(!in_array($f,$fids)){
+              $unwanted[] = $f;
               unset($fids_final[$key]);
             }
           }
         }
 
         if (!empty($fids)) {
-          return new ResourceResponse(array('fids'=>$fids_final));
+          return new ResourceResponse(array('fids'=>$fids_final,'unwanted'=>$unwanted));
         }
         throw new NotFoundHttpException(t('File entry with ID @id was not found', array('@id' => $fid)));
       }
