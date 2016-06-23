@@ -49,6 +49,14 @@ file_entity.settings:
 
 field.formatter.settings.file_image:
   type: field.formatter.settings.image
+  label: 'Image formatter for file entity settings'
+  mapping:
+    title:
+      type: string
+      label: 'Title field'
+    alt:
+      type: string
+      label: 'Alt field'
 
 field.formatter.settings.file_size:
   type: mapping
@@ -57,6 +65,9 @@ field.formatter.settings.file_download_link:
   type: mapping
   label: 'File download link display format settings'
   mapping:
+    access_message:
+      type: string
+      label: 'Access message'
     text:
       type: string
       label: 'Link text'
@@ -119,3 +130,23 @@ action.configuration.file_temporary_action:
 field.widget.settings.file_editable:
   type: field.widget.settings.file_generic
   label: 'File format settings'
+
+field.widget.settings.file_entity_browser:
+  type: mapping
+  label: 'File entity browser settings'
+  mapping:
+    entity_browser:
+      type: string
+      label: 'Entity browser'
+    field_widget_edit:
+      type: boolean
+      label: 'Display edit button'
+    field_widget_remove:
+      type: boolean
+      label: 'Display remove button'
+    open:
+      type: boolean
+      label: 'Show widget details as open by default'
+    view_mode:
+      type: string
+      label: 'View mode'

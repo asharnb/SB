@@ -1,6 +1,6 @@
 uuid: d97d8d7d-5683-421e-8c1d-9efd7f18ac6a
 langcode: en
-status: true
+status: false
 dependencies:
   theme:
     - studiobridge
@@ -8,8 +8,8 @@ _core:
   default_config_hash: 1TQP4b3ZnlzvIH9bj6cpCz_SyUHdJjLQkZnHpikjjhw
 id: studiobridge_page_title
 theme: studiobridge
-region: header
-weight: 0
+region: '-1'
+weight: 1
 provider: null
 plugin: page_title_block
 settings:
