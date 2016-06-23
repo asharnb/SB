@@ -2,7 +2,7 @@ studio-bridge-view-product:
   version: VERSION
   js:
     js/studio-bridge-auto-submit.js: {}
-    js/studio-bridge-resquence-images.js: {}
+    js/studio-bridge-resquence-images_2_0.js: {}
     js/studio-bridge-delete-images.js: {}
     js/studio-bridge-drop-product.js: {}
     js/studio-bridge-tag-image.js: {}

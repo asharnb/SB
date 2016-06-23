@@ -16,6 +16,7 @@ use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use \Drupal\node\Entity\Node;
 
 /**
  * Provides a resource to get view modes by entity and bundle.
@@ -107,6 +108,34 @@ class FileNameRestResource extends ResourceBase {
    *   Throws exception expected.
    */
   public function get($fid, $random) {
+
+    if(!empty($_GET['fids'])){
+      if ($fid && $random) {
+        $fids_get = explode(',',$_GET['fids']);
+        $record = $this->database->select('file_managed', 'f')->fields('f', ['fid'])->condition('f.fid', $fids_get, 'IN')->execute();
+        $records = $record->fetchAll();
+        $fids = array();
+        $fids_final = $fids_get;
+
+        if($record){
+          foreach($records as $each){
+            $fids[] =$each->fid;
+          }
+        }
+        if($fids){
+          foreach($fids_get as $key=>$f){
+            if(!in_array($f,$fids)){
+              unset($fids_final[$key]);
+            }
+          }
+        }
+
+        if (!empty($fids)) {
+          return new ResourceResponse(array('fids'=>$fids_final));
+        }
+        throw new NotFoundHttpException(t('File entry with ID @id was not found', array('@id' => $fid)));
+      }
+    }
 
     // Return filename.
     if ($fid && $random) {

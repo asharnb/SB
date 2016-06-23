@@ -9,7 +9,7 @@
             triggerit(identifier, rand);
             //document.getElementById('views-exposed-form-individual-project-view-page-1').submit();
 
-        }, 250);
+        }, 350);
          var rand = Math.floor((Math.random() * 1000000) + 1);
          triggerit(identifier, rand);
 
@@ -23,7 +23,7 @@
                 triggerit(identifier, rand);
              }
 
-         }, 250);
+         }, 350);
      }
     });
 
