@@ -9,15 +9,6 @@
             });
     }
 
-    function getFileNameDelete(callback, fid) {
-
-        $.get(Drupal.url('filename/'+ fid +'/'+ Math.floor((Math.random() * 1000000) + 1) +'?_format=json'))
-            .done(function (data) {
-                //document.getElementById('seq-img-'+ fid).innerHTML = data.filename;
-                callback(data.filename);
-            });
-    }
-
     function patchNodeDelete(csrfToken, node, nid, unwanted) {
 
         $.ajax({
@@ -79,10 +70,6 @@
                     // todo : get img file name
                     var rand = Math.floor((Math.random() * 1000000) + 1);
                     var fid =  inputs2[index2].value;
-                    getFileNameDelete(function (filename) {
-                        //console.log(csrfToken);
-                        //document.getElementById('seq-img-'+ fid).innerHTML = filename;
-                    }, fid);
 
                 }
 
