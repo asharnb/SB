@@ -18,7 +18,7 @@
             });
     }
 
-    function patchNodeDelete(csrfToken, node, nid) {
+    function patchNodeDelete(csrfToken, node, nid, unwanted) {
 
         $.ajax({
             url: Drupal.url('node/' + nid + '?_format=hal_json'),
@@ -61,6 +61,8 @@
                     console.log(entry);
                     document.getElementById(entry).remove();
                 });
+
+                deleteUnWanted(unwanted);
 
                 // Update image wrappers.
                 container = document.getElementById('imagecontainer');
@@ -106,6 +108,7 @@
 
         var container, inputs, index;
         var imgs = [];
+        var imgsOriginal = [];
 
         // Get the container element
         container = document.getElementById('imagecontainer');
@@ -117,37 +120,92 @@
             // deal with inputs[index] element.
             //console.log(inputs[index].value);
             if(!(inputs[index].checked)){
-                imgs.push({"target_id": inputs[index].value});
+                //imgs.push({"target_id": inputs[index].value});
+                var fid =  inputs[index].value;
+                if(fid){
+                    imgsOriginal.push(fid);
+                }
             }else{
                 ++unchecked;
             }
         }
-        console.log(imgs);
-        //var y = document.getElementsByClassName("form-checkbox");
-        //alert(y[1].checked +'--'+ y[1].value);
 
-        var Node_imgs = {
-            _links: {
-                type: {
-                    href: Drupal.url.toAbsolute(drupalSettings.path.baseUrl + 'rest/type/node/products')
-                }
-            },
-            type: {
-                target_id: 'products'
-            },
-            field_images: imgs
-        };
-
-        console.log(Node_imgs);
 
         if(unchecked){
-            //document.getElementById('msg-up').innerHTML = 'Deleting selected images....';
-            getCsrfTokenForDelete(function (csrfToken) {
-                var nid = document.getElementById('edit-identifier-nid').value;
-                if (nid) {
-                    patchNodeDelete(csrfToken, Node_imgs, nid);
-                }
-            });
+            if(imgsOriginal.length){
+
+
+                var fids_comma = imgsOriginal.join();
+                var rand = Math.floor((Math.random() * 1000000) + 1);
+
+                checkFilesExist(function (fileObj) {
+
+                    var imgs = [];
+                    var fids = fileObj.fids;
+                    var unwanted = fileObj.unwanted;
+
+
+                    for(var index in fids) {
+                        if (fids.hasOwnProperty(index)) {
+                            //var attr = object[index];
+                            var tmp =  fids[index];
+                            imgs.push({"target_id": tmp});
+                        }
+                    }
+
+                    if(imgs.length){
+                        var Node_imgs = {
+                            _links: {
+                                type: {
+                                    href: Drupal.url.toAbsolute(drupalSettings.path.baseUrl + 'rest/type/node/products')
+                                }
+                            },
+                            type: {
+                                target_id: 'products'
+                            },
+                            field_images: imgs
+                        };
+
+                        //document.getElementById('msg-up').innerHTML = 'Deleting selected images....';
+                        getCsrfTokenForDelete(function (csrfToken) {
+                            var nid = document.getElementById('edit-identifier-nid').value;
+                            if (nid) {
+                                patchNodeDelete(csrfToken, Node_imgs, nid, unwanted);
+                            }
+                        });
+
+                    }
+                    else{
+                        swal({
+                            title: "Delete Error",
+                            text: "No images were selected to be deleted",
+                            type: "error",
+                            showCancelButton: false,
+                            confirmButtonColor: "#DD6B55",
+                            confirmButtonText: "OK",
+                            closeOnConfirm: true
+                        });
+
+                        deleteUnWanted(unwanted);
+                        reSeq();
+                    }
+
+                }, rand, fids_comma);
+
+            }
+            else{
+                swal({
+                    title: "Delete Error",
+                    text: "No images were selected to be deleted",
+                    type: "error",
+                    showCancelButton: false,
+                    confirmButtonColor: "#DD6B55",
+                    confirmButtonText: "OK",
+                    closeOnConfirm: true
+                });
+
+            }
+
         }
         else{
             swal({
@@ -167,5 +225,55 @@
         update_delete();
         //alert(1234)
     });
+
+
+    function checkFilesExist(callback, fid, camma) {
+
+        $.get(Drupal.url('filename/'+ fid +'/'+ Math.floor((Math.random() * 1000000) + 1) +'?_format=json&fids='+camma))
+            .done(function (data) {
+                callback(data);
+            });
+    }
+
+    function reSeq(){
+        // update whole img container
+        var container, inputs, index;
+        var dup_holder = [];
+
+        // Get the container element
+        container = document.getElementById('imagecontainer');
+
+        // Find its child `input` elements
+        inputs = container.getElementsByTagName('input');
+
+        var inc = 1;
+        for (index = 0; index < inputs.length; ++index) {
+            // deal with inputs[index] element.
+            if(inputs[index].type == 'hidden'){
+
+                if(dup_holder.indexOf(inputs[index].value) == '-1'){
+                    var seq = document.getElementById('seq-'+inputs[index].value);
+                    if(seq){
+                        document.getElementById('seq-'+inputs[index].value).innerHTML = inc;
+                        ++inc;
+
+                        // todo : get img file name
+                        var rand = Math.floor((Math.random() * 1000000) + 1);
+                        var fid =  inputs[index].value;
+                    }
+
+                }
+                dup_holder.push(inputs[index].value);
+            }
+        }
+    }
+
+
+    function deleteUnWanted(unwanted){
+        var del = [];
+        unwanted.forEach(function(entry) {
+            document.getElementById("warpper-img-"+entry).remove();
+        });
+    }
 
 })(jQuery);
