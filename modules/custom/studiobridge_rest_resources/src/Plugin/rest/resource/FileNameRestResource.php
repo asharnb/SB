@@ -130,12 +130,11 @@ class FileNameRestResource extends ResourceBase {
               unset($fids_final[$key]);
             }
           }
+        }else{
+          $fids_final = array();
         }
 
-        if (!empty($fids)) {
           return new ResourceResponse(array('fids'=>$fids_final,'unwanted'=>$unwanted));
-        }
-        throw new NotFoundHttpException(t('File entry with ID @id was not found', array('@id' => $fid)));
       }
     }
 

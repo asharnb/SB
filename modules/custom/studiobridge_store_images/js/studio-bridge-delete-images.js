@@ -121,7 +121,6 @@
         if(unchecked){
             if(imgsOriginal.length){
 
-
                 var fids_comma = imgsOriginal.join();
                 var rand = Math.floor((Math.random() * 1000000) + 1);
 
@@ -140,7 +139,6 @@
                         }
                     }
 
-                    if(imgs.length){
                         var Node_imgs = {
                             _links: {
                                 type: {
@@ -161,34 +159,30 @@
                             }
                         });
 
-                    }
-                    else{
-                        swal({
-                            title: "Delete Error",
-                            text: "No images were selected to be deleted",
-                            type: "error",
-                            showCancelButton: false,
-                            confirmButtonColor: "#DD6B55",
-                            confirmButtonText: "OK",
-                            closeOnConfirm: true
-                        });
-
-                        deleteUnWanted(unwanted);
-                        reSeq();
-                    }
 
                 }, rand, fids_comma);
 
             }
             else{
-                swal({
-                    title: "Delete Error",
-                    text: "No images were selected to be deleted",
-                    type: "error",
-                    showCancelButton: false,
-                    confirmButtonColor: "#DD6B55",
-                    confirmButtonText: "OK",
-                    closeOnConfirm: true
+
+                var Node_imgs = {
+                    _links: {
+                        type: {
+                            href: Drupal.url.toAbsolute(drupalSettings.path.baseUrl + 'rest/type/node/products')
+                        }
+                    },
+                    type: {
+                        target_id: 'products'
+                    },
+                    field_images: []
+                };
+
+                //document.getElementById('msg-up').innerHTML = 'Deleting selected images....';
+                getCsrfTokenForDelete(function (csrfToken) {
+                    var nid = document.getElementById('edit-identifier-nid').value;
+                    if (nid) {
+                        patchNodeDelete(csrfToken, Node_imgs, nid, []);
+                    }
                 });
 
             }
