@@ -346,17 +346,36 @@ class StudioProducts implements StudioProductsInterface {
     // todo : multiple search, means if product not found with sku_id then look for color variant.
     // todo : for now external resource is public, but it might be changed to auth.
 
+    $config = \Drupal::config('studiobridge_global_settings.studiosettings');
     $url = "http://beta.contentcentral.co/service/product-data?_format=json&product_identifier=$input";
-    $response = \Drupal::httpClient()
-      ->get($url, [
-        'auth' => ['demouser', 'demouser'],
-        //'body' => $serialized_entity,
-        'headers' => [
-          'Content-Type' => 'application/json'
-        ],
-      ]);
+    $user_name = 'demouser';
+    $pass = 'demouser';
+    if($config){
+      $url = $config->get('url');
+      if($config->get('url')){
+        $url = $config->get('url') .''. $input;
+      }
+      if($config->get('user_name')){
+        $user_name = $config->get('user_name');
+      }
+      if($config->get('password')){
+        $pass = $config->get('password');
+      }
+    }
 
-    $result = (string) $response->getBody();
+    try {
+      $response = \Drupal::httpClient()
+        ->get($url, [
+          'auth' => [$user_name, $pass],
+          //'body' => $serialized_entity,
+          'headers' => [
+            'Content-Type' => 'application/json'
+          ],
+        ]);
+      $result = (string) $response->getBody();
+    } catch (\Exception $e) {
+      $result = json_encode(array('msg' => $e->getMessage()));
+    }
     return $result;
   }
 

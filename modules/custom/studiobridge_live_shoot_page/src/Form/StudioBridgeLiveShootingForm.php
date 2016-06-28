@@ -220,7 +220,7 @@ class StudioBridgeLiveShootingForm extends FormBase {
       '#markup' => '<a id="studio-delete-bt" class="btn btn-xs" disabled>Delete</a>',
     );
     $form['misc'] = array(
-      '#markup' => '<div id="studio-img-container"></div><div id="js-holder"></div><div id="msg-up"></div>',
+      '#markup' => '<div id="studio-img-container"></div><div id="js-holder"></div><div id="msg-up"></div><div><span id="spinner-holder" class="hidden"><img src="/themes/studiobridge/images/spinner.gif"></span></div>',
     );
     $form['random_user'] = array(
       '#type' => 'button',
@@ -416,7 +416,7 @@ class StudioBridgeLiveShootingForm extends FormBase {
       $product = json_decode($product);
 
       // validate product
-      if (isset($product->msg)) {
+      if (isset($product->msg) || isset($product->message)) {
         // product not found on the server so save it as unmapped product.
         $un_mapped_node = $StudioProducts->createUnmappedProduct(array(), $session_id, $identifier, FALSE);
 
@@ -711,6 +711,9 @@ class StudioBridgeLiveShootingForm extends FormBase {
       $ajax_response->addCommand(new InvokeCommand('#product-state', 'html', array($product_state)));
 
       $ajax_response->addCommand(new HtmlCommand('#smartnotification', $inject_script_mapping));
+
+      $ajax_response->addCommand(new InvokeCommand('#spinner-holder', 'css', array('visibility', 'hidden')));
+
 
     }
 

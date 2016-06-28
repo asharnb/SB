@@ -1,0 +1,24 @@
+<?php
+
+/**
+ * @file
+ * Contains studiobridge_global_settings.module..
+ */
+
+use Drupal\Core\Routing\RouteMatchInterface;
+
+/**
+ * Implements hook_help().
+ */
+function studiobridge_global_settings_help($route_name, RouteMatchInterface $route_match) {
+  switch ($route_name) {
+    // Main module help for the studiobridge_global_settings module.
+    case 'help.page.studiobridge_global_settings':
+      $output = '';
+      $output .= '<h3>' . t('About') . '</h3>';
+      $output .= '<p>' . t('StudioBridge Module to save all global configurations at one place.') . '</p>';
+      return $output;
+
+    default:
+  }
+}

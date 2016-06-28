@@ -1,0 +1,5 @@
+name: StudioBridge Global Settings
+type: module
+description: StudioBridge Module to save all global configurations at one place.
+core: 8.x
+package: StudioBridge
