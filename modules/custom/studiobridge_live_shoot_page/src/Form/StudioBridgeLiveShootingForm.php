@@ -712,8 +712,8 @@ class StudioBridgeLiveShootingForm extends FormBase {
 
       $ajax_response->addCommand(new HtmlCommand('#smartnotification', $inject_script_mapping));
 
-      $ajax_response->addCommand(new InvokeCommand('#spinner-holder', 'css', array('visibility', 'hidden')));
-
+      $ajax_response->addCommand(new InvokeCommand('#spinner-holder', 'addClass', array('hidden')));
+      //$ajax_response->addCommand(new InvokeCommand('#edit-identifier', 'removeAttr', array('disabled')));
 
     }
 

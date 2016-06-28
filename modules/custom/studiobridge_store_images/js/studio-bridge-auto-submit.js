@@ -122,5 +122,15 @@
     });
 
 
+    $('#edit-identifier').keypress(function (e) {
+        var key = e.which;
+        if(key == 13)  // the enter key code
+        {
+            //$( '#edit-identifier' ).attr('disabled', 'disabled');
+            $('#spinner-holder').removeClass( "hidden" );
+
+        }
+    });
+
 
 })(jQuery);
