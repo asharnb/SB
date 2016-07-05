@@ -87,7 +87,7 @@ class ContainerView extends ControllerBase {
 
     $grouped_concepts = [];
     $grouped_concepts_count = [];
-    $unmapped_products = 0;
+    $unmapped_products = array();
 
     $products = array();
     $all_products = array();
@@ -203,7 +203,8 @@ class ContainerView extends ControllerBase {
           );
 
           $cpu = $product->toArray();
-          $unmapped_products[] = $all_products[]  = $cpu;
+          $unmapped_products[] = $cpu;
+          $all_products[]  = $cpu;
           if($drop['0']['value'] == 1){
             //if the product is dropped add it to dropped products list
             $unmapped_dropped_products[] = array('nid' => $product->id());

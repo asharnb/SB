@@ -37,18 +37,216 @@
 */
 #}
 
+{#Header#}
+<div class="row">
+  {{kint()}}
+  <div class="col-sm-12 col-md-8">
+    <h3 class='no-margins p-b-sm'>Container Details</h3>
+    <h4 class="no-margins">View and export list of products received in the container</h4>
+  </div>
+  <div class="col-sm-12 col-md-4 m-t-md">
+    <a class="btn btn-primary btn-cons pull-right" id="import-products" href="/warehouse/checkin/{{container.nid.0.value}}">
+      Check-in Products</a>
 
-<h1>Testing container.</h1>
+    </div>
+  </div>
+
+  <hr class="simple">
+  <div class="row ">
+    <div class="col-lg-12">
+      <div class="panel panel-default equalheight">
+        <div class="panel-body p-xs-imp m-t-5">
 
 
-<ul>
-{% for item in products %}
-    <li>{{ item.concept }}, {{ item.styleno }}</li>
-{% endfor %}
-</ul>
-<hr>
-<ul>
-    {% for item in grouped_concepts %}
-        <li>{{ item.concept }}, {{ item.product_count }}</li>
-    {% endfor %}
-</ul>
+          <div class="col-sm-12 no-margins no-padding ">
+            <div class="col-sm-5">
+              <address>
+                <strong class="text-success">Container is Open</strong><br>
+                <small class="text-muted"><em>Started at {{session.created.0.value|date('F jS, Y, g:i a')}}</em></small>
+              </address>
+
+            </div>
+            <div class="col-sm-7">
+
+              <span class="pull-right ">
+                <a id="close-session" class="btn btn-sm border-blue text-complete" data-id="{{ session.nid.0.value }}">Finish</a>
+              </span>
+
+            </div>
+          </div>
+
+          <div class="col-sm-12 no-margins no-padding p-t-20">
+            <div class="col-sm-8">
+              <div class="col-sm-4 m-l-n">
+                <h5 class="m-sm">Container ID</h5>
+                <h3 class="m-sm">{{ container.nid.0.value }}</h3>
+              </div>
+
+              <div class="col-sm-4">
+                <h5 class="m-sm">Products Received</h5>
+                <h3 class="m-sm">{{ container.field_actual_quantity.0.value }}</h3>
+              </div>
+
+              <div class="col-sm-4">
+                <h5 class="m-sm">Products Expected</h5>
+                <h3 class="m-sm">{{ container.field_expected_quantity.0.value }}</h3>
+              </div>
+            </div>
+            <div class="col-sm-2">
+            </div>
+            <div class="col-sm-2">
+              <table class="table table-stripped small no-margins no-padding">
+                <tbody>
+                  {% if unmapped_products|length > 0 %}
+
+                  <tr class="no-margins no-padding text-danger border-bottom-dotted">
+                    <td>
+                      <h5 class="no-margins ">Unmapped</h5>
+                    </td>
+                    <td class="pull-right">
+                      <h5 class="no-margins semi-bold">{{unmapped_products|length}}</h5>
+                    </td>
+                  </tr>
+                  {% endif %}
+                  {% for item in grouped_concepts %}
+                  <tr class="no-margins no-padding border-bottom-dotted">
+                    <td>
+                      <h5 class="no-margins ">{{item.concept|title}}</h5>
+                    </td>
+                    <td class="pull-right">
+                      <h5 class="no-margins semi-bold">{{item.product_count}}</h5>
+                    </td>
+                  </tr>
+                  {% endfor %}
+                </tbody>
+              </table>
+
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<div class="row p-t-10">
+  <div class="col-lg-12">
+    <ul class="nav nav-tabs ">
+
+      <li class="active">
+        <a href="#tab-received" data-toggle="tab" aria-expanded="false">Received
+          <span class=" label label-success semi-bold">{{ products|length }}</span>
+        </a>
+      </li>
+      <li class="">
+        <a href="#tab-reports" data-toggle="tab" aria-expanded="false">Report(s)</a>
+      </li>
+
+
+    </ul>
+
+    <div class="tab-content">
+
+      <div class="tab-pane active" id="tab-received">
+        {% if products|length == 0%}
+        <h2 class="text-center">No products available in this container.</h2>
+        {% else %}
+        <table id="dt_mapped" class="table table-responsive table-hover" width="100%">
+          <thead>
+            <tr>
+
+              <th>Concept</th>
+              <th>Style ID</th>
+              <th>Color Variant</th>
+              <th>Identifier</th>
+              <th>State</th>
+              <th>Image Count</th>
+
+              <th></th>
+
+            </tr>
+          </thead>
+          <tbody>
+            {% for item in products %}
+
+
+            {% if item.image_count | length == 0 %}
+            {% set image_count_class = 'bold text-danger' %}
+            {% elseif item.image_count | length >= 3 %}
+            {% set image_count_class = 'bold text-warning' %}
+            {% else %}
+            {% set image_count_class = 'bold text-success' %}
+            {% endif %}
+            <tr>
+
+              <td>
+                {% if item.concept|lower == 'unmapped' %}
+                Not Avaliable
+                {% else %}
+                <img src="/{{ directory }}/images/brands/brand_logo_{{ item.concept|lower|replace({" ": ""}) }}.png" height="20px"></td>
+                {% endif %}
+
+              <td>{{ item.styleno }}</td>
+              <td>{{ item.colorvariant }}</td>
+              <td>{{ item.identifier }}</td>
+              <td>
+                <span class="label label-warning">{{item.state}}</span>
+              </td>
+
+              <td class="{{ image_count_class }}">{{ item.image_count }}</td>
+
+              <td class="text-align-center">
+                <a target="_blank" class="btn btn-xs" href="/view-product/{{item.nid.0.value }}">View</a>
+              </td>
+
+
+
+            </tr>
+
+            {% endfor %}
+
+          </tbody>
+        </table>
+
+        {% endif %}
+      </div>
+
+      <div class="tab-pane" id="tab-reports">
+        {% if grouped_concepts|length == 0%}
+        <h2 class="text-center">No reports are available in this container.</h2>
+        {% endif %}
+        {% for item in grouped_concepts %}
+        <div class="col-md-6">
+
+          <div class="profile-image">
+            <img src="/themes/studiobridge/images/excel.png" class="m-b-md" alt="profile">
+          </div>
+          <div class="profile-info">
+            <div class="">
+              <div>
+                <h2 class="m-t-sm">
+                  {{item.concept|title}} Shoot List
+                </h2>
+
+                <small>
+
+                  <a href="/shootlist/{{session.nid.0.value}}/download.csv" class="btn">Download</a>
+                </small>
+
+              </div>
+            </div>
+          </div>
+        </div>
+        {% endfor %}
+
+
+
+      </div>
+
+    </div>
+
+  </div>
+
+</div>

@@ -31,21 +31,21 @@ total_images: Total no.of images in this session - {{ total_images }} * * * @ing
 {% set total_count = adjusted_mapped + adjusted_unmapped + total_dropped %}
 
 {% if session.field_status.0.value == 'open' and total_count == 0  %}
-  {% set status_class = '<span class="text-success"><i class=""></i> Session has started</span>' %}
+{% set status_class = '<span class="text-success"><i class=""></i> Session has started</span>' %}
 {% elseif session.field_status.0.value == 'open' and total_count > 0   %}
-  {% set status_class = '<span class="text-success"><i class=""></i> Importing products in session</span>' %}
+{% set status_class = '<span class="text-success"><i class=""></i> Importing products in session</span>' %}
 {% endif %}
 
 {% if session.field_status.0.value == 'pause' and total_count == 0  %}
-  {% set status_class = '<span class="text-warning"><i class=""></i> Session is paused</span>' %}
+{% set status_class = '<span class="text-warning"><i class=""></i> Session is paused</span>' %}
 {% endif %}
 
 {% if session.field_status.0.value == 'closed' and total_count == 0  %}
-  {% set status_class = '<span class="text-danger"><i class=""></i> Session Cancelled</span>' %}
+{% set status_class = '<span class="text-danger"><i class=""></i> Session Cancelled</span>' %}
 {% elseif session.field_status.0.value == 'closed' and unmapped_products|length > 0   %}
-  {% set status_class = '<span class="text-danger"><i class=""></i>'~ unmapped_products|length ~' items are unmapped</span>' %}
+{% set status_class = '<span class="text-danger"><i class=""></i>'~ unmapped_products|length ~' items are unmapped</span>' %}
 {% elseif session.field_status.0.value == 'closed' and unmapped_products|length == 0  and total_count > 0 %}
-    {% set status_class = '<span class="text-success"><i class=""></i> Session Complete</span>' %}
+{% set status_class = '<span class="text-success"><i class=""></i> Session Complete</span>' %}
 {% endif %}
 
 
@@ -60,7 +60,7 @@ total_images: Total no.of images in this session - {{ total_images }} * * * @ing
     {% if session.field_status.0.value == 'open' %}
     <a class="btn btn-primary btn-cons pull-right" id="import-products" data-id="{{total_count}}">
       Add Products</a>
-    {% endif %}
+      {% endif %}
     </div>
   </div>
 
@@ -87,12 +87,12 @@ total_images: Total no.of images in this session - {{ total_images }} * * * @ing
               </span>
               <span class="pull-right  m-r-md">
                 {% if  session.field_status.0.value == 'open' %}
-                  <a id="close-session" class="btn btn-sm border-blue text-complete" data-id="{{ session.nid.0.value }}">Finish</a>
+                <a id="close-session" class="btn btn-sm border-blue text-complete" data-id="{{ session.nid.0.value }}">Finish</a>
                 {% endif %}
               </span>
               <span class="pull-right  m-r-sm">
                 {% if session.field_status.0.value == 'open' %}
-                  <a id="pause-session" class="text-info btn btn-sm">Pause</a>
+                <a id="pause-session" class="text-info btn btn-sm">Pause</a>
                 {% endif %}
               </span>
 
@@ -235,9 +235,9 @@ total_images: Total no.of images in this session - {{ total_images }} * * * @ing
         <a href="#tab-reports" data-toggle="tab" aria-expanded="false">Report(s)</a>
       </li>
       <li class="">
-      {% if user.hasPermission('administrator') == true %}
-          <a href="#tab-analysis" data-toggle="tab" aria-expanded="true">Analysis</a>
-      {% endif %}
+        {% if user.hasPermission('administrator') == true %}
+        <a href="#tab-analysis" data-toggle="tab" aria-expanded="true">Analysis</a>
+        {% endif %}
 
       </li>
 
@@ -252,13 +252,14 @@ total_images: Total no.of images in this session - {{ total_images }} * * * @ing
         <table id="dt_mapped" class="table table-responsive table-hover" width="100%">
           <thead>
             <tr>
-              <th></th>
+
               <th>Concept</th>
               <th>Style ID</th>
               <th>Color Variant</th>
               <th>State</th>
               <th>QC Status</th>
               <th>Image Count</th>
+
               <th></th>
 
             </tr>
@@ -276,249 +277,267 @@ total_images: Total no.of images in this session - {{ total_images }} * * * @ing
             {% set image_count_class = 'bold text-success' %}
             {% endif %}
             <tr>
-                <td><i class="fa fa-circle {{image_count_class}}"></i></td>
-                <td><img src="/{{ directory }}/images/brands/brand_logo_{{ item.field_concept_name.0.value|lower|replace({" ": ""}) }}.png" height="20px"></td>
-                <td>{{ item.field_style_family.0.value }}</td>
-                <td>{{ item.title.0.value }}</td>
-                <td>
-                  {% if item.nid.0. value in session.field_reshoot_product | json_encode() %}
-                  <span class="text-warning semi-bold">Reshoot</span>
-                  {% else %}
-                  <span class="text-success semi-bold">New</span>
-                  {% endif %}
-                </td>
-                <td>
-                  <span class="label label-warning">Pending</span>
-                </td>
-                <td class="{{ image_count_class }}">{{ item.field_images|length }}</td>
 
-                <td class="text-align-center">
-                  <a target="_blank" class="btn btn-xs" href="/view-product/{{item.nid.0.value }}">View</a>
-                </td>
+              <td><img src="/{{ directory }}/images/brands/brand_logo_{{ item.field_concept_name.0.value|lower|replace({" ": ""}) }}.png" height="20px"></td>
+              <td>{{ item.field_style_family.0.value }}</td>
+              <td>{{ item.title.0.value }}</td>
+              <td>
+                {% if item.nid.0. value in session.field_reshoot_product | json_encode() %}
+                <span class="text-warning semi-bold">Reshoot</span>
+                {% else %}
+                <span class="text-success semi-bold">New</span>
+                {% endif %}
+              </td>
+              <td>
+                <span class="label label-warning">Pending</span>
+              </td>
+              <td class="{{ image_count_class }}">{{ item.field_images|length }}</td>
 
-
-
-              </tr>
-              {% endif %}
-              {% endfor %}
-
-            </tbody>
-          </table>
-
-          {% endif %}
-        </div>
-
-        <div class="tab-pane" id="tab-unmapped">
-          {% if unmapped_products|length == 0%}
-          <h2 class="text-center">No unmapped products available in this session.</h2>
-          {% else %}
-          <table id="dt_unmapped" class="table table-responsive table-hover" width="100%">
-            <thead>
-              <tr>
-                <th>Concept</th>
-                <th>Identifier</th>
-                <th>State</th>
-                <th>Image Count</th>
-                <th></th>
-              </tr>
-            </thead>
-            <tbody>
-
-              {% for item in unmapped_products %}
-              {% if item.field_draft.0. value == 0 %}
-
-              {% if item.field_images | length == 0 %}
-              {% set image_count_class = 'bold text-danger' %}
-              {% elseif item.field_images | length >= 7 %}
-              {% set image_count_class = 'bold text-warning' %}
-              {% else %}
-
-              {% set image_count_class = 'bold text-success' %}
-              {% endif %}
-              <tr>
-                <td>Not Available</td>
-                <td>{{ item.title.0.value }}</td>
-                <td>
-                  {% if item.nid.0. value in session.field_reshoot_product | json_encode() %}
-                  <span class="text-warning semi-bold">Reshoot</span>
-                  {% else %}
-                  <span class="text-success semi-bold">New</span>
-                  {% endif %}
-                </td>
-                <td class="{{ image_count_class }}">{{ item.field_images|length }}</td>
-
-                <td class="text-align-center">
-                  <a target="_blank" class="btn btn-xs" href="/view-product/{{item.nid.0.value }}">View</a>
-                </td>
-
-              </tr>
-              {% endif %}
-              {% endfor %}
-
-            </tbody>
-          </table>
-          {% endif %}
-        </div>
-
-        <div class="tab-pane" id="tab-dropped">
-
-          <table id="dt_drops" class="table table-responsive table-hover" width="100%">
-
-            <thead>
-              <tr>
-                <th>Concept</th>
-                <th>Color Variant</th>
-                <th>Identifier</th>
-                <th>State</th>
-                <th>Image Count</th>
-                <th></th>
-                <th></th>
-              </tr>
-            </thead>
-            <tbody>
-              {% for item in drops %}
-
-              {% if item.image_count == 0 %}
-              {% set image_count_class = 'bold text-danger' %}
-              {% elseif item.image_count >= 7 %}
-              {% set image_count_class = 'bold text-warning' %}
-              {% else %}
-              {% set image_count_class = 'bold text-success' %}
-              {% endif %}
-              <tr>
-                <td>
-                  {% if item.concept|lower == 'unmapped' %}
-                  Not Available
-                  {% else %}
-                  <img src="/{{ directory }}/images/brands/brand_logo_{{ item.concept|lower|replace({" ": ""}) }}.png" height="20px">
-                  {% endif %}
-                </td>
-                  <td>{{ item.colorvariant }}</td>
-                  <td>{{ item.identifier }}</td>
-                  <td>
-                    <span class="text-danger semi-bold">Dropped</span>
-
-                  </td>
-                  <td class="{{ image_count_class }}">{{ item.field_images|length }}</td>
-
-                  <td class="text-align-center">
-                    <a target="_blank" class="btn btn-xs" href="/view-product/{{item.nid}}">View</a>
-                  </td>
-                  <td class="text-align-center">
-                    <a target="_blank" class="btn btn-xs" href="/view-product/{{item.nid}}">Undo</a>
-                  </td>
-
-                </tr>
-
-                {% endfor %}
-
-
-                </tbody>
-              </table>
-            </div>
-
-            <div class="tab-pane" id="tab-reports">
-              {% if grouped_concepts|length == 0%}
-              <h2 class="text-center">No reports are available in this session.</h2>
-              {% endif %}
-              {% for item in grouped_concepts %}
-              <div class="col-md-6">
-
-                                  <div class="profile-image">
-                                      <img src="/themes/studiobridge/images/excel.png" class="m-b-md" alt="profile">
-                                  </div>
-                                  <div class="profile-info">
-                                      <div class="">
-                                          <div>
-                                              <h2 class="m-t-sm">
-                                                  {{item.concept|title}} Shoot List
-                                              </h2>
-
-                                              <small>
-
-                                                  <a href="/shootlist/{{session.nid.0.value}}/download.csv" class="btn">Download</a>
-                                              </small>
-
-                                          </div>
-                                      </div>
-                                  </div>
-                              </div>
-              {% endfor %}
+              <td class="text-align-center">
+                <a target="_blank" class="btn btn-xs" href="/view-product/{{item.nid.0.value }}">View</a>
+              </td>
 
 
 
-            </div>
+            </tr>
+            {% endif %}
+            {% endfor %}
 
-            <div class="tab-pane" id="tab-analysis">
+          </tbody>
+        </table>
 
-              <div class="col-sm-height col-bottom ">
-                <div class="flot-chart">
-                  <div class="flot-chart-content" id="flot-analysis-chart" style="height:300px;"></div>
-                </div>
-              </div>
+        {% endif %}
+      </div>
 
-            </div>
+      <div class="tab-pane" id="tab-unmapped">
+        {% if unmapped_products|length == 0%}
+        <h2 class="text-center">No unmapped products available in this session.</h2>
+        {% else %}
+        <table id="dt_unmapped" class="table table-responsive table-hover" width="100%">
+          <thead>
+            <tr>
+              <th>Concept</th>
+              <th>Identifier</th>
+              <th>State</th>
+              <th>Image Count</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody>
 
-          </div>
+            {% for item in unmapped_products %}
+            {% if item.field_draft.0. value == 0 %}
 
-        </div>
+            {% if item.field_images | length == 0 %}
+            {% set image_count_class = 'bold text-danger' %}
+            {% elseif item.field_images | length >= 7 %}
+            {% set image_count_class = 'bold text-warning' %}
+            {% else %}
 
-        <!-- <div class="col-lg-2">
+            {% set image_count_class = 'bold text-success' %}
+            {% endif %}
+            <tr>
+              <td>Not Available</td>
+              <td>{{ item.title.0.value }}</td>
+              <td>
+                {% if item.nid.0. value in session.field_reshoot_product | json_encode() %}
+                <span class="text-warning semi-bold">Reshoot</span>
+                {% else %}
+                <span class="text-success semi-bold">New</span>
+                {% endif %}
+              </td>
+              <td class="{{ image_count_class }}">{{ item.field_images|length }}</td>
 
-        <div class="sidebard-panel" style="min-height: 100%;">
+              <td class="text-align-center">
+                <a target="_blank" class="btn btn-xs" href="/view-product/{{item.nid.0.value }}">View</a>
+              </td>
+
+            </tr>
+            {% endif %}
+            {% endfor %}
+
+          </tbody>
+        </table>
+        {% endif %}
+      </div>
+
+      <div class="tab-pane" id="tab-dropped">
+
+        <table id="dt_drops" class="table table-responsive table-hover" width="100%">
+
+          <thead>
+            <tr>
+              <th>Concept</th>
+              <th>Color Variant</th>
+              <th>Identifier</th>
+              <th>State</th>
+              <th>Image Count</th>
+              <th></th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for item in drops %}
+
+            {% if item.image_count == 0 %}
+            {% set image_count_class = 'bold text-danger' %}
+            {% elseif item.image_count >= 7 %}
+            {% set image_count_class = 'bold text-warning' %}
+            {% else %}
+            {% set image_count_class = 'bold text-success' %}
+            {% endif %}
+            <tr>
+              <td>
+                {% if item.concept|lower == 'unmapped' %}
+                Not Available
+                {% else %}
+                <img src="/{{ directory }}/images/brands/brand_logo_{{ item.concept|lower|replace({" ": ""}) }}.png" height="20px">
+                {% endif %}
+              </td>
+              <td>{{ item.colorvariant }}</td>
+              <td>{{ item.identifier }}</td>
+              <td>
+                <span class="text-danger semi-bold">Dropped</span>
+
+              </td>
+              <td class="{{ image_count_class }}">{{ item.field_images|length }}</td>
+
+              <td class="text-align-center">
+                <a target="_blank" class="btn btn-xs" href="/view-product/{{item.nid}}">View</a>
+              </td>
+              <td class="text-align-center">
+                <a target="_blank" class="btn btn-xs" href="/view-product/{{item.nid}}">Undo</a>
+              </td>
+
+            </tr>
+
+            {% endfor %}
 
 
+          </tbody>
+        </table>
+      </div>
 
+      <div class="tab-pane" id="tab-reports">
+        {% if grouped_concepts|length == 0%}
+        <h2 class="text-center">No reports are available in this session.</h2>
+        {% endif %}
         {% for item in grouped_concepts %}
+        <div class="col-md-6">
 
-        <div class="company-stat-boxes">
-        <div data-index="" class="company-stat-box mb-10  active padding-10 bg-master-lightest">
+          <div class="profile-image">
+            <img src="/themes/studiobridge/images/excel.png" class="m-b-md" alt="profile">
+          </div>
+          <div class="profile-info">
+            <div class="">
+              <div>
+                <h2 class="m-t-sm">
+                  {{item.concept|title}} Shoot List
+                </h2>
+
+                <small>
+
+                  <a href="/shootlist/{{session.nid.0.value}}/download.csv" class="btn">Download</a>
+                </small>
+
+              </div>
+            </div>
+          </div>
+        </div>
+        {% endfor %}
 
 
 
-        <p class="company-name pull-left text-uppercase bold no-margin">
-        <img src="/{{ directory }}/images/brands/brand_logo_{{ item.concept|lower }}.png"
-        height="15px">
-        <div class="pull-right">
-        <span class=" label label-primary p-t-5 m-l-5 p-b-5 inline fs-12">{{ item.product_count }}
-      </span>
+      </div>
+
+      <div class="tab-pane" id="tab-analysis">
+
+        <div class="col-lg-12">
+            <div class=" flot-chart chart-responsive text-center " >
+                <canvas id="uploadTrendsChart" class="flot-chart-content" ></canvas>
+            </div>
+            <div id="uploadTrendLegend" class="chart-legend"></div>
+        </div>
+
+
+      </div>
 
     </div>
 
-  </p>
-
-  <div class="clearfix"></div>
-
-
+  </div>
 
 </div>
 
-</div>
-{% endfor %}
-{% if unmapped_products|length > 0 %}
-<div class="company-stat-boxes">
-<div data-index="" class="company-stat-box mb-10  active padding-10 bg-master-lightest">
+<script type="text/javascript">
 
-<p class="company-name pull-left text-uppercase bold no-margin">
-<img src="/{{ directory }}/images/brands/brand_logo_.png"
-height="15px">
-<div class="pull-right">
-<span class=" label label-danger p-t-5 m-l-5 p-b-5 inline fs-12">{{ unmapped_products|length }}
-</span>
+var lineChartCanvas = document.getElementById("uploadTrendsChart").getContext("2d");
+// This will get the first returned node in the jQuery collection.
+var lineChart = new Chart(lineChartCanvas);
 
-</div>
+var lineChartData = {
+  labels: [{% for label in uploadtrend.chart_label %} "{{ label }}", {% endfor %}],
+  datasets: [
+    {
+      label: "{{uploadtrend.first_set_label}}",
+        fillColor: "rgba(220,220,220,0.5)",
+        strokeColor: "rgba(220,220,220,1)",
+        pointColor: "rgba(220,220,220,1)",
+        pointStrokeColor: "#fff",
+        pointHighlightFill: "#fff",
+        pointHighlightStroke: "rgba(220,220,220,1)",
+      data: [{% for first in uploadtrend.first_set %} "{{ first }}", {% endfor %}],
+    },
+    {
+      label: "{{uploadtrend.second_set_label}}",
+        fillColor: "rgba(0,185,229,0.5)",
+        strokeColor: "rgba(0,185,229,0.7)",
+        pointColor: "rgba(0,185,229,1)",
+        pointStrokeColor: "#fff",
+        pointHighlightFill: "#fff",
+        pointHighlightStroke: "rgba(26,179,148,1)",
+      data: [{% for second in uploadtrend.second_set %} "{{ second }}", {% endfor %}],
+    },
+  ]
+};
 
-</p>
+var lineChartOptions = {
+  //Boolean - If we should show the scale at all
+    showScale: true,
+    //Boolean - Whether grid lines are shown across the chart
+    scaleShowGridLines: true,
+    //String - Colour of the grid lines
+    scaleGridLineColor: "rgba(0, 0, 0,.05)",
+    //Number - Width of the grid lines
+    scaleGridLineWidth: 1,
+    //Boolean - Whether to show horizontal lines (except X axis)
+    scaleShowHorizontalLines: true,
+    //Boolean - Whether to show vertical lines (except Y axis)
+    scaleShowVerticalLines: true,
+    //Boolean - Whether the line is curved between points
+    bezierCurve: true,
+    //Number - Tension of the bezier curve between points
+    bezierCurveTension: 0.4,
+    //Boolean - Whether to show a dot for each point
+    pointDot: true,
+    //Number - Radius of each point dot in pixels
+    pointDotRadius: 3,
+    //Number - Pixel width of point dot stroke
+    pointDotStrokeWidth: 1,
+    //Number - amount extra to add to the radius to cater for hit detection outside the drawn point
+    pointHitDetectionRadius: 20,
+    //Boolean - Whether to show a stroke for datasets
+    datasetStroke: true,
+    //Number - Pixel width of dataset stroke
+    datasetStrokeWidth: 2,
+    //Boolean - Whether to fill the dataset with a color
+    datasetFill: true,
+    //String - A legend template
+    //Boolean - whether to make the chart responsive to window resizing
+    responsive: true
+};
 
-<div class="clearfix"></div>
+//Create the line chart
+var uploadTrend = lineChart.Line(lineChartData, lineChartOptions);
 
-
-
-</div>
-
-</div>
-{% endif %}
-</div>
-
-</div> -->
-</div>
+      document.getElementById('uploadTrendLegend').innerHTML = uploadTrend.generateLegend();
+</script>

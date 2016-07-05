@@ -62,8 +62,9 @@ class warehousecheckinController extends ControllerBase {
   //handle all checkin at the warehouse level
   public function content($cid, $state) {
     // Get container id. (not container node id, container title will be container id in our case.)
-    $container_id = $cid;
-    $container_nid = $this->studioContainer->getContainerNodeIdByContainerId($container_id);
+    //$container_id = $cid;
+    $container_nid = $cid;
+
     $product_return_data = array();
 
     // on invalid container, redirect user to somewhere & notify him.
@@ -74,6 +75,12 @@ class warehousecheckinController extends ControllerBase {
 
     $container = $this->nodeStorage->load($container_nid);
     $container_values = $container->toArray();
+    if($container_values['title']){
+      $container_id = $container_values['title'][0]['value'];
+    }else{
+      drupal_set_message('Invalid Container found', 'warning');
+      return new RedirectResponse(base_path() . 'containers');
+    }
 
     if($state == 'checkin'){
 
