@@ -84,6 +84,15 @@ class warehousecheckinController extends ControllerBase {
 
     if($state == 'checkin'){
 
+      // validate if container already checked out.
+      if($container_values){
+        $container_state = $container_values['field_container_state'][0]['value'];
+        if($container_state == 'checkout'){
+          drupal_set_message('Container cannot be checkin again', 'warning');
+          return new RedirectResponse(base_path() . 'container/view/'. $container_nid);
+        }
+      }
+
       $last_scanned_product_container = $this->state()->get('warehouse_container_last_scan_product_' . $container_id,'');
 
       if($last_scanned_product_container){
@@ -119,7 +128,7 @@ class warehousecheckinController extends ControllerBase {
       $this->studioContainer->updateContainerStatus($container, 'checkout');
 
       drupal_set_message('Container check out successful.', 'success');
-      return new RedirectResponse(base_path() . 'containers');
+      return new RedirectResponse(base_path() . 'container/view/'. $container_nid);
     }
 
   }

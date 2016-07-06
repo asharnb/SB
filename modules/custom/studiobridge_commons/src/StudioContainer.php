@@ -217,7 +217,7 @@ class StudioContainer implements StudioContainerInterface {
    *
    */
   public function updateContainerStatus($container, $status = 'checkout'){
-    if($container){
+      if($container){
       $state = array(
         'value' => $status
       );

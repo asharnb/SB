@@ -131,4 +131,22 @@
         $('#dd-styleno').html(data.product.styleno);
     }
 
+
+    $("#container-finish").click(function () {
+        var container_nid = document.getElementById('warehouse-container-nid').value;
+
+        swal({
+            title: "Confirm Finish",
+            text: "Are you sure you want to finish this container?",
+            type: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#DD6B55",
+            confirmButtonText: "Finish It",
+            closeOnConfirm: false
+        },function () {
+            window.location = Drupal.url.toAbsolute(drupalSettings.path.baseUrl + 'warehouse/checkout/' + container_nid);
+        });
+
+    });
+
 })(jQuery);

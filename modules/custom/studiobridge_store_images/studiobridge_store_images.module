@@ -323,6 +323,18 @@ function studiobridge_store_images_form_node_sessions_form_alter(&$form, FormSta
   }
 }
 
+
+/*
+*  Implements hook_FORM_ID_form_alter().
+*/
+function studiobridge_store_images_form_node_container_form_alter(&$form, FormStateInterface $form_state) {
+  foreach (array_keys($form['actions']) as $action) {
+    if ($action != 'preview' && isset($form['actions'][$action]['#type']) && $form['actions'][$action]['#type'] === 'submit') {
+      $form['actions'][$action]['#submit'][] = 'studiobridge_store_images_container_redirect';
+    }
+  }
+}
+
 /*
 * Submit handler for studiobridge_store_images_form_node_sessions_form_alter() form.
 */
@@ -335,6 +347,16 @@ function studiobridge_store_images_upload_enabled_types_submit($form, FormStateI
     exit;
   }else{
     $response = new Symfony\Component\HttpFoundation\RedirectResponse(base_path().'view-sessions2');
+    $response->send();
+    exit;
+  }
+}
+
+function studiobridge_store_images_container_redirect($form, FormStateInterface $form_state){
+  // Redirect to container view page after creating container.
+  $nid = $form_state->getValue('nid');
+  if($nid){
+    $response = new Symfony\Component\HttpFoundation\RedirectResponse(base_path().'container/view/'.$nid);
     $response->send();
     exit;
   }
