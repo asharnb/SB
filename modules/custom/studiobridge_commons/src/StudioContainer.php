@@ -154,16 +154,19 @@ class StudioContainer implements StudioContainerInterface {
   public function addDropProductToContainer($container_id, $node) {
     // Load session node object.
     $container_node = $this->nodeStorage->load($container_id);
-    // Get products from session node.
-    $container_products = $container_node->field_dropped_products->getValue();
+    // Get products & dropped products from session node.
+    $container_dropped_products = $container_node->field_dropped_products->getValue();
+    $container_products = $container_node->field_product->getValue();
+    $container_products_duplicate = $container_products;
+
     // Get product nid.
     $product_nid = $node->id();
 
     // Check for this product already exist in the current session.
     // todo : other logs and property settings may come here
     $product_exist = FALSE;
-    if (count($container_products)) {
-      foreach ($container_products as $each) {
+    if (count($container_dropped_products)) {
+      foreach ($container_dropped_products as $each) {
         if ($each['target_id'] == $product_nid) {
           $product_exist = TRUE;
           break;
@@ -178,11 +181,24 @@ class StudioContainer implements StudioContainerInterface {
         )
       );
 
+      // Remove dropped product from products field
+      if($container_products){
+        foreach($container_products as $k=>$pid){
+          if($pid['target_id'] == $product_nid){
+            unset($container_products_duplicate[$k]);
+          }
+        }
+      }
+
+
       // merge the current product to existing products.
-      $products = array_merge($product, $container_products);
+      $products = array_merge($product, $container_dropped_products);
 
       // add the product to field.
       $container_node->field_dropped_products->setValue($products);
+
+      // remove dropped product from product.
+      $container_node->field_product->setValue($container_products_duplicate);
       // save the node.
       $container_node->save();
       return array('message' => 'Product dropped successfully.','status' => true);
