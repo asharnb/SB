@@ -31,3 +31,20 @@ warehouse_checkin.container_view_hello:
     _title: 'view'
   requirements:
     _permission: 'access content'
+
+# In order to to create pages it is necessary to define routes for them.
+# A route maps a URL path to a controller. It defines with what function
+# or method will be called when a URL is accessed.
+# If the user accesses http://drupal8.dev/container/view/{cid}, the routing
+# system will look for a route with that path. In this case it will find a
+# match, and execute the _controller callback. In this case the callback is
+# defined as a classname
+# ("\Drupal\warehouse_checkin\Controller\ContainerView")
+# and a method ("hello").
+warehouse_checkin.view_all_containers:
+  path: '/view-containers'
+  defaults:
+    _controller: '\Drupal\warehouse_checkin\Controller\ViewAllContainersController::content'
+    _title: 'view'
+  requirements:
+    _permission: 'access content'

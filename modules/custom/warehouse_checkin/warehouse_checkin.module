@@ -37,9 +37,15 @@ function warehouse_checkin_theme($existing, $type, $theme, $path) {
         'test' => NULL,
         'grouped_concepts' => array(),
         'unmapped_products' => array(),
-//        'mapped_products' => array(),
       ),
-    )
+    ),
+    'view_all_containers' => array(
+      'variables' => array(
+        'results' => array (
+
+      ),
+    ),
+    ),
   );
 }
 

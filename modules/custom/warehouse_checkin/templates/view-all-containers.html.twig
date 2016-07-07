@@ -1,0 +1,86 @@
+
+<div class="row">
+  <div class="col-sm-12 col-md-8">
+    <h3 class="no-margins p-b-sm">Containers</span></h3>
+    <h4 class="no-margins">View all containers received by the studio</h4>
+  </div>
+  <div class="col-sm-12 col-md-4 m-t-md">
+    <a class="btn btn-primary btn-cons pull-right" href="/node/add/sessions">Add New Container</a>
+  </div>
+
+</div>
+<hr class="simple">
+
+<div class="panel panel-default">
+  <div class="">
+    <div class="panel-body" style="padding-left:0px !important;">
+        <div id="dt_viewsessions_filter" class="col-sm-5 search-container">
+              <div class="input-group">
+        <span class="input-group-addon" id="basic-addon1"><i class="fa fa-search"></i></span>
+        <input type="text" class="form-control inputs" placeholder="What are you looking for?" id="dt_search_box">
+
+
+      </div>
+
+        </div>
+        <div class="col-sm-4">
+      <button type="button" id="btn_search_reset" class="btn">Clear</button>
+        </div>
+
+    </div>
+  </div>
+</div>
+<div class="panel panel-default">
+  <!-- NEW COL START -->
+  <article class="m-sm">
+    <table id="dt_viewproducts" class="table table-responsive table-hover" width="100%">
+
+      <thead>
+        <th>ID</th>
+        <th>Container ID</th>
+        <th>Stage</th>
+        <th>Received By</th>
+        <th>Received Date</th>
+        <th>Expected Quantity</th>
+        <th>Received Quantity</th>
+        <th></th>
+      </thead>
+
+      <tbody>
+
+
+        {% for result in results %}
+
+
+
+
+        <tr>
+          {% set received_class = 'text-danger' %}
+          {% if result.field_product|length == result.field_expected_quantity.0.value %}
+            {% set received_class = 'text-success' %}
+          {% endif %}
+
+          <td>{{ result.nid.0.value }}</td>
+          <td>{{ result.title.0.value }}</td>
+          <td >{{ result.field_container_state.0.value|title }}</td>
+          <td >{{ result.field_received_by.0.value }}</td>
+          <td >{{ result.field_received_date.0.value|date('F jS, Y, g:i a') }}</td>
+          <td >{{ result.field_expected_quantity.0.value }}</td>
+          <td class="{{received_class}}">{{ result.field_product|length }}</td>
+
+
+          <td>
+            <a class="btn btn-xs " href="/container/view/{{ result.nid.0.value }}">View</a>
+          </td>
+
+        </tr>
+
+        {% endfor %}
+
+
+      </tbody>
+    </table>
+
+  </article>
+  <!-- END COL -->
+</div>
