@@ -9,6 +9,7 @@
             <input type="hidden" value="{{ container.title.0.value }}" id="warehouse-container-id">
             <label for="" class="control-label"></label>
             <input type="text" value="{{ product_identifier }}" id="warehouse-checkin-product-scan" class="form-text form-control">
+            <input type="hidden" id="pid" value="{{ product_block.pid }}">
         </div>
 
   </div>
@@ -54,7 +55,7 @@
                     </div>
                     <div class="col-lg-12">
                       <a class="btn btn-xs border-red txt-color-red studio-product-drop pull-right" id="warehouse-drop-product">Drop Product</a>
-                      <a class="btn btn-xs border-blue text-complete studio-product-drop pull-right mr-5">Flag Product</a>
+                      <a class="btn btn-xs border-blue text-complete studio-product-drop pull-right mr-5" id="warehouse-flag-product">Flag Product</a>
                     </div>
                 </div>
 

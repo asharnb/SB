@@ -23,8 +23,8 @@
             data: JSON.stringify(node),
             success: function (node) {
                 swal({
-                    title: "Product Dropped",
-                    text: "This product has been marked as dropped, you can undrop this product until the session is closed.",
+                    title: "Product Flagged",
+                    text: "This product has been flagged!",
                     type: "success",
                     showCancelButton: false,
                     confirmButtonColor: "#DD6B55",
@@ -43,9 +43,6 @@
 
         });
 
-        setTimeout(function(){
-            document.getElementById('msg-up').innerHTML = '';
-        }, 3300);
 
     }
 
@@ -54,7 +51,7 @@
      *  draft value 0 means undo draft
      *
      */
-    function update_product(draft) {
+    function update_product(option, message) {
         var Node_imgs = {
             _links: {
                 type: {
@@ -64,13 +61,16 @@
             type: {
                 target_id: 'products'
             },
-            field_draft: {
-                value:draft
+            field_flag_option: {
+                value:option
+            },
+            field_flag_message: {
+                value:message
             }
         };
 
         getCsrfTokenForProductDrop(function (csrfToken) {
-            var nid = document.getElementById('edit-identifier-nid').value;
+            var nid = document.getElementById('pid').value;
             console.log(nid);
             if (nid) {
                 patchNodeDrop(csrfToken, Node_imgs, nid);
@@ -82,15 +82,18 @@
 
     $(".studio-product-drop").click(function () {
         swal({
-            title: "Confirm Drop",
-            text: "Are you sure you want to drop this product from this session?",
-            type: "warning",
+            title: 'Flag Product',
+            type: 'info',
+            html:
+                'options, textarea will come here',
+            showCloseButton: true,
             showCancelButton: true,
-            confirmButtonColor: "#DD6B55",
-            confirmButtonText: "Drop It",
-            closeOnConfirm: false
+            confirmButtonText:
+                '<i class="fa fa-thumbs-up"></i> Submit!',
+            cancelButtonText:
+                '<i class="fa fa-thumbs-down"></i>'
         },function () {
-            update_product(1);
+            update_product('option','message');
             });
     });
 

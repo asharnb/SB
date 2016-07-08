@@ -126,6 +126,7 @@ class WarehouseOperations extends ResourceBase {
         $result = $this->studioProducts->getProductByIdentifier($product_identifier);
         $product = $this->productCheck($result, $product_identifier);
         $product_values = $product->toArray();
+        $product_container_images = $this->studioProducts->getProductImages($product->id(),true);
 
         // Assign this product to container.
         $this->studioContainer->addProductToContainer($container_nid, $product);
@@ -148,7 +149,7 @@ class WarehouseOperations extends ResourceBase {
         }
 
         // Return the response. Product info, container info, import status, etc.,
-        return new ResourceResponse(array('product'=>$product_return_data,'duplicate' => $duplicate,'already_scanned' => $already_scanned));
+        return new ResourceResponse(array('product'=>$product_return_data,'duplicate' => $duplicate,'already_scanned' => $already_scanned,'images' => $product_container_images));
       }
     }
 

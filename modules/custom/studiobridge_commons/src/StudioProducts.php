@@ -298,7 +298,7 @@ class StudioProducts implements StudioProductsInterface {
    * @param nid
    *   Node nid value.
    */
-  public function getProductImages($nid) {
+  public function getProductImages($nid, $containerOlny = false) {
 
     $image_uri = array();
 
@@ -319,12 +319,27 @@ class StudioProducts implements StudioProductsInterface {
             // Get the file name.
             $file_name = $file->filename->getValue();
             $file_name = $file_name[0]['value'];
-            // Get if image has been tagged
-            $image_tag = $file->field_tag->getValue();
-            $image_tag = $image_tag[0]['value'];
-            // Get the image of style - Live shoot preview.
-            $image_uri_value = ImageStyle::load('live_shoot_preview')->buildUrl($file->getFileUri());
-            $image_uri[$fid] = array('uri' => $image_uri_value, 'name' => $file_name, 'tag' => $image_tag);
+
+            if($containerOlny){
+              $field_container = $file->field_container->getValue();
+              if($field_container[0]['target_id']){
+                // Get if image has been tagged
+                $image_tag = $file->field_tag->getValue();
+                $image_tag = $image_tag[0]['value'];
+                // Get the image of style - Live shoot preview.
+                $image_uri_value = ImageStyle::load('live_shoot_preview')->buildUrl($file->getFileUri());
+                $image_uri[$fid] = array('uri' => $image_uri_value, 'name' => $file_name, 'tag' => $image_tag);
+              }
+
+            }else{
+
+              // Get if image has been tagged
+              $image_tag = $file->field_tag->getValue();
+              $image_tag = $image_tag[0]['value'];
+              // Get the image of style - Live shoot preview.
+              $image_uri_value = ImageStyle::load('live_shoot_preview')->buildUrl($file->getFileUri());
+              $image_uri[$fid] = array('uri' => $image_uri_value, 'name' => $file_name, 'tag' => $image_tag);
+            }
 
           }
 
@@ -779,7 +794,8 @@ class StudioProducts implements StudioProductsInterface {
           "color" => '',
           "description" => '',
           "image_count" => count($images),
-          "identifier" => $identifier
+          "identifier" => $identifier,
+          "pid" => $product->id()
         );
 
       }
@@ -820,7 +836,8 @@ class StudioProducts implements StudioProductsInterface {
           "color" => $color,
           "description" => $description,
           "image_count" => count($images),
-          "identifier" => $identifier
+          "identifier" => $identifier,
+          "pid" => $product->id()
         );
 
       }
