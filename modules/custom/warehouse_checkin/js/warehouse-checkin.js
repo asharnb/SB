@@ -19,7 +19,7 @@
             var container_nid = document.getElementById('warehouse-container-nid').value;
             //check for scanning same product
             if(this.value.length){
-                process_product(this.value,container, container_nid);
+                process_product(this.value,container, container_nid, false);
             }else{
                 $('#warehouse-checkin-product-status-wrapper').html('Please enter product value.');
             }
@@ -29,7 +29,7 @@
     /*
      *  Process to warehouse rest resource.
      */
-    function wareHouseScanProduct(csrfToken, node, init) {
+    function wareHouseScanProduct(csrfToken, node, init, onload) {
         $('#warehouse-checkin-product-status-wrapper').html('Checking server ...');
         $.ajax({
             url: Drupal.url('warehouse/operation/' + init + '/post?_format=json'),
@@ -44,34 +44,37 @@
                 $('#warehouse-checkin-product-status-wrapper').html('Processed successfully.');
                 console.log(response);
 
-                if(response.duplicate){
-                    swal({
-                        title: 'Duplicate Product',
-                        text: 'Duplicate product, already found in another container.',
-                        type: 'warning', //error
-                        showCancelButton: false,
-                        confirmButtonColor: "#DD6B55",
-                        confirmButtonText: "OK",
-                        closeOnConfirm: true,
-                        timer: 5000
-                    });
-                }
-                if(response.already_scanned){
-                    swal({
-                        title: 'Product already scanned',
-                        text: 'This product already scanned in this container.',
-                        type: 'warning', //error
-                        showCancelButton: false,
-                        confirmButtonColor: "#DD6B55",
-                        confirmButtonText: "OK",
-                        closeOnConfirm: true,
-                        timer: 5000
-                    });
+                if(!onload){
+                    if(response.duplicate){
+                        swal({
+                            title: 'Duplicate Product',
+                            text: 'Duplicate product, already found in another container.',
+                            type: 'warning', //error
+                            showCancelButton: false,
+                            confirmButtonColor: "#DD6B55",
+                            confirmButtonText: "OK",
+                            closeOnConfirm: true,
+                            timer: 5000
+                        });
+                    }
+                    if(response.already_scanned){
+                        swal({
+                            title: 'Product already scanned',
+                            text: 'This product already scanned in this container.',
+                            type: 'warning', //error
+                            showCancelButton: false,
+                            confirmButtonColor: "#DD6B55",
+                            confirmButtonText: "OK",
+                            closeOnConfirm: true,
+                            timer: 5000
+                        });
+                    }
+
+                    setTimeout(function(){
+                        $('#warehouse-checkin-product-status-wrapper').html('&nbsp');
+                    }, 3300);
                 }
 
-                setTimeout(function(){
-                    $('#warehouse-checkin-product-status-wrapper').html('&nbsp');
-                }, 3300);
             },
             error: function(){
                 alert('Failed! **');
@@ -87,7 +90,7 @@
     /*
      *  Process product in the container.
      */
-    function process_product(product,container, container_nid){
+    function process_product(product,container, container_nid, onload){
         var data = {
             _links: {
                 type: {
@@ -109,7 +112,7 @@
         };
 
         getCsrfTokenForWarehouse(function (csrfToken) {
-            wareHouseScanProduct(csrfToken, data, 'import');
+            wareHouseScanProduct(csrfToken, data, 'import', onload);
         });
 
     }
@@ -147,34 +150,27 @@
     $("#container-finish").click(function () {
         var container_nid = document.getElementById('warehouse-container-nid').value;
 
-        swal({
-            title: "Confirm Finish",
-            text: "Are you sure you want to finish this container?",
-            type: "warning",
-            showCancelButton: true,
-            confirmButtonColor: "#DD6B55",
-            confirmButtonText: "Finish It",
-            closeOnConfirm: false
-        },function () {
-            window.location = Drupal.url.toAbsolute(drupalSettings.path.baseUrl + 'warehouse/checkout/' + container_nid);
-        });
-
-
 //        swal({
-//            title: '<i>HTML</i> <u>example</u>',
-//            type: 'info',
-//            html:
-//                'You can use <b>bold text</b>, ' +
-//                    '<a href="//github.com">links</a> ' +
-//                    'and other HTML tags',
-//            showCloseButton: true,
+//            title: "Confirm Finish",
+//            text: "Are you sure you want to finish this container?",
+//            type: "warning",
 //            showCancelButton: true,
-//            confirmButtonText:
-//                '<i class="fa fa-thumbs-up"></i> Great!',
-//            cancelButtonText:
-//                '<i class="fa fa-thumbs-down"></i>'
-//        })
+//            confirmButtonColor: "#DD6B55",
+//            confirmButtonText: "Finish It",
+//            closeOnConfirm: false
+//        },function () {
+//            window.location = Drupal.url.toAbsolute(drupalSettings.path.baseUrl + 'warehouse/checkout/' + container_nid);
+//        });
 
+        swal({
+            title: 'jQuery HTML example',
+            html: $('<input type="text">')
+                .addClass('some-class')
+                .text('jQuery is everywhere.') +
+                $('<input type="text">')
+                    .addClass('some-class1')
+                    .text('jQuery is everywhere1.')
+        })
 
     });
 
@@ -186,7 +182,7 @@
         var container, inputs, index;
 
         // Get the container element
-        container = document.getElementById('imagecontainer');
+        container = document.getElementById('filmroll');
 
         // Find its child `input` elements
         //inputs = container.getElementsByTagName('input');
@@ -195,7 +191,7 @@
 
 
 
-        var ul = document.getElementById('imagecontainer');
+        var ul = document.getElementById('filmroll');
         var li = document.createElement("div");
         //li.appendChild(document.createTextNode(100));
         li.setAttribute("class", "bulkviewfiles imagefile ui-sortable-handle"); // added line
@@ -233,9 +229,20 @@
         li.innerHTML = block;
         ul.appendChild(li);
 
-        var dcount = document.getElementById('product-img-count').innerHTML;
-        dcount++;
-        document.getElementById('product-img-count').innerHTML = dcount;
+//        var dcount = document.getElementById('product-img-count').innerHTML;
+//        dcount++;
+//        document.getElementById('product-img-count').innerHTML = dcount;
     }
+
+    $( document ).ready(function() {
+        var w = $('#warehouse-checkin-product-scan');
+        var wx = w.val();
+        var container = document.getElementById('warehouse-container-id').value;
+        var container_nid = document.getElementById('warehouse-container-nid').value;
+        //check for scanning same product
+        if(wx.length){
+            process_product(wx,container, container_nid, true);
+        }
+    });
 
 })(jQuery);
