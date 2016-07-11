@@ -277,7 +277,7 @@ class StudioProducts implements StudioProductsInterface {
         'field_concept_name' => array('value' => $product->concept),
         'field_gender' => array('value' => $product->gender),
         'field_description' => array('value' => $product->description),
-        'field_color_variant' => array('value' => $product->color_variant), // todo: may be multiple
+        'field_color_variant' => array('value' => str_replace('/','-', $product->color_variant)), // todo: may be multiple
         'field_color_name' => array('value' => $product->color_name), //  todo: may be multiple
         'field_size_name' => $field_size_name, // todo: may be multiple
         'field_size_variant' => $field_size_variant, // todo: may be multiple
@@ -377,6 +377,7 @@ class StudioProducts implements StudioProductsInterface {
         $pass = $config->get('password');
       }
     }
+
 
     try {
       $response = \Drupal::httpClient()

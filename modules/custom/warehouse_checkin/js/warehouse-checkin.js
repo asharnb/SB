@@ -127,7 +127,7 @@
         //document.getElementById('dd-identifier').innerHTML = data.product.concept;
         $('#dd-identifier').html(data.product.identifier);
         $('#dd-description').html(data.product.description);
-        $('#dd-color-variant').html(data.product.colorvariant);
+        $('#dd-colorvariant').html(data.product.colorvariant);
         $('#dd-gender').html(data.product.gender);
         $('#dd-color').html(data.product.color);
         $('#dd-size').html(data.product.size);
@@ -150,27 +150,27 @@
     $("#container-finish").click(function () {
         var container_nid = document.getElementById('warehouse-container-nid').value;
 
-//        swal({
-//            title: "Confirm Finish",
-//            text: "Are you sure you want to finish this container?",
-//            type: "warning",
-//            showCancelButton: true,
-//            confirmButtonColor: "#DD6B55",
-//            confirmButtonText: "Finish It",
-//            closeOnConfirm: false
-//        },function () {
-//            window.location = Drupal.url.toAbsolute(drupalSettings.path.baseUrl + 'warehouse/checkout/' + container_nid);
-//        });
-
         swal({
-            title: 'jQuery HTML example',
-            html: $('<input type="text">')
-                .addClass('some-class')
-                .text('jQuery is everywhere.') +
-                $('<input type="text">')
-                    .addClass('some-class1')
-                    .text('jQuery is everywhere1.')
-        })
+            title: "Confirm Finish",
+            text: "Are you sure you want to finish this container?",
+            type: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#DD6B55",
+            confirmButtonText: "Finish It",
+            closeOnConfirm: false
+        },function () {
+            window.location = Drupal.url.toAbsolute(drupalSettings.path.baseUrl + 'warehouse/checkout/' + container_nid);
+        });
+
+//        swal({
+//            title: 'jQuery HTML example',
+//            html: $('<input type="text">')
+//                .addClass('some-class')
+//                .text('jQuery is everywhere.') +
+//                $('<input type="text">')
+//                    .addClass('some-class1')
+//                    .text('jQuery is everywhere1.')
+//        })
 
     });
 
