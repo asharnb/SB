@@ -26,7 +26,7 @@ studio_session_operations.close_session_operations_hello:
 # ("\Drupal\studio_session_operations\Controller\CsvMakerController")
 # and a method ("hello").
 studio_session_operations.csv_maker_controller_hello:
-  path: 'session-shootlist/{id}'
+  path: 'session-shootlist/{id}/{type}'
   defaults:
     _controller: '\Drupal\studio_session_operations\Controller\CsvMakerController::hello'
     _title: 'download'
