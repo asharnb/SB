@@ -67,9 +67,10 @@
         }, function () {
           window.location = "/close-session/"+id+"/1";
         });
-      });
-    }
-  };
+
+    });
+  }
+}
 
   Drupal.behaviors.importproducts = {
     attach: function(context) {

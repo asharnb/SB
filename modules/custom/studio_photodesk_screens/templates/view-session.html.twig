@@ -280,7 +280,7 @@ total_images: Total no.of images in this session - {{ total_images }} * * * @ing
 
               <td><img src="/{{ directory }}/images/brands/brand_logo_{{ item.field_concept_name.0.value|lower|replace({" ": ""}) }}.png" height="20px"></td>
               <td>{{ item.field_style_family.0.value }}</td>
-              <td>{{ item.title.0.value }}</td>
+              <td>{{ item.field_color_variant.0.value }}</td>
               <td>
                 {% if item.nid.0. value in session.field_reshoot_product | json_encode() %}
                 <span class="text-warning semi-bold">Reshoot</span>

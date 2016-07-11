@@ -26,14 +26,9 @@ function studiobridge_theme(&$existing, $type, $theme, $path) {
         'render element' => 'form',
         'template' => 'customtemplates/user-edit',
     );
+    $hooks['node_container_form'] = array(
+        'render element' => 'form',
+        'template' => 'customtemplates/add-container',
+    );
     return $hooks;
-};
-
-function studiobridge_preprocess_breadcrumb(&$variables){
-       if(($node = \Drupal::routeMatch()->getParameter('node')) && $variables['breadcrumb']){
-               $variables['breadcrumb'][] = array(
-                         'text' => $node->getTitle(),
-                         'url' => $node->URL()
-                       );
-       }
 };

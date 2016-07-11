@@ -5,7 +5,7 @@
     <h4 class="no-margins">View all containers received by the studio</h4>
   </div>
   <div class="col-sm-12 col-md-4 m-t-md">
-    <a class="btn btn-primary btn-cons pull-right" href="/node/add/sessions">Add New Container</a>
+    <a class="btn btn-primary btn-cons pull-right" href="/node/add/container">Add New Container</a>
   </div>
 
 </div>
@@ -63,7 +63,7 @@
           <td>{{ result.nid.0.value }}</td>
           <td>{{ result.title.0.value }}</td>
           <td >{{ result.field_container_state.0.value|title }}</td>
-          <td >{{ result.field_received_by.0.value }}</td>
+          <td >{{ result.field_received_by.0.target_id }}</td>
           <td >{{ result.field_received_date.0.value|date('F jS, Y, g:i a') }}</td>
           <td >{{ result.field_expected_quantity.0.value }}</td>
           <td class="{{received_class}}">{{ result.field_product|length }}</td>

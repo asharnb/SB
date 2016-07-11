@@ -75,22 +75,8 @@ public function content()
   ->execute();
 
   //load all the nodes from the result
-  $products = $this->nodeStorage->loadMultiple($result);
+  $containers = $this->nodeStorage->loadMultiple($result);
 
-
-  //load all the nodes from the result
-  $mapped_products = $this->nodeStorage->loadMultiple($result);
-
-
-  //if results are not empty load each node and get info
-  if (!empty($products)) {
-    foreach ($products as $product) {
-
-      $product_data[] = $product->toArray();
-
-
-  }
-}
 
 
 
@@ -98,10 +84,10 @@ public function content()
 return [
   '#theme' => 'view_all_containers',
   '#cache' => ['max-age' => 0],
-  '#results' => $mapped_products,
+  '#results' => $containers,
   '#attached' => array(
     'library' => array(
-      'studio_photodesk_screens/studiobridge-sessions'
+      'warehouse_checkin/containers'
     ),
   ),
 ];
