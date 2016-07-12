@@ -61,7 +61,7 @@
           <div class="col-sm-12 no-margins no-padding ">
             <div class="col-sm-5">
               <address>
-                <strong class="text-success">Container is Open</strong><br>
+                <strong class="text-success">Container is Checking-in</strong><br>
                 <small class="text-muted"><em>Started at {{session.created.0.value|date('F jS, Y, g:i a')}}</em></small>
               </address>
 
@@ -76,6 +76,11 @@
           </div>
 
           <div class="col-sm-12 no-margins no-padding p-t-20">
+            {% set received_class = 'text-danger' %}
+            {% if products|length == container.field_expected_quantity.0.value %}
+              {% set received_class = 'text-success' %}
+            {% endif %}
+
             <div class="col-sm-8">
               <div class="col-sm-4 m-l-n">
                 <h5 class="m-sm">Container ID</h5>
@@ -84,7 +89,7 @@
 
               <div class="col-sm-4">
                 <h5 class="m-sm">Products Received</h5>
-                <h3 class="m-sm">{{ container.field_product|length }}</h3>
+                <h3 class="m-sm {{received_class}}">{{ container.field_product|length }}</h3>
               </div>
 
               <div class="col-sm-4">
