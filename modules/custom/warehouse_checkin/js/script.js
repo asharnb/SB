@@ -231,7 +231,8 @@
         imgSrc = imgSrc.replace('data:image/png;base64,',"");
 
         if(tag || ref){
-            SendImageToServer(container_nid, tag, ref, imgSrc, id);
+            //SendImageToServer(container_nid, tag, ref, imgSrc, id);
+            sendfile(imgSrc,container_nid);
         }
     }
 
@@ -244,8 +245,8 @@
 
         // Find its child `input` elements
         //inputs = container.getElementsByTagName('input');
-        inputs = container.getElementsByClassName("form-checkbox");
-        var seq = inputs.length + 1;
+        //inputs = container.getElementsByClassName("form-checkbox");
+        var seq = 1;
 
         var fid = div_id;
         //var img = {'uri' : 'https://www.drupal.org/files/druplicon-small.png', 'tag':1};
@@ -289,6 +290,69 @@
 
         li.innerHTML = block;
     //    ul.appendChild(li);
+    }
+
+
+
+    function sendfile(theFile, cid) {
+
+
+        var filename = theFile;
+
+
+        var formData = {
+            _links: {
+                type: {
+                    href: Drupal.url.toAbsolute(drupalSettings.path.baseUrl + 'rest/type/file/image')
+                }
+            },
+            filename: [{
+                value: "test.jpg"
+            }],
+            filemime: [{
+                value: "image/jpeg"
+            }],
+            field_container: [{
+                target_id: cid //get global session
+            }],
+            filesize: [{
+                value: "488" //get filesize
+            }],
+            type: [{
+                target_id: "image" //static
+            }],
+            data: [{
+                value: filename
+            }]
+        };
+
+        //console.log(JSON.stringify(formData));
+
+
+        $.ajax({
+
+            //processData: false,
+            //contentType: false,
+            async: true,
+            url: Drupal.url.toAbsolute(drupalSettings.path.baseUrl + 'entity/file?_format=hal_json'),
+            method: "POST",
+            headers: {
+                "authorization": "Basic a3Jpc2huYToxMjM0",
+                "content-type": "application/hal+json"
+                //"cache-control": "no-cache",
+                //"postman-token": "54574d50-e846-6642-51d0-038790477b9a"
+            },
+            data: JSON.stringify(formData),
+
+            success: function(data) {
+                alert('sss');
+
+            }
+
+
+        });
+
+
     }
 
 

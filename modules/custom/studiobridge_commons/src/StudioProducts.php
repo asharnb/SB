@@ -322,13 +322,15 @@ class StudioProducts implements StudioProductsInterface {
 
             if($containerOlny){
               $field_container = $file->field_container->getValue();
-              if($field_container[0]['target_id']){
-                // Get if image has been tagged
-                $image_tag = $file->field_tag->getValue();
-                $image_tag = $image_tag[0]['value'];
-                // Get the image of style - Live shoot preview.
-                $image_uri_value = ImageStyle::load('live_shoot_preview')->buildUrl($file->getFileUri());
-                $image_uri[$fid] = array('uri' => $image_uri_value, 'name' => $file_name, 'tag' => $image_tag);
+              if($field_container){
+                if($field_container[0]['target_id']){
+                  // Get if image has been tagged
+                  $image_tag = $file->field_tag->getValue();
+                  $image_tag = $image_tag[0]['value'];
+                  // Get the image of style - Live shoot preview.
+                  $image_uri_value = ImageStyle::load('live_shoot_preview')->buildUrl($file->getFileUri());
+                  $image_uri[$fid] = array('uri' => $image_uri_value, 'name' => $file_name, 'tag' => $image_tag);
+                }
               }
 
             }else{

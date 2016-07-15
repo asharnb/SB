@@ -61,10 +61,10 @@
             type: {
                 target_id: 'products'
             },
-            field_flag_option: {
+            field_container_flag_options: {
                 value:option
             },
-            field_flag_message: {
+            field_container_flag_message: {
                 value:message
             }
         };
@@ -80,20 +80,34 @@
         });
     }
 
-    $(".studio-product-drop").click(function () {
+    $("#warehouse-flag-product").click(function () {
         swal({
             title: 'Flag Product',
             type: 'info',
             html:
-                'options, textarea will come here',
+                '<div id="warehouse-flag-form">' +
+                'Option: <select id="flag-option" required="required">' +
+                    '<option value="op1">Option 1</option>' +
+                    '<option value="op2">Option 2</option> ' +
+                    '<option value="op3">Option 3</option>' +
+                '</select>'+
+                '<br />' +
+                'Reason: <textarea rows="2" id="flag-reason" required="required"></textarea>'+
+                '</div>',
             showCloseButton: true,
             showCancelButton: true,
             confirmButtonText:
-                '<i class="fa fa-thumbs-up"></i> Submit!',
+                'Flag',
             cancelButtonText:
-                '<i class="fa fa-thumbs-down"></i>'
+                'Cancel'
         },function () {
-            update_product('option','message');
+            var option = document.getElementById('flag-option').value;
+            var reason = document.getElementById('flag-reason').value;
+                if(option && reason.length){
+                    update_product(option,reason);
+                }else{
+                    alert('Missing input.');
+                }
             });
     });
 

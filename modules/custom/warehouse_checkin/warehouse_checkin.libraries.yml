@@ -8,6 +8,7 @@ checkin-form:
     js/warehouse-checkin.js: {}
     js/warehouse-img-actions.js: {}
     js/warehouse-drop-product.js: {}
+    js/warehouse-flag-product.js: {}
   dependencies:
     - core/jquery
 
