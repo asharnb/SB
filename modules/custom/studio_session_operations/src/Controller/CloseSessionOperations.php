@@ -199,7 +199,7 @@ class CloseSessionOperations extends ControllerBase {
 
   }
 
-  public function closeSession($session){
+  public static function closeSession($session){
     $session->field_status->setValue(array('value' => 'closed'));
     $session->save();
   }
@@ -216,7 +216,7 @@ class CloseSessionOperations extends ControllerBase {
    *  Product node object
    *
    */
-  public function DeleteProducts($product, $sid, &$context) {
+  public static function DeleteProducts($product, $sid, &$context) {
     $key = 'close_operation_delete_'.$product->id();
     \Drupal::state()->set($key,$sid);
 
@@ -260,7 +260,7 @@ class CloseSessionOperations extends ControllerBase {
     }
   }
 
-  public function AutomaticEmails($sid, $session){
+  public static function AutomaticEmails($sid, $session){
     Queues::RunMappingQueues($sid);
 
 
@@ -342,14 +342,21 @@ class CloseSessionOperations extends ControllerBase {
 
   public function ImageNameOperations($sid){
     foreach($this->products as $product){
-      $this->operations[] = array(array(get_class($this), 'PhysicalImageName'), array($product->id(), $sid));
+      $draft = $product->field_draft->getValue();
+      if(isset($draft[0]['value'])){
+        if(!$draft[0]['value']){
+          $this->operations[] = array(array(get_class($this), 'PhysicalImageName'), array($product->id(), $sid));
+        }
+      }else{
+        $this->operations[] = array(array(get_class($this), 'PhysicalImageName'), array($product->id(), $sid));
+      }
     }
   }
 
   /*
    *
    */
-  public function PhysicalImageName($product, $sid){
+  public static function PhysicalImageName($product, $sid){
     $product = Node::load($product);
 
     $concept = 'InValidConcept';

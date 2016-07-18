@@ -23,7 +23,7 @@ class CsvMakerController extends ControllerBase {
    * @return string
    *   Return Hello string.
    */
-  public function hello($id, $type) {
+  public function hello($id, $type, $concept) {
 
     $head = array('Identifier', 'Photographer', 'Shoot-Date', 'Color-Variant', 'SESSION');
     $unMappedHead = array('Identifier', 'Photographer', 'Shoot-Date');
@@ -35,7 +35,7 @@ class CsvMakerController extends ControllerBase {
       $bundle = $session->bundle();
       if ($bundle == 'sessions') {
         $pids = $session->field_product->getValue();
-        $rows = $this->getMapped($session, $pids, $type);
+        $rows = $this->getMapped($session, $pids, $type, $concept);
         $sid = $session->id();
 
         if($type == 'unmapped_products'){
@@ -82,12 +82,13 @@ class CsvMakerController extends ControllerBase {
   /*unmapped_products, products
    *
    */
-  public function getMapped($session, $pids, $type) {
+  public function getMapped($session, $pids, $type, $concept) {
     //print_r($session->toArray());
 
     $photographer = $session->field_photographer->getValue();
     $sid = $session->id();
     $rows = array();
+    $product_concept = '';
 
     if ($photographer) {
       $photographer = User::load($photographer[0]['target_id']);
@@ -121,28 +122,68 @@ class CsvMakerController extends ControllerBase {
 
           if ($bundle == 'products' && $type == 'products') {
 
-            $title = $product->title->getValue();
+            if($concept){
+              $product_concept = $product->field_concept_name->getValue();
+              if($product_concept){
+                $product_concept = $product_concept[0]['value'];
+                if($product_concept == $concept){
 
-            if ($title) {
-              $title = $title[0]['value'];
-            }
 
-            $created = $product->created->getValue();
-            $date = date('d-m-Y', $created[0]['value']);
+                  $title = $product->title->getValue();
 
-            $color_variant = '';
-            // Get color variant.
-            $product_color_variant = $product->field_color_variant->getValue();
-            if ($product_color_variant) {
-              $color_variant = $product_color_variant[0]['value'];
-            }
-            if (!$color_variant) {
-              if ($title) {
-                $color_variant = $title[0]['value'];
+                  if ($title) {
+                    $title = $title[0]['value'];
+                  }
+
+                  $created = $product->created->getValue();
+                  $date = date('d-m-Y', $created[0]['value']);
+
+                  $color_variant = '';
+                  // Get color variant.
+                  $product_color_variant = $product->field_color_variant->getValue();
+                  if ($product_color_variant) {
+                    $color_variant = $product_color_variant[0]['value'];
+                  }
+                  if (!$color_variant) {
+                    if ($title) {
+                      $color_variant = $title[0]['value'];
+                    }
+                  }
+
+                  $rows[] = array(trim($title), $photographer, $date, $color_variant, $sid);
+
+                }
               }
+            }else{
+
+
+              $title = $product->title->getValue();
+
+              if ($title) {
+                $title = $title[0]['value'];
+              }
+
+              $created = $product->created->getValue();
+              $date = date('d-m-Y', $created[0]['value']);
+
+              $color_variant = '';
+              // Get color variant.
+              $product_color_variant = $product->field_color_variant->getValue();
+              if ($product_color_variant) {
+                $color_variant = $product_color_variant[0]['value'];
+              }
+              if (!$color_variant) {
+                if ($title) {
+                  $color_variant = $title[0]['value'];
+                }
+              }
+
+              $rows[] = array(trim($title), $photographer, $date, $color_variant, $sid);
+
+
             }
 
-           $rows[] = array(trim($title), $photographer, $date, $color_variant, $sid);
+
 
           }
 
