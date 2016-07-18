@@ -150,7 +150,8 @@
             method: 'POST',
             headers: {
                 'Content-Type': 'application/hal+json',
-                'X-CSRF-Token': csrfToken
+                'X-CSRF-Token': csrfToken,
+                'Cache-Control': 'max-age=0'
             },
             data: JSON.stringify(node),
             success: function (file) {
@@ -201,9 +202,9 @@
             "data": [
                 {    "value": src   }
             ],
-            "status": [
-                {     "value": "1"   }
-            ],
+//            "status": [
+//                {     "value": "1"   }
+//            ],
             "field_reference": [
                 {
                     "value": ref
@@ -231,8 +232,8 @@
         imgSrc = imgSrc.replace('data:image/png;base64,',"");
 
         if(tag || ref){
-            //SendImageToServer(container_nid, tag, ref, imgSrc, id);
-            sendfile(imgSrc,container_nid);
+            SendImageToServer(container_nid, tag, ref, imgSrc, id);
+            //sendfile(imgSrc,container_nid);
         }
     }
 
