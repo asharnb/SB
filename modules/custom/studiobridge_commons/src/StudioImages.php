@@ -53,7 +53,8 @@ Class StudioImages {
       //\Drupal::logger('GGG')->notice('');
       $uri = $folder.'/'.$filename;
       //file_build_uri();
-      return file_move($fileObj, $uri, FILE_EXISTS_REPLACE);
+      //return file_move($fileObj, $uri, FILE_EXISTS_REPLACE);
+      return file_copy($fileObj, $uri, FILE_EXISTS_RENAME);
     }
 
   }
@@ -147,14 +148,14 @@ Class StudioImages {
     if(StudioImages::ImagePhysicalName($dir,$filename,$file)){
       $folder = "public://$dir";
       $uri = $folder.'/'.$filename;
-      $file->uri->setValue($uri); //public://fileKVxEHe
+//      $file->uri->setValue($uri); //public://fileKVxEHe
     }
-    $file->filename->setValue($filename);
-    $file->save();
+//    $file->filename->setValue($filename);
+//    $file->save();
     //
     $folder = "public://$dir";
     $uri = $folder.'/'.$filename;
-    StudioImages::UpdateFileLog($file->id(),$uri);
+    //StudioImages::UpdateFileLog($file->id(),$uri);
 
   }
 

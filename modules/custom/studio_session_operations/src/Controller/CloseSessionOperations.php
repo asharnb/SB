@@ -102,6 +102,8 @@ class CloseSessionOperations extends ControllerBase {
    */
   public function run($sid, $confirm) {
 
+    \Drupal::state()->set('close_session_operation_started',true);
+
     $this->sid = $sid;
 
     $this->session_node = $this->nodeStorage->load($sid);
@@ -149,6 +151,9 @@ class CloseSessionOperations extends ControllerBase {
    * Function will run after batch finished.
    */
   public function finishBatch($success, $results, $operations) {
+
+    \Drupal::state()->delete('close_session_operation_started');
+
     // The 'success' parameter means no fatal PHP errors were detected. All
     // other error management should be handled using 'results'.
     if ($success) {
