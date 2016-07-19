@@ -53,8 +53,9 @@ dashboard:
     js/dashboard.js: {}
 
 chart-js:
+  header: true
   js:
-    js/chartjs/Chart.js: {}
+    js/chartjs/chart.min.js: {}
   dependencies:
     - core/jquery
 

@@ -23,3 +23,5 @@ libraries:
   - 'studiobridge/global-styling'
   - 'studiobridge/sweet-alert'
   - 'studiobridge/smart-alert'
+  - 'studiobridge/chart-js'
+  - 'studiobridge/flot-charts'

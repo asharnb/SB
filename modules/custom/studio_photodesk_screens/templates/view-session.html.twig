@@ -437,7 +437,7 @@ total_images: Total no.of images in this session - {{ total_images }} * * * @ing
 
                 <small>
 
-                  <a href="/shootlist/{{session.nid.0.value}}/download.csv" class="btn">Download</a>
+                  <a href="/session-shootlist/{{session.nid.0.value}}/products" class="btn">Download</a>
                 </small>
 
               </div>
@@ -445,6 +445,29 @@ total_images: Total no.of images in this session - {{ total_images }} * * * @ing
           </div>
         </div>
         {% endfor %}
+        {% if unmapped_products|length > 0%}
+        <div class="col-md-6">
+
+          <div class="profile-image">
+            <img src="/themes/studiobridge/images/excel.png" class="m-b-md" alt="profile">
+          </div>
+          <div class="profile-info">
+            <div class="">
+              <div>
+                <h2 class="m-t-sm">
+                  Unmapped Shoot List
+                </h2>
+
+                <small>
+
+                  <a href="/session-shootlist/{{session.nid.0.value}}/unmapped_products" class="btn">Download</a>
+                </small>
+
+              </div>
+            </div>
+          </div>
+        </div>
+        {% endif %}
 
 
 
@@ -453,8 +476,11 @@ total_images: Total no.of images in this session - {{ total_images }} * * * @ing
       <div class="tab-pane" id="tab-analysis">
 
         <div class="col-lg-12">
+
+          {% for item in period %} "{{ item.time }}", {% endfor %}
+          {% for item in period %} "{{ item.nid }}", {% endfor %}
             <div class=" flot-chart chart-responsive text-center " >
-                <canvas id="uploadTrendsChart" class="flot-chart-content" ></canvas>
+                <canvas id="uploadTrendsChart" class="flot-chart-content" style="width:1024px; height: 500px;"></canvas>
             </div>
             <div id="uploadTrendLegend" class="chart-legend"></div>
         </div>
@@ -475,28 +501,18 @@ var lineChartCanvas = document.getElementById("uploadTrendsChart").getContext("2
 var lineChart = new Chart(lineChartCanvas);
 
 var lineChartData = {
-  labels: [{% for label in uploadtrend.chart_label %} "{{ label }}", {% endfor %}],
+  labels: [{% for item in period %} "{{ item.nid }}", {% endfor %}],
   datasets: [
     {
-      label: "{{uploadtrend.first_set_label}}",
+      label: "Time per Product",
         fillColor: "rgba(220,220,220,0.5)",
         strokeColor: "rgba(220,220,220,1)",
         pointColor: "rgba(220,220,220,1)",
         pointStrokeColor: "#fff",
         pointHighlightFill: "#fff",
         pointHighlightStroke: "rgba(220,220,220,1)",
-      data: [{% for first in uploadtrend.first_set %} "{{ first }}", {% endfor %}],
-    },
-    {
-      label: "{{uploadtrend.second_set_label}}",
-        fillColor: "rgba(0,185,229,0.5)",
-        strokeColor: "rgba(0,185,229,0.7)",
-        pointColor: "rgba(0,185,229,1)",
-        pointStrokeColor: "#fff",
-        pointHighlightFill: "#fff",
-        pointHighlightStroke: "rgba(26,179,148,1)",
-      data: [{% for second in uploadtrend.second_set %} "{{ second }}", {% endfor %}],
-    },
+      data: [{% for item in period %} "{{ item.nid }}", {% endfor %}],
+    }
   ]
 };
 
