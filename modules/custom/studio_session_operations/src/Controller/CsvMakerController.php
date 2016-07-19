@@ -71,12 +71,12 @@ class CsvMakerController extends ControllerBase {
     // reset the file pointer to the start of the file
     fseek($f, 0);
     // tell the browser it's going to be a csv file
-    header('Content-Type: application/xls');
+    //header('Content-Type: application/xls');
     // tell the browser we want to save it instead of displaying it
     header('Content-Disposition: attachment; filename="' . $filename . '";');
     // make php send the generated csv lines to the browser
 
-    header('Content-Type: text/html; charset=utf-8');
+    header('Content-Type: text/csv; charset=utf-8');
 
     fpassthru($f);
 
@@ -130,7 +130,7 @@ class CsvMakerController extends ControllerBase {
               $product_concept = $product->field_concept_name->getValue();
               if($product_concept){
                 $product_concept = $product_concept[0]['value'];
-                if($product_concept == $concept){
+                if(strtolower($product_concept) == strtolower($concept)){
 
 
                   $title = $product->title->getValue();
