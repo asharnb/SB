@@ -294,7 +294,7 @@ total_images: Total no.of images in this session - {{ total_images }} * * * @ing
               <td class="{{ image_count_class }}">{{ item.field_images|length }}</td>
 
               <td class="text-align-center">
-                <a target="_blank" class="btn btn-xs" href="/view-product/{{item.nid.0.value }}">View</a>
+                <a target="_blank" class="btn btn-xs" href="/node/{{item.nid.0.value }}">View</a>
               </td>
 
 
@@ -349,7 +349,7 @@ total_images: Total no.of images in this session - {{ total_images }} * * * @ing
               <td class="{{ image_count_class }}">{{ item.field_images|length }}</td>
 
               <td class="text-align-center">
-                <a target="_blank" class="btn btn-xs" href="/view-product/{{item.nid.0.value }}">View</a>
+                <a target="_blank" class="btn btn-xs" href="/node/{{item.nid.0.value }}">View</a>
               </td>
 
             </tr>
@@ -403,7 +403,7 @@ total_images: Total no.of images in this session - {{ total_images }} * * * @ing
               <td class="{{ image_count_class }}">{{ item.field_images|length }}</td>
 
               <td class="text-align-center">
-                <a target="_blank" class="btn btn-xs" href="/view-product/{{item.nid}}">View</a>
+                <a target="_blank" class="btn btn-xs" href="/node/{{item.nid}}">View</a>
               </td>
               <td class="text-align-center">
                 <a target="_blank" class="btn btn-xs" href="/view-product/{{item.nid}}">Undo</a>
@@ -437,7 +437,7 @@ total_images: Total no.of images in this session - {{ total_images }} * * * @ing
 
                 <small>
 
-                  <a href="/session-shootlist/{{session.nid.0.value}}/products" class="btn">Download</a>
+                  <a href="/session-shootlist/{{session.nid.0.value}}/products/{{item.concept|title}}" class="btn">Download</a>
                 </small>
 
               </div>
