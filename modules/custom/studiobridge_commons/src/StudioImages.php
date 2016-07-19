@@ -146,16 +146,7 @@ Class StudioImages {
     $dir = $session_id.'/'.$concept.'/'.$color_variant;
 
     if(StudioImages::ImagePhysicalName($dir,$filename,$file)){
-      $folder = "public://$dir";
-      $uri = $folder.'/'.$filename;
-//      $file->uri->setValue($uri); //public://fileKVxEHe
     }
-//    $file->filename->setValue($filename);
-//    $file->save();
-    //
-    $folder = "public://$dir";
-    $uri = $folder.'/'.$filename;
-    //StudioImages::UpdateFileLog($file->id(),$uri);
 
   }
 
@@ -243,6 +234,109 @@ Class StudioImages {
 
 
   }
+
+
+  public static function productImageCopy($file, $session_id,$field_base_product_id,$i,$concept, $color_variant, $tag = false){
+
+    $filemime = 'jpg';
+    // todo : filemime will be wrong
+    // change file name as per sequence number and base product_id value.
+    if($tag){
+      $filename = 'Tag.jpg';
+    }else{
+      $filename = $color_variant . '_' . $i . ".$filemime";
+    }
+
+    $dir = $session_id.'/'.$concept.'/'.$color_variant;
+    $dirs = array($session_id,$concept,$color_variant);
+
+    //StudioImages::ImagePhysicalName($dir,$filename,$file);
+
+    $config = \Drupal::config('studiobridge_global_settings.studiosettings');
+    $img_dest = $config->get('image_destination');
+
+    $file_uri = $file->getFileUri();
+    $source = drupal_realpath($file_uri);
+    $drupal_public_file_path = drupal_realpath('public://');
+    $drupal_public_file_path_file_name = $drupal_public_file_path.'/'.$dir.'/'.$filename;
+
+    $drupal_dest_dir = $drupal_public_file_path.'/'.$dir;
+    $is_drupal_dir_writable = is_dir($drupal_dest_dir) && is_writable($drupal_dest_dir);
+
+
+
+    // check destination was set in global configs.
+    if($img_dest){
+
+      $is_writable = is_dir($img_dest) && is_writable($img_dest);
+      // check destination is writable
+      if($is_writable){
+
+        $destination_dir = $img_dest.''.$dir;
+
+        // check directory exists or not.
+        $is_destination_dir_writable = is_dir($destination_dir) && is_writable($destination_dir);
+        if(!$is_destination_dir_writable){
+          mkdir($destination_dir,0777,true);
+          chmod($destination_dir,0777);
+        }
+
+        $destination = $destination_dir.'/'.$filename;
+
+//        if($tag && file_exists($destination)){
+//          $actual_name = pathinfo($destination,PATHINFO_FILENAME);
+//          $extension = pathinfo($destination, PATHINFO_EXTENSION);
+//          $destination = $img_dest.''.$actual_name.'_1.'.$extension;
+//        }
+
+        // on failure copy try to copy to drupal public folder.
+        if(!copy($source,$destination)){
+
+          if(!$is_drupal_dir_writable){
+            mkdir($drupal_dest_dir,0777,true);
+            chmod($drupal_dest_dir,0777);
+          }
+
+          // on failure copy try to copy to drupal public folder.(but by drupal copy methods)
+          if(!copy($source,$drupal_public_file_path_file_name)){
+            StudioImages::ImagePhysicalName($dir,$filename,$file);
+          }
+
+        }
+
+      }else{
+
+        if(!$is_drupal_dir_writable){
+          mkdir($drupal_dest_dir,0777,true);
+          chmod($drupal_dest_dir,0777);
+        }
+
+        if(!copy($source,$drupal_public_file_path_file_name)){
+          StudioImages::ImagePhysicalName($dir,$filename,$file);
+        }
+
+      }
+
+    }else{
+
+      if(!$is_drupal_dir_writable){
+        mkdir($drupal_dest_dir,0777,true);
+        chmod($drupal_dest_dir,0777);
+      }
+
+      // on failure copy try to copy to drupal public folder.(but by drupal copy methods)
+      if(!copy($source,$drupal_public_file_path_file_name)){
+        StudioImages::ImagePhysicalName($dir,$filename,$file);
+      }
+    }
+
+
+
+
+
+
+  }
+
 
 
 }

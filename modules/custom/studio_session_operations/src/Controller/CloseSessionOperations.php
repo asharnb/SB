@@ -423,10 +423,12 @@ class CloseSessionOperations extends ControllerBase {
 
           //$file_name = $file->filename->getValue();
           if($tagged){
-            StudioImages::ImgUpdate($file, $sid,$field_base_product_id,$i,$concept, $color_variant, true);
+            //StudioImages::ImgUpdate($file, $sid,$field_base_product_id,$i,$concept, $color_variant, true);
+            StudioImages::productImageCopy($file, $sid,$field_base_product_id,$i,$concept, $color_variant, true);
             continue;
           }else{
-            StudioImages::ImgUpdate($file, $session_id,$field_base_product_id,$i,$concept, $color_variant,false);
+            //StudioImages::ImgUpdate($file, $session_id,$field_base_product_id,$i,$concept, $color_variant,false);
+            StudioImages::productImageCopy($file, $sid,$field_base_product_id,$i,$concept, $color_variant, false);
             $i++;
           }
 

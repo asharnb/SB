@@ -61,6 +61,14 @@ class StudioSettingsForm extends ConfigFormBase {
       '#size' => 64,
       '#default_value' => $config->get('password'),
     ];
+    $form['image_destination'] = [
+      '#type' => 'textfield',
+      '#title' => $this->t('Destination folder for saving images?'),
+      '#description' => $this->t('Example : /var/www/studio/files/'),
+      '#maxlength' => 200,
+      '#size' => 200,
+      '#default_value' => $config->get('image_destination'),
+    ];
     return parent::buildForm($form, $form_state);
   }
 
@@ -68,6 +76,13 @@ class StudioSettingsForm extends ConfigFormBase {
    * {@inheritdoc}
    */
   public function validateForm(array &$form, FormStateInterface $form_state) {
+
+    $directory = $form_state->getValue('image_destination');
+    $is_writable = is_dir($directory) && is_writable($directory);
+    if(!$is_writable){
+      $form_state->setErrorByName('image_destination','Directory not writable(Should have 0777 permissions) OR directory not exists');
+    }
+
     parent::validateForm($form, $form_state);
   }
 
@@ -80,6 +95,7 @@ class StudioSettingsForm extends ConfigFormBase {
       ->set('url', $form_state->getValue('url'))
       ->set('user_name', $form_state->getValue('user_name'))
       ->set('password', $form_state->getValue('password'))
+      ->set('image_destination', $form_state->getValue('image_destination'))
       ->save();
   }
 
