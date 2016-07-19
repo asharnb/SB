@@ -78,7 +78,7 @@ class warehousecheckinController extends ControllerBase {
     if($container_values['title']){
       $container_id = $container_values['title'][0]['value'];
     }else{
-      drupal_set_message('Invalid Container found', 'warning');
+      drupal_set_message('Invalid Container found', 'error');
       return new RedirectResponse(base_path() . 'containers');
     }
 
@@ -88,7 +88,7 @@ class warehousecheckinController extends ControllerBase {
       if($container_values){
         $container_state = $container_values['field_container_state'][0]['value'];
         if($container_state == 'checkout'){
-          drupal_set_message('Container cannot be checkin again', 'warning');
+          drupal_set_message('This container is closed for check in. No more products can be added to it.', 'warning');
           return new RedirectResponse(base_path() . 'container/view/'. $container_nid);
         }
       }
