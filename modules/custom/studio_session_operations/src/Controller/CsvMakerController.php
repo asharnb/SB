@@ -42,7 +42,11 @@ class CsvMakerController extends ControllerBase {
           $head = $unMappedHead;
           $file_name = 'UnMapped-shootlist-'.$sid.'.csv';
         }else{
-          $file_name = 'Mapped-shootlist-'.$sid.'.csv';
+          if($concept){
+            $file_name = $concept.' Shoot List-'.$sid.'.csv';
+          }else{
+            $file_name = 'Mapped-shootlist-'.$sid.'.csv';
+          }
         }
 
         $this->array_to_csv_download($head, $rows,$file_name);
