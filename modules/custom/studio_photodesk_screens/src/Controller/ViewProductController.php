@@ -88,8 +88,9 @@ class ViewProductController extends ControllerBase {
 
       $file_name = $file->filename->getValue();
       $file_name = $file_name[0]['value'];
+
       $image_uri_value = ImageStyle::load('live_shoot_preview')->buildUrl($file->getFileUri());
-      $images[$fid] = array('uri'=>$image_uri_value,'name'=>$file_name);
+      $images[$fid] = array('fid'=>$fid,'uri'=>$image_uri_value,'name'=>$file_name);
     }
 
     $a =1;
