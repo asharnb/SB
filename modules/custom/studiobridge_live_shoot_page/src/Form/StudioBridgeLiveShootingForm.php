@@ -591,7 +591,7 @@ class StudioBridgeLiveShootingForm extends FormBase {
         $block .= '<div class="ribbon" id="ribboncontainer"><span class="for-tag" id="seq-' . $fid . '" name="' . $i . '">' . $i . '</span></div>';
       }
       else {
-        $block .= '<div class="ribbon" id="ribboncontainer"><span class="for-tag tag" id="seq-' . $fid . '" name="' . $i . '"><i class="fa fa-lg fa-barcode txt-color-white"></i></span></div>';
+        $block .= '<div class="ribbon" id="ribboncontainer"><span data-id="'.$fid.'" class="for-tag tag" id="seq-' . $fid . '" name="' . $i . '"><i class="fa fa-lg fa-barcode txt-color-white"></i></span></div>';
       }
 
       $block .= '<div class="scancontainer"> <div class="hovereffect">';

@@ -163,4 +163,10 @@ $(document).on("click",".studio-img-tag",function(){
         }
     }
 
+    var tag_fid = document.getElementById('seq-2214').getAttribute('data-id');
+    if(tag_fid){
+        updateTagClasses(tag_fid, 'tag');
+        //updateSequence();
+    }
+
 })(jQuery);

@@ -69,7 +69,7 @@
 
                 <div class="bulkviewfiles imagefile" id="warpper-img-{{ image.fid }}">
                     {% if image.tag == '1' %}
-                    <div class="ribbon" id="ribboncontainer"><span class="for-tag tag" id="seq-{{ image.fid }}" name="{{ image.id }}"><i class="fa fa-lg fa-barcode txt-color-white"></i></span></div>
+                    <div class="ribbon" id="ribboncontainer"><span data-id="{{ image.fid }}" class="for-tag tag" id="seq-{{ image.fid }}" name="{{ image.id }}"><i class="fa fa-lg fa-barcode txt-color-white"></i></span></div>
                     {% else %}
                     <div class="ribbon" id="ribboncontainer"><span class="for-tag" id="seq-{{ image.fid }}" name="{{ image.id }}">{{ image.id }}</span></div>
                     {% endif %}
