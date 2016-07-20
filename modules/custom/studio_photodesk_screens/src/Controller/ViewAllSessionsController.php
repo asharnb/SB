@@ -66,15 +66,39 @@ public function content()
   // Get uid of user.
   $uid = $user->id();
   $session_data[] = '';
+  $group = '';
 
-  //get all nodes of session type
-  $result = \Drupal::entityQuery('node')
-  ->condition('type', 'sessions')
-  //->condition('field_photographer', $uid)
-  ->sort('created', 'DESC')
-  ->range(0, 10000)
-  ->execute();
+  //check if user is admin
+    $is_admin = $user->hasPermission('Administrator');
+    $roles = $user->getRoles();
 
+    // check user has studio_mis_coordinator role
+    $is_mis = false;
+    if(in_array('studio_mis_coordinator', $roles)){
+      $is_mis = true;
+    }
+    if($is_admin || $is_mis){
+      $query = \Drupal::entityQuery('node');
+      $result = $query
+        ->condition('type', 'sessions')
+        //->condition($usergroup)
+        ->sort('created', 'DESC')
+        ->range(0, 10000)
+        ->execute();
+    }else{
+      $query = \Drupal::entityQuery('node');
+      $usergroup = $query->orConditionGroup()
+      ->condition('field_photographer', $uid)
+      ->condition('field_vm', $uid)
+      ->condition('field_stylish', $uid);
+      $result = $query
+        ->condition('type', 'sessions')
+        ->condition($usergroup)
+        ->sort('created', 'DESC')
+        ->range(0, 10000)
+        ->execute();
+    }
+    
   //load all the nodes from the result
   $sessions = $this->nodeStorage->loadMultiple($result);
 

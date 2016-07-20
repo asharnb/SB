@@ -59,7 +59,8 @@ class CsvMakerController extends ControllerBase {
   public function array_to_csv_download($head, $array, $filename = "export.csv", $delimiter = ";") {
     // open raw memory as file so no temp files needed, you might run out of memory though
     $f = fopen('php://output', 'w');
-
+    $delimiter = ";";
+    
     fputcsv($f, $head, $delimiter);
 
     // loop over the input array
