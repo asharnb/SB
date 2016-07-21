@@ -101,7 +101,18 @@
         block += '<div class="row">';
 
 
-        block += '<div class="col col-sm-12"><span id= "'+fid+'"><a class="col-sm-4 text-info" href= "/file/'+fid+'" target="_blank" ><i class="fa fa-lg fa-fw fa-search"></i></a><a class="col-sm-4 studio-img-fullshot text-info"><i class="fa fa-lg fa-fw fa-copy"></i></a><a class=" col-sm-4 studio-img-tag text-info" ><i class="fa fa-lg fa-fw fa-barcode"></i></a></span></div>';
+        var is_tag = $(".tag");
+
+        if(is_tag){
+            var tag_fid = is_tag.attr("data-id");
+            if(!isNaN(parseFloat(tag_fid)) && isFinite(tag_fid)){
+                //alert(tag_fid);
+                //updateTagClasses(tag_fid, 'tag');
+                block += '<div class="col col-sm-12"><span id= "'+fid+'"><a class="col-sm-4 text-info" href= "/file/'+fid+'" target="_blank" ><i class="fa fa-lg fa-fw fa-search"></i></a><a class="col-sm-4 studio-img-fullshot text-info"><i class="fa fa-lg fa-fw fa-copy"></i></a><a class=" col-sm-4 studio-img-tag-nutral text-info" ><i class="fa fa-lg fa-fw fa-barcode"></i></a></span></div>';
+            }else{
+                block += '<div class="col col-sm-12"><span id= "'+fid+'"><a class="col-sm-4 text-info" href= "/file/'+fid+'" target="_blank" ><i class="fa fa-lg fa-fw fa-search"></i></a><a class="col-sm-4 studio-img-fullshot text-info"><i class="fa fa-lg fa-fw fa-copy"></i></a><a class=" col-sm-4 studio-img-tag text-info" ><i class="fa fa-lg fa-fw fa-barcode"></i></a></span></div>';
+            }
+        }
 
         block += '</div>';
         block += '</div>';

@@ -163,10 +163,20 @@ $(document).on("click",".studio-img-tag",function(){
         }
     }
 
-    var tag_fid = document.getElementById('seq-2214').getAttribute('data-id');
-    if(tag_fid){
-        updateTagClasses(tag_fid, 'tag');
-        //updateSequence();
+//    var tag_fid = document.getElementById('seq-2214').getAttribute('data-id');
+//    if(tag_fid){
+//        updateTagClasses(tag_fid, 'tag');
+//        //updateSequence();
+//    }
+
+    var is_tag = $(".tag");
+
+    if(is_tag){
+        var tag_fid = is_tag.attr("data-id");
+        if(!isNaN(parseFloat(tag_fid)) && isFinite(tag_fid)){
+            //alert(tag_fid);
+            updateTagClasses(tag_fid, 'tag');
+        }
     }
 
 })(jQuery);
