@@ -273,6 +273,7 @@ class StudioProducts implements StudioProductsInterface {
         'uid' => $uid,
         'status' => TRUE,
         'field_base_product_id' => array('value' => $product->base_product_id),
+        'field_department' => array('value' => $product->department),
         'field_style_family' => array('value' => $product->style_no),
         'field_concept_name' => array('value' => $product->concept),
         'field_gender' => array('value' => $product->gender),
