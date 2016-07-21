@@ -39,7 +39,6 @@
 
 {#Header#}
 <div class="row">
-
   <div class="col-sm-12 col-md-8">
     <h3 class='no-margins p-b-sm'>Container Details</h3>
     <h4 class="no-margins">View and export list of products received in the container</h4>
@@ -61,7 +60,14 @@
           <div class="col-sm-12 no-margins no-padding ">
             <div class="col-sm-5">
               <address>
-                <strong class="text-success">Container is Checking-in</strong><br>
+                {% if container.field_container_state.0.value|lower == 'checkin' %}
+                <strong class="text-success">Container is checking-in products</strong><br>
+                {% elseif container.field_container_state.0.value|lower == 'checkout' %}
+                <strong class="text-warning">Container is closed for check-in</strong><br>
+                {% elseif container.field_container_state.0.value|lower == '' %}
+                <strong class="text-success">Container has been started</strong><br>
+                {% endif %}
+
                 <small class="text-muted"><em>Started at {{session.created.0.value|date('F jS, Y, g:i a')}}</em></small>
               </address>
 
@@ -232,7 +238,7 @@
             <div class="">
               <div>
                 <h2 class="m-t-sm">
-                  {{item.concept|title}} Shoot List
+                  {{item.concept|title}} Delivery List
                 </h2>
 
                 <small>

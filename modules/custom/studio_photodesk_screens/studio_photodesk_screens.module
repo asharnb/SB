@@ -16,7 +16,7 @@ function studio_photodesk_screens_help($route_name, RouteMatchInterface $route_m
     case 'help.page.studio_photodesk_screens':
       $output = '';
       $output .= '<h3>' . t('About') . '</h3>';
-      $output .= '<p>' . t('Module holds all screens which are required for PhotoDesk operations.') . '</p>';
+      $output .= '<p>' . t('Module holds all screens which are required for Photo desk operations.') . '</p>';
       return $output;
 
     default:
