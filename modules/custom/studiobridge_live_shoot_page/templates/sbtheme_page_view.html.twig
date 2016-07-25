@@ -6,8 +6,13 @@
   <div class="col-sm-12 m-t-10 no-padding">
         <div class="col-sm-5">
             <h5 class="no-margins semi-bold p-t-10">Enter Product Tag</h5>
-            {{ form|without('resequence','delete') }}
+            {{ form|without('resequence','delete','spinner') }}
         </div>
+        <div class="col-sm-2 p-t-50">
+            {{ form.spinner }}
+        </div>
+
+
 
   </div>
 
@@ -26,7 +31,7 @@
                               <dd id="dd-concept"><span class="bold">Not Available</span></dd>
                           {% else %}
                               <dd id="dd-concept" class="mb-10"><img
-                                          src="/sb/{{ directory }}/images/brands/brand_logo_{{ form.productdetails['#concept']|lower }}.png"
+                                          src="/{{ directory }}/images/brands/brand_logo_{{ form.productdetails['#concept']|lower }}.png"
                                           height="20px"></dd>
                           {% endif %}
                             <dt>Identifier</dt>

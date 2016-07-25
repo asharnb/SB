@@ -220,7 +220,10 @@ class StudioBridgeLiveShootingForm extends FormBase {
       '#markup' => '<a id="studio-delete-bt" class="btn btn-xs" disabled>Delete</a>',
     );
     $form['misc'] = array(
-      '#markup' => '<div id="studio-img-container"></div><div id="js-holder"></div><div id="msg-up"></div><div><span id="spinner-holder" class="hidden"><img src="/themes/studiobridge/images/spinner.gif"></span></div>',
+      '#markup' => '<div id="studio-img-container"></div><div id="js-holder"></div><div id="msg-up"></div>',
+    );
+    $form['spinner'] = array (
+      '#markup' => '<span id="spinner-holder" class="hidden"><img src="/themes/studiobridge/images/spinner.gif"></span>',
     );
     $form['random_user'] = array(
       '#type' => 'button',

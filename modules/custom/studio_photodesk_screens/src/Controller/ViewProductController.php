@@ -79,6 +79,7 @@ class ViewProductController extends ControllerBase {
     $field_images = $values['field_images'];
 
     $images =[];
+    $images2 =[];
 
     foreach($field_images as $img){
       $fid = $img['target_id'];
@@ -91,6 +92,8 @@ class ViewProductController extends ControllerBase {
 
       $image_uri_value = ImageStyle::load('live_shoot_preview')->buildUrl($file->getFileUri());
       $images[$fid] = array('fid'=>$fid,'uri'=>$image_uri_value,'name'=>$file_name);
+
+      $images2[$fid] = $file;
     }
 
     $a =1;
@@ -100,6 +103,7 @@ class ViewProductController extends ControllerBase {
       '#cache' => ['max-age' => 0],
       '#product' => $values,
       '#images' => $images,
+      '#images2' => $images2,
       '#product_type' => $bundle,
     ];
   }

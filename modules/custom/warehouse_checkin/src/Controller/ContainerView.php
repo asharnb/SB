@@ -91,6 +91,7 @@ class ContainerView extends ControllerBase {
 
     $products = array();
     $all_products = array();
+    $output_product = array();
 
     if($products_objs){
       foreach($products_objs as $product){
