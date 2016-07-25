@@ -279,12 +279,34 @@ class CloseSessionOperations extends ControllerBase {
     $module = 'studio_session_operations';
     $key = 'shootlist';
     //$to = \Drupal::currentUser()->getEmail();
-    $to = 'ashar.babar@landmarkgroup.com';
+    //$to = 'ashar.babar@landmarkgroup.com';
     global $base_insecure_url;
     $link = $base_insecure_url."/shootlist/$sid/download.csv";
 
-    $params['message'] = 'Download the shootlist csv file here ' . $link;
-    $params['node_title'] = $title;
+    // Get email settings
+    $config = \Drupal::config('studiobridge_global_settings.studiosettings');
+    $to = $config->get('to_email');
+    if(empty($to)){
+      $to = 'ashar.babar@landmarkgroup.com, krishnakanth@valuebound.com';
+    }
+
+    $body = $config->get('body');
+    if(empty($body)){
+      $params['message'] = 'Download the shootlist csv file here ' . $link;
+    }else{
+      // replace tokens.
+      $params['message'] = str_replace(array('@session_name@', '@shootlist_link@'),array($title, $link),$body);
+    }
+
+    $subject = $config->get('subject');
+    if(empty($subject)){
+      $params['node_title'] = $title;
+    }else{
+      // replace tokens
+      $params['node_title'] = str_replace(array('@session_name@'),array($title),$subject);
+    }
+
+
     $langcode = \Drupal::currentUser()->getPreferredLangcode();
     $send = true;
 
