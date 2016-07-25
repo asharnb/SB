@@ -58,69 +58,41 @@ public function __construct(Connection $database)
 /**
 * Content.
 */
-public function content()
-{
+  public function content() {
+    $product_data = array();
 
-  // Get current logged in user.
-  $user = \Drupal::currentUser();
-  // Get uid of user.
-  $uid = $user->id();
+    $result = \Drupal::entityQuery('node')
+      ->condition('type', array('products', 'unmapped_products'), 'IN')
+      ->sort('created', 'DESC')
+      ->range(0, 1000000)
+      ->execute();
 
-  //get all nodes of session type
-  $result = \Drupal::entityQuery('node')
-  ->condition('type', 'unmapped_products')
-  //->condition('type', 'products')
-  ->sort('created', 'DESC')
-  ->range(0, 10000)
-  ->execute();
+    //load all the nodes from the result
+    if ($result) {
+      $products = $this->nodeStorage->loadMultiple($result);
 
-  //load all the nodes from the result
-  $products = $this->nodeStorage->loadMultiple($result);
-
-  $result = \Drupal::entityQuery('node')
-  //->condition('type', 'unmapped_products')
-  ->condition('type', 'products')
-  ->sort('created', 'DESC')
-  ->range(0, 10000)
-  ->execute();
-
-  //load all the nodes from the result
-  $mapped_products = $this->nodeStorage->loadMultiple($result);
-
-
-  //if results are not empty load each node and get info
-  if (!empty($products)) {
-    foreach ($products as $product) {
-
-      $product_data[] = $product->toArray();
-
-
-  }
-}
-
-if (!empty($mapped_products)) {
-  foreach ($mapped_products as $mapped_product) {
-
-    $product_data[] = $mapped_product->toArray();
-
-
-}
-}
+      //if results are not empty load each node and get info
+      if ($products) {
+        foreach ($products as $product) {
+          $product_data[] = $product->toArray();
+        }
+      }
+    }
 
 
 //return array to render
-return [
-  '#theme' => 'view_all_products',
-  '#cache' => ['max-age' => 0],
-  '#results' => $product_data,
-  '#attached' => array(
-    'library' => array(
-      'studio_photodesk_screens/studiobridge-sessions'
-    ),
-  ),
-];
+    return [
+      '#theme' => 'view_all_products',
+      '#cache' => ['max-age' => 0],
+      '#results' => $product_data,
+      '#attached' => array(
+        'library' => array(
+          'studio_photodesk_screens/studiobridge-sessions'
+        ),
+      ),
+    ];
 
-}
+  }
 
 
 

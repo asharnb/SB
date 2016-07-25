@@ -38,8 +38,10 @@ function studio_session_operations_mail($key, &$message, $params) {
     case 'shootlist':
       $message['from'] = \Drupal::config('system.site')->get('mail');
       // $message['subject'] = t('Article created: @title', array('@title' => $params['node_title']), $options);
-      $message['subject'] = t('Session closed: @title', array('@title' => $params['node_title']), $options);
+      $message['subject'] = t('@title', array('@title' => $params['node_title']), $options);
       $message['body'][] = $params['message'];
+      $message['headers']['Content-Type'] = 'text/html; charset=UTF-8; format=flowed';
+
       break;
   }
 }
