@@ -52,7 +52,7 @@ function studiobridge_store_images_entity_insert(Drupal\Core\Entity\EntityInterf
 
   $session_operation = \Drupal::state()->get('close_session_operation_started', false);
   // When new image is received by server, assign it to Current open product of particular session.
-  if ($bundle == 'image' && isset($values['field_session'][0]['target_id']) && !$session_operation) {
+  if ($bundle == 'image' && isset($values['field_session'][0]['target_id'])) {
 
     // Get sessionid from image entity ; basically when image is uploaded that time user will select opended session.
     $session_id = $values['field_session'][0]['target_id'];
@@ -201,7 +201,7 @@ function studiobridge_store_images_entity_insert(Drupal\Core\Entity\EntityInterf
 
   //$session_operation = \Drupal::state()->get('close_session_operation_started', false);
 
-  if ($bundle == 'image' && isset($values['field_container'][0]['target_id']) && !$session_operation) {
+  if ($bundle == 'image' && isset($values['field_container'][0]['target_id'])) {
 
     // Get sessionid from image entity ; basically when image is uploaded that time user will select opended session.
     $container_id = $values['field_container'][0]['target_id'];
