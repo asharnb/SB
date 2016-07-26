@@ -109,7 +109,7 @@
             if (fid) {
                 patchImageTag(csrfToken, img, fid, tag);
             }else{
-                alert('Node product found, pls refresh the page.');
+                alert('No product found, pls refresh the page.');
             }
         });
     }
