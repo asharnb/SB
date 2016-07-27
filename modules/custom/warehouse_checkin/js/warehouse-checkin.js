@@ -222,7 +222,7 @@
         block += '<div class="row">';
 
         block += '<div class="col col-sm-12"><span id= "warehouse-tags-container-'+fid+'" data-value="'+fid+'">';
-        block += '<a class="col-sm-4 text-info " id= "warehouse-fullview-'+fid+'"><i class="fa fa-lg fa-fw fa-search"></i></a>';
+        block += '<a class="col-sm-4 text-info " id= "warehouse-fullview-'+fid+'" href= "/file/'+fid+'" target="_blank"><i class="fa fa-lg fa-fw fa-search"></i></a>';
         block += '<a class="col-sm-4 text-info warehouse-tag" id= "warehouse-tag-'+fid+'"><i class="fa fa-lg fa-fw fa-barcode"></i></a>';
         block += '<a class="col-sm-4 text-info" id= "warehouse-fullshot-'+fid+'"><i class="fa fa-lg fa-fw fa-trash"></i></a>';
         block += '</span></div>';
