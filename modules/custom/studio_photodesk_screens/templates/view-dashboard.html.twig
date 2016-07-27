@@ -1,0 +1,212 @@
+
+
+<div class="row ">
+  {{kint()}}
+  <div class="col-lg-8">
+    <div class="panel panel-default equalheight">
+      <div class="panel-heading">
+        <div class="panel-title">Today's Summary
+        </div>
+
+      </div>
+      <div class="panel-body p-xs-imp">
+
+
+        <div class="col-sm-12 no-margins no-padding ">
+          <div class="col-sm-12">
+            <div class="col-sm-3 m-l-n">
+              <h5 class="m-sm">Sessions</h5>
+              <h3 class="m-sm">{{ results|length }}</h3>
+            </div>
+
+            <div class="col-sm-3">
+              <h5 class="m-sm">Products</h5>
+              <h3 class="m-sm">{{ adjusted_mapped + adjusted_unmapped }}</h3>
+            </div>
+
+            <div class="col-sm-3">
+              <h5 class="m-sm">Unmapped</h5>
+              <h3 class="m-sm">{{ session.field_shoot_class.0.value|title|replace({'_': ' '}) }}</h3>
+            </div>
+            <div class="col-sm-3">
+              <h5 class="m-sm">Dropped</h5>
+              <h3 class="m-sm">{{ session.field_shoot_class.0.value|title|replace({'_': ' '}) }}</h3>
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+    </div>
+  </div>
+  <div class="col-lg-4 ">
+    <div class="panel panel-default equalheight">
+
+      <div class="panel-heading">
+        <div class="panel-title">Concept Counts
+        </div>
+
+      </div>
+
+      <div class="panel-body p-xs-imp m-t-n">
+        {% if not session_users.photographer == ''%}
+        <div class="col-sm-6 no-padding">
+          <div class="social-avatar">
+            <a href="" class="pull-left">
+              <img src="/{{directory}}/images/users/{{session_users.photographer|lower|replace({".": "_" , " " : "_"})}}.jpg" class="img-circle" alt="{{session_users.photographer|title}}">
+            </a>
+            <div class="media-body p-xs">
+              <h6 class="no-margins bold">
+                {{session_users.photographer|replace({".": " " , "_" : " "})|title}}
+              </h6>
+              <small class="text-muted">Photographer</small>
+            </div>
+          </div>
+        </div>
+        {% endif %}
+        {% if not session_users.stylist == ''%}
+        <div class="col-sm-6 no-padding">
+          <div class="social-avatar">
+            <a href="" class="pull-left m-r-5">
+              <img src="/{{directory}}/images/users/{{session_users.stylist|lower|replace({".": "_" , " " : "_"})}}.jpg" class="img-circle" alt="{{session_users.stylist|title}}">
+            </a>
+            <div class="media-body p-xs">
+              <h6 class="no-margins bold">
+                {{session_users.stylist|replace({".": " " , "_" : " "})|title}}
+              </h6>
+              <small class="text-muted">Stylist</small>
+            </div>
+          </div>
+        </div>
+        {% endif %}
+        {% if not session_users.vm == ''%}
+        <div class="col-sm-6 no-padding">
+          <div class="social-avatar">
+            <a href="" class="pull-left">
+              <img src="/{{directory}}/images/users/{{session_users.vm|lower|replace({".": "_" , " " : "_"})}}.jpg" class="img-circle" alt="{{session_users.vm|title}}">
+            </a>
+            <div class="media-body p-xs">
+              <h6 class="no-margins bold">
+                {{session_users.vm|replace({".": " " , "_" : " "})|title}}
+              </h6>
+              <small class="text-muted">Visual Merchandiser</small>
+            </div>
+          </div>
+        </div>
+        {% endif %}
+      </div>
+
+    </div>
+  </div>
+
+</div>
+
+<div class="panel panel-default">
+  <!-- NEW COL START -->
+  <article class="m-sm">
+    <table id="dt_viewsessions" class="table table-responsive table-hover" width="100%">
+
+      <thead>
+        <th>ID</th>
+        <th>Status</th>
+        <th>Concept(s)</th>
+        <th>Contributors</th>
+        <th>Date Created</th>
+        <th>Total Products</th>
+        <th></th>
+      </thead>
+
+      <tbody>
+
+
+        {% for result in results %}
+
+        {% if not result.id == '' %}
+
+        {% set total_count = result.mapped.0.mappedcount + result.unmapped.0.unmappedcount %}
+
+        {#rules for status stages#}
+            {% if result.stage.0.value == 'open' and total_count == 0  %}
+              {% set status_class = '<span class="text-success"><i class=""></i> Started</span>' %}
+            {% elseif result.stage.0.value == 'open' and total_count > 0   %}
+              {% set status_class = '<span class="text-success"><i class=""></i> Importing Products</span>' %}
+            {% endif %}
+
+            {% if result.stage.0.value == 'pause' and total_count == 0  %}
+              {% set status_class = '<span class="text-warning"><i class=""></i> Paused</span>' %}
+            {% endif %}
+
+            {% if result.stage.0.value == 'closed' and total_count == 0  %}
+              {% set status_class = '<span class="text-danger"><i class=""></i> Cancelled</span>' %}
+            {% elseif result.stage.0.value == 'closed' and result.unmapped.0.unmappedcount > 0   %}
+              {% set status_class = '<span class="text-danger"><i class=""></i>'~ result.unmapped.0.unmappedcount ~' items unmapped</span>' %}
+            {% elseif result.stage.0.value == 'closed' and result.unmapped.0.unmappedcount == 0  and total_count > 0 %}
+                {% set status_class = '<span class="text-success"><i class=""></i> Session Complete</span>' %}
+            {% endif %}
+
+        {#rules for status stages#}
+            {% if result.shootdate.0.value|date('Y-m-d') == "now"|date("Y-m-d") %}
+              {% set date_class = '' %}
+              {% set date_text = 'Today, ' ~ result.shootdate.0.value|date("h:m a") %}
+            {% elseif result.shootdate.0.value|date('Y-m-d') == "now"|date_modify("-1 day")|date("Y-m-d") %}
+              {% set date_class = '' %}
+              {% set date_text = 'Yesterday, ' ~ result.shootdate.0.value|date("h:m a") %}
+            {% else %}
+              {% set date_class = '' %}
+              {% set date_text = result.shootdate.0.value|date("M d, Y, h:m a") %}
+            {% endif %}
+
+
+
+
+        <tr>
+
+          <td>{{ result.id }}</td>
+          <td>{{ status_class|raw }}</td>
+          <td>
+
+            {% if result.concepts|length == 0 %}
+                Not Available
+
+            {% elseif result.concepts|length == 1 %}
+
+                <img src="/{{directory}}/images/brands/brand_logo_{{result.concepts.0.concept|lower}}.png" height="20px" alt="{{result.concepts.0.concept|lower|replace({" ": ""})}}">
+                <span style="display:none;">{% for item in result.concepts %}{{item.concept}}{% endfor %}</span>
+            {% elseif result.concepts|length >= 2 %}
+
+                <img src="/{{directory}}/images/brands/brand_logo_{{result.concepts.0.concept|lower}}.png" height="20px" alt="{{result.concepts.0.concept|lower|replace({" ": ""})}}">
+                <span class="text text-complete bold" data-toggle="tooltip" title="{% for item in result.concepts|slice(1) %}{{item.concept|title}}{% if not loop.last %},{% endif %}{% endfor %}">   +{{result.concepts|length -1}}</span>
+                <span style="display:none;">{% for item in result.concepts %}{{item.concept}}{% endfor %}</span>
+            {% endif %}
+          </td>
+          <td>
+            <img src="/{{directory}}/images/users/{{result.photographer|lower|replace({".": "_" , " " : "_"})}}.jpg" class="img-circle-table " alt="{{ result.photographer }}">
+            <span style="display:none;">{{ result.photographer }}</span>
+            {% if not result.vm == '' %}
+              <img src="/{{directory}}/images/users/{{result.vm|lower|replace({".": "_" , " " : "_"})}}.jpg" class="img-circle-table " alt="{{ result.vm }}">
+              <span style="display:none;">{{ result.vm }}</span>
+            {% endif %}
+            {% if not result.stylist == '' %}
+              <img src="/{{directory}}/images/users/{{result.stylist|lower|replace({".": "_" , " " : "_"})}}.jpg" class="img-circle-table " alt="{{ result.stylist }}">
+              <span style="display:none;">{{ result.stylist }}</span>
+            {% endif %}
+          </td>
+          <td><span class="{{date_class}}">{{ date_text }}</span></td>
+
+          <td class="bold">{{total_count}}</td>
+          <td>
+            <a class="btn btn-xs " href="/view-session/{{ result.id }}">View</a>
+          </td>
+
+        </tr>
+
+          {% endif %}
+        {% endfor %}
+
+
+      </tbody>
+    </table>
+
+  </article>
+  <!-- END COL -->
+</div>

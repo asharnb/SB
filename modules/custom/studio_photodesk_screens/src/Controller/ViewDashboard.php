@@ -2,7 +2,7 @@
 
 /**
 * @file
-* Contains \Drupal\studio_photodesk_screens\Controller\ViewSessionController.
+* Contains \Drupal\studio_photodesk_screens\Controller\ViewDashboard.
 */
 
 namespace Drupal\studio_photodesk_screens\Controller;
@@ -18,7 +18,7 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
 *
 * @package Drupal\studio_photodesk_screens\Controller
 */
-class ViewAllSessionsController extends ControllerBase
+class ViewDashboard extends ControllerBase
 {
 
   /**
@@ -67,6 +67,8 @@ public function content()
   $uid = $user->id();
   $session_data[] = '';
   $group = '';
+  $day_start = strtotime(date('Y-m-d 00:00:00', time()));
+  $day_end = strtotime(date('Y-m-d 23:59:59', time()));
 
   //check if user is admin
     $is_admin = $user->hasPermission('Administrator');
@@ -81,7 +83,7 @@ public function content()
       $query = \Drupal::entityQuery('node');
       $result = $query
         ->condition('type', 'sessions')
-        //->condition($usergroup)
+        ->condition('created', array($day_start, $day_end), 'BETWEEN')
         ->sort('created', 'DESC')
         ->range(0, 10000)
         ->execute();
@@ -93,11 +95,14 @@ public function content()
       ->condition('field_stylish', $uid);
       $result = $query
         ->condition('type', 'sessions')
+        ->condition('created', array($day_start, $day_end), 'BETWEEN')
         ->condition($usergroup)
         ->sort('created', 'DESC')
         ->range(0, 10000)
         ->execute();
     }
+
+
 
   //load all the nodes from the result
   $sessions = $this->nodeStorage->loadMultiple($result);
@@ -121,7 +126,7 @@ public function content()
         where bundle='products' AND entity_id IN $in_q")->fetchAll();
         $mapped = db_query("select count(nid) as mappedcount from node where type='products' AND nid IN $in_q")->fetchAll();
         $unmapped = db_query("select count(nid) as unmappedcount from node where type='unmapped_products' AND nid IN $in_q")->fetchAll();
-        $concepts = objectToArray($concepts);
+        $concepts = objectToArrayDashboard($concepts);
       } else{
         $mapped = '';
         $unmapped = '';
@@ -168,7 +173,7 @@ public function content()
 
 //return array to render
 return [
-  '#theme' => 'view_all_sessions',
+  '#theme' => 'view_dashboard',
   '#cache' => ['max-age' => 0],
   '#results' => $session_data,
   '#attached' => array(
@@ -184,7 +189,7 @@ return [
 
 }
 
-function objectToArray($data) {
+function objectToArrayDashboard($data) {
     if (is_object($data))
         $data = get_object_vars($data);
     if (is_array($data))

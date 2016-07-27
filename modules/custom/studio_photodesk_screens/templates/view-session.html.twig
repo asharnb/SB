@@ -419,9 +419,6 @@ total_images: Total no.of images in this session - {{ total_images }} * * * @ing
       </div>
 
       <div class="tab-pane" id="tab-reports">
-        {% if grouped_concepts|length == 0%}
-        <h2 class="text-center">No reports are available in this session.</h2>
-        {% endif %}
         {% for item in grouped_concepts %}
         <div class="col-md-6">
 

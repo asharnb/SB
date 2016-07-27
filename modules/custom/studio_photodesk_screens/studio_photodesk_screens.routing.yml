@@ -54,3 +54,10 @@ studio_photodesk_screens.view_products_controller_content:
     _controller: '\Drupal\studio_photodesk_screens\Controller\ViewAllProductsController::content'
   requirements:
     _permission: 'access content'
+
+studio_photodesk_screens.view_dasboard_content:
+  path: '/photodesk-dashboard'
+  defaults:
+    _controller: '\Drupal\studio_photodesk_screens\Controller\ViewDashboard::content'
+  requirements:
+    _permission: 'access content'
