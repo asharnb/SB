@@ -330,6 +330,37 @@
      *
      */
     function update_image(tag,fidinput, ref) {
+
+        var tags_lenght = $('.tag').length;
+        var is_tagged = $('#warpper-img-'+ fidinput +' .tag').length;
+
+        if(is_tagged >=1){
+            swal({
+                title: "Tag Image",
+                text: "This image already tagged!, Delete it to tag a new image.",
+                type: "error",
+                showCancelButton: false,
+                confirmButtonColor: "#DD6B55",
+                confirmButtonText: "OK",
+                closeOnConfirm: true
+            });
+            return;
+        }
+
+        if(tags_lenght >=1){
+
+            swal({
+                title: "Tag Image",
+                text: "Tag image already found, please delete them to tag a new image.",
+                type: "error",
+                showCancelButton: false,
+                confirmButtonColor: "#DD6B55",
+                confirmButtonText: "OK",
+                closeOnConfirm: true
+            });
+            return;
+        }
+
         // todo get file name here
         var fid = fidinput;
 
@@ -397,6 +428,8 @@
                     var r = '<i class="fa fa-lg fa-barcode txt-color-white"></i>';
                     document.getElementById('seq-' + fid).className += ' tag';
                     document.getElementById('seq-'+ fid).innerHTML = r;
+
+                    $('#warehouse-tag-' + fid).addClass('tag');
 
                     //todo
                     //updateTagClasses(fid, 'tag');
