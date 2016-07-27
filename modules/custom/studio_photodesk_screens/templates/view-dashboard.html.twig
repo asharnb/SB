@@ -28,8 +28,8 @@
               <h3 class="m-sm text-warning">{{ unmapped }}</h3>
             </div>
             <div class="col-sm-3">
-              <h5 class="m-sm">Dropped</h5>
-              <h3 class="m-sm text-danger">{{ session.field_shoot_class.0.value|title|replace({'_': ' '}) }}</h3>
+              <h5 class="m-sm">Reshoot</h5>
+              <h3 class="m-sm text-navy">0</h3>
             </div>
           </div>
 
@@ -125,6 +125,10 @@
 
 </div>
 
+<div class="row ">
+  <div class="col-lg-8">
+
+
 <div class="panel panel-default">
   <div class="panel-heading">
     <div class="panel-title">Sessions
@@ -140,7 +144,6 @@
         <th>Status</th>
         <th>Concept(s)</th>
         <th>Contributors</th>
-        <th>Date Created</th>
         <th>Total Products</th>
         <th></th>
       </thead>
@@ -173,19 +176,6 @@
                 {% set status_class = '<span class="text-success"><i class=""></i> Session Complete</span>' %}
             {% endif %}
 
-        {#rules for status stages#}
-            {% if result.shootdate.0.value|date('Y-m-d') == "now"|date("Y-m-d") %}
-              {% set date_class = '' %}
-              {% set date_text = 'Today, ' ~ result.shootdate.0.value|date("h:m a") %}
-            {% elseif result.shootdate.0.value|date('Y-m-d') == "now"|date_modify("-1 day")|date("Y-m-d") %}
-              {% set date_class = '' %}
-              {% set date_text = 'Yesterday, ' ~ result.shootdate.0.value|date("h:m a") %}
-            {% else %}
-              {% set date_class = '' %}
-              {% set date_text = result.shootdate.0.value|date("M d, Y, h:m a") %}
-            {% endif %}
-
-
 
 
         <tr>
@@ -195,7 +185,7 @@
           <td>
 
             {% if result.concepts|length == 0 %}
-                No sessions today
+                Not Available
 
             {% elseif result.concepts|length == 1 %}
 
@@ -220,7 +210,6 @@
               <span style="display:none;">{{ result.stylist }}</span>
             {% endif %}
           </td>
-          <td><span class="{{date_class}}">{{ date_text }}</span></td>
 
           <td class="bold">{{total_count}}</td>
           <td>
@@ -238,4 +227,48 @@
 
   </article>
   <!-- END COL -->
+</div>
+</div>
+  <div class="col-lg-4">
+<div class="panel panel-default">
+  <div class="panel-heading">
+    <div class="panel-title">Goal Breakdown
+    </div>
+  </div>
+  <div class="contact-box center-version">
+
+                      <a>
+
+                          <img src="/{{directory}}/images/users/azhar_mohammadali.jpg" class="img-circle-table " alt="{{ result.photographer }}">
+
+
+                          <h3 class="m-b-xs m-t-5"><strong>15</strong></h3>
+
+                          <div class="font-bold">HC furniture(10) & Mx Flat(5)</div>
+
+
+                      </a>
+
+
+                  </div>
+
+                  <div class="contact-box center-version">
+
+                                      <a>
+
+                                          <img src="/{{directory}}/images/users/moosa_kutty.jpg" class="img-circle-table " alt="{{ result.photographer }}">
+                                          <img src="/{{directory}}/images/users/shameena_sainudeen.jpg" class="img-circle-table " alt="{{ result.photographer }}">
+
+
+                                          <h3 class="m-b-xs m-t-5"><strong>49</strong></h3>
+
+                                          <div class="font-bold">BS BTS, LS Acc, SPL Acc</div>
+
+
+                                      </a>
+
+
+                                  </div>
+</div>
+</div>
 </div>
