@@ -24,6 +24,21 @@
 
             $("#snapapicture").click(function () {
 
+                var container_nid = document.getElementById('pid').value;
+                if(!container_nid.length){
+                    swal({
+                        title: "Can't shoot images",
+                        text: "No product has been scanned yet",
+                        type: 'error',
+                        showCancelButton: false,
+                        confirmButtonColor: "#DD6B55",
+                        confirmButtonText: "OK",
+                        closeOnConfirm: true
+                        //timer: 1500
+                    });
+                    return;
+                }
+
                 var top_level_div = document.getElementById('filmroll');
                 if(top_level_div){
                     var count = top_level_div.getElementsByTagName('img').length;
