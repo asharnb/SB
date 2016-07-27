@@ -178,7 +178,7 @@
                 tags.addEventListener("click", function(){
                     //processImageToServer(id,1,0);
                     // Tagging image.
-                    update_image(1,fid);
+                    update_image(1,fid, 0);
 
                 }, false);
 
@@ -329,7 +329,7 @@
      *  tag value 0 means undo tag
      *
      */
-    function update_image(tag,fidinput) {
+    function update_image(tag,fidinput, ref) {
         // todo get file name here
         var fid = fidinput;
 
@@ -345,6 +345,11 @@
             field_tag: {
                 value: tag
             },
+            field_reference: [
+                {
+                    "value": ref
+                }
+            ],
             filename: {
 
                 value: "Tag.jpg"
