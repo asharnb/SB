@@ -58,6 +58,8 @@ function studio_photodesk_screens_theme($existing, $type, $theme, $path) {
       'view_dashboard' => array(
         'variables' => array(
           'results' => array (),
+          'mapped' => array (),
+          'unmapped' => array (),
       ),
       ),
   );

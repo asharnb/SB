@@ -149,6 +149,8 @@ public function content()
         $stylist = $this->userStorage->load($session->field_stylish->get(0)->target_id)->label();
       }
 
+
+
       //set values into array
       $session_data[] = array( 'id' => $session->id(),
       'name' => $session->title->getValue(),
@@ -169,13 +171,39 @@ public function content()
   }
 }
 
+//get total mapped products
+$result_products = \Drupal::entityQuery('node')
+  ->condition('type', array('products'), 'IN')
+  ->sort('created', 'DESC')
+  ->condition('created', array($day_start, $day_end), 'BETWEEN')
+  ->range(0, 1000000)
+  ->count()->execute();
 
+
+  //get total unmapped products
+  $result_unmapped_products = \Drupal::entityQuery('node')
+    ->condition('type', array('unmapped_products'), 'IN')
+    ->sort('created', 'DESC')
+    ->condition('created', array($day_start, $day_end), 'BETWEEN')
+    ->range(0, 1000000)
+    ->count()->execute();
+
+    //get total unmapped products
+    $result_dropped_products = \Drupal::entityQuery('node')
+      ->condition('type', array('dropped_products'), 'IN')
+      ->sort('created', 'DESC')
+      ->condition('created', array($day_start, $day_end), 'BETWEEN')
+      ->range(0, 1000000)
+      ->execute();
 
 //return array to render
 return [
   '#theme' => 'view_dashboard',
   '#cache' => ['max-age' => 0],
   '#results' => $session_data,
+  '#mapped' => $result_products,
+  '#unmapped' => $result_unmapped_products,
+  '#dropped' => $result_dropped_product,
   '#attached' => array(
     'library' => array(
       'studio_photodesk_screens/studiobridge-sessions'

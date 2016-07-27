@@ -1,7 +1,6 @@
 
 
 <div class="row ">
-  {{kint()}}
   <div class="col-lg-8">
     <div class="panel panel-default equalheight">
       <div class="panel-heading">
@@ -21,16 +20,16 @@
 
             <div class="col-sm-3">
               <h5 class="m-sm">Products</h5>
-              <h3 class="m-sm">{{ adjusted_mapped + adjusted_unmapped }}</h3>
+              <h3 class="m-sm">{{ mapped }}</h3>
             </div>
 
             <div class="col-sm-3">
               <h5 class="m-sm">Unmapped</h5>
-              <h3 class="m-sm">{{ session.field_shoot_class.0.value|title|replace({'_': ' '}) }}</h3>
+              <h3 class="m-sm text-warning">{{ unmapped }}</h3>
             </div>
             <div class="col-sm-3">
               <h5 class="m-sm">Dropped</h5>
-              <h3 class="m-sm">{{ session.field_shoot_class.0.value|title|replace({'_': ' '}) }}</h3>
+              <h3 class="m-sm text-danger">{{ session.field_shoot_class.0.value|title|replace({'_': ' '}) }}</h3>
             </div>
           </div>
 
