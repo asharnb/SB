@@ -224,7 +224,7 @@
         block += '<div class="col col-sm-12"><span id= "warehouse-tags-container-'+fid+'" data-value="'+fid+'">';
         block += '<a class="col-sm-4 text-info " id= "warehouse-fullview-'+fid+'" href= "/file/'+fid+'" target="_blank"><i class="fa fa-lg fa-fw fa-search"></i></a>';
         block += '<a class="col-sm-4 text-info warehouse-tag" id= "warehouse-tag-'+fid+'"><i class="fa fa-lg fa-fw fa-barcode"></i></a>';
-        block += '<a class="col-sm-4 text-info" id= "warehouse-fullshot-'+fid+'"><i class="fa fa-lg fa-fw fa-trash"></i></a>';
+        block += '<a class="col-sm-4 text-info" id= "warehouse-delete-'+fid+'"><i class="fa fa-lg fa-fw fa-trash"></i></a>';
         block += '</span></div>';
 
         block += '</div>';
@@ -239,9 +239,24 @@
         var tag = document.getElementById('warehouse-tag-'+fid);
         tag.addEventListener("click", function(){
             // tag image todo:
-            update_image(1,fid, 0);
+            update_image(1,fid, 0); //warehouse-delete-2342
 
         }, false);
+
+
+        var del = document.getElementById('warehouse-delete-'+fid);
+
+            del.addEventListener("click", function(){
+
+                getCsrfTokenForWarehouse(function (csrfToken) {
+                    if (fid) {
+                        deleteImage(csrfToken, fid);
+                    }else{
+                        alert('No image found, pls refresh the page.');
+                    }
+                });
+
+            }, false);
 
 
     }
@@ -401,6 +416,52 @@
 
     }
 
+    function deleteImage(csrfToken, fid) {
+
+        //document.getElementById('msg-up').innerHTML = 'Tagging product ....';
+
+        $.ajax({
+            url: Drupal.url('file/' + fid + '?_format=hal_json'),
+            method: 'DELETE',
+            headers: {
+                'Content-Type': 'application/hal+json',
+                'X-CSRF-Token': csrfToken
+            },
+            //data: JSON.stringify(file),
+            success: function (file) {
+
+                //delete image
+                document.getElementById("warpper-img-"+fid).remove();
+
+                    swal({
+                        title: "Deleted Image",
+                        text: "Image deleted successfully!",
+                        type: "success",
+                        showConfirmButton: false,
+                        confirmButtonColor: "#DD6B55",
+                        confirmButtonText: "OK",
+                        closeOnConfirm: true,
+                        timer:1500
+                    });
+
+
+            },
+            error: function(){
+                swal({
+                    title: "Error to delete Image",
+                    text: "There was an error to delete image, please try again.",
+                    type: "error",
+                    showCancelButton: false,
+                    confirmButtonColor: "#DD6B55",
+                    confirmButtonText: "OK",
+                    closeOnConfirm: true
+                });
+            }
+
+        });
+
+
+    }
 
 
 })(jQuery);

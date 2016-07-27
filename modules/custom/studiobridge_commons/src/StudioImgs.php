@@ -11,6 +11,8 @@ use Drupal\Core\Entity\EntityTypeManager;
 use Drupal\Core\Database\Connection;
 use Drupal\Core\Session\AccountProxyInterface;
 use Drupal\Core\State\StateInterface;
+use \Drupal\node\Entity\Node;
+use \Drupal\file\Entity\File;
 
 /**
  * Class StudioImgs.
@@ -235,6 +237,46 @@ class StudioImgs implements StudioImgsInterface {
       return $result_count - $images_count;
     }
     return 0;
+  }
+
+  /*
+ *
+ */
+  public static function deleteImagesFromNodes($fid){
+    $a = 1;
+    $result = \Drupal::database()->select('studio_file_transfers', 'spsp')
+      ->fields('spsp', array('pid'))
+      ->condition('spsp.fid', $fid);
+    $result = $result->execute()->fetchAll();
+
+    if($result){
+      foreach($result as $pid){
+        if($pid->pid){
+
+          $node = Node::load($pid->pid);
+          $field_images = $node->field_images->getValue();
+
+          if($field_images){
+
+            foreach($field_images as $key=>$image){
+              if($image['target_id'] == $fid){
+                unset($field_images[$key]);
+              }
+            }
+
+            // Set the image array to image field
+            $node->field_images->setValue($field_images);
+
+
+            // finally save the node
+            $node->save();
+
+          }
+
+        }
+      }
+    }
+
   }
 
 }

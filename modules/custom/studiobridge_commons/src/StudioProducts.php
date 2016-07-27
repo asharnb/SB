@@ -870,5 +870,17 @@ class StudioProducts implements StudioProductsInterface {
     return $result;
   }
 
+  /*
+   * Helper function. to delete a image from product.
+   */
+  public function deleteImageFromProduct($product, $fid){
+
+    if(is_object($product)){
+
+    }else{
+      return array('status' => 'Invalid product found');
+    }
+
+  }
 
 }

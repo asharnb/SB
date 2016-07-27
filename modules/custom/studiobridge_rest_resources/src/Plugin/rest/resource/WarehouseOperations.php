@@ -3,6 +3,7 @@
 namespace Drupal\studiobridge_rest_resources\Plugin\rest\resource;
 
 use Drupal\Core\Session\AccountProxyInterface;
+use Drupal\file\Plugin\views\field\File;
 use Drupal\node\Entity\Node;
 use Drupal\rest\Plugin\ResourceBase;
 use Drupal\rest\ResourceResponse;
@@ -39,6 +40,8 @@ class WarehouseOperations extends ResourceBase {
 
   protected $nodeStorage;
 
+  protected $fileStorage;
+
   protected $studioContainer;
 
   protected $newProduct = false;
@@ -74,6 +77,7 @@ class WarehouseOperations extends ResourceBase {
     $this->studioSessions = $studioSessions;
     $this->state = $state;
     $this->nodeStorage = $entity_manager->getStorage('node');
+    $this->fileStorage = $entity_manager->getStorage('file');
     $this->studioContainer = $studioContainer;
 
   }
@@ -161,6 +165,10 @@ class WarehouseOperations extends ResourceBase {
       }
     }
 
+    if ($node_type == 'drop-image'){
+      $this->dropImageInProductOfContainer($data);
+    }
+
     return new ResourceResponse(array(rand(1, 22222222), array($node_type)));
   }
 
@@ -211,6 +219,33 @@ class WarehouseOperations extends ResourceBase {
 
     if($node){
       return $this->studioContainer->addDropProductToContainer($container_nid, $node);
+    }
+
+    return array('message' => 'Failed to drop product. It not exists in the system.','status' => false);
+  }
+
+  /*
+ * Helper function, to drop product from container.
+ */
+  public function dropImageInProductOfContainer($data){
+    $container = $data->body->value['container'];
+    $product_identifier = $data->body->value['product'];
+    $container_nid = $data->body->value['container_nid'];
+    $fid = $data->body->value['fid'];
+    // Return the response. Product info, container info, import status, etc.,
+
+    $result = $this->studioProducts->getProductByIdentifier($product_identifier);
+    $node = $this->nodeStorage->load(reset($result));
+
+    if($node){
+      //$return =  $this->studioProducts->deleteImageFromProduct($node, $fid);
+
+      // Delete image physically.
+      $file = $this->fileStorage->load($fid);
+      $file->delete();
+
+
+      return array('status' => 'File deleted successfully!');
     }
 
     return array('message' => 'Failed to drop product. It not exists in the system.','status' => false);

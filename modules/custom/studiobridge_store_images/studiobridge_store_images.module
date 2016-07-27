@@ -375,6 +375,9 @@ function studiobridge_store_images_entity_delete(Drupal\Core\Entity\EntityInterf
 
   // When image deleted delete this log from {studio_file_transfers} table.
   if ($bundle == 'image') {
+    $StudioImgs = \Drupal::service('studio.imgs');
+    $StudioImgs->deleteImagesFromNodes($entity->id());
+
     // Delete the entity's entry from a fictional table of all entities.
     StudioImages::DeleteFileTransfer($entity->id());
   }
