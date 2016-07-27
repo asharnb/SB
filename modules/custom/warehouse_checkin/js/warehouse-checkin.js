@@ -136,21 +136,13 @@
 
         var a = data.images;
         document.getElementById('filmroll').innerHTML = '';
+        var tag = [];
         //console.log(a);
         if(a){
             for(var i in a){
                 if ($('#warpper-img-'+ i).length == 0) {
                     // div not found,
                     attachImages(a[i],i);
-
-
-                    var tag = document.getElementById('warehouse-tag-'+i);
-                    tag.addEventListener("click", function(){
-                        // tag image todo:
-                        update_image(1,i);
-
-                    }, false);
-
                 }
             }
         }
@@ -244,9 +236,14 @@
         li.innerHTML = block;
         ul.appendChild(li);
 
-//        var dcount = document.getElementById('product-img-count').innerHTML;
-//        dcount++;
-//        document.getElementById('product-img-count').innerHTML = dcount;
+        var tag = document.getElementById('warehouse-tag-'+fid);
+        tag.addEventListener("click", function(){
+            // tag image todo:
+            update_image(1,fid);
+
+        }, false);
+
+
     }
 
     $( document ).ready(function() {
