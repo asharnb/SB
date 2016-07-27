@@ -24,6 +24,26 @@
 
             $("#snapapicture").click(function () {
 
+                var top_level_div = document.getElementById('filmroll');
+                if(top_level_div){
+                    var count = top_level_div.getElementsByTagName('img').length;
+                    if(count >= 2){
+                        //alert('2 images are already found, please delete one of them.');
+                        swal({
+                            title: "Can't shoot images",
+                            text: "Found 2 images, please delete them before proceed",
+                            type: 'error',
+                            showCancelButton: false,
+                            confirmButtonColor: "#DD6B55",
+                            confirmButtonText: "OK",
+                            closeOnConfirm: true
+                            //timer: 1500
+                        });
+                        return;
+                    }
+                }
+
+
                 // Make the canvas the same size as the live video
                 snapshot.width = video.clientWidth
                 snapshot.height = video.clientHeight
@@ -38,7 +58,7 @@
                 img.src = snapshot.toDataURL("image/png")
                 img.style.padding = 5
 
-                var id = Math.floor((Math.random() * 1000000) + 1);
+                var id = Math.floor((Math.random() * 100000000) + 1);
 
                 img.id = 'img-' + id;
                 //img.width = snapshot.width / 2
@@ -51,20 +71,25 @@
 
 
                 //var imgWrapper = imgContainer(img,id);
-                var imgWrapper = createImageContainer(id,id,1,snapshot.toDataURL("image/png"),0);
-
-                filmroll.appendChild(imgWrapper);
+//                var imgWrapper = createImageContainer(id,id,1,snapshot.toDataURL("image/png"),0);
+//
+//                filmroll.appendChild(imgWrapper);
 
                 var fullview = document.getElementById('warehouse-fullview-'+id);
                 var tag = document.getElementById('warehouse-tag-'+id);
 
-                tag.addEventListener("click", function(){
-                    processImageToServer(id,1,0);
-                }, false);
+                processImageToServer(id,0,1, snapshot.toDataURL("image/png"));
 
-                fullview.addEventListener("click", function(){
-                    processImageToServer(id,0,0);
-                }, false);
+//                var tag = document.getElementById('warehouse-tag-'+id);
+//                tag.addEventListener("click", function(){
+//                    //processImageToServer(id,1,0);
+//                    alert('dsf')
+//                }, false);
+//
+//                fullview.addEventListener("click", function(){
+//                    //processImageToServer(id,0,0);
+//                    alert(123);
+//                }, false);
 
             });
 
@@ -87,33 +112,7 @@
         return wrap;
     }
 
-    function imgContainer(img,id){
-        //var imagecontainer = newDom('div','imagecontainer-inner','');
-        var li = document.createElement("div");
-        li.setAttribute("class", "bulkviewfiles imagefile ui-sortable-handle");
-        li.setAttribute("id", id);
 
-        //li.appendChild();
-        //imagecontainer.appendChild(li);
-
-        var scancontainer = newDom('div', '', 'scancontainer');
-        scancontainer.appendChild(img);
-
-        li.appendChild(scancontainer);
-
-        var div = document.createElement('div');
-
-        var block = imageTags(1, 1, id);
-
-        var block = createImageContainer(1,0,seq,src,0)
-
-        div.innerHTML = block;
-
-        li.appendChild(div);
-
-        //imagecontainer.appendChild(li);
-        return li;
-    }
 
 
     function imageTags(fid, img, div_id) {
@@ -163,6 +162,25 @@
 
                 //todo replace the image with uploaded one.
                 imageContainerFromServer(file, div_id, node);
+
+                var src = 'data:image/png;base64,'+node.data[0].value;
+
+                var tag = file.field_tag[0].value;
+                var fid = file.fid[0].value;
+                var ref = file.field_reference[0].value;
+
+                var imgWrapper = createImageContainer(fid,fid,1,src,0);
+
+                var filmroll = document.querySelector("#filmroll");
+                filmroll.appendChild(imgWrapper);
+
+                var tags = document.getElementById('warehouse-tag-'+fid);
+                tags.addEventListener("click", function(){
+                    //processImageToServer(id,1,0);
+                    // Tagging image.
+                    update_image(1,fid);
+
+                }, false);
 
             },
             error: function () {
@@ -215,12 +233,12 @@
         });
     }
 
-    function processImageToServer(id,tag,ref){
+    function processImageToServer(id,tag,ref, src){
 
         var container = document.getElementById('warehouse-container-id').value;
         var container_nid = document.getElementById('warehouse-container-nid').value;
-        var imgSrc = document.getElementById('src-'+id).getAttribute('data-src');
-        imgSrc = imgSrc.replace('data:image/png;base64,',"");
+//        var imgSrc = document.getElementById('src-'+id).getAttribute('data-src');
+        var imgSrc = src.replace('data:image/png;base64,',"");
 
         if(tag || ref){
             SendImageToServer(container_nid, tag, ref, imgSrc, id);
@@ -240,9 +258,10 @@
         //inputs = container.getElementsByClassName("form-checkbox");
         var seq = 1;
 
-        var fid = div_id;
+        //var fid = div_id;
         //var img = {'uri' : 'https://www.drupal.org/files/druplicon-small.png', 'tag':1};
         var tag = file.field_tag[0].value;
+        var fid = file.fid[0].value;
         var ref = file.field_reference[0].value;
 
         var ul = document.getElementById('filmroll');
@@ -250,9 +269,11 @@
         var li = document.getElementById(div_id);
 
 
-        var li = createImageContainer(fid,fid,seq,src,1)
+        var li = createImageContainer(fid,fid,seq,src,1);
 
-       //ul.appendChild(li);
+        // remove old image and update uploaded image.
+
+        //ul.appendChild(li);
     }
 
 
@@ -262,7 +283,8 @@
       var width = '250';
 
       var li = document.createElement("div");
-      li.setAttribute('class','bulkviewfiles imagefile')
+      li.setAttribute('class','bulkviewfiles imagefile');
+      li.setAttribute('id','img-shot-wrapper-' + fid);
 
       var block = '';
 
@@ -287,7 +309,7 @@
 
       block += '<div class="col col-sm-12"><span id= "warehouse-tags-container-'+fid+'" data-value="'+fid+'">';
       block += '<a class="col-sm-4 text-info " id= "warehouse-fullview-'+fid+'"><i class="fa fa-lg fa-fw fa-search"></i></a>';
-      block += '<a class="col-sm-4 text-info" id= "warehouse-tag-'+fid+'"><i class="fa fa-lg fa-fw fa-barcode"></i></a>';
+      block += '<a class="col-sm-4 text-info warehouse-tag" id= "warehouse-tag-'+fid+'"><i class="fa fa-lg fa-fw fa-barcode"></i></a>';
       block += '<a class="col-sm-4 text-info" id= "warehouse-fullshot-'+fid+'"><i class="fa fa-lg fa-fw fa-trash"></i></a>';
       block += '</span></div>';
 
@@ -302,7 +324,111 @@
     }
 
 
+    /*
+     *  tag value 1 means tag
+     *  tag value 0 means undo tag
+     *
+     */
+    function update_image(tag,fidinput) {
+        // todo get file name here
+        var fid = fidinput;
 
+        // var identifier = document.getElementById('edit-identifier-hidden').value;
+
+
+        var img = {
+            _links: {
+                type: {
+                    href: Drupal.url.toAbsolute(drupalSettings.path.baseUrl + 'rest/type/file/image')
+                }
+            },
+            field_tag: {
+                value: tag
+            },
+            filename: {
+
+                value: "Tag.jpg"
+
+            }
+        };
+
+        getCsrfTokenForImgActions(function (csrfToken) {
+            if (fid) {
+                patchImageTag(csrfToken, img, fid, tag);
+            }else{
+                alert('No product found, pls refresh the page.');
+            }
+        });
+    }
+
+
+    function patchImageTag(csrfToken, file, fid, tag) {
+
+        //document.getElementById('msg-up').innerHTML = 'Tagging product ....';
+
+        $.ajax({
+            url: Drupal.url('file/' + fid + '?_format=hal_json'),
+            method: 'PATCH',
+            headers: {
+                'Content-Type': 'application/hal+json',
+                'X-CSRF-Token': csrfToken
+            },
+            data: JSON.stringify(file),
+            success: function (file) {
+
+                if(tag){
+                    //console.log(node);
+                    //document.getElementById('msg-up').innerHTML = 'Image Tagged!';
+                    swal({
+                        title: "Tag Shot",
+                        text: "Tag shot has been selected",
+                        type: "success",
+                        showConfirmButton: false,
+                        confirmButtonColor: "#DD6B55",
+                        confirmButtonText: "OK",
+                        closeOnConfirm: true,
+                        timer:1500
+                    });
+                    var r = '<i class="fa fa-lg fa-barcode txt-color-white"></i>';
+                    document.getElementById('seq-' + fid).className += ' tag';
+                    document.getElementById('seq-'+ fid).innerHTML = r;
+
+                    //todo
+                    //updateTagClasses(fid, 'tag');
+                }else{
+                    swal({
+                        title: "Undo Tag Shot",
+                        text: "Tag shot has been cancelled",
+                        type: "success",
+                        showConfirmButton: false,
+                        confirmButtonColor: "#DD6B55",
+                        confirmButtonText: "OK",
+                        closeOnConfirm: true,
+                        timer:1500
+                    });
+                    //updateTagClasses(fid, 'untag');
+                    //updateSequence();
+
+                    $('#seq-'+fid).removeClass('tag');
+                }
+
+            },
+            error: function(){
+                swal({
+                    title: "Tag Shot",
+                    text: "There was an error, please try again.",
+                    type: "error",
+                    showCancelButton: false,
+                    confirmButtonColor: "#DD6B55",
+                    confirmButtonText: "OK",
+                    closeOnConfirm: true
+                });
+            }
+
+        });
+
+
+    }
 
 
 
