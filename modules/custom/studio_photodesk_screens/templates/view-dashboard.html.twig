@@ -14,12 +14,12 @@
         <div class="col-sm-12 no-margins no-padding ">
           <div class="col-sm-12">
             <div class="col-sm-3 m-l-n">
-              <h5 class="m-sm">Sessions</h5>
-              <h3 class="m-sm">{{ results|length }}</h3>
+              <h5 class="m-sm">Total Shot</h5>
+              <h3 class="m-sm bold">{{ mapped + unmapped }}</h3>
             </div>
 
             <div class="col-sm-3">
-              <h5 class="m-sm">Products</h5>
+              <h5 class="m-sm">Mapped</h5>
               <h3 class="m-sm">{{ mapped }}</h3>
             </div>
 
@@ -42,57 +42,28 @@
     <div class="panel panel-default equalheight">
 
       <div class="panel-heading">
-        <div class="panel-title">Concept Counts
+        <div class="panel-title">Goal
         </div>
 
       </div>
 
       <div class="panel-body p-xs-imp m-t-n">
-        {% if not session_users.photographer == ''%}
-        <div class="col-sm-6 no-padding">
+
+        <div class="col-sm-12 no-padding">
           <div class="social-avatar">
             <a href="" class="pull-left">
-              <img src="/{{directory}}/images/users/{{session_users.photographer|lower|replace({".": "_" , " " : "_"})}}.jpg" class="img-circle" alt="{{session_users.photographer|title}}">
+              <h1>{{ ((mapped + unmapped)/250)*100 }}%</h1>
             </a>
             <div class="media-body p-xs">
-              <h6 class="no-margins bold">
-                {{session_users.photographer|replace({".": " " , "_" : " "})|title}}
-              </h6>
-              <small class="text-muted">Photographer</small>
+              <h5 class="no-margins bold">
+                Todays Goal: 250
+              </h5>
+              <small class="text-muted">Under Achieved</small>
             </div>
           </div>
         </div>
-        {% endif %}
-        {% if not session_users.stylist == ''%}
-        <div class="col-sm-6 no-padding">
-          <div class="social-avatar">
-            <a href="" class="pull-left m-r-5">
-              <img src="/{{directory}}/images/users/{{session_users.stylist|lower|replace({".": "_" , " " : "_"})}}.jpg" class="img-circle" alt="{{session_users.stylist|title}}">
-            </a>
-            <div class="media-body p-xs">
-              <h6 class="no-margins bold">
-                {{session_users.stylist|replace({".": " " , "_" : " "})|title}}
-              </h6>
-              <small class="text-muted">Stylist</small>
-            </div>
-          </div>
-        </div>
-        {% endif %}
-        {% if not session_users.vm == ''%}
-        <div class="col-sm-6 no-padding">
-          <div class="social-avatar">
-            <a href="" class="pull-left">
-              <img src="/{{directory}}/images/users/{{session_users.vm|lower|replace({".": "_" , " " : "_"})}}.jpg" class="img-circle" alt="{{session_users.vm|title}}">
-            </a>
-            <div class="media-body p-xs">
-              <h6 class="no-margins bold">
-                {{session_users.vm|replace({".": " " , "_" : " "})|title}}
-              </h6>
-              <small class="text-muted">Visual Merchandiser</small>
-            </div>
-          </div>
-        </div>
-        {% endif %}
+
+
       </div>
 
     </div>
@@ -100,7 +71,66 @@
 
 </div>
 
+
+<div class="row ">
+  <div class="col-lg-12">
+    <div class="panel panel-default equalheight">
+      <div class="panel-heading">
+        <div class="panel-title">By Concept
+        </div>
+
+      </div>
+      <div class="panel-body p-xs-imp">
+
+
+        <div class="col-sm-12 no-margins no-padding ">
+          <div class="col-sm-12">
+            <div class="col-sm-2 m-l-n">
+              <h5 class="m-sm"><img src="/{{ directory }}/images/brands/brand_logo_splash.png" height="20px"></h5>
+              <h3 class="m-sm">0</h3>
+            </div>
+
+            <div class="col-sm-2">
+              <h5 class="m-sm"><img src="/{{ directory }}/images/brands/brand_logo_max.png" height="20px"></h5>
+              <h3 class="m-sm">0</h3>
+            </div>
+
+            <div class="col-sm-2">
+              <h5 class="m-sm"><img src="/{{ directory }}/images/brands/brand_logo_babyshop.png" height="20px"></h5>
+              <h3 class="m-sm">0</h3>
+            </div>
+
+            <div class="col-sm-2">
+              <h5 class="m-sm"><img src="/{{ directory }}/images/brands/brand_logo_lifestyle.png" height="20px"></h5>
+              <h3 class="m-sm">0</h3>
+            </div>
+
+            <div class="col-sm-2">
+              <h5 class="m-sm"><img src="/{{ directory }}/images/brands/brand_logo_shoemart.png" height="20px"></h5>
+              <h3 class="m-sm">0</h3>
+            </div>
+
+            <div class="col-sm-2">
+              <h5 class="m-sm"><img src="/{{ directory }}/images/brands/brand_logo_homecentre.png" height="20px"></h5>
+              <h3 class="m-sm">0</h3>
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+
+</div>
+
 <div class="panel panel-default">
+  <div class="panel-heading">
+    <div class="panel-title">Sessions
+    </div>
+
+  </div>
   <!-- NEW COL START -->
   <article class="m-sm">
     <table id="dt_viewsessions" class="table table-responsive table-hover" width="100%">
@@ -128,7 +158,7 @@
             {% if result.stage.0.value == 'open' and total_count == 0  %}
               {% set status_class = '<span class="text-success"><i class=""></i> Started</span>' %}
             {% elseif result.stage.0.value == 'open' and total_count > 0   %}
-              {% set status_class = '<span class="text-success"><i class=""></i> Importing Products</span>' %}
+              {% set status_class = '<span class="text-success"><i class=""></i> Open</span>' %}
             {% endif %}
 
             {% if result.stage.0.value == 'pause' and total_count == 0  %}
@@ -165,7 +195,7 @@
           <td>
 
             {% if result.concepts|length == 0 %}
-                Not Available
+                No sessions today
 
             {% elseif result.concepts|length == 1 %}
 

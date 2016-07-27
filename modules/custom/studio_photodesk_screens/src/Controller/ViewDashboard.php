@@ -203,7 +203,7 @@ return [
   '#results' => $session_data,
   '#mapped' => $result_products,
   '#unmapped' => $result_unmapped_products,
-  '#dropped' => $result_dropped_product,
+  '#dropped' => $result_dropped_products,
   '#attached' => array(
     'library' => array(
       'studio_photodesk_screens/studiobridge-sessions'
