@@ -19,6 +19,7 @@
             var container_nid = document.getElementById('warehouse-container-nid').value;
             //check for scanning same product
             if(this.value.length){
+                $('#spinner-holder').removeClass( "hidden" );
                 process_product(this.value,container, container_nid, false);
             }else{
                 $('#warehouse-checkin-product-status-wrapper').html('Please enter product value.');
@@ -74,9 +75,10 @@
                         $('#warehouse-checkin-product-status-wrapper').html('&nbsp');
                     }, 3300);
                 }
-
+                $('#spinner-holder').addClass( "hidden" );
             },
             error: function(){
+                $('#spinner-holder').addClass( "hidden" );
                 alert('Failed! **');
                 setTimeout(function(){
                     $('#warehouse-checkin-product-status-wrapper').html('&nbsp');
