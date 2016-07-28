@@ -250,7 +250,19 @@
 
                 getCsrfTokenForWarehouse(function (csrfToken) {
                     if (fid) {
-                        deleteImage(csrfToken, fid);
+
+                        swal({
+                            title: "Confirm delete image",
+                            text: "Are you sure you want to delete image from this container?",
+                            type: "warning",
+                            showCancelButton: true,
+                            confirmButtonColor: "#DD6B55",
+                            confirmButtonText: "Delete It",
+                            closeOnConfirm: false
+                        },function () {
+                            deleteImage(csrfToken, fid);
+                        });
+
                     }else{
                         alert('No image found, pls refresh the page.');
                     }

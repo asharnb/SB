@@ -248,6 +248,7 @@ class StudioLiveImageContainerRestResource extends ResourceBase {
       // Get images received after last scanned image.
       // Else get all images in the current product of the session.
       if($last_scanned_fid){
+        //@note: incase to receive images of products irrespective of session or containers, delete sid condition
         $record = $this->database->select('studio_file_transfers', 'sft')
           ->fields('sft', ['fid'])
           ->condition('sft.pid', $nid)
@@ -257,6 +258,7 @@ class StudioLiveImageContainerRestResource extends ResourceBase {
         $record = $record->fetchAll();
 
       }else{
+        //@note: incase to receive images of products irrespective of session or containers, delete sid condition
         $record = $this->database->select('studio_file_transfers', 'sft')
           ->fields('sft', ['fid'])
           ->condition('sft.pid', $nid)
