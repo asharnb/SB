@@ -421,7 +421,7 @@ class StudioBridgeLiveShootingForm extends FormBase {
       // validate product
       if (isset($product->msg) || isset($product->message)) {
         // product not found on the server so save it as unmapped product.
-        $un_mapped_node = $StudioProducts->createUnmappedProduct(array(), $session_id, $identifier, FALSE);
+        $un_mapped_node = $StudioProducts->createUnmappedProduct(array(), $session_id, $identifier, FALSE, 'photodesk');
 
         $new_or_old_product_nid = $un_mapped_node->id();
         $is_unmapped_product = TRUE;
@@ -456,7 +456,7 @@ class StudioBridgeLiveShootingForm extends FormBase {
       }
       else {
         // import it in our drupal.
-        $new_product = $StudioProducts->createMappedProduct($product, $identifier);
+        $new_product = $StudioProducts->createMappedProduct($product, $identifier, 'photodesk');
 
         $new_or_old_product_nid = $new_product->id();
         $inject_script_mapping = '<script>

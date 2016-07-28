@@ -171,7 +171,7 @@ class StudioProducts implements StudioProductsInterface {
    * @param fid
    *   File entity fid.
    */
-  public function createUnmappedProduct($image = array(), $session_id, $identifier = 'UnMapped', $fid) {
+  public function createUnmappedProduct($image = array(), $session_id, $identifier = 'UnMapped', $fid, $import_state='photodesk') {
     // The owner of session will be become owner of unmapped product.
     // Load session entity
     $session = $this->nodeStorage->load($session_id);
@@ -185,7 +185,8 @@ class StudioProducts implements StudioProductsInterface {
       'title' => $identifier,
       'uid' => $session_uid,
       'status' => TRUE,
-      'field_images' => $image
+      'field_images' => $image,
+      'field_product_import_state' => array('value' => $import_state)
     );
     // Create new node entity.
     $node = \Drupal::entityManager()->getStorage('node')->create($values);
@@ -232,7 +233,7 @@ class StudioProducts implements StudioProductsInterface {
    * @param identifier
    *   Name of the identifier.
    */
-  public function createMappedProduct($product, $identifier) {
+  public function createMappedProduct($product, $identifier, $import_state = 'warehouse') {
     // Get current logged in user.
     $uid = $this->currentUser->id();
 
@@ -283,6 +284,7 @@ class StudioProducts implements StudioProductsInterface {
         'field_size_name' => $field_size_name, // todo: may be multiple
         'field_size_variant' => $field_size_variant, // todo: may be multiple
         'field_barcode' => $field_barcode, // todo: may be multiple
+        'field_product_import_state' => array('value' => $import_state), // todo: may be multiple
       );
       // Create node object with above values.
       $node = $this->nodeStorage->create($values);
@@ -750,7 +752,7 @@ class StudioProducts implements StudioProductsInterface {
     return $secs;
   }
 
-  public function createUnmappedProductFromContainer($identifier = 'UnMapped') {
+  public function createUnmappedProductFromContainer($identifier = 'UnMapped', $import_state = 'warehouse') {
     $image = array();
     // The owner of session will be become owner of unmapped product.
     // Load session entity
@@ -762,7 +764,8 @@ class StudioProducts implements StudioProductsInterface {
       'title' => $identifier,
       'uid' => $uid,
       'status' => TRUE,
-      'field_images' => $image
+      'field_images' => $image,
+      'field_product_import_state' => array('value' => $import_state)
     );
     // Create new node entity.
     //$node = \Drupal::entityManager()->getStorage('node')->create($values);

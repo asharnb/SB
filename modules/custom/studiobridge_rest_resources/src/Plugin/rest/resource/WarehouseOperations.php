@@ -189,7 +189,7 @@ class WarehouseOperations extends ResourceBase {
       }
       else {
         // Create them if not exist in drupal server.
-        $return = $this->studioProducts->createMappedProduct($product, $identifier);
+        $return = $this->studioProducts->createMappedProduct($product, $identifier, 'warehouse');
         $this->newProduct = true;
       }
     }
