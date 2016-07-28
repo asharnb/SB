@@ -443,25 +443,44 @@ class CloseSessionOperations extends ControllerBase {
           $tag = $file->field_tag->getValue();
           $tagged = $tag[0]['value'];
 
-          //$file_name = $file->filename->getValue();
-          if($tagged){
-            //StudioImages::ImgUpdate($file, $sid,$field_base_product_id,$i,$concept, $color_variant, true);
-            StudioImages::productImageCopy($file, $sid,$field_base_product_id,$i,$concept, $color_variant, true);
-            continue;
+
+
+
+          $image_container_ref = $file->field_reference->getValue();
+          if(isset($image_container_ref) && !empty($image_container_ref[0]['value'])){
+            $image_container_ref = $image_container_ref[0]['value'];
+            if(!$image_container_ref){
+
+              //$file_name = $file->filename->getValue();
+              if($tagged){
+                //StudioImages::ImgUpdate($file, $sid,$field_base_product_id,$i,$concept, $color_variant, true);
+                StudioImages::productImageCopy($file, $sid,$field_base_product_id,$i,$concept, $color_variant, true);
+                continue;
+              }else{
+                //StudioImages::ImgUpdate($file, $session_id,$field_base_product_id,$i,$concept, $color_variant,false);
+                StudioImages::productImageCopy($file, $sid,$field_base_product_id,$i,$concept, $color_variant, false);
+                $i++;
+              }
+
+            }
+
           }else{
-            //StudioImages::ImgUpdate($file, $session_id,$field_base_product_id,$i,$concept, $color_variant,false);
-            StudioImages::productImageCopy($file, $sid,$field_base_product_id,$i,$concept, $color_variant, false);
-            $i++;
+
+            //$file_name = $file->filename->getValue();
+            if($tagged){
+              //StudioImages::ImgUpdate($file, $sid,$field_base_product_id,$i,$concept, $color_variant, true);
+              StudioImages::productImageCopy($file, $sid,$field_base_product_id,$i,$concept, $color_variant, true);
+              continue;
+            }else{
+              //StudioImages::ImgUpdate($file, $session_id,$field_base_product_id,$i,$concept, $color_variant,false);
+              StudioImages::productImageCopy($file, $sid,$field_base_product_id,$i,$concept, $color_variant, false);
+              $i++;
+            }
+
           }
 
         }
       }
-
-//      // update tag image to last.
-      $a =1;
-//      if($tag_img){
-//        StudioImages::ImgUpdate(File::load($tag_img), $sid,$field_base_product_id,$i,$concept, $color_variant, true);
-//      }
 
     }
 
