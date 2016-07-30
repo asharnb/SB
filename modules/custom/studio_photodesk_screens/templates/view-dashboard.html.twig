@@ -1,0 +1,274 @@
+
+
+<div class="row ">
+  <div class="col-lg-8">
+    <div class="panel panel-default equalheight">
+      <div class="panel-heading">
+        <div class="panel-title">Today's Summary
+        </div>
+
+      </div>
+      <div class="panel-body p-xs-imp">
+
+
+        <div class="col-sm-12 no-margins no-padding ">
+          <div class="col-sm-12">
+            <div class="col-sm-3 m-l-n">
+              <h5 class="m-sm">Total Shot</h5>
+              <h3 class="m-sm bold">{{ mapped + unmapped }}</h3>
+            </div>
+
+            <div class="col-sm-3">
+              <h5 class="m-sm">Mapped</h5>
+              <h3 class="m-sm">{{ mapped }}</h3>
+            </div>
+
+            <div class="col-sm-3">
+              <h5 class="m-sm">Unmapped</h5>
+              <h3 class="m-sm text-warning">{{ unmapped }}</h3>
+            </div>
+            <div class="col-sm-3">
+              <h5 class="m-sm">Reshoot</h5>
+              <h3 class="m-sm text-navy">0</h3>
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+    </div>
+  </div>
+  <div class="col-lg-4 ">
+    <div class="panel panel-default equalheight">
+
+      <div class="panel-heading">
+        <div class="panel-title">Goal
+        </div>
+
+      </div>
+
+      <div class="panel-body p-xs-imp m-t-n">
+
+        <div class="col-sm-12 no-padding">
+          <div class="social-avatar">
+            <a href="" class="pull-left">
+              <h1>{{ ((mapped + unmapped)/250)*100 }}%</h1>
+            </a>
+            <div class="media-body p-xs">
+              <h5 class="no-margins bold">
+                Todays Goal: 250
+              </h5>
+              <small class="text-muted">Under Achieved</small>
+            </div>
+          </div>
+        </div>
+
+
+      </div>
+
+    </div>
+  </div>
+
+</div>
+
+
+<div class="row ">
+  <div class="col-lg-12">
+    <div class="panel panel-default equalheight">
+      <div class="panel-heading">
+        <div class="panel-title">By Concept
+        </div>
+
+      </div>
+      <div class="panel-body p-xs-imp">
+
+
+        <div class="col-sm-12 no-margins no-padding ">
+          <div class="col-sm-12">
+            <div class="col-sm-2 m-l-n">
+              <h5 class="m-sm"><img src="/{{ directory }}/images/brands/brand_logo_splash.png" height="20px"></h5>
+              <h3 class="m-sm">0</h3>
+            </div>
+
+            <div class="col-sm-2">
+              <h5 class="m-sm"><img src="/{{ directory }}/images/brands/brand_logo_max.png" height="20px"></h5>
+              <h3 class="m-sm">0</h3>
+            </div>
+
+            <div class="col-sm-2">
+              <h5 class="m-sm"><img src="/{{ directory }}/images/brands/brand_logo_babyshop.png" height="20px"></h5>
+              <h3 class="m-sm">0</h3>
+            </div>
+
+            <div class="col-sm-2">
+              <h5 class="m-sm"><img src="/{{ directory }}/images/brands/brand_logo_lifestyle.png" height="20px"></h5>
+              <h3 class="m-sm">0</h3>
+            </div>
+
+            <div class="col-sm-2">
+              <h5 class="m-sm"><img src="/{{ directory }}/images/brands/brand_logo_shoemart.png" height="20px"></h5>
+              <h3 class="m-sm">0</h3>
+            </div>
+
+            <div class="col-sm-2">
+              <h5 class="m-sm"><img src="/{{ directory }}/images/brands/brand_logo_homecentre.png" height="20px"></h5>
+              <h3 class="m-sm">0</h3>
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+
+</div>
+
+<div class="row ">
+  <div class="col-lg-8">
+
+
+<div class="panel panel-default">
+  <div class="panel-heading">
+    <div class="panel-title">Sessions
+    </div>
+
+  </div>
+  <!-- NEW COL START -->
+  <article class="m-sm">
+    <table id="dt_viewsessions" class="table table-responsive table-hover" width="100%">
+
+      <thead>
+        <th>ID</th>
+        <th>Status</th>
+        <th>Concept(s)</th>
+        <th>Contributors</th>
+        <th>Total Products</th>
+        <th></th>
+      </thead>
+
+      <tbody>
+
+
+        {% for result in results %}
+
+        {% if not result.id == '' %}
+
+        {% set total_count = result.mapped.0.mappedcount + result.unmapped.0.unmappedcount %}
+
+        {#rules for status stages#}
+            {% if result.stage.0.value == 'open' and total_count == 0  %}
+              {% set status_class = '<span class="text-success"><i class=""></i> Started</span>' %}
+            {% elseif result.stage.0.value == 'open' and total_count > 0   %}
+              {% set status_class = '<span class="text-success"><i class=""></i> Open</span>' %}
+            {% endif %}
+
+            {% if result.stage.0.value == 'pause' and total_count == 0  %}
+              {% set status_class = '<span class="text-warning"><i class=""></i> Paused</span>' %}
+            {% endif %}
+
+            {% if result.stage.0.value == 'closed' and total_count == 0  %}
+              {% set status_class = '<span class="text-danger"><i class=""></i> Cancelled</span>' %}
+            {% elseif result.stage.0.value == 'closed' and result.unmapped.0.unmappedcount > 0   %}
+              {% set status_class = '<span class="text-danger"><i class=""></i>'~ result.unmapped.0.unmappedcount ~' items unmapped</span>' %}
+            {% elseif result.stage.0.value == 'closed' and result.unmapped.0.unmappedcount == 0  and total_count > 0 %}
+                {% set status_class = '<span class="text-success"><i class=""></i> Session Complete</span>' %}
+            {% endif %}
+
+
+
+        <tr>
+
+          <td>{{ result.id }}</td>
+          <td>{{ status_class|raw }}</td>
+          <td>
+
+            {% if result.concepts|length == 0 %}
+                Not Available
+
+            {% elseif result.concepts|length == 1 %}
+
+                <img src="/{{directory}}/images/brands/brand_logo_{{result.concepts.0.concept|lower}}.png" height="20px" alt="{{result.concepts.0.concept|lower|replace({" ": ""})}}">
+                <span style="display:none;">{% for item in result.concepts %}{{item.concept}}{% endfor %}</span>
+            {% elseif result.concepts|length >= 2 %}
+
+                <img src="/{{directory}}/images/brands/brand_logo_{{result.concepts.0.concept|lower}}.png" height="20px" alt="{{result.concepts.0.concept|lower|replace({" ": ""})}}">
+                <span class="text text-complete bold" data-toggle="tooltip" title="{% for item in result.concepts|slice(1) %}{{item.concept|title}}{% if not loop.last %},{% endif %}{% endfor %}">   +{{result.concepts|length -1}}</span>
+                <span style="display:none;">{% for item in result.concepts %}{{item.concept}}{% endfor %}</span>
+            {% endif %}
+          </td>
+          <td>
+            <img src="/{{directory}}/images/users/{{result.photographer|lower|replace({".": "_" , " " : "_"})}}.jpg" class="img-circle-table " alt="{{ result.photographer }}">
+            <span style="display:none;">{{ result.photographer }}</span>
+            {% if not result.vm == '' %}
+              <img src="/{{directory}}/images/users/{{result.vm|lower|replace({".": "_" , " " : "_"})}}.jpg" class="img-circle-table " alt="{{ result.vm }}">
+              <span style="display:none;">{{ result.vm }}</span>
+            {% endif %}
+            {% if not result.stylist == '' %}
+              <img src="/{{directory}}/images/users/{{result.stylist|lower|replace({".": "_" , " " : "_"})}}.jpg" class="img-circle-table " alt="{{ result.stylist }}">
+              <span style="display:none;">{{ result.stylist }}</span>
+            {% endif %}
+          </td>
+
+          <td class="bold">{{total_count}}</td>
+          <td>
+            <a class="btn btn-xs " href="/view-session/{{ result.id }}">View</a>
+          </td>
+
+        </tr>
+
+          {% endif %}
+        {% endfor %}
+
+
+      </tbody>
+    </table>
+
+  </article>
+  <!-- END COL -->
+</div>
+</div>
+  <div class="col-lg-4">
+<div class="panel panel-default">
+  <div class="panel-heading">
+    <div class="panel-title">Goal Breakdown
+    </div>
+  </div>
+  <div class="contact-box center-version">
+
+                      <a>
+
+                          <img src="/{{directory}}/images/users/azhar_mohammadali.jpg" class="img-circle-table " alt="{{ result.photographer }}">
+
+
+                          <h3 class="m-b-xs m-t-5"><strong>15</strong></h3>
+
+                          <div class="font-bold">HC furniture(10) & Mx Flat(5)</div>
+
+
+                      </a>
+
+
+                  </div>
+
+                  <div class="contact-box center-version">
+
+                                      <a>
+
+                                          <img src="/{{directory}}/images/users/moosa_kutty.jpg" class="img-circle-table " alt="{{ result.photographer }}">
+                                          <img src="/{{directory}}/images/users/shameena_sainudeen.jpg" class="img-circle-table " alt="{{ result.photographer }}">
+
+
+                                          <h3 class="m-b-xs m-t-5"><strong>49</strong></h3>
+
+                                          <div class="font-bold">BS BTS, LS Acc, SPL Acc</div>
+
+
+                                      </a>
+
+
+                                  </div>
+</div>
+</div>
+</div>

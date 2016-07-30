@@ -276,39 +276,39 @@ class CloseSessionOperations extends ControllerBase {
 
     $mailManager = \Drupal::service('plugin.manager.mail');
 
-    $module = 'studio_session_operations';
-    $key = 'shootlist';
-    //$to = \Drupal::currentUser()->getEmail();
-    //$to = 'ashar.babar@landmarkgroup.com';
-    global $base_insecure_url;
-    $link = $base_insecure_url."/shootlist/$sid/download.csv";
+        $module = 'studio_session_operations';
+        $key = 'shootlist';
+        //$to = \Drupal::currentUser()->getEmail();
+        //$to = 'ashar.babar@landmarkgroup.com';
+        global $base_insecure_url;
+        $link = $base_insecure_url."/shootlist/$sid/download.csv";
 
-    // Get email settings
-    $config = \Drupal::config('studiobridge_global_settings.studiosettings');
-    $to = $config->get('to_email');
-    if(empty($to)){
-      $to = 'ashar.babar@landmarkgroup.com, krishnakanth@valuebound.com';
-    }
+        // Get email settings
+        $config = \Drupal::config('studiobridge_global_settings.studiosettings');
+        $to = $config->get('to_email');
+        if(empty($to)){
+          $to = 'ashar.babar@landmarkgroup.com, krishnakanth@valuebound.com';
+        }
 
-    $body = $config->get('body');
-    if(empty($body)){
-      $params['message'] = 'Download the shootlist csv file here ' . $link;
-    }else{
-      // replace tokens.
-      $params['message'] = str_replace(array('@session_name@', '@shootlist_link@'),array($title, $link),$body);
-    }
+        $body = $config->get('body');
+        if(empty($body)){
+          $params['message'] = 'Download the shootlist csv file here ' . $link . '<br />';
+        }else{
+          // replace tokens.
+          $params['message'] = str_replace(array('@session_name@', '@shootlist_link@'),array($title, $link),$body);
+        }
 
-    $subject = $config->get('subject');
-    if(empty($subject)){
-      $params['node_title'] = $title;
-    }else{
-      // replace tokens
-      $params['node_title'] = str_replace(array('@session_name@'),array($title),$subject);
-    }
+        $subject = $config->get('subject');
+        if(empty($subject)){
+          $params['node_title'] = $title;
+        }else{
+          // replace tokens
+          $params['node_title'] = str_replace(array('@session_name@'),array($title),$subject);
+        }
 
 
-    $langcode = \Drupal::currentUser()->getPreferredLangcode();
-    $send = true;
+        $langcode = \Drupal::currentUser()->getPreferredLangcode();
+        $send = true;
 
     $result = $mailManager->mail($module, $key, $to, $langcode, $params, NULL, $send);
 
@@ -316,7 +316,7 @@ class CloseSessionOperations extends ControllerBase {
       drupal_set_message(t('There was a problem sending automated shootlist email, please download shootlists manually.'), 'error');
     }
     else {
-      drupal_set_message(t('Shootlist email has been sent.'));
+      drupal_set_message(t('Automated shootlists have been sent.'));
     }
 
   }
