@@ -5,7 +5,7 @@ checkin-form:
       css/capture.css: {}
   js:
     js/script.js: {}
-    js/warehouse-checkin.js: {}
+    js/warehouse-checkin_1.js: {}
     js/warehouse-img-actions.js: {}
     js/warehouse-drop-product.js: {}
     js/warehouse-flag-product.js: {}
