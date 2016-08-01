@@ -16,3 +16,10 @@ studiobridge-sessions:
     - core/drupalSettings
     - core/jquery.once
     - core/jquery.ui.sortable
+
+studiobridge-analysis:
+  version: VERSION
+  js:
+    js/analysis.js: {}
+  dependencies:
+    - core/jquery
