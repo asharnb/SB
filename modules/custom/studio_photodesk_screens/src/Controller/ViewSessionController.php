@@ -149,8 +149,8 @@ class ViewSessionController extends ControllerBase
 
       $product_time = sprintf("%02d:%02d:%02d", $H, $i, $s);
 
-      $product_period[] = array('nid' => $product['target_id'], 'time' => $product_time);
-
+      //$product_period[] = array('nid' => $product['target_id'], 'time' => $product_time);
+      $product_period[] = array('nid' => $product['target_id'], 'time' => $i);
 
 
       $current_product = $this->nodeStorage->load($product['target_id']);
@@ -346,6 +346,7 @@ class ViewSessionController extends ControllerBase
       '#attached' => array(
         'library' => array(
           'studio_photodesk_screens/studiobridge-sessions',
+          'studio_photodesk_screens/analysis.js'
         )
       ),
 
@@ -360,7 +361,7 @@ class ViewSessionController extends ControllerBase
 
     $period_product = $productperiod;
     $data[] = '';
-    
+
   	foreach ($period_product as $key => $period) {
   		$data[] = array(
   			'label'       => $key,

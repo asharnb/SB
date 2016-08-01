@@ -44,8 +44,13 @@
     <h4 class="no-margins">View and export list of products received in the container</h4>
   </div>
   <div class="col-sm-12 col-md-4 m-t-md">
+
+    {% if container.field_container_state.0.value|lower == 'checkin' or container.field_container_state.0.value|lower == '' %}
     <a class="btn btn-primary btn-cons pull-right" id="import-products" href="/warehouse/checkin/{{container.nid.0.value}}">
       Check-in Products</a>
+    {% endif %}
+
+
 
     </div>
   </div>
@@ -75,7 +80,7 @@
             <div class="col-sm-7">
 
               <span class="pull-right ">
-                <a id="close-session" class="btn btn-sm border-blue text-complete" data-id="{{ session.nid.0.value }}">Finish</a>
+                <a id="container-finish" class="btn btn-sm border-blue text-complete" data-id="{{ session.nid.0.value }}">Finish</a>
               </span>
 
             </div>
