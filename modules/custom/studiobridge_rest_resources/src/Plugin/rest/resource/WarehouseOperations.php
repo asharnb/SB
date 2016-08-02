@@ -140,13 +140,17 @@ class WarehouseOperations extends ResourceBase {
           return new ResourceResponse($return);
         }
         else{
+          // check for duplicates
+
           if(count($result) == 0){
             $return = $this->processProduct($result, $product_identifier, $container_nid);
             // Return the response. Product info, container info, import status, etc.,
             return new ResourceResponse($return);
           }else{
+            $duplicates = $this->studioProducts->checkProductDuplicate(reset($result), array('container','sessions'));
 
-            if((count($result) == 1 && in_array($container_nid, $result)) || (count($result) >= 1 && in_array($container_nid, $result)) ){
+
+            if((count($duplicates) == 1 && in_array($container_nid, $duplicates)) || (count($duplicates) >= 1 && in_array($container_nid, $duplicates)) ){
               $product = $this->productCheck($result, $product_identifier);
 
               $product_container_images = $this->studioProducts->getProductImages($product->id(),true);
@@ -156,14 +160,14 @@ class WarehouseOperations extends ResourceBase {
 
               // Product data response.
               $product_return_data = $this->studioProducts->getProductInfoByObject($product);
-              return new ResourceResponse(array('product'=>$product_return_data,'duplicate' => $duplicate,'already_scanned' => $already_scanned,'images' => $product_container_images));
+              return new ResourceResponse(array('product'=>$product_return_data,'duplicate' => $duplicate,'already_scanned' => true,'images' => $product_container_images));
 
             }
 
-            if(count($result) >= 1 && !in_array($container_nid, $result)){
+            if(count($duplicates) >= 1 && !in_array($container_nid, $duplicates)){
 
               // Return the response. Product info, container info, import status, etc.,
-              return new ResourceResponse(array('product'=>array(),'duplicate' => $duplicate,'already_scanned' => $already_scanned,'images' => array()));
+              return new ResourceResponse(array('product'=>array(),'duplicate' => true,'already_scanned' => $already_scanned,'images' => array()));
 
               //return array('duplicate' => true,'already_scanned' => false, 'container_nid');
             }
@@ -285,7 +289,7 @@ class WarehouseOperations extends ResourceBase {
 
     // Check for duplicate/Reshoot
     if($product){
-      $duplicates = $this->studioProducts->checkProductDuplicate($product->id(), array('container'));
+      $duplicates = $this->studioProducts->checkProductDuplicate($product->id(), array('container','sessions'));
       if(count($duplicates) > 1){
         $duplicate = true;
       }elseif(count($duplicates) == 1){
@@ -298,6 +302,45 @@ class WarehouseOperations extends ResourceBase {
     }
 
     return array('product'=>$product_return_data,'duplicate' => $duplicate,'already_scanned' => $already_scanned,'images' => $product_container_images);
+  }
+
+  /**
+   * Responds to POST requests.
+   *
+   * Returns a list of bundles for specified entity.
+   *
+   * @param $op_type
+   * @param $data
+   * @return \Drupal\rest\ResourceResponse Throws exception expected.
+   * Throws exception expected.
+   */
+  public function get() {
+    \Drupal::service('page_cache_kill_switch')->trigger();
+
+    if(!empty($_GET['identifier']) && !empty($_GET['cid'])){
+
+      $result = $this->studioProducts->getProductByIdentifier($_GET['identifier']);
+      if($result){
+        $duplicates = $this->studioProducts->checkProductDuplicate(reset($result), array('container','sessions'));
+
+        if(count($duplicates) > 1){
+          return new ResourceResponse(array('reshoot'=> true, 'same_container' => false));
+        }elseif(count($duplicates) == 1){
+          if(reset($duplicates) == $_GET['cid']){
+            return new ResourceResponse(array('reshoot'=> false, 'same_container' => true));
+          }else{
+            return new ResourceResponse(array('reshoot'=> true, 'same_container' => false));
+          }
+        }
+
+        return new ResourceResponse(array('reshoot'=> false, 'same_container' => false));
+      }else{
+        return new ResourceResponse(array('reshoot'=> false, 'same_container' => false));
+      }
+
+    }
+
+    return new ResourceResponse($_GET);
   }
 }
 

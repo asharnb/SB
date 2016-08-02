@@ -20,7 +20,58 @@
             //check for scanning same product
             if(this.value.length){
                 $('#spinner-holder').removeClass( "hidden" );
-                process_product(this.value,container, container_nid, false, 0);
+
+
+                var w = $('#warehouse-checkin-product-scan');
+                var wx = w.val();
+                var container = document.getElementById('warehouse-container-id').value;
+                var container_nid = document.getElementById('warehouse-container-nid').value;
+
+                if(wx.length){
+
+                    getCsrfTokenForWarehouse(function (csrfToken) {
+
+                        $.ajax({
+                            url: Drupal.url('warehouse/operation?_format=json&identifier=' + wx + '&cid='+ container_nid),
+                            method: 'GET',
+                            headers: {
+                                'Content-Type': 'application/hal+json',
+                                'X-CSRF-Token': csrfToken
+                            },
+                            // data: JSON.stringify(node),
+                            success: function (node) {
+
+                                if(node.reshoot){
+                                    swal({
+                                        title: "Confirm Reshoot",
+                                        text: "This product already exists in system, is this a reshoot?",
+                                        type: "warning",
+                                        showCancelButton: true,
+                                        confirmButtonColor: "#DD6B55",
+                                        confirmButtonText: "Drop It",
+                                        closeOnConfirm: true
+                                    },function () {
+                                        process_product(wx,container, container_nid, true,1);
+                                        return;
+                                    });
+                                }
+
+
+
+                                    process_product(wx,container, container_nid, true,1);
+
+                            },
+                            error: function(){
+                                alert('Failed! **');
+                            }
+
+                        });
+
+                    });
+
+                }
+
+               // process_product(this.value,container, container_nid, false, 0);
             }else{
                 $('#warehouse-checkin-product-status-wrapper').html('Please enter product value.');
             }
@@ -41,31 +92,6 @@
             },
             data: JSON.stringify(node),
             success: function (response) {
-                if(response.duplicate){
-
-                    var w = $('#warehouse-checkin-product-scan');
-                    var wx = w.val();
-                    var container = document.getElementById('warehouse-container-id').value;
-                    var container_nid = document.getElementById('warehouse-container-nid').value;
-                    //check for scanning same product
-                    if(wx.length){
-
-                        swal({
-                            title: "Confirm Reshoot",
-                            text: "This product already exists in system, is this a reshoot?",
-                            type: "warning",
-                            showCancelButton: true,
-                            confirmButtonColor: "#DD6B55",
-                            confirmButtonText: "Drop It",
-                            closeOnConfirm: false
-                        },function () {
-                            process_product(wx,container, response.container_nid, true,1);
-                            return;
-                        });
-
-                    }
-
-                }
                 updateProductInformationBlock(response);
                 $('#warehouse-checkin-product-status-wrapper').html('Processed successfully.');
                 console.log(response);
