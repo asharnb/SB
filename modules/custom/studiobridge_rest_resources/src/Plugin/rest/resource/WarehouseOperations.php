@@ -120,62 +120,47 @@ class WarehouseOperations extends ResourceBase {
         $container = $data->body->value['container'];
         $product_identifier = $data->body->value['product'];
         $container_nid = $data->body->value['container_nid'];
-        $confirm = $data->body->value['confirm'];
         $duplicate = false;
         $already_scanned = false;
 
         // Set product identifier to container state
         $this->state->set('warehouse_container_last_scan_product_' . $container, $product_identifier);
+        $a = $this->state->get('warehouse_container_last_scan_product_' . $container);
+        $aa = 'warehouse_container_last_scan_product_' . $container;
 
         // Check server for product.
         $result = $this->studioProducts->getProductByIdentifier($product_identifier);
+        $product = $this->productCheck($result, $product_identifier);
+        $product_values = $product->toArray();
+        $product_container_images = $this->studioProducts->getProductImages($product->id(),true);
 
-        // check the request is came from confirm button or direct.
+        // Assign this product to container.
+        $this->studioContainer->addProductToContainer($container_nid, $product);
 
-        if($confirm){
+        // Product data response.
+        $product_return_data = $this->studioProducts->getProductInfoByObject($product);
 
-          $return = $this->processProduct($result, $product_identifier, $container_nid);
+        // Check for duplicate/Reshoot
+        if($product){
+          $duplicates = $this->studioProducts->checkProductDuplicate($product->id(), array('container'));
+          if(count($duplicates) > 1){
+            $duplicate = true;
 
-          // Return the response. Product info, container info, import status, etc.,
-          return new ResourceResponse($return);
-        }
-        else{
-          // check for duplicates
-
-          if(count($result) == 0){
-            $return = $this->processProduct($result, $product_identifier, $container_nid);
-            // Return the response. Product info, container info, import status, etc.,
-            return new ResourceResponse($return);
-          }else{
-            $duplicates = $this->studioProducts->checkProductDuplicate(reset($result), array('container','sessions'));
-
-
-            if((count($duplicates) == 1 && in_array($container_nid, $duplicates)) || (count($duplicates) >= 1 && in_array($container_nid, $duplicates)) ){
-              $product = $this->productCheck($result, $product_identifier);
-
-              $product_container_images = $this->studioProducts->getProductImages($product->id(),true);
-
-              // Assign this product to container.
-              $this->studioContainer->addProductToContainer($container_nid, $product);
-
-              // Product data response.
-              $product_return_data = $this->studioProducts->getProductInfoByObject($product);
-              return new ResourceResponse(array('product'=>$product_return_data,'duplicate' => $duplicate,'already_scanned' => true,'images' => $product_container_images));
-
+            if(in_array($container_nid, $duplicates)){
+              $already_scanned = true;
             }
 
-            if(count($duplicates) >= 1 && !in_array($container_nid, $duplicates)){
-
-              // Return the response. Product info, container info, import status, etc.,
-              return new ResourceResponse(array('product'=>array(),'duplicate' => true,'already_scanned' => $already_scanned,'images' => array()));
-
-              //return array('duplicate' => true,'already_scanned' => false, 'container_nid');
+          }elseif(count($duplicates) == 1){
+            if(reset($duplicates) == $container_nid){
+              if(!$this->newProduct){
+                //$already_scanned = true;
+              }
             }
-
           }
-
         }
 
+        // Return the response. Product info, container info, import status, etc.,
+        return new ResourceResponse(array('product'=>$product_return_data,'duplicate' => $duplicate,'already_scanned' => $already_scanned,'images' => $product_container_images));
       }
     }
 
@@ -193,6 +178,7 @@ class WarehouseOperations extends ResourceBase {
 
     return new ResourceResponse(array(rand(1, 22222222), array($node_type)));
   }
+
 
   /*
    *
@@ -324,7 +310,13 @@ class WarehouseOperations extends ResourceBase {
         $duplicates = $this->studioProducts->checkProductDuplicate(reset($result), array('container','sessions'));
 
         if(count($duplicates) > 1){
-          return new ResourceResponse(array('reshoot'=> true, 'same_container' => false));
+
+          if(in_array($_GET['cid'], $duplicates)){
+            return new ResourceResponse(array('reshoot'=> true, 'same_container' => true));
+          }else{
+            return new ResourceResponse(array('reshoot'=> true, 'same_container' => false));
+          }
+
         }elseif(count($duplicates) == 1){
           if(reset($duplicates) == $_GET['cid']){
             return new ResourceResponse(array('reshoot'=> false, 'same_container' => true));

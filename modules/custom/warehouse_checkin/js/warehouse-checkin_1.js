@@ -41,24 +41,24 @@
                             // data: JSON.stringify(node),
                             success: function (node) {
 
-                                if(node.reshoot){
+                                if(node.reshoot && !(node.same_container)){
                                     swal({
                                         title: "Confirm Reshoot",
                                         text: "This product already exists in system, is this a reshoot?",
                                         type: "warning",
                                         showCancelButton: true,
                                         confirmButtonColor: "#DD6B55",
-                                        confirmButtonText: "Drop It",
+                                        confirmButtonText: "Confirm",
                                         closeOnConfirm: true
                                     },function () {
-                                        process_product(wx,container, container_nid, true,1);
+                                        process_product(wx,container, container_nid, false,1, node.same_container);
                                         return;
                                     });
                                 }
+                                else{
+                                    process_product(wx,container, container_nid, false,0, node.same_container);
+                                }
 
-
-
-                                    process_product(wx,container, container_nid, true,1);
 
                             },
                             error: function(){
@@ -81,7 +81,7 @@
     /*
      *  Process to warehouse rest resource.
      */
-    function wareHouseScanProduct(csrfToken, node, init, onload) {
+    function wareHouseScanProduct(csrfToken, node, init, onload, same_container) {
         $('#warehouse-checkin-product-status-wrapper').html('Checking server ...');
         $.ajax({
             url: Drupal.url('warehouse/operation/' + init + '/post?_format=json'),
@@ -95,21 +95,9 @@
                 updateProductInformationBlock(response);
                 $('#warehouse-checkin-product-status-wrapper').html('Processed successfully.');
                 console.log(response);
-
                 if(!onload){
-                    if(response.duplicate){
-                        swal({
-                            title: 'Duplicate Product',
-                            text: 'Duplicate product, already found in another container.',
-                            type: 'warning', //error
-                            showCancelButton: false,
-                            confirmButtonColor: "#DD6B55",
-                            confirmButtonText: "OK",
-                            closeOnConfirm: true,
-                            timer: 5000
-                        });
-                    }
-                    if(response.already_scanned){
+
+                    if(same_container){
                         swal({
                             title: 'Product already scanned',
                             text: 'This product already scanned in this container.',
@@ -143,7 +131,7 @@
     /*
      *  Process product in the container.
      */
-    function process_product(product,container, container_nid, onload, confirm){
+    function process_product(product,container, container_nid, onload, confirm, same_container){
         var data = {
             _links: {
                 type: {
@@ -166,7 +154,7 @@
         };
 
         getCsrfTokenForWarehouse(function (csrfToken) {
-            wareHouseScanProduct(csrfToken, data, 'import', onload);
+            wareHouseScanProduct(csrfToken, data, 'import', onload, same_container);
         });
 
     }
@@ -334,7 +322,7 @@
         var container_nid = document.getElementById('warehouse-container-nid').value;
         //check for scanning same product
         if(wx.length){
-            process_product(wx,container, container_nid, true,0);
+            process_product(wx,container, container_nid, true,0, 0);
         }
     });
 
