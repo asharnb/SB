@@ -19,7 +19,7 @@ use Psr\Log\LoggerInterface;
  *   label = @Translation("[Studio|Warehouse] warehouse operations"),
  *   serialization_class = "Drupal\node\Entity\Node",
  *   uri_paths = {
- *     "canonical" = "/warehouse/operation",
+ *     "canonical" = "/warehouse/operation/{random}",
  *     "https://www.drupal.org/link-relations/create" = "/warehouse/operation/{op_type}/post"
  *   }
  * )
@@ -300,7 +300,7 @@ class WarehouseOperations extends ResourceBase {
    * @return \Drupal\rest\ResourceResponse Throws exception expected.
    * Throws exception expected.
    */
-  public function get() {
+  public function get($random) {
     \Drupal::service('page_cache_kill_switch')->trigger();
 
     if(!empty($_GET['identifier']) && !empty($_GET['cid'])){

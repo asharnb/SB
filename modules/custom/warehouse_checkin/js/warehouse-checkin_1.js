@@ -31,8 +31,10 @@
 
                     getCsrfTokenForWarehouse(function (csrfToken) {
 
+                        var rand = Math.floor((Math.random() * 1000000) + 1);
+
                         $.ajax({
-                            url: Drupal.url('warehouse/operation?_format=json&identifier=' + wx + '&cid='+ container_nid),
+                            url: Drupal.url('warehouse/operation/'+ rand +'?_format=json&identifier=' + wx + '&cid='+ container_nid),
                             method: 'GET',
                             headers: {
                                 'Content-Type': 'application/hal+json',
@@ -205,16 +207,6 @@
         },function () {
             window.location = Drupal.url.toAbsolute(drupalSettings.path.baseUrl + 'warehouse/checkout/' + container_nid);
         });
-
-//        swal({
-//            title: 'jQuery HTML example',
-//            html: $('<input type="text">')
-//                .addClass('some-class')
-//                .text('jQuery is everywhere.') +
-//                $('<input type="text">')
-//                    .addClass('some-class1')
-//                    .text('jQuery is everywhere1.')
-//        })
 
     });
 
