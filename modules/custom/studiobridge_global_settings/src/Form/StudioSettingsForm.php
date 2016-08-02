@@ -105,7 +105,7 @@ class StudioSettingsForm extends ConfigFormBase {
 
     $form['shootlist_email_settings']['to_email'] = [
       '#type' => 'textarea',
-      '#title' => $this->t('To emails'),
+      '#title' => $this->t('CC all shootlists to'),
       '#description' => $this->t('Example : 	krishnakanth@valuebound.com, ashar.babar@landmarkgroup.com'),
       '#default_value' => !empty($config->get('to_email')) ? $config->get('to_email'): 'krishnakanth@valuebound.com, ashar.babar@landmarkgroup.com',
     ];
@@ -118,6 +118,52 @@ class StudioSettingsForm extends ConfigFormBase {
     ];
 
 
+    $form['shootlist_email_concepts'] = array(
+      '#type' => 'fieldset',
+      '#title' => t('Shootlist: Email settings per concept'),
+      '#weight' => 5,
+      '#collapsible' => TRUE,
+      '#collapsed' => FALSE,
+    );
+
+    $form['shootlist_email_concepts']['splash_email'] = [
+      '#type' => 'textfield',
+      '#title' => $this->t('Splash Email'),
+      '#description' => $this->t('Email address of person processing concept shootlist'),
+      '#default_value' => !empty($config->get('splash_email')) ? $config->get('splash_email'): '',
+    ];
+    $form['shootlist_email_concepts']['max_email'] = [
+      '#type' => 'textfield',
+      '#title' => $this->t('Max Email'),
+      '#description' => $this->t('Email address of person processing concept shootlist'),
+      '#default_value' => !empty($config->get('max_email')) ? $config->get('max_email'): '',
+    ];
+    $form['shootlist_email_concepts']['babyshop_email'] = [
+      '#type' => 'textfield',
+      '#title' => $this->t('Babyshop Email'),
+      '#description' => $this->t('Email address of person processing concept shootlist'),
+      '#default_value' => !empty($config->get('babyshop_email')) ? $config->get('babyshop_email'): '',
+    ];
+    $form['shootlist_email_concepts']['lifestyle_email'] = [
+      '#type' => 'textfield',
+      '#title' => $this->t('Lifestyle Email'),
+      '#description' => $this->t('Email address of person processing concept shootlist'),
+      '#default_value' => !empty($config->get('lifestyle_email')) ? $config->get('lifestyle_email'): '',
+    ];
+
+    $form['shootlist_email_concepts']['homecentre_email'] = [
+      '#type' => 'textfield',
+      '#title' => $this->t('Homecentre Email'),
+      '#description' => $this->t('Email address of person processing concept shootlist'),
+      '#default_value' => !empty($config->get('homecentre_email')) ? $config->get('homecentre_email'): '',
+    ];
+
+    $form['shootlist_email_concepts']['shoemart_email'] = [
+      '#type' => 'textfield',
+      '#title' => $this->t('Shoemart Email'),
+      '#description' => $this->t('Email address of person processing concept shootlist'),
+      '#default_value' => !empty($config->get('shoemart_email')) ? $config->get('shoemart_email'): '',
+    ];
     return parent::buildForm($form, $form_state);
   }
 
@@ -127,10 +173,12 @@ class StudioSettingsForm extends ConfigFormBase {
   public function validateForm(array &$form, FormStateInterface $form_state) {
 
     $directory = $form_state->getValue('image_destination');
+    if(!$directory){}else{
     $is_writable = is_dir($directory) && is_writable($directory);
     if(!$is_writable){
       $form_state->setErrorByName('image_destination','Directory not writable(Should have 0777 permissions) OR directory not exists');
     }
+  }
 
     parent::validateForm($form, $form_state);
   }
@@ -148,6 +196,13 @@ class StudioSettingsForm extends ConfigFormBase {
       ->set('subject', $form_state->getValue('subject'))
       ->set('body', $form_state->getValue('body'))
       ->set('to_email', $form_state->getValue('to_email'))
+
+      ->set('splash_email', $form_state->getValue('splash_email'))
+      ->set('max_email', $form_state->getValue('max_email'))
+      ->set('lifestyle_email', $form_state->getValue('lifestyle_email'))
+      ->set('homecentre_email', $form_state->getValue('homecentre_email'))
+      ->set('babyshop_email', $form_state->getValue('babyshop_email'))
+      ->set('shoemart_email', $form_state->getValue('shoemart_email'))
       ->save();
   }
 

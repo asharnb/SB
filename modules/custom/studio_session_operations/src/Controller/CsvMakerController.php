@@ -25,7 +25,7 @@ class CsvMakerController extends ControllerBase {
    */
   public function hello($id, $type, $concept) {
 
-    $head = array('Identifier', 'Photographer', 'Shoot-Date', 'Color-Variant', 'SESSION');
+    $head = array('Identifier', 'Photographer', 'Shoot-Date', 'Color-Variant', 'Session');
     $unMappedHead = array('Identifier', 'Photographer', 'Shoot-Date');
 
     // Load session
@@ -40,7 +40,7 @@ class CsvMakerController extends ControllerBase {
 
         if($type == 'unmapped_products'){
           $head = $unMappedHead;
-          $file_name = 'UnMapped-shootlist-'.$sid.'.csv';
+          $file_name = 'Unmapped-shootlist-'.$sid.'.csv';
         }else{
           if($concept){
             $file_name = $concept.' Shoot List-'.$sid.'.csv';
