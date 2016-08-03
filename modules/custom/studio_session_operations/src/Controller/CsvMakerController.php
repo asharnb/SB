@@ -25,7 +25,7 @@ class CsvMakerController extends ControllerBase {
    */
   public function hello($id, $type, $concept) {
 
-    $head = array('Identifier', 'Photographer', 'Shoot-Date', 'Color-Variant', 'SESSION');
+    $head = array('Identifier', 'Photographer', 'Shoot-Date', 'Color-Variant', 'Session');
     $unMappedHead = array('Identifier', 'Photographer', 'Shoot-Date');
 
     // Load session
@@ -40,7 +40,7 @@ class CsvMakerController extends ControllerBase {
 
         if($type == 'unmapped_products'){
           $head = $unMappedHead;
-          $file_name = 'UnMapped-shootlist-'.$sid.'.csv';
+          $file_name = 'Unmapped-shootlist-'.$sid.'.csv';
         }else{
           if($concept){
             $file_name = $concept.' Shoot List-'.$sid.'.csv';
@@ -58,6 +58,7 @@ class CsvMakerController extends ControllerBase {
 
   public function array_to_csv_download($head, $array, $filename = "export.csv", $delimiter = ";") {
     // open raw memory as file so no temp files needed, you might run out of memory though
+    ob_start();
     $f = fopen('php://output', 'w');
     $delimiter = ";";
 
@@ -70,7 +71,7 @@ class CsvMakerController extends ControllerBase {
     }
 
     // reset the file pointer to the start of the file
-    fseek($f, 0);
+    //fseek($f, 0);
     // tell the browser it's going to be a csv file
     header('Content-Type: application/csv');
     // tell the browser we want to save it instead of displaying it
@@ -80,7 +81,7 @@ class CsvMakerController extends ControllerBase {
     //header('Content-Type: text/csv; charset=utf-8');
 
     fpassthru($f);
-
+    ob_end_flush();
     exit();
   }
 
