@@ -25,7 +25,7 @@ class CsvMakerController extends ControllerBase {
    */
   public function hello($id, $type, $concept) {
 
-    $head = array('Identifier', 'Photographer', 'Shoot-Date', 'Color-Variant', 'Session');
+    $head = array('Identifier', 'Photographer', 'Shoot-Date', 'Color-Variant', 'Session', 'size name', 'size variant');
     $unMappedHead = array('Identifier', 'Photographer', 'Shoot-Date');
 
     // Load session
@@ -49,7 +49,7 @@ class CsvMakerController extends ControllerBase {
           }
         }
 
-        $this->array_to_csv_download($head, $rows,$file_name);
+        $this->array_to_csv_download($head, $rows,$file_name, ',');
 
       }
     }
@@ -60,14 +60,14 @@ class CsvMakerController extends ControllerBase {
     // open raw memory as file so no temp files needed, you might run out of memory though
     ob_start();
     $f = fopen('php://output', 'w');
-    $delimiter = ";";
+    $delimiter = ",";
 
-    fputcsv($f, $head, $delimiter);
+    fputcsv($f, $head, $delimiter,'"');
 
     // loop over the input array
     foreach ($array as $line) {
       // generate csv lines from the inner arrays
-      fputcsv($f, $line, $delimiter);
+      fputcsv($f, $line, $delimiter,'"');
     }
 
     // reset the file pointer to the start of the file
@@ -156,7 +156,61 @@ class CsvMakerController extends ControllerBase {
                     }
                   }
 
-                  $rows[] = array(trim($title), $photographer, $date, $color_variant, $sid);
+                  // add size name & size variant.
+                  $identifier = $title;
+                  $size_name = '';
+                  $size_variant = '';
+
+                  // check the product is multi sku or not
+                  // if barcode exists we can treat this product as multi sku
+                  $field_barcode = $product->field_barcode->getValue();
+                  $barcodes = array();
+
+                  if($field_barcode){
+                    foreach($field_barcode as $v){
+                      $barcodes[] = $v['value'];
+                    }
+                  }
+
+                  $field_size_variant = $product->field_size_variant->getValue();
+                  $size_variant_values = array();
+
+                  if($field_size_variant){
+                    foreach($field_size_variant as $s){
+                      $size_variant_values[] = $s['value'];
+                    }
+                  }
+
+                  $field_size_name = $product->field_size_name->getValue();
+                  $size_name_values = array();
+                  if($field_size_name){
+                    foreach($field_size_name as $n){
+                      $size_name_values[] = $n['value'];
+                    }
+                  }
+
+                  if($field_barcode || $field_size_variant){
+
+                    $a = 1;
+
+                    // check identifier available in barcode array.
+                    // else available in size variant.
+                    if(in_array($identifier, $barcodes)){
+                      $pos = array_search($identifier, $barcodes);
+                      $size_name = $size_name_values[$pos];
+                      $size_variant = $size_variant_values[$pos];
+
+                    }elseif(in_array($identifier, $size_variant_values)){
+
+                      $pos = array_search($identifier, $size_name_values);
+                      $size_name = $size_name_values[$pos];
+                      $size_variant = $size_variant_values[$pos];
+
+                    }
+
+                  }
+
+                  $rows[] = array(trim($title), $photographer, $date, $color_variant, $sid, $size_name, $size_variant);
 
                 }
               }
