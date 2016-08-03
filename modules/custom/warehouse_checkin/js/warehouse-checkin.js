@@ -330,6 +330,12 @@
 
         // var identifier = document.getElementById('edit-identifier-hidden').value;
 
+        var filename = 'Tag.jpg';
+
+        if(ref){
+            filename = 'Ref.jpg';
+        }
+
 
         var img = {
             _links: {
@@ -347,7 +353,7 @@
             ],
             filename: {
 
-                value: "Tag.jpg"
+                value: filename
 
             }
         };

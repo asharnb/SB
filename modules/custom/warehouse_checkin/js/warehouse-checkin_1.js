@@ -56,6 +56,7 @@
                                         process_product(wx,container, container_nid, false,1, node.same_container);
                                         return;
                                     });
+                                    $('#spinner-holder').addClass( "hidden" );
                                 }
                                 else{
                                     process_product(wx,container, container_nid, false,0, node.same_container);
@@ -107,8 +108,8 @@
                             showCancelButton: false,
                             confirmButtonColor: "#DD6B55",
                             confirmButtonText: "OK",
-                            closeOnConfirm: true,
-                            timer: 5000
+                            closeOnConfirm: true
+                            //timer: 5000
                         });
                     }
 
@@ -134,6 +135,7 @@
      *  Process product in the container.
      */
     function process_product(product,container, container_nid, onload, confirm, same_container){
+
         var data = {
             _links: {
                 type: {
@@ -362,6 +364,11 @@
 
         // var identifier = document.getElementById('edit-identifier-hidden').value;
 
+        var filename = 'Tag.jpg';
+
+        if(ref){
+            filename = 'Ref.jpg';
+        }
 
         var img = {
             _links: {
@@ -379,7 +386,7 @@
             ],
             filename: {
 
-                value: "Tag.jpg"
+                value: filename
 
             }
         };
@@ -435,8 +442,8 @@
                         showConfirmButton: false,
                         confirmButtonColor: "#DD6B55",
                         confirmButtonText: "OK",
-                        closeOnConfirm: true,
-                        timer:1500
+                        closeOnConfirm: true
+                        //timer:1500
                     });
                     //updateTagClasses(fid, 'untag');
                     //updateSequence();
