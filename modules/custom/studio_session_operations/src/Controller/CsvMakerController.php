@@ -202,7 +202,7 @@ class CsvMakerController extends ControllerBase {
 
                     }elseif(in_array($identifier, $size_variant_values)){
 
-                      $pos = array_search($identifier, $size_name_values);
+                      $pos = array_search($identifier, $size_variant_values);
                       $size_name = $size_name_values[$pos];
                       $size_variant = $size_variant_values[$pos];
 
