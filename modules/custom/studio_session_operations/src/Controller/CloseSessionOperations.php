@@ -191,7 +191,7 @@ class CloseSessionOperations extends ControllerBase {
     $this->MapUnmappedProductsOperations();
 
     // Automated emails  // Create shootlist
-    $this->operations[] = array(array(get_class($this), 'AutomaticEmails'), array($this->sid, $this->session_node, $this->concepts));
+    $this->operations[] = array(array(get_class($this), 'AutomaticEmails'), array($this->sid, $this->session_node, $this->pids));
 
 
     $this->operations[] = array(array(get_class($this), 'closeSession'), array($this->session_node));
@@ -250,6 +250,11 @@ class CloseSessionOperations extends ControllerBase {
         }
 
         if($identifier){
+          $this->operations[] = array(array(get_class($this), 'NodeCovert'), array($product,$identifier, $this->sid));
+        }
+
+/*
+        if($identifier){
           $StudioProducts = \Drupal::service('studio.products');
           //$server_product = Products::getProductExternal($identifier);
           $server_product = $StudioProducts->getProductExternal($identifier);
@@ -263,12 +268,37 @@ class CloseSessionOperations extends ControllerBase {
 
           }
         }
+*/
       }
     }
   }
 
-  public static function AutomaticEmails($sid, $session, $concepts) {
+  public static function AutomaticEmails($sid, $session, $pids) {
     Queues::RunMappingQueues($sid);
+
+    $products = Node::loadMultiple($pids);
+    $concepts = array();
+
+    foreach($products as $product){
+      $bundle = $product->bundle();
+
+      // get available concepts.
+      if($bundle == 'unmapped_products'){
+        $concepts['unmapped'] = 'unmapped';
+      }else{
+        $product_concept = $product->field_concept_name->getValue();
+        if($product_concept){
+          if(!empty($product_concept[0]['value'])){
+            $concept = $product_concept[0]['value'];
+            if(!in_array($concept, $concepts)){
+              $concepts[$concept] = $concept;
+            }
+          }
+        }
+      }
+
+    }
+
 
     // Get email settings
     $config = \Drupal::config('studiobridge_global_settings.studiosettings');
@@ -337,13 +367,37 @@ class CloseSessionOperations extends ControllerBase {
   /*
    *
    */
-  public function NodeCovert($unmappedProduct,$server_product, &$context){
+  public function NodeCovert($unmappedProduct,$identifier,$sid, &$context){
+
+    if($identifier){
+      $StudioProducts = \Drupal::service('studio.products');
+      $server_product = $StudioProducts->getProductExternal($identifier);
+      $server_product = json_decode($server_product);
+      if (!isset($server_product->msg)){
+
+        if (is_object($server_product)) {
+
+          $unmappedProduct->type->setValue('products');
+          $unmappedProduct->save();
+
+          $context['results']['mapped'][] = $unmappedProduct->id();
+
+          Queues::CreateQueueProductMapping($sid, $server_product, $unmappedProduct->id());
+
+        }
+
+      }
+    }
+
+
+/*
       if (is_object($server_product)) {
         $unmappedProduct->type->setValue('products');
         $unmappedProduct->save();
 
         $context['results']['mapped'][] = $unmappedProduct->id();
       }
+ */
   }
 
   public function ImageNameOperations($sid){

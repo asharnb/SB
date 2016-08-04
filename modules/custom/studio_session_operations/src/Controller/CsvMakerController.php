@@ -191,8 +191,6 @@ class CsvMakerController extends ControllerBase {
 
                   if($field_barcode || $field_size_variant){
 
-                    $a = 1;
-
                     // check identifier available in barcode array.
                     // else available in size variant.
                     if(in_array($identifier, $barcodes)){
@@ -240,10 +238,7 @@ class CsvMakerController extends ControllerBase {
 
               $rows[] = array(trim($title), $photographer, $date, $color_variant, $sid);
 
-
             }
-
-
 
           }
 
