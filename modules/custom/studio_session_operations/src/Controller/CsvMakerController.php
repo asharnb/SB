@@ -70,17 +70,22 @@ class CsvMakerController extends ControllerBase {
       fputcsv($f, $line, $delimiter,'"');
     }
 
+    $csv = stream_get_contents($f);
+    /* converting CSV content encoding inside */
+    $csv = mb_convert_encoding($csv, 'iso-8859-2', 'utf-8');
+
+
     // reset the file pointer to the start of the file
     //fseek($f, 0);
     // tell the browser it's going to be a csv file
+
     header('Content-Type: application/csv');
-    // tell the browser we want to save it instead of displaying it
     header('Content-Disposition: attachment; filename="' . $filename . '";');
-    // make php send the generated csv lines to the browser
 
     //header('Content-Type: text/csv; charset=utf-8');
 
-    fpassthru($f);
+    //fpassthru($f);
+    echo $csv;
     ob_end_flush();
     exit();
   }
