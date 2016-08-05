@@ -10,6 +10,7 @@ namespace Drupal\studio_session_operations\Controller;
 use Drupal\Core\Controller\ControllerBase;
 use \Drupal\node\Entity\Node;
 use \Drupal\user\Entity\User;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 
 /**
  * Class CsvMakerController.
@@ -25,7 +26,7 @@ class CsvMakerController extends ControllerBase {
    */
   public function hello($id, $type, $concept) {
 
-    $head = array('Identifier', 'Photographer', 'Shoot-Date', 'Color-Variant', 'Session', 'size name', 'size variant');
+    $head = array('Identifier', 'Photographer', 'Shoot Date', 'Color Variant', 'Session', 'Size Name', 'Size Variant');
     $unMappedHead = array('Identifier', 'Photographer', 'Shoot-Date');
 
     // Load session
@@ -52,6 +53,13 @@ class CsvMakerController extends ControllerBase {
         $this->array_to_csv_download($head, $rows,$file_name, ',');
 
       }
+      else{
+        drupal_set_message('Invalid session id ' . $id, 'error');
+        return new RedirectResponse(base_path() . 'view-sessions2');
+      }
+    }else{
+      drupal_set_message('Invalid session id ' . $id, 'error');
+      return new RedirectResponse(base_path() . 'view-sessions2');
     }
 
   }
