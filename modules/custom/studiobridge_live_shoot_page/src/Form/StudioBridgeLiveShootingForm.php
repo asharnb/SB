@@ -533,7 +533,8 @@ class StudioBridgeLiveShootingForm extends FormBase {
         },function () {
           window.location="' . base_path() . 'live-shooting-page1?reshoot&identifier=' . $identifier . '"
         });
-
+        var d = document.getElementById("spinner-holder");
+        d.className = "hidden";
 
         </script>';
         // return ajax here.
