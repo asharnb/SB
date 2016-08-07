@@ -67,6 +67,8 @@ class CloseSessionOperations extends ControllerBase {
 
   protected $fileStorage;
 
+  protected $concepts = array();
+
   /*
  * {@inheritdoc}
  */
@@ -189,7 +191,7 @@ class CloseSessionOperations extends ControllerBase {
     $this->MapUnmappedProductsOperations();
 
     // Automated emails  // Create shootlist
-    $this->operations[] = array(array(get_class($this), 'AutomaticEmails'), array($this->sid, $this->session_node));
+    $this->operations[] = array(array(get_class($this), 'AutomaticEmails'), array($this->sid, $this->session_node, $this->pids));
 
 
     $this->operations[] = array(array(get_class($this), 'closeSession'), array($this->session_node));
@@ -248,6 +250,11 @@ class CloseSessionOperations extends ControllerBase {
         }
 
         if($identifier){
+          $this->operations[] = array(array(get_class($this), 'NodeCovert'), array($product,$identifier, $this->sid));
+        }
+
+/*
+        if($identifier){
           $StudioProducts = \Drupal::service('studio.products');
           //$server_product = Products::getProductExternal($identifier);
           $server_product = $StudioProducts->getProductExternal($identifier);
@@ -261,62 +268,47 @@ class CloseSessionOperations extends ControllerBase {
 
           }
         }
+*/
       }
     }
   }
 
-  public static function AutomaticEmails($sid, $session){
+  public static function AutomaticEmails($sid, $session, $pids) {
     Queues::RunMappingQueues($sid);
 
+    $products = Node::loadMultiple($pids);
+    $concepts = array();
 
-    $title = $session->title->getValue();
-    if ($title) {
-      $title = $title[0]['value'];
+    foreach($products as $product){
+      $bundle = $product->bundle();
+
+      // get available concepts.
+      if($bundle == 'unmapped_products'){
+        $concepts['unmapped'] = 'unmapped';
+      }else{
+        $product_concept = $product->field_concept_name->getValue();
+        if($product_concept){
+          if(!empty($product_concept[0]['value'])){
+            $concept = $product_concept[0]['value'];
+            if(!in_array($concept, $concepts)){
+              $concepts[$concept] = $concept;
+            }
+          }
+        }
+      }
+
     }
 
-    $mailManager = \Drupal::service('plugin.manager.mail');
 
-        $module = 'studio_session_operations';
-        $key = 'shootlist';
-        //$to = \Drupal::currentUser()->getEmail();
-        //$to = 'ashar.babar@landmarkgroup.com';
-        global $base_insecure_url;
-        $link = $base_insecure_url."/shootlist/$sid/download.csv";
+    // Get email settings
+    $config = \Drupal::config('studiobridge_global_settings.studiosettings');
 
-        // Get email settings
-        $config = \Drupal::config('studiobridge_global_settings.studiosettings');
-        $to = $config->get('to_email');
-        if(empty($to)){
-          $to = 'ashar.babar@landmarkgroup.com, krishnakanth@valuebound.com';
-        }
+    $StudioCommons = \Drupal::service('studio.commons');
 
-        $body = $config->get('body');
-        if(empty($body)){
-          $params['message'] = 'Download the shootlist csv file here ' . $link . '<br />';
-        }else{
-          // replace tokens.
-          $params['message'] = str_replace(array('@session_name@', '@shootlist_link@'),array($title, $link),$body);
-        }
-
-        $subject = $config->get('subject');
-        if(empty($subject)){
-          $params['node_title'] = $title;
-        }else{
-          // replace tokens
-          $params['node_title'] = str_replace(array('@session_name@'),array($title),$subject);
-        }
-
-
-        $langcode = \Drupal::currentUser()->getPreferredLangcode();
-        $send = true;
-
-    $result = $mailManager->mail($module, $key, $to, $langcode, $params, NULL, $send);
-
-    if ($result['result'] !== true) {
-      drupal_set_message(t('There was a problem sending automated shootlist email, please download shootlists manually.'), 'error');
-    }
-    else {
-      drupal_set_message(t('Automated shootlists have been sent.'));
+    if ($concepts) {
+      foreach ($concepts as $concept) {
+        $StudioCommons->sendConceptShootlist($config, $concept, $sid, $session);
+      }
     }
 
   }
@@ -338,6 +330,8 @@ class CloseSessionOperations extends ControllerBase {
 
     foreach($this->products as $product){
       $draft = $product->field_draft->getValue();
+      $bundle = $product->bundle();
+
       if(isset($draft[0]['value'])){
         if($draft[0]['value'] == 1){
           $this->draft_products[] = $product;
@@ -345,12 +339,27 @@ class CloseSessionOperations extends ControllerBase {
           $this->operations[] = array(array(get_class($this), 'DeleteProducts'), array($product,$this->sid));
         }
 
-        $bundle = $product->bundle();
         if($bundle == 'unmapped_products'){
           $this->unmapped_products[] = $product;
         }
 
       }
+
+      // get available concepts.
+      if($bundle == 'unmapped_products'){
+        $this->concepts['unmapped'] = 'unmapped';
+      }else{
+        $product_concept = $product->field_concept_name->getValue();
+        if($product_concept){
+          if(!empty($product_concept[0]['value'])){
+            $concept = $product_concept[0]['value'];
+            if(!in_array($concept, $this->concepts)){
+              $this->concepts[$concept] = $concept;
+            }
+          }
+        }
+      }
+
     }
 
   }
@@ -358,13 +367,37 @@ class CloseSessionOperations extends ControllerBase {
   /*
    *
    */
-  public function NodeCovert($unmappedProduct,$server_product, &$context){
+  public function NodeCovert($unmappedProduct,$identifier,$sid, &$context){
+
+    if($identifier){
+      $StudioProducts = \Drupal::service('studio.products');
+      $server_product = $StudioProducts->getProductExternal($identifier);
+      $server_product = json_decode($server_product);
+      if (!isset($server_product->msg)){
+
+        if (is_object($server_product)) {
+
+          $unmappedProduct->type->setValue('products');
+          $unmappedProduct->save();
+
+          $context['results']['mapped'][] = $unmappedProduct->id();
+
+          Queues::CreateQueueProductMapping($sid, $server_product, $unmappedProduct->id());
+
+        }
+
+      }
+    }
+
+
+/*
       if (is_object($server_product)) {
         $unmappedProduct->type->setValue('products');
         $unmappedProduct->save();
 
         $context['results']['mapped'][] = $unmappedProduct->id();
       }
+ */
   }
 
   public function ImageNameOperations($sid){

@@ -39,6 +39,11 @@
 
     function SendImageToServer(cid,tag, ref, src) {
         //        alert(11111);
+        var filename = 'Tag.jpg';
+
+        if(ref){
+            filename = 'Ref.jpg';
+        }
         var img = {
             "_links": {
                 "type": {
@@ -46,7 +51,7 @@
                 }
             },
             "filename": [
-                {    "value": "Tag.jpg"   }
+                {    "value": filename   }
             ],
             "filemime": [
                 {    "value": "image/jpeg"   }

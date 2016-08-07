@@ -164,6 +164,14 @@ class StudioSettingsForm extends ConfigFormBase {
       '#description' => $this->t('Email address of person processing concept shootlist'),
       '#default_value' => !empty($config->get('shoemart_email')) ? $config->get('shoemart_email'): '',
     ];
+
+    $form['shootlist_email_concepts']['unmapped_email'] = [
+      '#type' => 'textfield',
+      '#title' => $this->t('Unmapped Email'),
+      '#description' => $this->t('Email address of person processing concept shootlist'),
+      '#default_value' => !empty($config->get('unmapped_email')) ? $config->get('unmapped_email'): '',
+    ];
+
     return parent::buildForm($form, $form_state);
   }
 
@@ -203,6 +211,7 @@ class StudioSettingsForm extends ConfigFormBase {
       ->set('homecentre_email', $form_state->getValue('homecentre_email'))
       ->set('babyshop_email', $form_state->getValue('babyshop_email'))
       ->set('shoemart_email', $form_state->getValue('shoemart_email'))
+      ->set('unmapped_email', $form_state->getValue('unmapped_email'))
       ->save();
   }
 

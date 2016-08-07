@@ -20,7 +20,61 @@
             //check for scanning same product
             if(this.value.length){
                 $('#spinner-holder').removeClass( "hidden" );
-                process_product(this.value,container, container_nid, false);
+
+
+                var w = $('#warehouse-checkin-product-scan');
+                var wx = w.val();
+                var container = document.getElementById('warehouse-container-id').value;
+                var container_nid = document.getElementById('warehouse-container-nid').value;
+
+                if(wx.length){
+
+                    getCsrfTokenForWarehouse(function (csrfToken) {
+
+                        var rand = Math.floor((Math.random() * 1000000) + 1);
+
+                        $.ajax({
+                            url: Drupal.url('warehouse/operation/'+ rand +'?_format=json&identifier=' + wx + '&cid='+ container_nid),
+                            method: 'GET',
+                            headers: {
+                                'Content-Type': 'application/hal+json',
+                                'X-CSRF-Token': csrfToken
+                            },
+                            // data: JSON.stringify(node),
+                            success: function (node) {
+
+                                if(node.reshoot && !(node.same_container)){
+                                    swal({
+                                        title: "Confirm Reshoot",
+                                        text: "This product already exists in system, is this a reshoot?",
+                                        type: "warning",
+                                        showCancelButton: true,
+                                        confirmButtonColor: "#DD6B55",
+                                        confirmButtonText: "Confirm",
+                                        closeOnConfirm: true
+                                    },function () {
+                                        process_product(wx,container, container_nid, false,1, node.same_container);
+                                        return;
+                                    });
+                                    $('#spinner-holder').addClass( "hidden" );
+                                }
+                                else{
+                                    process_product(wx,container, container_nid, false,0, node.same_container);
+                                }
+
+
+                            },
+                            error: function(){
+                                alert('Failed! **');
+                            }
+
+                        });
+
+                    });
+
+                }
+
+               // process_product(this.value,container, container_nid, false, 0);
             }else{
                 $('#warehouse-checkin-product-status-wrapper').html('Please enter product value.');
             }
@@ -30,7 +84,7 @@
     /*
      *  Process to warehouse rest resource.
      */
-    function wareHouseScanProduct(csrfToken, node, init, onload) {
+    function wareHouseScanProduct(csrfToken, node, init, onload, same_container) {
         $('#warehouse-checkin-product-status-wrapper').html('Checking server ...');
         $.ajax({
             url: Drupal.url('warehouse/operation/' + init + '/post?_format=json'),
@@ -44,21 +98,9 @@
                 updateProductInformationBlock(response);
                 $('#warehouse-checkin-product-status-wrapper').html('Processed successfully.');
                 console.log(response);
-
                 if(!onload){
-                    if(response.duplicate){
-                        swal({
-                            title: 'Duplicate Product',
-                            text: 'Duplicate product, already found in another container.',
-                            type: 'warning', //error
-                            showCancelButton: false,
-                            confirmButtonColor: "#DD6B55",
-                            confirmButtonText: "OK",
-                            closeOnConfirm: true,
-                            timer: 5000
-                        });
-                    }
-                    if(response.already_scanned){
+
+                    if(same_container){
                         swal({
                             title: 'Product already scanned',
                             text: 'This product already scanned in this container.',
@@ -66,8 +108,8 @@
                             showCancelButton: false,
                             confirmButtonColor: "#DD6B55",
                             confirmButtonText: "OK",
-                            closeOnConfirm: true,
-                            timer: 5000
+                            closeOnConfirm: true
+                            //timer: 5000
                         });
                     }
 
@@ -92,7 +134,8 @@
     /*
      *  Process product in the container.
      */
-    function process_product(product,container, container_nid, onload){
+    function process_product(product,container, container_nid, onload, confirm, same_container){
+
         var data = {
             _links: {
                 type: {
@@ -104,7 +147,8 @@
                     "value": {
                         "product": product,
                         "container": container,
-                        "container_nid": container_nid
+                        "container_nid": container_nid,
+                        "confirm": confirm
                     },
                     "format": null,
                     "summary": null
@@ -114,7 +158,7 @@
         };
 
         getCsrfTokenForWarehouse(function (csrfToken) {
-            wareHouseScanProduct(csrfToken, data, 'import', onload);
+            wareHouseScanProduct(csrfToken, data, 'import', onload, same_container);
         });
 
     }
@@ -165,16 +209,6 @@
         },function () {
             window.location = Drupal.url.toAbsolute(drupalSettings.path.baseUrl + 'warehouse/checkout/' + container_nid);
         });
-
-//        swal({
-//            title: 'jQuery HTML example',
-//            html: $('<input type="text">')
-//                .addClass('some-class')
-//                .text('jQuery is everywhere.') +
-//                $('<input type="text">')
-//                    .addClass('some-class1')
-//                    .text('jQuery is everywhere1.')
-//        })
 
     });
 
@@ -282,7 +316,7 @@
         var container_nid = document.getElementById('warehouse-container-nid').value;
         //check for scanning same product
         if(wx.length){
-            process_product(wx,container, container_nid, true);
+            process_product(wx,container, container_nid, true,0, 0);
         }
     });
 
@@ -335,7 +369,6 @@
         if(ref){
             filename = 'Ref.jpg';
         }
-
 
         var img = {
             _links: {
@@ -409,8 +442,8 @@
                         showConfirmButton: false,
                         confirmButtonColor: "#DD6B55",
                         confirmButtonText: "OK",
-                        closeOnConfirm: true,
-                        timer:1500
+                        closeOnConfirm: true
+                        //timer:1500
                     });
                     //updateTagClasses(fid, 'untag');
                     //updateSequence();

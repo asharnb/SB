@@ -19,7 +19,7 @@ use Psr\Log\LoggerInterface;
  *   label = @Translation("[Studio|Warehouse] warehouse operations"),
  *   serialization_class = "Drupal\node\Entity\Node",
  *   uri_paths = {
- *     "canonical" = "/warehouse/operation",
+ *     "canonical" = "/warehouse/operation/{random}",
  *     "https://www.drupal.org/link-relations/create" = "/warehouse/operation/{op_type}/post"
  *   }
  * )
@@ -125,6 +125,8 @@ class WarehouseOperations extends ResourceBase {
 
         // Set product identifier to container state
         $this->state->set('warehouse_container_last_scan_product_' . $container, $product_identifier);
+        $a = $this->state->get('warehouse_container_last_scan_product_' . $container);
+        $aa = 'warehouse_container_last_scan_product_' . $container;
 
         // Check server for product.
         $result = $this->studioProducts->getProductByIdentifier($product_identifier);
@@ -143,10 +145,15 @@ class WarehouseOperations extends ResourceBase {
           $duplicates = $this->studioProducts->checkProductDuplicate($product->id(), array('container'));
           if(count($duplicates) > 1){
             $duplicate = true;
+
+            if(in_array($container_nid, $duplicates)){
+              $already_scanned = true;
+            }
+
           }elseif(count($duplicates) == 1){
             if(reset($duplicates) == $container_nid){
               if(!$this->newProduct){
-                $already_scanned = true;
+                //$already_scanned = true;
               }
             }
           }
@@ -171,6 +178,7 @@ class WarehouseOperations extends ResourceBase {
 
     return new ResourceResponse(array(rand(1, 22222222), array($node_type)));
   }
+
 
   /*
    *
@@ -251,5 +259,80 @@ class WarehouseOperations extends ResourceBase {
     return array('message' => 'Failed to drop product. It not exists in the system.','status' => false);
   }
 
+
+  public function processProduct($result, $product_identifier, $container_nid){
+    $duplicate = false;
+    $already_scanned = false;
+    $product = $this->productCheck($result, $product_identifier);
+    $product_values = $product->toArray();
+    $product_container_images = $this->studioProducts->getProductImages($product->id(),true);
+
+    // Assign this product to container.
+    $this->studioContainer->addProductToContainer($container_nid, $product);
+
+    // Product data response.
+    $product_return_data = $this->studioProducts->getProductInfoByObject($product);
+
+    // Check for duplicate/Reshoot
+    if($product){
+      $duplicates = $this->studioProducts->checkProductDuplicate($product->id(), array('container','sessions'));
+      if(count($duplicates) > 1){
+        $duplicate = true;
+      }elseif(count($duplicates) == 1){
+        if(reset($duplicates) == $container_nid){
+          if(!$this->newProduct){
+            $already_scanned = true;
+          }
+        }
+      }
+    }
+
+    return array('product'=>$product_return_data,'duplicate' => $duplicate,'already_scanned' => $already_scanned,'images' => $product_container_images);
+  }
+
+  /**
+   * Responds to POST requests.
+   *
+   * Returns a list of bundles for specified entity.
+   *
+   * @param $op_type
+   * @param $data
+   * @return \Drupal\rest\ResourceResponse Throws exception expected.
+   * Throws exception expected.
+   */
+  public function get($random) {
+    \Drupal::service('page_cache_kill_switch')->trigger();
+
+    if(!empty($_GET['identifier']) && !empty($_GET['cid'])){
+
+      $result = $this->studioProducts->getProductByIdentifier($_GET['identifier']);
+      if($result){
+        $duplicates = $this->studioProducts->checkProductDuplicate(reset($result), array('container','sessions'));
+
+        if(count($duplicates) > 1){
+
+          if(in_array($_GET['cid'], $duplicates)){
+            return new ResourceResponse(array('reshoot'=> true, 'same_container' => true));
+          }else{
+            return new ResourceResponse(array('reshoot'=> true, 'same_container' => false));
+          }
+
+        }elseif(count($duplicates) == 1){
+          if(reset($duplicates) == $_GET['cid']){
+            return new ResourceResponse(array('reshoot'=> false, 'same_container' => true));
+          }else{
+            return new ResourceResponse(array('reshoot'=> true, 'same_container' => false));
+          }
+        }
+
+        return new ResourceResponse(array('reshoot'=> false, 'same_container' => false));
+      }else{
+        return new ResourceResponse(array('reshoot'=> false, 'same_container' => false));
+      }
+
+    }
+
+    return new ResourceResponse($_GET);
+  }
 }
 
