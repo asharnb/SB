@@ -148,7 +148,8 @@
                         "product": product,
                         "container": container,
                         "container_nid": container_nid,
-                        "confirm": confirm
+                        "confirm": confirm,
+                        "onload": onload
                     },
                     "format": null,
                     "summary": null

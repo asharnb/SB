@@ -120,6 +120,7 @@ class WarehouseOperations extends ResourceBase {
         $container = $data->body->value['container'];
         $product_identifier = $data->body->value['product'];
         $container_nid = $data->body->value['container_nid'];
+        $on_pageload = $data->body->value['onload'];
         $duplicate = false;
         $already_scanned = false;
 
@@ -144,7 +145,9 @@ class WarehouseOperations extends ResourceBase {
         if($product){
           $pid = $product->id();
           // Add imported product identifier & product node it to schema table.
-          $this->studioProducts->insertProductImportRecord($product_identifier, $pid, 0, $container_nid);
+          if(!$on_pageload){
+            $this->studioProducts->insertProductImportRecord($product_identifier, $pid, 0, $container_nid);
+          }
 
           $duplicates = $this->studioProducts->checkProductDuplicate($product->id(), array('container'));
           if(count($duplicates) > 1){
