@@ -898,4 +898,29 @@ class StudioProducts implements StudioProductsInterface {
 
   }
 
+  /*
+   *
+   */
+  public function insertProductImportRecord($identifier, $pid, $sid, $cid){
+    $this->database->insert('studio_products_import_track')
+      ->fields(array(
+        'identifier' => $identifier,
+        'pid' => $pid,
+        'sid' => $sid,
+        'cid' => $cid,
+        'time' => REQUEST_TIME,
+      ))
+      ->execute();
+  }
+
+  public function getLastScannedProduct($sid, $cid){
+    $result = $this->database->select('studio_products_import_track', 'spit')
+      ->fields('spit', array('identifier','pid','time'))
+      ->condition('spit.sid', $sid)
+      ->condition('spit.cid', $cid)
+      ->orderBy('spit.id', 'desc')
+      ->range(0, 1);
+    return $result->execute()->fetchAssoc();
+  }
+
 }

@@ -214,8 +214,15 @@ function studiobridge_store_images_entity_insert(Drupal\Core\Entity\EntityInterf
 
       // Set product identifier to container state
       $identifier = \Drupal::state()->get('warehouse_container_last_scan_product_' . $title,false);
-
       $StudioProducts = \Drupal::service('studio.products');
+
+      if(!$identifier){
+        $record = $StudioProducts->getLastScannedProduct(0, $container_id);
+        if($record){
+          $identifier = $record['identifier'];
+        }
+      }
+
       $result = $StudioProducts->getProductByIdentifier($identifier);
 
       if($result){
