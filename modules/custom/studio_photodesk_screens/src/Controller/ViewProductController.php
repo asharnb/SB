@@ -105,6 +105,11 @@ class ViewProductController extends ControllerBase {
       '#images' => $images,
       '#images2' => $images2,
       '#product_type' => $bundle,
+      '#attached' => array(
+        'library' => array(
+          'studio_photodesk_screens/fancybox'
+        ),
+      ),
     ];
   }
 
