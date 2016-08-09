@@ -337,7 +337,7 @@ total_images: Total no.of images in this session - {{ total_images }} * * * @ing
 
             {% set image_count_class = 'bold text-success' %}
             {% endif %}
-            <tr>
+            <tr id="tr-product-{{item.nid.0.value }}">
               <td>Not Available</td>
               <td>{{ item.title.0.value }}</td>
               <td>
@@ -351,6 +351,7 @@ total_images: Total no.of images in this session - {{ total_images }} * * * @ing
 
               <td class="text-align-center">
                 <a target="_blank" class="btn btn-xs" href="/view-product/{{item.nid.0.value }}">View</a>
+                <a class="btn btn-xs studio-product-drop" data-id="{{item.nid.0.value }}">Drop Product</a>
               </td>
 
             </tr>

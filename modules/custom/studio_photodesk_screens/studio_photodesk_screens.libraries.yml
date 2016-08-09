@@ -9,6 +9,7 @@ studiobridge-sessions:
     js/datatables/dataTables.min.js: {}
     js/datatable-responsive/datatables.responsive.min.js: {}
     js/scripts.js: {}
+    js/studio-view-session-drop-product.js: {}
   dependencies:
     - core/jquery
     - core/drupal.ajax
