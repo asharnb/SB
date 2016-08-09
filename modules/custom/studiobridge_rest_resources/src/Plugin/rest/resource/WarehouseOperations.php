@@ -120,13 +120,14 @@ class WarehouseOperations extends ResourceBase {
         $container = $data->body->value['container'];
         $product_identifier = $data->body->value['product'];
         $container_nid = $data->body->value['container_nid'];
+        $on_pageload = $data->body->value['onload'];
         $duplicate = false;
         $already_scanned = false;
 
         // Set product identifier to container state
         $this->state->set('warehouse_container_last_scan_product_' . $container, $product_identifier);
-        $a = $this->state->get('warehouse_container_last_scan_product_' . $container);
-        $aa = 'warehouse_container_last_scan_product_' . $container;
+        //$b = $this->studioProducts->getLastScannedProduct(0, $container_nid);
+
 
         // Check server for product.
         $result = $this->studioProducts->getProductByIdentifier($product_identifier);
@@ -142,6 +143,12 @@ class WarehouseOperations extends ResourceBase {
 
         // Check for duplicate/Reshoot
         if($product){
+          $pid = $product->id();
+          // Add imported product identifier & product node it to schema table.
+          if(!$on_pageload){
+            $this->studioProducts->insertProductImportRecord($product_identifier, $pid, 0, $container_nid);
+          }
+
           $duplicates = $this->studioProducts->checkProductDuplicate($product->id(), array('container'));
           if(count($duplicates) > 1){
             $duplicate = true;

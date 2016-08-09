@@ -94,6 +94,12 @@ class warehousecheckinController extends ControllerBase {
       }
 
       $last_scanned_product_container = $this->state()->get('warehouse_container_last_scan_product_' . $container_id,'');
+      if(!$last_scanned_product_container){
+        $record = $this->studioProducts->getLastScannedProduct(0, $cid);
+        if($record){
+          $last_scanned_product_container = $record['identifier'];
+        }
+      }
 
       if($last_scanned_product_container){
         $result = $this->studioProducts->getProductByIdentifier($last_scanned_product_container);

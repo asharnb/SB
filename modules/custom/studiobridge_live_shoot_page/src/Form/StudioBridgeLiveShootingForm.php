@@ -111,6 +111,13 @@ class StudioBridgeLiveShootingForm extends FormBase {
 
     $identifier_hidden = $this->state->get('last_scan_product_' . $uid . '_' . $session_id, FALSE);
 
+    if(!$identifier_hidden){
+      $record = $this->StudioProducts->getLastScannedProduct($session_id, 0);
+      if($record){
+        $identifier_hidden = $record['identifier'];
+      }
+    }
+
     $this->StudioSessions->AddEndTimeToSession($session_id,1,1);
 
     // todo : identifier might available in query
@@ -132,6 +139,13 @@ class StudioBridgeLiveShootingForm extends FormBase {
 
         $last_scan_product = $this->state->get('last_scan_product_' . $uid . '_' . $session_id, FALSE);
 
+        if(!$last_scan_product){
+          $record = $this->StudioProducts->getLastScannedProduct($session_id, 0);
+          if($record){
+            $last_scan_product = $record['identifier'];
+          }
+        }
+
         $this->StudioProducts->AddEndTimeToProduct($session_id, FALSE, $last_scan_product);
 
 
@@ -141,6 +155,8 @@ class StudioBridgeLiveShootingForm extends FormBase {
 
 
         $this->state->set('last_scan_product_' . $uid . '_' . $session_id, $_GET['identifier']);
+
+        $this->StudioProducts->insertProductImportRecord($_GET['identifier'], $new_or_old_product_nid, $session_id, 0);
 
         $product_obj = $this->nodeStorage->load($new_or_old_product_nid);
 
@@ -202,6 +218,14 @@ class StudioBridgeLiveShootingForm extends FormBase {
 
     $images = array();
     $pid = $this->state->get('last_scan_product_nid' . $uid . '_' . $session_id, FALSE);
+
+    if(!$pid){
+        $record = $this->StudioProducts->getLastScannedProduct($session_id, 0);
+        if($record){
+          $pid = $record['pid'];
+        }
+    }
+
     if ($pid) {
       $images = $this->StudioProducts->getProductImages($pid);
     }
@@ -376,6 +400,13 @@ class StudioBridgeLiveShootingForm extends FormBase {
     $identifier_old = $form_state->getValue('identifier_hidden'); // @note : this will be the recent product.
 
     $last_scan_product = $state->get('last_scan_product_' . $uid . '_' . $session_id, FALSE);
+
+    if(!$last_scan_product){
+      $record = $StudioProducts->getLastScannedProduct($session_id, 0);
+      if($record){
+        $last_scan_product = $record['identifier'];
+      }
+    }
 
     if (empty(trim($identifier))) {
       //return js with error message
@@ -567,6 +598,8 @@ class StudioBridgeLiveShootingForm extends FormBase {
       $product_node = $nodeStorage->load($new_or_old_product_nid);
 
       $state->set('last_scan_product_nid' . $uid . '_' . $session_id, $new_or_old_product_nid);
+
+      $StudioProducts->insertProductImportRecord($identifier, $new_or_old_product_nid, $session_id, 0);
 
       // todo : add product to session.
       $StudioSessions->UpdateLastProductToSession($session_id, $product_node);
