@@ -920,7 +920,8 @@ class StudioProducts implements StudioProductsInterface {
       ->condition('spit.cid', $cid)
       ->orderBy('spit.id', 'desc')
       ->range(0, 1);
-    return $result->execute()->fetchAssoc();
+    $return = $result->execute()->fetchAssoc();
+    return $return;
   }
 
 }

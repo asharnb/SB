@@ -113,7 +113,9 @@ class StudioBridgeLiveShootingForm extends FormBase {
 
     if(!$identifier_hidden){
       $record = $this->StudioProducts->getLastScannedProduct($session_id, 0);
-      $identifier_hidden = $record['identifier'];
+      if($record){
+        $identifier_hidden = $record['identifier'];
+      }
     }
 
     $this->StudioSessions->AddEndTimeToSession($session_id,1,1);
@@ -139,7 +141,9 @@ class StudioBridgeLiveShootingForm extends FormBase {
 
         if(!$last_scan_product){
           $record = $this->StudioProducts->getLastScannedProduct($session_id, 0);
-          $last_scan_product = $record['identifier'];
+          if($record){
+            $last_scan_product = $record['identifier'];
+          }
         }
 
         $this->StudioProducts->AddEndTimeToProduct($session_id, FALSE, $last_scan_product);
@@ -217,7 +221,9 @@ class StudioBridgeLiveShootingForm extends FormBase {
 
     if(!$pid){
         $record = $this->StudioProducts->getLastScannedProduct($session_id, 0);
-        $pid = $record['pid'];
+        if($record){
+          $pid = $record['pid'];
+        }
     }
 
     if ($pid) {
@@ -396,8 +402,10 @@ class StudioBridgeLiveShootingForm extends FormBase {
     $last_scan_product = $state->get('last_scan_product_' . $uid . '_' . $session_id, FALSE);
 
     if(!$last_scan_product){
-      $record = $this->StudioProducts->getLastScannedProduct($session_id, 0);
-      $last_scan_product = $record['identifier'];
+      $record = $StudioProducts->getLastScannedProduct($session_id, 0);
+      if($record){
+        $last_scan_product = $record['identifier'];
+      }
     }
 
     if (empty(trim($identifier))) {
