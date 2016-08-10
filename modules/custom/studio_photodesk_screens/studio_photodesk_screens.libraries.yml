@@ -6,7 +6,7 @@ studiobridge-sessions:
       css/dataTables/datatables.min.css: {}
   js:
     js/bootstrap/bootstrap.min.js: {}
-    js/datatables/dataTables.min.js: {}
+    js/datatables/datatables.min.js: {}
     js/datatable-responsive/datatables.responsive.min.js: {}
     js/scripts.js: {}
     js/studio-view-session-drop-product.js: {}
