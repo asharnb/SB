@@ -36,7 +36,10 @@
         "bDestroy": true,
         "iDisplayLength": 30,
         "order": [[0 , 'desc']],
-        "autoWidth" : true
+        "autoWidth" : true,
+           "processing": true,
+           "serverSide": true,
+           "ajax": "/dt/ping.php"
       } );
       $('#dt_search_box').keyup(function(){
             oTable.search($(this).val()).draw() ;
