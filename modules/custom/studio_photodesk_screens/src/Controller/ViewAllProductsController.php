@@ -64,7 +64,7 @@ public function __construct(Connection $database)
     $result = \Drupal::entityQuery('node')
       ->condition('type', array('products', 'unmapped_products'), 'IN')
       ->sort('created', 'DESC')
-      ->range(0, 1000000)
+      ->range(0, 1000)
       ->execute();
 
     //load all the nodes from the result
