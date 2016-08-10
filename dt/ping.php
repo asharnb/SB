@@ -67,8 +67,8 @@ $sql_details = array(
 
 $data = array(
    'draw' => 1,
-   'recordsTotal' => 57,
-   'recordsFiltered' => 57,
+   'recordsTotal' => 2,
+   'recordsFiltered' => 2,
    'data' => 
   array (
     0 => 

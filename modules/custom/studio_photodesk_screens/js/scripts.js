@@ -37,9 +37,9 @@
         "iDisplayLength": 30,
         "order": [[0 , 'desc']],
         "autoWidth" : true,
-           "processing": true,
-           "serverSide": true,
-           "ajax": "/dt/ping.php"
+        "processing": true,
+        "serverSide": true,
+        "ajax": Drupal.url('screens/product?_format=json')
       } );
       $('#dt_search_box').keyup(function(){
             oTable.search($(this).val()).draw() ;
