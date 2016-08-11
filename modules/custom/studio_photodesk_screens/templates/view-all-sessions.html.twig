@@ -58,9 +58,9 @@
 
         {#rules for status stages#}
             {% if result.stage.0.value == 'open' and total_count == 0  %}
-              {% set status_class = '<span class="text-success"><i class=""></i> Started</span>' %}
+              {% set status_class = '<span class="text-complete"><i class=""></i> Started</span>' %}
             {% elseif result.stage.0.value == 'open' and total_count > 0   %}
-              {% set status_class = '<span class="text-success"><i class=""></i> Importing Products</span>' %}
+              {% set status_class = '<span class="text-complete"><i class=""></i> Importing Products</span>' %}
             {% endif %}
 
             {% if result.stage.0.value == 'pause' and total_count == 0  %}
