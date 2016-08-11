@@ -132,7 +132,8 @@ class ProductAndSessionsLookup extends ResourceBase {
       $orCondition->condition('title', "%$value%",'LIKE');
       $orCondition->condition('field_concept_name', "%$value%",'LIKE');
       $orCondition->condition('nid', "%$value%",'LIKE');
-     $query->condition($orCondition);
+      $query->condition($orCondition);
+      $query->range(0,50);
       $query->sort($order_field, strtoupper($order_direction));
       $result = $query->execute();
 
