@@ -380,12 +380,14 @@ class StudioProducts implements StudioProductsInterface {
 
     $config = \Drupal::config('studiobridge_global_settings.studiosettings');
     $url = "http://beta.contentcentral.co/service/product-data?_format=json&product_identifier=$input";
+    $url_without_input = "http://beta.contentcentral.co/service/product-data?_format=json&product_identifier=";
     $user_name = 'demouser';
     $pass = 'demouser';
     if($config){
       $url = $config->get('url');
       if($config->get('url')){
         $url = $config->get('url') .''. $input;
+        $url_without_input = $config->get('url');
       }
       if($config->get('user_name')){
         $user_name = $config->get('user_name');
@@ -396,19 +398,25 @@ class StudioProducts implements StudioProductsInterface {
     }
 
 
-    try {
-      $response = \Drupal::httpClient()
-        ->get($url, [
-          'auth' => [$user_name, $pass],
-          //'body' => $serialized_entity,
-          'headers' => [
-            'Content-Type' => 'application/json'
-          ],
-        ]);
-      $result = (string) $response->getBody();
-    } catch (\Exception $e) {
-      $result = json_encode(array('msg' => $e->getMessage()));
-    }
+//    try {
+//      $response = \Drupal::httpClient()
+//        ->get($url, [
+//          'auth' => [$user_name, $pass],
+//          //'body' => $serialized_entity,
+//          'headers' => [
+//            'Content-Type' => 'application/json'
+//          ],
+//        ]);
+//      $result = (string) $response->getBody();
+//    } catch (\Exception $e) {
+//      $result = json_encode(array('msg' => $e->getMessage()));
+//    }
+
+    $result = $this->lookProductServer($url, $user_name, $pass);
+
+    $result = $this->checkBarecodesInDB($result, $input, $url_without_input, $user_name, $pass);
+
+
     return $result;
   }
 
@@ -922,6 +930,70 @@ class StudioProducts implements StudioProductsInterface {
       ->range(0, 1);
     $return = $result->execute()->fetchAssoc();
     return $return;
+  }
+
+  /*
+   * Helper function to handle product lookup call.
+   */
+  public function lookProductServer($url, $user_name, $pass){
+    try {
+      $response = \Drupal::httpClient()
+        ->get($url, [
+          'auth' => [$user_name, $pass],
+          //'body' => $serialized_entity,
+          'headers' => [
+            'Content-Type' => 'application/json'
+          ],
+        ]);
+      $result = (string) $response->getBody();
+    } catch (\Exception $e) {
+      $result = json_encode(array('msg' => $e->getMessage()));
+    }
+
+    return $result;
+  }
+
+  /*
+   * Helper function to check for missing products on product server.
+   */
+  public function checkBarecodesInDB($result, $identifier, $url_without_input, $user_name, $pass){
+
+    $product = json_decode($result);
+    if(count((array)$product) <= 1){
+
+      $table_exists = $this->database->schema()->tableExists('studio_barcodes');
+
+      if($table_exists){
+        $rows_query = $this->database->select('studio_barcodes', 'sb')
+          ->fields('sb', array('Barcode','Color'));
+
+        $orCondition = $rows_query->orConditionGroup();
+        $orCondition->condition('sb.Barcode', $identifier);
+        $orCondition->condition('sb.Color', $identifier);
+
+        $rows_query->condition($orCondition);
+
+
+        $rows = $rows_query->execute()->fetchAssoc();
+
+        if(!empty($rows['Color'])){
+
+          $key = array_search($identifier, $rows);
+
+          if($key == 'Color'){
+            $url = $url_without_input.''.$rows['Barcode'];
+          }else{
+            $url = $url_without_input.''.$rows['Color'];
+          }
+
+          $result = $this->lookProductServer($url, $user_name, $pass);
+        }
+
+      }
+
+    }
+
+    return $result;
   }
 
 }
