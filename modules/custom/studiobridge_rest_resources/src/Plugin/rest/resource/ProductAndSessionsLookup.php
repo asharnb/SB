@@ -102,20 +102,24 @@ class ProductAndSessionsLookup extends ResourceBase {
 
 
     if(!empty($_GET['search']['value'])){
+      $value = $_GET['search']['value'];
       $result = \Drupal::entityQuery('node')
         ->condition('type', $bundles, 'IN')
-        ->condition('title',$_GET['search']['value'],'LIKE')
+        ->condition('title',"%$value%",'LIKE')
         ->sort('created', 'DESC')
+        ->range(0, 50)
         ->execute();
+      $a =1;
     }else{
       $result = \Drupal::entityQuery('node')
         ->condition('type', $bundles, 'IN')
         ->sort('created', 'DESC')
+        ->range(0, 50)
         ->execute();
     }
 
 
-
+$a =1;
 
     //load all the nodes from the result
     if ($result) {
@@ -124,42 +128,29 @@ class ProductAndSessionsLookup extends ResourceBase {
 
       //if results are not empty load each node and get info
       if ($products) {
-        foreach ($products as $product) {
-          //$product_data[] = $product->toArray();
-        }
-
 
         $data =  array(
           'draw' => intval( $_GET['draw'] ),
           'recordsTotal' => $total_count,
-          'recordsFiltered' => $total_count,
+          'recordsFiltered' => count($result),
           'data' =>
-            array (
-              0 =>
-                array (
-                  0 => '1111',
-                  1 => 'Satou',
-                  2 => 'Accountant',
-                  3 => 'Tokyo',
-                  4 => '28th Nov 08',
-                  5 => '$162,700',
-                ),
-              1 =>
-                array (
-                  0 => 'Cedric',
-                  1 => 'Kelly',
-                  2 => 'Senior Javascript Developer',
-                  3 => 'Edinburgh',
-                  4 => '29th Mar 12',
-                  5 => '$433,060',
-                ),
-            ),
+            $products,
         );
 
         return new ResourceResponse($data);
       }
-    }
+    }else{
 
+      $data =  array(
+        'draw' => intval( $_GET['draw'] ),
+        'recordsTotal' => $total_count,
+        'recordsFiltered' => 0,
+        'data' => array (),
+      );
+
+      return new ResourceResponse($data);
+
+    }
 
     // Throw an exception if it is required.
     // throw new HttpException(t('Throw an exception if it is required.'));
@@ -313,10 +304,83 @@ class ProductAndSessionsLookup extends ResourceBase {
   public function getProducts($result){
 
     $products = Node::loadMultiple($result);
+    $total_images = 0;
+    $data = array();
+
+
+    foreach($products as $current_product){
+      // Get product type; mapped or unmapped
+      $bundle = $current_product->bundle();
+      // Map unmapped & mapped products
+      if ($bundle == 'products') {
+        $cp = $current_product->toArray();
+        $pid = $current_product->id();
+
+        $total_images = count($cp['field_images']);
+
+        // Get Concept
+        $concept = $current_product->field_concept_name->getValue();
+
+          $product_concept = $current_product->field_concept_name->getValue();
+          if($product_concept){
+            $concept = $product_concept[0]['value'];
+          }
+
+          $product_color_variant = $current_product->field_color_variant->getValue();
+          if($product_color_variant){
+            $color_variant = $product_color_variant[0]['value'];
+          }
+
+          $product_state = $current_product->field_state->getValue();
+          if($product_state){
+            $state = $product_state[0]['value'];
+          }
+
+          $product_title = $current_product->title->getValue();
+          if($product_title){
+            $title = $product_title[0]['value'];
+          }
+
+        $view_link = '<a class="btn btn-xs " href="/view-product/'.$pid.'">View</a>';
+
+        $data[] = array(
+          $pid, $concept, $title, $color_variant, $total_images, $view_link
+        );
+
+
+
+      } elseif ($bundle == 'unmapped_products') {
+        $cpu = $current_product->toArray();
+        $total_images = count($cpu['field_images']);
+
+
+          $concept = 'Unmapped';
+          $pid = $current_product->id();
+
+          $product_state = $current_product->field_state->getValue();
+          if($product_state){
+            $state = $product_state[0]['value'];
+          }
+
+          $product_title = $current_product->title->getValue();
+          if($product_title){
+            $title = $product_title[0]['value'];
+          }
+
+        $view_link = '<a class="btn btn-xs " href="/view-product/'.$pid.'">View</a>';
+
+
+        $data[] = array(
+            $pid, $concept, $title, '', $total_images, $view_link
+          );
+
+
+      }
+    }
 
     
 
-    return array();
+    return $data;
   }
 
 }
