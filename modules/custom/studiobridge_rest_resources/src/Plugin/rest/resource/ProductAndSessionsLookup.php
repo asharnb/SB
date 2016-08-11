@@ -97,23 +97,50 @@ class ProductAndSessionsLookup extends ResourceBase {
 
     $total_count = \Drupal::entityQuery('node')
       ->condition('type', $bundles, 'IN')
-      ->sort('created', 'DESC')
       ->count()->execute();
 
+    $order_by = $_GET['order'][0]['column'];
+    $order_direction = $_GET['order'][0]['dir'];
+
+    switch($order_by){
+      case  0:
+        $order_field = 'nid';
+        break;
+      case  1:
+        $order_field = 'field_concept_name';
+        break;
+      case  2:
+        $order_field = 'title';
+        break;
+      case  3:
+        $order_field = 'field_color_variant';
+        break;
+      default:
+        $order_field = 'nid';
+
+    }
 
     if(!empty($_GET['search']['value'])){
       $value = $_GET['search']['value'];
-      $result = \Drupal::entityQuery('node')
-        ->condition('type', $bundles, 'IN')
-        ->condition('title',"%$value%",'LIKE')
-        ->sort('created', 'DESC')
-        ->range(0, 50)
-        ->execute();
-      $a =1;
+
+      $query = \Drupal::entityQuery('node');
+      $query->condition('type', $bundles, 'IN');
+
+      // Or condition for product fields
+      $orCondition = $query->orConditionGroup();
+      $orCondition->condition('field_color_variant', "%$value%",'LIKE');
+      $orCondition->condition('title', "%$value%",'LIKE');
+      $orCondition->condition('field_concept_name', "%$value%",'LIKE');
+      $orCondition->condition('nid', "%$value%",'LIKE');
+     $query->condition($orCondition);
+      $query->sort($order_field, strtoupper($order_direction));
+      $result = $query->execute();
+
+
     }else{
       $result = \Drupal::entityQuery('node')
         ->condition('type', $bundles, 'IN')
-        ->sort('created', 'DESC')
+        ->sort($order_field, strtoupper($order_direction))
         ->range(0, 50)
         ->execute();
     }
