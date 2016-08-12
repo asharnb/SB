@@ -210,6 +210,11 @@ class ProductAndSessionsLookup extends ResourceBase {
         $product_concept = $current_product->field_concept_name->getValue();
         if ($product_concept) {
           $concept = $product_concept[0]['value'];
+          $theme_path = base_path().''.drupal_get_path('theme', 'studiobridge');
+          //$theme_path = base_path().
+          $img_file_name = str_replace(' ','', $concept);
+          $concept_img = $theme_path.'/images/brands/brand_logo_'.strtolower($img_file_name).'.png';
+          $concept_img = '<img height="20px" src="'.$concept_img.'">';
         }
 
         $product_color_variant = $current_product->field_color_variant->getValue();
@@ -232,7 +237,7 @@ class ProductAndSessionsLookup extends ResourceBase {
 
         $data[] = array(
           $pid,
-          $concept,
+          $concept_img,
           $title,
           $color_variant,
           $total_images,
