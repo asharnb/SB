@@ -3,6 +3,7 @@
 		prevEffect	: 'none',
 		nextEffect	: 'none',
     type : 'image',
+
 		helpers	: {
 			title	: {
 				type: 'outside'

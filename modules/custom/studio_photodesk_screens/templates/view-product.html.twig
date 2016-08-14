@@ -146,7 +146,7 @@
 
                                                           <div class="overlay">
                                                               <input type="checkbox" class="form-checkbox" id="del-img-{{ image.fid }}" hidden value="{{image.fid}}">
-                                                             <a class="info select-delete" data-id="{{ image.fid }}" data-click="no">Select image</a>
+                                                             <a class="info select-delete" href="/file/{{image.fid}}" target="_blank" >Original Image</a>
                                                           </div>
                                                       </div>
 
@@ -158,7 +158,7 @@
                                                               <div class="col-sm-12">
                                                               <span  id = {{ image.fid }}>
 
-                                                                  <a rel="fancybox-thumb" href="{{image.largeimage}}" class="fancybox-thumb col-sm-4 text-info">
+                                                                  <a rel="fancybox-thumb" href="{{image.fullimage}}" class="fancybox-thumb col-sm-4 text-info">
                                                                     <i class="fa fa-lg fa-fw fa-search"></i>
                                                                     </a>
 
