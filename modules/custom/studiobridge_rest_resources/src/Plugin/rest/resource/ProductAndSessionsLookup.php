@@ -35,6 +35,10 @@ class ProductAndSessionsLookup extends ResourceBase {
    */
   protected $currentUser;
 
+  protected $nodeStorage;
+
+  protected $studioModels;
+
   /**
    * Constructs a Drupal\rest\Plugin\ResourceBase object.
    *
@@ -57,10 +61,14 @@ class ProductAndSessionsLookup extends ResourceBase {
     $plugin_definition,
     array $serializer_formats,
     LoggerInterface $logger,
-    AccountProxyInterface $current_user) {
+    AccountProxyInterface $current_user, $entity_manager, $studioModels) {
     parent::__construct($configuration, $plugin_id, $plugin_definition, $serializer_formats, $logger);
 
+    $this->nodeStorage = $entity_manager->getStorage('node');
+
     $this->currentUser = $current_user;
+
+    $this->studioModels = $studioModels;
   }
 
   /**
@@ -73,7 +81,9 @@ class ProductAndSessionsLookup extends ResourceBase {
       $plugin_definition,
       $container->getParameter('serializer.formats'),
       $container->get('logger.factory')->get('rest'),
-      $container->get('current_user')
+      $container->get('current_user'),
+      $container->get('entity_type.manager'),
+      $container->get('studio.models')
     );
   }
 
@@ -93,8 +103,14 @@ class ProductAndSessionsLookup extends ResourceBase {
       $bundles = array('products', 'unmapped_products');
 
     }
-    else {
+    elseif($type == 'sessions') {
       $bundles = array('sessions');
+    }elseif($type == 'models'){
+
+      $data = $this->studioModels->getModels();
+
+      return new ResourceResponse($data);
+
     }
 
     $total_count = \Drupal::entityQuery('node')

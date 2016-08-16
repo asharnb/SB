@@ -23,3 +23,8 @@ services:
     class: Drupal\studiobridge_commons\StudioContainer
     arguments: ['@database', '@entity_type.manager', '@current_user', '@entity.query', , '@state']
 
+  studio.models:
+    class: Drupal\studiobridge_commons\StudioModels
+    arguments: ['@database', '@entity_type.manager', '@current_user', '@entity.query', , '@state']
+
+
