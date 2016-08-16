@@ -19,7 +19,6 @@ studiobridge-sessions:
     - core/jquery.ui.sortable
 
 studiobridge-analysis:
-  version: VERSION
   js:
     js/analysis.js: {}
   dependencies:
