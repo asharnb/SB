@@ -2,7 +2,7 @@
 
 /**
 * @file
-* Contains \Drupal\studio_photodesk_screens\Controller\ViewSessionController.
+* Contains \Drupal\studio_photodesk_screens\Controller\ViewAllModelsController.
 */
 
 namespace Drupal\studio_photodesk_screens\Controller;
@@ -18,7 +18,7 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
 *
 * @package Drupal\studio_photodesk_screens\Controller
 */
-class ViewAllProductsController extends ControllerBase
+class ViewAllModelsController extends ControllerBase
 {
 
   /**
@@ -63,14 +63,10 @@ public function __construct(Connection $database)
 
     //return array to render
     return [
-      '#theme' => 'view_all_products',
+      '#theme' => 'view_all_models',
       '#cache' => ['max-age' => 0],
       '#results' => $product_data,
-      '#attached' => array(
-        'library' => array(
-          'studio_photodesk_screens/studiobridge-sessions'
-        ),
-      ),
+
     ];
 
   }
