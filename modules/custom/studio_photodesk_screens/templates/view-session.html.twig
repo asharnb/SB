@@ -322,6 +322,7 @@ total_images: Total no.of images in this session - {{ total_images }} * * * @ing
               <th>State</th>
               <th>Image Count</th>
               <th></th>
+              <th></th>
             </tr>
           </thead>
           <tbody>
@@ -351,9 +352,13 @@ total_images: Total no.of images in this session - {{ total_images }} * * * @ing
 
               <td class="text-align-center">
                 <a target="_blank" class="btn btn-xs" href="/view-product/{{item.nid.0.value }}">View</a>
-                <a class="btn btn-xs studio-product-drop" data-id="{{item.nid.0.value }}">Drop Product</a>
-              </td>
 
+              </td>
+              {% if  session.field_status.0.value == 'open' %}
+              <td class="text-align-center">
+                <a class="btn btn-xs border-red txt-color-red studio-product-drop" data-id="{{item.nid.0.value }}">Drop Product</a>
+              </td>
+              {% endif %}
             </tr>
             {% endif %}
             {% endfor %}
