@@ -1,3 +1,4 @@
+
 {% extends 'sbtheme_page.html.twig' %}
 
 
@@ -81,7 +82,7 @@
 
                     <div class="scancontainer">
                       <div class="hovereffect">
-                        <img src="{{ image.url }}" class="scanpicture"  data-imageid="{{ image.fid }}">
+                        <img src="{{ image.url }}" class="scanpicture"  id="pic-{{image.fid}}" data-imageid="{{ image.fid }}">
 
                         <div class="overlay">
                             <input type="checkbox" class="form-checkbox" id="del-img-{{ image.fid }}" hidden value="{{image.fid}}">
