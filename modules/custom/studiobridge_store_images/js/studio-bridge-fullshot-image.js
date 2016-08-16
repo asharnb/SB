@@ -11,7 +11,7 @@
 
     function patchImageFullShot(csrfToken, file, fid) {
 
-        document.getElementById('msg-up').innerHTML = 'Image marked as fullshot ....';
+        //document.getElementById('msg-up').innerHTML = 'Image marked as fullshot ....';
 
         $.ajax({
             url: Drupal.url('file/' + fid + '?_format=hal_json'),
@@ -23,7 +23,7 @@
             data: JSON.stringify(file),
             success: function (file) {
                 //console.log(node);
-                document.getElementById('msg-up').innerHTML = 'Image Fullshot started!';
+                //document.getElementById('msg-up').innerHTML = 'Image Fullshot started!';
                 swal({
                     title: "Full Shot",
                     text: "Image has been selected as full shot. Scan next ID",
@@ -48,9 +48,9 @@
 
         });
 
-        setTimeout(function(){
-            document.getElementById('msg-up').innerHTML = '';
-        }, 3300);
+//        setTimeout(function(){
+//            document.getElementById('msg-up').innerHTML = '';
+//        }, 3300);
 
     }
 
@@ -90,6 +90,14 @@
         console.log('fullshot');
         update_image_fullshot(1,id);
     });
+
+    $(document).on("click",".studio-img-fullshot",function(){
+
+        var id = $(this).parents('span').attr('id');
+        console.log('fullshot');
+        update_image_fullshot(1,id);
+    });
+
 
 })(jQuery);
 

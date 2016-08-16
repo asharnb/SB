@@ -61,26 +61,7 @@ public function __construct(Connection $database)
   public function content() {
     $product_data = array();
 
-    $result = \Drupal::entityQuery('node')
-      ->condition('type', array('products', 'unmapped_products'), 'IN')
-      ->sort('created', 'DESC')
-      ->range(0, 1000)
-      ->execute();
-
-    //load all the nodes from the result
-    if ($result) {
-      $products = $this->nodeStorage->loadMultiple($result);
-
-      //if results are not empty load each node and get info
-      if ($products) {
-        foreach ($products as $product) {
-          $product_data[] = $product->toArray();
-        }
-      }
-    }
-
-
-//return array to render
+    //return array to render
     return [
       '#theme' => 'view_all_products',
       '#cache' => ['max-age' => 0],
