@@ -31,7 +31,6 @@
 
 
                         <div class="row">
-                          {{kint()}}
                           <div class="col-sm-12 col-md-12">
                             <h3 class="no-margins p-b-sm">View Product</span></h3>
                             <h4 class="no-margins">View all information related to this product</h4>
@@ -147,7 +146,7 @@
 
                                                           <div class="overlay">
                                                               <input type="checkbox" class="form-checkbox" id="del-img-{{ image.fid }}" hidden value="{{image.fid}}">
-                                                             <a class="info select-delete" data-id="{{ image.fid }}" data-click="no">Select image</a>
+                                                             <a class="info select-delete" href="/file/{{image.fid}}" target="_blank" >Original Image</a>
                                                           </div>
                                                       </div>
 
@@ -158,8 +157,10 @@
 
                                                               <div class="col-sm-12">
                                                               <span  id = {{ image.fid }}>
-                                                                  <a target="_blank" href="/file/{{ image.fid }}" class="col-sm-4 text-info"><i class="fa fa-lg fa-fw fa-search"></i></a>
 
+                                                                  <a rel="fancybox-thumb" href="{{image.fullimage}}" class="fancybox-thumb col-sm-4 text-info">
+                                                                    <i class="fa fa-lg fa-fw fa-search"></i>
+                                                                    </a>
 
                                                               </span>
 

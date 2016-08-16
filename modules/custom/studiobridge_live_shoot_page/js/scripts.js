@@ -43,12 +43,6 @@
 
   });
   
-  Drupal.behaviors.liveshootpage = {
-    attach: function(context, settings) {
-
-
-    }
-  };
 
 
   Drupal.behaviors.sortable = {

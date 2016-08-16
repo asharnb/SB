@@ -61,3 +61,10 @@ studio_photodesk_screens.view_dasboard_content:
     _controller: '\Drupal\studio_photodesk_screens\Controller\ViewDashboard::content'
   requirements:
     _permission: 'access content'
+
+studio_photodesk_screens.view_models_controller_content:
+  path: '/view-models'
+  defaults:
+    _controller: '\Drupal\studio_photodesk_screens\Controller\ViewAllModelsController::content'
+  requirements:
+    _permission: 'access content'

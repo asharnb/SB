@@ -13,3 +13,15 @@ studiobridge-form:
     - core/drupalSettings
     - core/jquery.once
     - core/jquery.ui.sortable
+
+tracking:
+  version:  VERSION
+  head: true
+  js:
+    js/tracking/build/tracking-min.js: {}
+    js/tracking/build/data/face-min.js: {}
+    js/tracking/build/data/eye-min.js: {}
+    js/tracking/build/data/mouth-min.js: {}
+    js/tracking.js: {}
+  dependencies:
+    - core/jquery

@@ -62,5 +62,12 @@ function studio_photodesk_screens_theme($existing, $type, $theme, $path) {
           'unmapped' => array (),
       ),
       ),
+      'view_all_models' => array(
+        'variables' => array(
+          'results' => array (),
+          'mapped' => array (),
+          'unmapped' => array (),
+      ),
+      ),
   );
 }

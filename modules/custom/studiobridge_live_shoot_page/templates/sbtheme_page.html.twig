@@ -1,3 +1,5 @@
+{{ attach_library('studiobridge_live_shoot_page/tracking') }}
+
 {{ form.form_build_id }}
                 {{ form.form_id }}
 
@@ -11,7 +13,7 @@
                     <div class="col-xs-9">
 <div class="panel panel-default row">
 
-
+<div id="photo"></div>
 
 
 
@@ -65,3 +67,26 @@
         {% endblock sidepanel %}
 
     </div>
+
+    <!-- <script>
+        window.onload = function() {
+          var img = document.getElementById('pic-13783');
+          var tracker = new tracking.ObjectTracker(['face', 'eye', 'mouth']);
+          tracker.setStepSize(1.7);
+          tracking.track('#pic-13783', tracker);
+          tracker.on('track', function(event) {
+            event.data.forEach(function(rect) {
+              window.plot(rect.x, rect.y, rect.width, rect.height);
+            });
+          });
+          window.plot = function(x, y, w, h) {
+            var rect = document.createElement('div');
+            document.querySelector('#warpper-img-13783').appendChild(rect);
+            rect.classList.add('rect');
+            rect.style.width = w + 'px';
+            rect.style.height = h + 'px';
+            rect.style.left = (img.offsetLeft + x) + 'px';
+            rect.style.top = (img.offsetTop + y) + 'px';
+          };
+        };
+      </script> -->

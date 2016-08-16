@@ -19,7 +19,6 @@ studiobridge-sessions:
     - core/jquery.ui.sortable
 
 studiobridge-analysis:
-  version: VERSION
   js:
     js/analysis.js: {}
   dependencies:
@@ -32,10 +31,11 @@ fancybox:
     js/fancybox/source/helpers/jquery.fancybox-buttons.js?v=1.0.5: {}
     js/fancybox/source/helpers/jquery.fancybox-media.js?v=1.0.6: {}
     js/fancybox/source/helpers/jquery.fancybox-thumbs.js?v=1.0.7: {}
+    js/viewproduct.js: {}
   css:
     theme:
       js/fancybox/source/jquery.fancybox.css?v=2.1.5: {}
       js/fancybox/source/helpers/jquery.fancybox-buttons.css?v=1.0.5: {}
       js/fancybox/source/helpers/jquery.fancybox-thumbs.css?v=1.0.7: {}
   dependencies:
-    -core/jquery
+    - core/jquery
