@@ -141,4 +141,85 @@ class StudioModels implements StudioModelsInterface {
     return $models;
   }
 
+  /*
+ * Helper function, to get all models nodes from the database in the following format.
+ *   array(nid,model name, gender, stats, image path);
+ */
+  public function getModelsBySession($sid){
+
+    $name = '';
+    $stats = '';
+    $gender = '';
+    $image_uri_value = '';
+    $model_nids = '';
+    $model_node_objects = '';
+    $models = array();
+
+
+    if($sid){
+      $model_nids = \Drupal::database()->select('node__field_models', 'c')
+        ->fields('c',array('field_models_target_id'))
+        ->condition('entity_id', $sid)
+        ->condition('bundle', 'sessions')
+        ->execute()->fetchAll();
+    }
+
+
+    if($model_nids){
+      $nids = array();
+      foreach($model_nids as $nid){
+        $nids[] = $nid->field_models_target_id;
+      }
+
+      if($nids){
+        $model_node_objects = $this->nodeStorage->loadMultiple($nids);
+      }
+
+      if($model_node_objects){
+        foreach($model_node_objects as $node){
+
+          $model_name = $node->title->getValue();
+          if ($model_name) {
+            $name = $model_name[0]['value'];
+          }
+
+          $model_gender = $node->field_model_gender->getValue();
+          if ($model_gender) {
+            $gender = $model_gender[0]['value'];
+          }
+
+          $model_stats = $node->field_model_stats->getValue();
+          if ($model_stats) {
+            $stats = $model_stats[0]['value'];
+          }
+
+          $model_image = $node->field_model_image->getValue();
+          if ($model_image) {
+            $image = $model_image[0]['target_id'];
+
+            if($image){
+              $image_object = $this->fileStorage->load($image);
+              if($image_object){
+                $image_uri_value = ImageStyle::load('thumbnail')->buildUrl($image_object->getFileUri());
+              }
+            }
+
+          }
+
+          $models[] = array(
+            'nid' => $node->id(),
+            'model_name' => $name,
+            'model_gender' => $gender,
+            'model_stats' => $stats,
+            'model_image_path' => $image_uri_value
+          );
+
+        }
+      }
+
+    }
+
+    return $models;
+  }
+
 }
