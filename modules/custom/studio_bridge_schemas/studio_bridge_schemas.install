@@ -111,3 +111,25 @@ function studio_bridge_schemas_update_8104(&$sandbox) {
   $schema = Database::getConnection()->schema();
   $schema->createTable('studio_products_import_track', $spec);
 }
+
+/*
+ * Implements hook__update_8105().
+ *
+ * {studio_products_qc_records} table.
+ */
+function studio_bridge_schemas_update_8105(&$sandbox) {
+  $spec = array(
+    'fields' => array(
+      'id' => array('type' => 'serial', 'not null' => TRUE,),
+      'pid' => array('type' => 'varchar', 'length' => 20, 'not null' => TRUE,),
+      'sid' => array('type' => 'varchar', 'length' => 20, 'not null' => TRUE,),
+      'qc_note' => array('type' => 'text', 'size' => 'normal', 'not null' => TRUE,),
+      'qc_state' => array('type' => 'varchar', 'length' => 100, 'not null' => TRUE,),
+      'uid' => array('type' => 'varchar', 'length' => 20, 'not null' => TRUE,),
+      'created'   => array('type' => 'int', 'not null' => TRUE, 'default' => 0),
+    ),
+    'primary key' => array('id'),
+  );
+  $schema = Database::getConnection()->schema();
+  $schema->createTable('studio_products_qc_records', $spec);
+}
