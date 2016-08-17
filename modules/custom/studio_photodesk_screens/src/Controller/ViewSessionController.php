@@ -328,6 +328,9 @@ class ViewSessionController extends ControllerBase
       }
     }
 
+    $StudioModels = \Drupal::service('studio.models');
+    $models = $StudioModels->getModelsBySession($nid);
+
     return [
       '#theme' => 'view_session',
       '#cache' => ['max-age' => 0],
@@ -343,6 +346,7 @@ class ViewSessionController extends ControllerBase
       '#drops' => $drops,
       '#mapped_dropped_products' => $mapped_dropped_products,
       '#unmapped_dropped_products' => $unmapped_dropped_products,
+      '#models' => $StudioModels,
       '#attached' => array(
         'library' => array(
           'studio_photodesk_screens/studiobridge-sessions',
