@@ -1,0 +1,36 @@
+<?php
+
+/**
+ * @file
+ * Contains studio_photodesk_screens.module..
+ */
+
+use Drupal\Core\Routing\RouteMatchInterface;
+
+/**
+ * Implements hook_help().
+ */
+function studio_qc_help($route_name, RouteMatchInterface $route_match) {
+  switch ($route_name) {
+    // Main module help for the studio_photodesk_screens module.
+    case 'help.page.studio_qc':
+      $output = '';
+      $output .= '<h3>' . t('About') . '</h3>';
+      $output .= '<p>' . t('Module holds all screens which are required for qc operations.') . '</p>';
+      return $output;
+
+    default:
+  }
+}
+
+
+function studio_qc_theme($existing, $type, $theme, $path) {
+  return array(
+    'view_qc' => array(
+      'variables' => array(
+        'results' => array (),
+    ),
+    ),
+
+  );
+}

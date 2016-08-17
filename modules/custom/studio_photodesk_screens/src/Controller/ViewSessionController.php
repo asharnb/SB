@@ -346,7 +346,7 @@ class ViewSessionController extends ControllerBase
       '#drops' => $drops,
       '#mapped_dropped_products' => $mapped_dropped_products,
       '#unmapped_dropped_products' => $unmapped_dropped_products,
-      '#models' => $StudioModels,
+      '#models' => $models,
       '#attached' => array(
         'library' => array(
           'studio_photodesk_screens/studiobridge-sessions',

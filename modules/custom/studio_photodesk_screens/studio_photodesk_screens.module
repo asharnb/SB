@@ -41,7 +41,8 @@ function studio_photodesk_screens_theme($existing, $type, $theme, $path) {
         'period_chart' => NULL,
         'mapped_dropped_products' => NULL,
         'unmapped_dropped_products' => NULL,
-        'drops' => NULL
+        'drops' => NULL,
+        'models' => NULL
       ),
     ),
     'view_product' => array(
