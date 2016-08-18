@@ -1,0 +1,5 @@
+name: QC Desk
+type: module
+description: Module handles all qc desk operations
+core: 8.x
+package: StudioBridge

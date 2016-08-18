@@ -27,9 +27,6 @@
 
 {#Header#}
 <div class="row">
-
-
-
   <div class="col-sm-12 col-md-8">
     <h3 class='no-margins p-b-sm'>Session Details</h3>
     <h4 class="no-margins">View all primary details of your session</h4>
@@ -179,6 +176,21 @@
                   {{session_users.vm|replace({".": " " , "_" : " "})|title}}
                 </h6>
                 <small class="text-muted">Visual Merchandiser</small>
+              </div>
+            </div>
+          </div>
+          {% endif %}
+          {% if not models.0.nid == ''%}
+          <div class="col-sm-6 no-padding">
+            <div class="social-avatar">
+              <a href="" class="pull-left m-r-5">
+                <img src="{{models.0.model_image_path}}" class="img-circle" alt="{{session_users.stylist|title}}">
+              </a>
+              <div class="media-body p-xs">
+                <h6 class="no-margins bold">
+                  {{models.0.model_name}}
+                </h6>
+                <small class="text-muted">Model</small>
               </div>
             </div>
           </div>
