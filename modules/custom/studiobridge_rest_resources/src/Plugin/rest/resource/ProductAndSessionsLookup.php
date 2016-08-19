@@ -39,6 +39,8 @@ class ProductAndSessionsLookup extends ResourceBase {
 
   protected $studioModels;
 
+  protected $studioQc;
+
   /**
   * Constructs a Drupal\rest\Plugin\ResourceBase object.
   *
@@ -61,7 +63,7 @@ class ProductAndSessionsLookup extends ResourceBase {
   $plugin_definition,
   array $serializer_formats,
   LoggerInterface $logger,
-  AccountProxyInterface $current_user, $entity_manager, $studioModels) {
+  AccountProxyInterface $current_user, $entity_manager, $studioModels, $studioQc) {
     parent::__construct($configuration, $plugin_id, $plugin_definition, $serializer_formats, $logger);
 
     $this->nodeStorage = $entity_manager->getStorage('node');
@@ -69,6 +71,8 @@ class ProductAndSessionsLookup extends ResourceBase {
     $this->currentUser = $current_user;
 
     $this->studioModels = $studioModels;
+
+    $this->studioQc = $studioQc;
   }
 
   /**
@@ -83,7 +87,8 @@ class ProductAndSessionsLookup extends ResourceBase {
     $container->get('logger.factory')->get('rest'),
     $container->get('current_user'),
     $container->get('entity_type.manager'),
-    $container->get('studio.models')
+    $container->get('studio.models'),
+    $container->get('studio.qc')
   );
 }
 
@@ -173,7 +178,8 @@ public function get($type) {
   //load all the nodes from the result
   if ($result) {
     if ($type=='productsQC'){
-      $productsQC = $this->getProductsQC($result);
+      //$productsQC = $this->getProductsQC($result);
+      $productsQC = $this->studioQc->getProductsData($result);
     }else{
       $products = $this->getProducts($result);
     }

@@ -46,6 +46,10 @@ class QcOperations extends ResourceBase {
 
   protected $studioQc;
 
+  protected $nodeStorage;
+
+  protected $fileStorage;
+
   /**
    * Constructs a Drupal\rest\Plugin\ResourceBase object.
    *
@@ -79,6 +83,9 @@ class QcOperations extends ResourceBase {
     $this->database = $database;
 
     $this->studioQc =  $studioQc;
+
+    $this->nodeStorage = $entity_manager->getStorage('node');
+    $this->fileStorage = $entity_manager->getStorage('file');
   }
 
   /**
@@ -174,7 +181,7 @@ class QcOperations extends ResourceBase {
    *
    */
   public function rejectAll($sid, $pid, $fids){
-    $images = File::loadMultiple($fids);
+    $images = $this->fileStorage->loadMultiple($fids);
 
     foreach($images as $image){
       $image->field_qc_state->setValue(array('value'=>'rejected'));
@@ -187,7 +194,7 @@ class QcOperations extends ResourceBase {
   }
 
   public function approveAll($sid, $pid, $fids){
-    $images = File::loadMultiple($fids);
+    $images = $this->fileStorage->loadMultiple($fids);
 
     foreach($images as $image){
       $image->field_qc_state->setValue(array('value'=>'approved'));
@@ -204,13 +211,13 @@ class QcOperations extends ResourceBase {
   }
 
   public function rejectImg($fid){
-    $image = File::load($fid);
+    $image = $this->fileStorage->load($fid);
     $image->field_qc_state->setValue(array('value'=>'rejected'));
     $image->save();
   }
 
   public function approveImg($fid){
-    $image = File::load($fid);
+    $image = $this->fileStorage->load($fid);
     $image->field_qc_state->setValue(array('value'=>'approved'));
     $image->save();
   }

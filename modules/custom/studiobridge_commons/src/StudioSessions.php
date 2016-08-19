@@ -122,7 +122,6 @@ class StudioSessions implements StudioSessionsInterface {
       ->condition('type', 'sessions')
       ->sort('created', 'DESC')
       ->condition('field_status', 'open') // todo : poc on structure.
-      ->range(0, 100)
       ->execute();
     return $result;
   }
@@ -438,7 +437,6 @@ class StudioSessions implements StudioSessionsInterface {
       ->condition('type', array('sessions'), 'IN')
       ->sort('created', 'DESC')
       ->condition('created', array($day_start, $day_end), 'BETWEEN')
-      ->range(0, 100)
       ->execute();
 
     return $result;
