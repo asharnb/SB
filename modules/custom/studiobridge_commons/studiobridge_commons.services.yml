@@ -30,5 +30,5 @@ services:
 
   studio.qc:
     class: Drupal\studiobridge_commons\StudioQc
-    arguments: []
+    arguments: ['@database', '@entity_type.manager', '@current_user', '@entity.query', , '@state']
 
