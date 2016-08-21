@@ -24,10 +24,10 @@
             </div>
             </div>
 
-            <div data-email="opened" class="split-details">
+            <div data-product="opened" class="split-details">
 
               <div class="no-result">
-                <h1>No email has been selected</h1>
+                <h1>No product has been selected</h1>
               </div>
               <div class="email-content-wrapper" style="display:none">
                 <div class="actions-wrapper menuclipper bg-master-lightest">
@@ -51,48 +51,21 @@
               <div class="panel panel-default row">
 
                 <div class="col-sm-12 p-sm border-bottom">
-                  <div class="col-sm-12 no-margins no-padding ">
-                    <div class="col-sm-8">
-                      <address>
-                        <strong class="text-success">Product is active</strong><br>
-                        <small class="text-muted"><em>Last edited at {{product.changed.0.value|date('F jS, Y, g:i a')}}</em></small>
-                      </address>
-
-                    </div>
-                    <div class="col-sm-4">
-                        <h4 class="text-grey text-align-right">--</h4>
-
-                    </div>
-                  </div>
-
                   <div class="col-sm-12 p-t-20">
 
                       <div class="col-sm-3 m-l-n">
                         <h5 class="m-sm">Concept</h5>
-                        <h3 class="m-sm">
-
-
-
-                          {% if (product.field_concept_name.0.value|lower == 'Unmapped' or product.field_concept_name.0.value|lower == '')  %}
-                              Not Available
-                          {% else %}
-                              <img src="/{{ directory }}/images/brands/brand_logo_{{ product.field_concept_name.0.value|lower }}.png" height="20px">
-                          {% endif %}
-                        </h3>
+                        <h3 class="m-sm product-concept"></h3>
                       </div>
 
                       <div class="col-sm-3">
                         <h5 class="m-sm">Identifier</h5>
-                        <h3 class="m-sm">{{ product.title.0.value }}</h3>
+                        <h3 class="m-sm product-identifier"></h3>
                       </div>
 
                       <div class="col-sm-3">
                         <h5 class="m-sm">Color Variant</h5>
-                        <h3 class="m-sm">{{ product.field_color_variant.0.value }}</h3>
-                      </div>
-                      <div class="col-sm-3">
-                        <h5 class="m-sm">Style family</h5>
-                        <h3 class="m-sm">{{ product.field_style_family.0.value }}</h3>
+                        <h3 class="m-sm product-cv"></h3>
                       </div>
 
 

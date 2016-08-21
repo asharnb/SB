@@ -101,6 +101,9 @@ class ProductAndSessionsLookup extends ResourceBase {
 *   Throws exception expected.
 */
 public function get($type) {
+
+  //return new ResourceResponse($_GET);
+
   \Drupal::service('page_cache_kill_switch')->trigger();
 
   $product_data = array();
@@ -147,18 +150,16 @@ public function get($type) {
 
   }
 
-  if (!empty($_GET['search']['value'])) {
-    $value = $_GET['search']['value'];
+  if (!empty($_GET['search'])) {
+    $value = $_GET['search'];
+
 
     $query = \Drupal::entityQuery('node');
     $query->condition('type', $bundles, 'IN');
 
     // Or condition for product fields
     $orCondition = $query->orConditionGroup();
-    $orCondition->condition('field_color_variant', "%$value%", 'LIKE');
-    $orCondition->condition('title', "%$value%", 'LIKE');
-    $orCondition->condition('field_concept_name', "%$value%", 'LIKE');
-    $orCondition->condition('nid', "%$value%", 'LIKE');
+    $orCondition->condition('nid', "$value");
     $query->condition($orCondition);
     $query->range(0, 10);
     $query->sort($order_field, strtoupper($order_direction));

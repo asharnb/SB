@@ -3,7 +3,7 @@
     'use strict';
     //attach jquery once here to ensure it runs once on load
     var ProductList = $('[data-product="list"]');
-    var emailOpened = $('[data-product="opened"]');
+    var ProductOpened = $('[data-product="opened"]');
 
 
     ProductList.length && $.ajax({
@@ -28,7 +28,7 @@
                     var title = $this.title;
                     var session = $this.id;
                     var totalimages = $this.totalimages;
-                    var li = '<li class="item padding-15" data-email-id="' + id + '"> \
+                    var li = '<li class="item padding-15" data-product-id="' + id + '"> \
                                 <div class="checkbox  no-margin p-l-10"> \
                                     <input type="checkbox" value="1" id="emailcheckbox-' + i + "-" + j + '"> \
                                     <label for="emailcheckbox-' + i + "-" + j + '"></label> \
@@ -56,28 +56,21 @@
     });
     $('body').on('click', '.item', function(e) {
         e.stopPropagation();
-        var id = $(this).attr('data-email-id');
-        var email = null;
+        var id = $(this).attr('data-product-id');
+        var product = null;
         $.ajax({
             dataType: "json",
-            url: "http://revox.io/json/emails.json",
+            url: "screens/productsQC?_format=json&search="+id,
             success: function(data) {
-                $.each(data.emails, function(i) {
-                    var obj = data.emails[i];
-                    var list = obj.list;
-                    $.each(list, function(j) {
-                        if (list[j].id == 1) {
-                            email = list[j];
-                            return;
-                        }
-                    });
-                    if (email != null) return;
-                });
-                emailOpened.find('.sender .name').text(email.from);
-                emailOpened.find('.sender .datetime').text(email.datetime);
-                emailOpened.find('.subject').text(email.subject);
-                emailOpened.find('.email-content-body').html(email.body);
-                //emailOpened.find('.thumbnail-wrapper').html(thumbnailWrapper.html()).attr('class', thumbnailClasses);
+
+
+                var product = data.list[0]
+                console.log(product)
+                ProductOpened.find('.product-concept').html(product.concept);
+                ProductOpened.find('.product-identifier').text(product.title);
+                ProductOpened.find('.product-cv').text(product.colorvariant);
+                ProductOpened.find('.email-content-body').html(product.title);
+                //ProductOpened.find('.thumbnail-wrapper').html(thumbnailWrapper.html()).attr('class', thumbnailClasses);
                 $('.no-result').hide();
                 $('.actions-dropdown').toggle();
                 $('.actions, .email-content-wrapper').show();
