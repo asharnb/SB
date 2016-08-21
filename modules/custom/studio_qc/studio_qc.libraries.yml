@@ -3,9 +3,12 @@ live-qc-collection:
   css:
     theme:
       css/scrollbar.min.css: {}
+      js/menuclipper/dist/jquery.menuclipper.css: {}
   js:
     js/ioslist/ioslist.min.js: {}
     js/scrollbar/scrollbar.min.js: {}
-    js/live-qc.js: {}
+    js/menuclipper/dist/jquery.actual.min.js: {}
+    js/menuclipper/dist/jquery.menuclipper.min.js: {}
+    js/live-qc.js: { preprocess: false }
   dependencies:
     - core/jquery

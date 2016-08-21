@@ -8,7 +8,8 @@
 </div>
 <hr class="simple">
 
-        <div class="row">
+
+<div class="row">
 
 
 
@@ -20,18 +21,187 @@
             <a class="list-refresh" href="#"><i class="fa fa-refresh"></i></a>
             <div data-product="list" class="list-view">
 
+            </div>
+            </div>
 
-              <div data-product="opened" class="split-details">
+            <div data-email="opened" class="split-details">
+
               <div class="no-result">
-              <h1>No email has been selected</h1>
+                <h1>No email has been selected</h1>
               </div>
+              <div class="email-content-wrapper" style="display:none">
+                <div class="actions-wrapper menuclipper bg-master-lightest">
+                  <ul class="actions menuclipper-menu no-margin p-l-20 ">
+                    <li class="no-padding "><a href="#" class="text-success">Approve all</a>
+                    </li>
+                    <li class="no-padding "><a href="#" class="text-danger">Reject all</a>
+                    </li>
+                    <li class="no-padding "><a href="#">Add Note</a>
+                    </li>
+                  </ul>
+                  <div class="clearfix"></div>
+                </div>
+                <div class="email-content">
 
-              </div>
+                  <div class="clearfix"></div>
 
 
+
+
+              <div class="panel panel-default row">
+
+                <div class="col-sm-12 p-sm border-bottom">
+                  <div class="col-sm-12 no-margins no-padding ">
+                    <div class="col-sm-8">
+                      <address>
+                        <strong class="text-success">Product is active</strong><br>
+                        <small class="text-muted"><em>Last edited at {{product.changed.0.value|date('F jS, Y, g:i a')}}</em></small>
+                      </address>
+
+                    </div>
+                    <div class="col-sm-4">
+                        <h4 class="text-grey text-align-right">--</h4>
+
+                    </div>
+                  </div>
+
+                  <div class="col-sm-12 p-t-20">
+
+                      <div class="col-sm-3 m-l-n">
+                        <h5 class="m-sm">Concept</h5>
+                        <h3 class="m-sm">
+
+
+
+                          {% if (product.field_concept_name.0.value|lower == 'Unmapped' or product.field_concept_name.0.value|lower == '')  %}
+                              Not Available
+                          {% else %}
+                              <img src="/{{ directory }}/images/brands/brand_logo_{{ product.field_concept_name.0.value|lower }}.png" height="20px">
+                          {% endif %}
+                        </h3>
+                      </div>
+
+                      <div class="col-sm-3">
+                        <h5 class="m-sm">Identifier</h5>
+                        <h3 class="m-sm">{{ product.title.0.value }}</h3>
+                      </div>
+
+                      <div class="col-sm-3">
+                        <h5 class="m-sm">Color Variant</h5>
+                        <h3 class="m-sm">{{ product.field_color_variant.0.value }}</h3>
+                      </div>
+                      <div class="col-sm-3">
+                        <h5 class="m-sm">Style family</h5>
+                        <h3 class="m-sm">{{ product.field_style_family.0.value }}</h3>
+                      </div>
+
+
+
+                      </div>
+
+                      <div class="col-sm-12 p-t-10">
+
+
+
+                      <div class="col-sm-3 m-l-n">
+                        <h5 class="m-sm">Color</h5>
+                        <h3 class="m-sm">{{ product.field_color_name.0.value }}</h3>
+                      </div>
+
+                      <div class="col-sm-3">
+                        <h5 class="m-sm">Gender</h5>
+                        <h3 class="m-sm">{{ product.field_gender.0.value }}</h3>
+                      </div>
+
+                  </div>
+
+
+
+                    </div>
+
+
+              <hr class="simple">
+
+                                <div class="col-sm-12 p-sm">
+
+
+
+                                  <div class="row">
+                                    <div class="col-sm-12 ">
+                                        <h5 class="no-margins semi-bold">Product Images</h5>
+                                    </div>
+
+
+
+                                  </div>
+
+                                          <div  id="imagecontainer-wrapper">
+                                              <div id="imagecontainer" name="imagecontainer" class="ui-sortable">
+
+
+                                                {% for image in images %}
+
+                                                    {% if not image.fid == '' %}
+
+                                                        <div class="bulkviewfiles imagefile" id="warpper-img-{{ image.fid }}">
+                                                            {% if image.tag == '1' %}
+                                                            <div class="ribbon" id="ribboncontainer"><span class="for-tag tag" id="seq-{{ image.fid }}" name="{{ image.id }}"><i class="fa fa-lg fa-barcode txt-color-white"></i></span></div>
+                                                            {% else %}
+                                                            <div class="ribbon" id="ribboncontainer"><span class="for-tag" id="seq-{{ image.fid }}" name="{{ image.id }}">{{ loop.index }}</span></div>
+                                                            {% endif %}
+
+                                                            <div class="scancontainer">
+                                                              <div class="hovereffect">
+                                                                <img src="{{ image.uri }}" class="scanpicture"  data-imageid="{{ image.fid }}">
+
+                                                                <div class="overlay">
+                                                                    <input type="checkbox" class="form-checkbox" id="del-img-{{ image.fid }}" hidden value="{{image.fid}}">
+                                                                   <a class="info select-delete" href="/file/{{image.fid}}" target="_blank" >Original Image</a>
+                                                                </div>
+                                                            </div>
+
+                                                            <div class="file-name">
+                                                                <div id="tag-seq-img-{{ image.fid }}" type="hidden"></div>
+
+                                                                <div class="row">
+
+                                                                    <div class="col-sm-12">
+                                                                    <span  id = {{ image.fid }}>
+
+                                                                        <a rel="fancybox-thumb" href="{{image.fullimage}}" class="fancybox-thumb col-sm-4 text-info">
+                                                                          <i class="fa fa-lg fa-fw fa-search"></i>
+                                                                          </a>
+
+                                                                    </span>
+
+                                                                    </div>
+
+                                                                </div>
+
+                                                            </div>
+                                                          </div>
+                                                            <div class="studio-img-weight"><input type="hidden" value="{{ image.fid }}"></div>
+                                                        </div>
+                                                    {% endif %}
+                                                {% endfor %}
+
+                                              </div>
+                                          </div>
+                </div>
+
+
+
+
+                </div>
             </div>
-            </div>
+
+
+
+
 
           </div>
         </div>
       </div>
+
+    </div>
+  </div>

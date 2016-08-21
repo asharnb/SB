@@ -1,8 +1,9 @@
 
 (function($) {
     'use strict';
+    //attach jquery once here to ensure it runs once on load
     var ProductList = $('[data-product="list"]');
-    var ProductOpened = $('[data-product="opened"]');
+    var emailOpened = $('[data-product="opened"]');
 
 
     ProductList.length && $.ajax({
@@ -54,11 +55,39 @@
         e.stopPropagation();
     });
     $('body').on('click', '.item', function(e) {
-
-        //getproductbynid service to fetch data and images
-
         e.stopPropagation();
-
+        var id = $(this).attr('data-email-id');
+        var email = null;
+        $.ajax({
+            dataType: "json",
+            url: "http://revox.io/json/emails.json",
+            success: function(data) {
+                $.each(data.emails, function(i) {
+                    var obj = data.emails[i];
+                    var list = obj.list;
+                    $.each(list, function(j) {
+                        if (list[j].id == 1) {
+                            email = list[j];
+                            return;
+                        }
+                    });
+                    if (email != null) return;
+                });
+                emailOpened.find('.sender .name').text(email.from);
+                emailOpened.find('.sender .datetime').text(email.datetime);
+                emailOpened.find('.subject').text(email.subject);
+                emailOpened.find('.email-content-body').html(email.body);
+                //emailOpened.find('.thumbnail-wrapper').html(thumbnailWrapper.html()).attr('class', thumbnailClasses);
+                $('.no-result').hide();
+                $('.actions-dropdown').toggle();
+                $('.actions, .email-content-wrapper').show();
+                $('.email-reply').data('wysihtml5') && $('.email-reply').wysihtml5(editorOptions);
+                $(".email-content-wrapper").scrollTop(0);
+                $('.menuclipper').menuclipper({
+                    bufferWidth: 20
+                });
+            }
+        });
         $('.item').removeClass('active');
         $(this).addClass('active');
     });
@@ -68,4 +97,10 @@
         e.stopPropagation();
     })
 
-}(jQuery));
+
+    $(document).ready(function() {
+        $(".list-view-wrapper").scrollbar();
+    });
+
+
+})(window.jQuery);

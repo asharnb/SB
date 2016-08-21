@@ -118,7 +118,7 @@ public function get($type) {
 
   }elseif($type == 'productsQC'){
 
-    $bundles = array('products', 'unmapped_products');
+    $bundles = array('products');
 
   }
 
