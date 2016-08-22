@@ -180,7 +180,8 @@ public function get($type) {
   if ($result) {
     if ($type=='productsQC'){
       //$productsQC = $this->getProductsQC($result);
-      $productsQC = $this->studioQc->getProductsData($result);
+      $dataset = array('id', 'title', 'field_color_variant', 'field_concept_name','image_count', 'view_link');
+      $productsQC = $this->studioQc->getProductsData($result, $dataset);
     }else{
       $products = $this->getProducts($result);
     }

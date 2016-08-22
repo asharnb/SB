@@ -24,7 +24,7 @@
                 $.each(list, function(j) {
                     var $this = list[j];
                     var id = $this.id;
-                    var to = $this.concept;
+                    var to = $this.concept_img_url;
                     var title = $this.title;
                     var session = $this.id;
                     var totalimages = $this.totalimages;
@@ -66,7 +66,7 @@
 
                 var product = data.list[0]
                 console.log(product)
-                ProductOpened.find('.product-concept').html(product.concept);
+                ProductOpened.find('.product-concept').html(product.concept_img_url);
                 ProductOpened.find('.product-identifier').text(product.title);
                 ProductOpened.find('.product-cv').text(product.colorvariant);
                 ProductOpened.find('.email-content-body').html(product.title);
