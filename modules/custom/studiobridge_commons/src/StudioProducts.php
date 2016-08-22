@@ -72,6 +72,8 @@ class StudioProducts implements StudioProductsInterface {
    */
   protected $fileStorage;
 
+  protected $StudioQc;
+
   /**
    * Constructor.
    */
@@ -87,6 +89,8 @@ class StudioProducts implements StudioProductsInterface {
     $this->currentUser = $current_user;
     $this->queryFactory = $query_factory;
     $this->state = $state;
+
+    $this->StudioQc = \Drupal::service('studio.qc');
 
   }
 
@@ -301,12 +305,16 @@ class StudioProducts implements StudioProductsInterface {
    * @param nid
    *   Node nid value.
    */
-  public function getProductImages($nid, $containerOlny = false) {
+  public function getProductImages($nid, $containerOlny = false, $nid_is_object = false) {
 
     $image_uri = array();
 
     // Load the node.
-    $product = $this->nodeStorage->load($nid);
+    if(!$nid_is_object){
+      $product = $this->nodeStorage->load($nid);
+    }else{
+      $product = $nid;
+    }
 
     if ($product) {
       // Get available images from the product.
@@ -999,7 +1007,7 @@ class StudioProducts implements StudioProductsInterface {
   /*
    *
    */
-  public function getProductsData($pids, $dataset= array('id', 'title', 'field_color_variant', 'field_concept_name','image_count', 'view_link')){
+  public function getProductsData($pids, $dataset= array('images','id', 'title', 'field_color_variant', 'field_concept_name','image_count', 'view_link')){
 
     if($pids){
       $products = $this->nodeStorage->loadMultiple($pids);
@@ -1127,16 +1135,28 @@ class StudioProducts implements StudioProductsInterface {
           }
 
 
-          $data[] = $data_row;
-//          $data[] = array(
-//            'id'=>$pid,
-//            'concept'=>$concept_img,
-//            'title'=>$title,
-//            'colorvariant'=>$color_variant,
-//            'totalimages'=>$total_images,
-//            'view'=>$view_link
-//          );
+          if(in_array('images', $dataset)){
+            $data_row['images'] = $this->getProductImages($current_product, false, true);
+          }
 
+          if(in_array('sessions', $dataset)){
+            $data_row['sessions'] = $this->getSessionDetailsOfProduct($pid);
+          }
+
+          if(in_array('qc', $dataset)){
+            $qc_records = $this->StudioQc->getQcRecordsByProduct($pid);
+            $qc_array = array();
+
+            if($qc_records){
+              foreach($qc_records as $record){
+                $qc_array[] = (array) $record;
+              }
+
+            }
+            $data_row['qc'] = $qc_array;
+          }
+
+            $data[] = $data_row;
 
         }
         elseif ($bundle == 'unmapped_products') {
@@ -1181,17 +1201,28 @@ class StudioProducts implements StudioProductsInterface {
             $data_row['view'] = $view_link;
           }
 
+          if(in_array('images', $dataset)){
+            $data_row['images'] = $this->getProductImages($current_product, false, true);
+          }
+
+          if(in_array('sessions', $dataset)){
+            $data_row['sessions'] = $this->getSessionDetailsOfProduct($pid);
+          }
+
+          if(in_array('qc', $dataset)){
+            $qc_records = $this->StudioQc->getQcRecordsByProduct($pid);
+            $qc_array = array();
+
+            if($qc_records){
+              foreach($qc_records as $record){
+                $qc_array[] = (array) $record;
+              }
+
+            }
+            $data_row['qc'] = $qc_array;
+          }
+
           $data[] = $data_row;
-
-//          $data[] = array(
-//            'id'=>$pid,
-//            'concept'=>$concept,
-//            'title'=>$title,
-//            'colorvariant'=>"",
-//            'totalimages'=>$total_images,
-//            'view'=>$view_link
-//          );
-
 
         }
       }
@@ -1202,6 +1233,42 @@ class StudioProducts implements StudioProductsInterface {
 
     }
 
+
+  }
+
+  /*
+   *
+   */
+  public function getSessionDetailsOfProduct($nid){
+
+    $sessions_data = array();
+    $session_ids = $this->checkProductDuplicate($nid, array('sessions'));
+
+    $sessions = $this->nodeStorage->loadMultiple($session_ids);
+
+    foreach($sessions as $session){
+      $photographer = '';
+      $vm = '';
+      $stylish = '';
+      $sid = $session->id();
+      if(!empty($session->field_photographer->get(0)->target_id)){
+        $photographer = $this->userStorage->load($session->field_photographer->get(0)->target_id)->label();
+      }
+      if(!empty($session->field_vm->get(0)->target_id)){
+        $vm = $this->userStorage->load($session->field_vm->get(0)->target_id)->label();
+      }
+      if(!empty($session->field_stylish->get(0)->target_id)){
+        $stylish = $this->userStorage->load($session->field_stylish->get(0)->target_id)->label();
+      }
+
+      $sessions_data[$sid] = array(
+        'photographer' => $photographer,
+        'vm' => $vm,
+        'stylish' => $stylish
+      );
+    }
+
+    return $sessions_data;
 
   }
 

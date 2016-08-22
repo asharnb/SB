@@ -474,6 +474,19 @@ class StudioQc implements StudioQcInterface {
     return $pids;
   }
 
+  /*
+   * Helper function, to get qc records of a product.
+   */
+  public function getQcRecordsByProduct($pid, $fields = array('pid','sid','qc_note','qc_state','uid','created')){
+    $result = $this->database->select('studio_products_qc_records', 'spqr')
+      ->fields('spqr', $fields)
+      ->condition('spqr.pid', $pid);
+
+    $records = $result->execute()->fetchAll();
+
+    return $records;
+  }
+
 }
 /*
  * Helper function, to get required fields from products for QC page.
