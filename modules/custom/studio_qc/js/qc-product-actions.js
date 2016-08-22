@@ -143,4 +143,21 @@
     }
 
 
+    $(document).on("click",".approve-all",function(){
+      swal({
+          title: "Tag Shot",
+          text: "Tag shot has been selected",
+          type: "success",
+          showConfirmButton: false,
+          confirmButtonColor: "#DD6B55",
+          confirmButtonText: "OK",
+          closeOnConfirm: true,
+          timer:1500
+      });
+
+        });
+
+
+
+
 })(jQuery);

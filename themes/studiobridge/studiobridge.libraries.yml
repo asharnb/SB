@@ -68,3 +68,11 @@ iCheck:
     js/icheck.js: {}
   dependencies:
     - core/jquery
+
+jquery-loading:
+  css:
+    theme:
+  js:
+    js/loading/src/loadingoverlay.js: {}
+  dependencies:
+    - core/jquery

@@ -25,3 +25,4 @@ libraries:
   - 'studiobridge/smart-alert'
   - 'studiobridge/chart-js'
   - 'studiobridge/flot-charts'
+  - 'studiobridge/jquery-loading'
