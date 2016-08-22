@@ -12,7 +12,7 @@
         success: function(data) {
             $.each(data, function(i) {
                 var obj = data[i];
-                var group = obj.group;
+                var group = data.group;
                 var list = data.list;
                 var listViewGroupCont = $('<div/>', {
                     "class": "list-view-group-container"
@@ -24,7 +24,7 @@
                 $.each(list, function(j) {
                     var $this = list[j];
                     var id = $this.id;
-                    var to = $this.concept_img_url;
+                    var to = $this.concept;
                     var title = $this.title;
                     var session = $this.id;
                     var totalimages = $this.totalimages;
@@ -55,6 +55,11 @@
         e.stopPropagation();
     });
     $('body').on('click', '.item', function(e) {
+        $("#email-content-wrapper").LoadingOverlay("show", {
+            image       : "modules/custom/studio_qc/img/CC_smooth.gif",
+            //fontawesome : "fa fa-spinner fa-spin"
+        });
+
         e.stopPropagation();
         var id = $(this).attr('data-product-id');
         var product = null;
@@ -64,13 +69,12 @@
             success: function(data) {
 
 
-                var product = data.list[0]
-                console.log(product)
-                ProductOpened.find('.product-concept').html(product.concept_img_url);
+                var product = data.list[0];
+                ProductOpened.find('.product-concept').html(product.concept);
                 ProductOpened.find('.product-identifier').text(product.title);
                 ProductOpened.find('.product-cv').text(product.colorvariant);
                 ProductOpened.find('.email-content-body').html(product.title);
-                //ProductOpened.find('.thumbnail-wrapper').html(thumbnailWrapper.html()).attr('class', thumbnailClasses);
+
                 $('.no-result').hide();
                 $('.actions-dropdown').toggle();
                 $('.actions, .email-content-wrapper').show();
@@ -79,10 +83,15 @@
                 $('.menuclipper').menuclipper({
                     bufferWidth: 20
                 });
+                $("#email-content-wrapper").LoadingOverlay("hide", true)
             }
         });
         $('.item').removeClass('active');
         $(this).addClass('active');
+
+
+
+
     });
 
 
@@ -94,6 +103,62 @@
     $(document).ready(function() {
         $(".list-view-wrapper").scrollbar();
     });
+
+
+    $(document).on("click",".approve-all",function(){
+      swal({
+          title: "Approve All?",
+          text: "Are you sure you want to approve all images?",
+          type: "success",
+          showCancelButton: true,
+          confirmButtonColor: "#00b9e5",
+          confirmButtonText: "Approve",
+          closeOnConfirm: true
+      },function () {
+          //update_product(1);
+          //alert('approved');
+          });
+
+    });
+
+    $(document).on("click",".reject-all",function(){
+      swal({
+          title: "Reject All?",
+          text: "Are you sure you want to reject all images?",
+          type: "warning",
+          showCancelButton: true,
+          confirmButtonColor: "#DD6B55",
+          confirmButtonText: "Reject",
+          closeOnConfirm: true
+      },function () {
+          //update_product(1);
+          //alert('rejected');
+          });
+
+    });
+
+    $(document).on("click",".add-note",function(){
+
+      swal({
+          title: 'Add Note',
+          html:
+              '<div id="warehouse-flag-form">' +
+              '<textarea class="js-text-full text-full form-textarea form-control resize-vertical" data-drupal-selector="edit-field-notes-0-value" title="" data-toggle="tooltip" id="edit-field-notes-0-value" name="field_notes[0][value]" rows="4" cols="60" placeholder="Add notes about this product..." data-original-title=""></textarea>'+
+              '</div>',
+          showCloseButton: true,
+          showCancelButton: true,
+          confirmButtonText:
+              'Add',
+          cancelButtonText:
+              'Cancel'
+      },function () {
+          var option = document.getElementById('flag-option').value;
+          var reason = document.getElementById('flag-reason').value;
+
+          });
+
+    });
+
 
 
 })(window.jQuery);

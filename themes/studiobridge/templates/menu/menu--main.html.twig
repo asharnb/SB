@@ -43,6 +43,9 @@
                     {% elseif item.title|lower == 'warehouse desk' %}
 
                         {% set icon_class = 'fa fa-lg fa-truck' %}
+                    {% elseif item.title|lower == 'qc desk' %}
+
+                        {% set icon_class = 'fa fa-lg fa-check-square' %}
                     {% else %}
 
                         {% set icon_class = '' %}
