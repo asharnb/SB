@@ -41,6 +41,8 @@ class ProductAndSessionsLookup extends ResourceBase {
 
   protected $studioQc;
 
+  protected $studioProducts;
+
   /**
   * Constructs a Drupal\rest\Plugin\ResourceBase object.
   *
@@ -63,7 +65,7 @@ class ProductAndSessionsLookup extends ResourceBase {
   $plugin_definition,
   array $serializer_formats,
   LoggerInterface $logger,
-  AccountProxyInterface $current_user, $entity_manager, $studioModels, $studioQc) {
+  AccountProxyInterface $current_user, $entity_manager, $studioModels, $studioQc, $studioProducts) {
     parent::__construct($configuration, $plugin_id, $plugin_definition, $serializer_formats, $logger);
 
     $this->nodeStorage = $entity_manager->getStorage('node');
@@ -73,6 +75,8 @@ class ProductAndSessionsLookup extends ResourceBase {
     $this->studioModels = $studioModels;
 
     $this->studioQc = $studioQc;
+
+    $this->studioProducts = $studioProducts;
   }
 
   /**
@@ -88,7 +92,8 @@ class ProductAndSessionsLookup extends ResourceBase {
     $container->get('current_user'),
     $container->get('entity_type.manager'),
     $container->get('studio.models'),
-    $container->get('studio.qc')
+    $container->get('studio.qc'),
+    $container->get('studio.products')
   );
 }
 
@@ -180,7 +185,9 @@ public function get($type) {
   if ($result) {
     if ($type=='productsQC'){
       //$productsQC = $this->getProductsQC($result);
-      $productsQC = $this->studioQc->getProductsData($result);
+      $dataset = array('id', 'title', 'field_color_variant', 'field_concept_name','image_count', 'view_link');
+      //$productsQC = $this->studioQc->getProductsData($result, $dataset);
+      $productsQC = $this->studioProducts->getProductsData($result, $dataset);
     }else{
       $products = $this->getProducts($result);
     }

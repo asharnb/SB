@@ -996,4 +996,214 @@ class StudioProducts implements StudioProductsInterface {
     return $result;
   }
 
+  /*
+   *
+   */
+  public function getProductsData($pids, $dataset= array('id', 'title', 'field_color_variant', 'field_concept_name','image_count', 'view_link')){
+
+    if($pids){
+      $products = $this->nodeStorage->loadMultiple($pids);
+
+      $total_images = 0;
+      $data = array();
+
+
+      foreach ($products as $current_product) {
+        // Get product type; mapped or unmapped
+        $bundle = $current_product->bundle();
+        $data_row = array();
+        // Map unmapped & mapped products
+        if ($bundle == 'products') {
+          $cp = $current_product->toArray();
+          $pid = $current_product->id();
+
+          if(in_array('id',$dataset)){
+            $data_row['id'] = $pid;
+          }
+
+          $total_images = count($cp['field_images']);
+          if(in_array('image_count',$dataset)){
+            $data_row['image_count'] = $total_images;
+            $data_row['totalimages'] = $total_images;
+          }
+
+          // Get Concept
+          //$concept = $current_product->field_concept_name->getValue();
+
+          if(in_array('field_concept_name',$dataset)){
+            $product_concept = $current_product->field_concept_name->getValue();
+            if ($product_concept) {
+              $concept = $product_concept[0]['value'];
+              $theme_path = base_path().''.drupal_get_path('theme', 'studiobridge');
+              //$theme_path = base_path().
+              $img_file_name = str_replace(' ','', $concept);
+              $concept_img = $theme_path.'/images/brands/brand_logo_'.strtolower($img_file_name).'.png';
+              $concept_img = '<img height="20px" src="'.$concept_img.'">';
+              $data_row['concept'] = $concept;
+              $data_row['concept_img_url'] = $concept_img;
+            }
+          }
+
+          if(in_array('field_color_variant', $dataset)){
+            $product_color_variant = $current_product->field_color_variant->getValue();
+            if ($product_color_variant) {
+              $color_variant = $product_color_variant[0]['value'];
+              $data_row['field_color_variant'] = $color_variant;
+              // temporary todo : update in js files & remove next line.
+              $data_row['colorvariant'] = $color_variant;
+            }
+
+          }
+
+          if(in_array('field_state', $dataset)){
+            $product_state = $current_product->field_state->getValue();
+
+            if ($product_state) {
+              $state = $product_state[0]['value'];
+              $data_row['field_state'] = $state;
+
+            }
+          }
+
+
+          if(in_array('title',$dataset)){
+            $product_title = $current_product->title->getValue();
+            $title = '';
+            if ($product_title) {
+              $title = $product_title[0]['value'];
+              $data_row['title'] = $title;
+            }
+          }
+
+          if(in_array('view_link',$dataset)){
+            $view_link = '<a class="btn btn-xs " href="/view-product/' . $pid . '">View</a>';
+            $data_row['view'] = $view_link;
+          }
+
+          if(in_array('field_style_family', $dataset)){
+            $product_field_style_family = $current_product->field_style_family->getValue();
+            if ($product_field_style_family) {
+              $data_row['field_style_family'] = $product_field_style_family[0]['value'];
+            }
+          }
+
+          //
+          if(in_array('field_base_product_id', $dataset)){
+            $field_base_product_id = $current_product->field_base_product_id->getValue();
+            if ($field_base_product_id) {
+              $data_row['field_base_product_id'] = $field_base_product_id[0]['value'];
+            }
+          }
+
+          //
+          if(in_array('field_gender', $dataset)){
+            $field_gender = $current_product->field_gender->getValue();
+            if ($field_gender) {
+              $data_row['field_gender'] = $field_gender[0]['value'];
+            }
+          }
+          //field_color_name
+          if(in_array('field_color_name', $dataset)){
+            $field_color_name = $current_product->field_color_name->getValue();
+            if ($field_color_name) {
+              $data_row['field_color_name'] = $field_color_name[0]['value'];
+            }
+          }
+
+          //field_department
+          if(in_array('field_department', $dataset)){
+            $field_department = $current_product->field_department->getValue();
+            if ($field_department) {
+              $data_row['field_department'] = $field_department[0]['value'];
+            }
+          }
+
+          //field_product_import_state
+          if(in_array('field_product_import_state', $dataset)){
+            $field_product_import_state = $current_product->field_product_import_state->getValue();
+            if ($field_product_import_state) {
+              $data_row['field_product_import_state'] = $field_product_import_state[0]['value'];
+            }
+          }
+
+
+          $data[] = $data_row;
+//          $data[] = array(
+//            'id'=>$pid,
+//            'concept'=>$concept_img,
+//            'title'=>$title,
+//            'colorvariant'=>$color_variant,
+//            'totalimages'=>$total_images,
+//            'view'=>$view_link
+//          );
+
+
+        }
+        elseif ($bundle == 'unmapped_products') {
+          $cpu = $current_product->toArray();
+          $total_images = count($cpu['field_images']);
+          $pid = $current_product->id();
+
+          $total_images = count($cpu['field_images']);
+          if(in_array('image_count',$dataset)){
+            $data_row['image_count'] = $total_images;
+            $data_row['totalimages'] = $total_images;
+          }
+
+
+          if(in_array('id',$dataset)){
+            $data_row['id'] = $pid;
+          }
+
+          $concept = 'Unmapped';
+
+          if(in_array('field_state', $dataset)){
+            $product_state = $current_product->field_state->getValue();
+
+            if ($product_state) {
+              $state = $product_state[0]['value'];
+              $data_row['field_state'] = $state;
+
+            }
+          }
+
+          if(in_array('title',$dataset)){
+            $product_title = $current_product->title->getValue();
+            $title = '';
+            if ($product_title) {
+              $title = $product_title[0]['value'];
+              $data_row['title'] = $title;
+            }
+          }
+
+          if(in_array('view_link',$dataset)){
+            $view_link = '<a class="btn btn-xs " href="/view-product/' . $pid . '">View</a>';
+            $data_row['view'] = $view_link;
+          }
+
+          $data[] = $data_row;
+
+//          $data[] = array(
+//            'id'=>$pid,
+//            'concept'=>$concept,
+//            'title'=>$title,
+//            'colorvariant'=>"",
+//            'totalimages'=>$total_images,
+//            'view'=>$view_link
+//          );
+
+
+        }
+      }
+
+
+      return $data;
+
+
+    }
+
+
+  }
+
+
 }
