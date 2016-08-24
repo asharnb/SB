@@ -188,7 +188,8 @@ public function get($type) {
 
       $dataset = array('id', 'title', 'field_color_variant', 'field_concept_name','image_count', 'view_link','sessions', 'qc', 'images');
 
-      $productsQC = $this->studioProducts->getProductsData($result, $dataset);
+      // 3rd arg - photographer, sessions,date, qc_state, state
+      $productsQC = $this->studioProducts->getProductsData($result, $dataset, 'sessions');
     }else{
       $products = $this->getProducts($result);
     }

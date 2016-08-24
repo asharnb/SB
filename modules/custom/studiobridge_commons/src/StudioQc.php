@@ -480,7 +480,8 @@ class StudioQc implements StudioQcInterface {
   public function getQcRecordsByProduct($pid, $fields = array('pid','sid','qc_note','qc_state','uid','created')){
     $result = $this->database->select('studio_products_qc_records', 'spqr')
       ->fields('spqr', $fields)
-      ->condition('spqr.pid', $pid);
+      ->condition('spqr.pid', $pid)
+      ->orderBy('spqr.id', 'desc');
 
     $records = $result->execute()->fetchAll();
 
