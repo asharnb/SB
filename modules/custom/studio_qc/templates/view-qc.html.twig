@@ -13,7 +13,6 @@
 
 
 
-
             <div class="inner-content full-height">
             <div class="split-view">
 
@@ -54,40 +53,26 @@
                 <div class="col-sm-12 p-sm border-bottom">
                   <div class="col-sm-12 p-t-20">
 
-                      <div class="col-sm-3 m-l-n">
+                      <div class="col-sm-4 m-l-n">
                         <h5 class="m-sm">Concept</h5>
-                        <h3 class="m-sm product-concept"></h3>
+                        <h3 class="m-sm  product product-concept"></h3>
                       </div>
 
-                      <div class="col-sm-3">
+                      <div class="col-sm-4">
                         <h5 class="m-sm">Identifier</h5>
-                        <h3 class="m-sm product-identifier"></h3>
+                        <h3 class="m-sm product product-identifier"></h3>
                       </div>
 
-                      <div class="col-sm-3">
+                      <div class="col-sm-4">
                         <h5 class="m-sm">Color Variant</h5>
-                        <h3 class="m-sm product-cv"></h3>
+                        <h3 class="m-sm product product-cv"></h3>
                       </div>
 
 
 
                       </div>
 
-                      <div class="col-sm-12 p-t-10">
 
-
-
-                      <div class="col-sm-3 m-l-n">
-                        <h5 class="m-sm">Color</h5>
-                        <h3 class="m-sm">{{ product.field_color_name.0.value }}</h3>
-                      </div>
-
-                      <div class="col-sm-3">
-                        <h5 class="m-sm">Gender</h5>
-                        <h3 class="m-sm">{{ product.field_gender.0.value }}</h3>
-                      </div>
-
-                  </div>
 
 
 
@@ -109,55 +94,11 @@
 
                                   </div>
 
-                                          <div  id="imagecontainer-wrapper">
+                                          <div id="imagecontainer-wrapper">
                                               <div id="imagecontainer" name="imagecontainer" class="ui-sortable">
 
 
-                                                {% for image in images %}
 
-                                                    {% if not image.fid == '' %}
-
-                                                        <div class="bulkviewfiles imagefile" id="warpper-img-{{ image.fid }}">
-                                                            {% if image.tag == '1' %}
-                                                            <div class="ribbon" id="ribboncontainer"><span class="for-tag tag" id="seq-{{ image.fid }}" name="{{ image.id }}"><i class="fa fa-lg fa-barcode txt-color-white"></i></span></div>
-                                                            {% else %}
-                                                            <div class="ribbon" id="ribboncontainer"><span class="for-tag" id="seq-{{ image.fid }}" name="{{ image.id }}">{{ loop.index }}</span></div>
-                                                            {% endif %}
-
-                                                            <div class="scancontainer">
-                                                              <div class="hovereffect">
-                                                                <img src="{{ image.uri }}" class="scanpicture"  data-imageid="{{ image.fid }}">
-
-                                                                <div class="overlay">
-                                                                    <input type="checkbox" class="form-checkbox" id="del-img-{{ image.fid }}" hidden value="{{image.fid}}">
-                                                                   <a class="info select-delete" href="/file/{{image.fid}}" target="_blank" >Original Image</a>
-                                                                </div>
-                                                            </div>
-
-                                                            <div class="file-name">
-                                                                <div id="tag-seq-img-{{ image.fid }}" type="hidden"></div>
-
-                                                                <div class="row">
-
-                                                                    <div class="col-sm-12">
-                                                                    <span  id = {{ image.fid }}>
-
-                                                                        <a rel="fancybox-thumb" href="{{image.fullimage}}" class="fancybox-thumb col-sm-4 text-info">
-                                                                          <i class="fa fa-lg fa-fw fa-search"></i>
-                                                                          </a>
-
-                                                                    </span>
-
-                                                                    </div>
-
-                                                                </div>
-
-                                                            </div>
-                                                          </div>
-                                                            <div class="studio-img-weight"><input type="hidden" value="{{ image.fid }}"></div>
-                                                        </div>
-                                                    {% endif %}
-                                                {% endfor %}
 
                                               </div>
                                           </div>
@@ -179,3 +120,6 @@
 
     </div>
   </div>
+  <script>
+
+  </script>

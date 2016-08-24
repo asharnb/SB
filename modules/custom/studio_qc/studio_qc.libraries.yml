@@ -1,11 +1,11 @@
 live-qc-collection:
-  head: true
   css:
     theme:
       css/scrollbar.min.css: {}
       js/menuclipper/dist/jquery.menuclipper.css: {}
   js:
     js/ioslist/ioslist.min.js: {}
+    js/jquery-actual/jquery.actual.min.js: {}
     js/scrollbar/scrollbar.min.js: {}
     js/menuclipper/dist/jquery.actual.min.js: {}
     js/menuclipper/dist/jquery.menuclipper.min.js: {}

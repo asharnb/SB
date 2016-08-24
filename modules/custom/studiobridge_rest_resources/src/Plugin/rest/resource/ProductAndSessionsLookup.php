@@ -126,7 +126,7 @@ public function get($type) {
 
   }elseif($type == 'productsQC'){
 
-    $bundles = array('products');
+    $bundles = array('products', 'unmapped_products');
 
   }
 
@@ -166,7 +166,7 @@ public function get($type) {
     $orCondition = $query->orConditionGroup();
     $orCondition->condition('nid', "$value");
     $query->condition($orCondition);
-    $query->range(0, 10);
+    $query->range(0, 50);
     $query->sort($order_field, strtoupper($order_direction));
     $result = $query->execute();
 
@@ -175,8 +175,8 @@ public function get($type) {
   else {
     $result = \Drupal::entityQuery('node')
     ->condition('type', $bundles, 'IN')
-    ->sort($order_field, strtoupper($order_direction))
-    ->range(0, 10)
+    ->sort('nid', DESC)
+    ->range(0, 50)
     ->execute();
   }
 
@@ -185,8 +185,9 @@ public function get($type) {
   if ($result) {
     if ($type=='productsQC'){
       //$productsQC = $this->getProductsQC($result);
+
       $dataset = array('id', 'title', 'field_color_variant', 'field_concept_name','image_count', 'view_link','sessions', 'qc', 'images');
-      //$productsQC = $this->studioQc->getProductsData($result, $dataset);
+
       $productsQC = $this->studioProducts->getProductsData($result, $dataset);
     }else{
       $products = $this->getProducts($result);
@@ -207,13 +208,20 @@ public function get($type) {
     }
 
     if($productsQC){
-      $data = array(
-        'group'=>'Today April 23',
-        'list' =>
-        $productsQC,
-      );
+
+        $data[] = array(
+          'group'=>'All Products',
+          'list' =>
+          $productsQC,
+        );
+
+
+
   return new ResourceResponse($data);
+
+
     }
+
   }
   else {
 
