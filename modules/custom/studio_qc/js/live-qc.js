@@ -107,6 +107,21 @@
                     console.log(product.images[j]);
                     append_img(product.images[j],j)
                   });
+                  $(".fancybox-thumb").fancybox({
+                    prevEffect	: 'none',
+                    nextEffect	: 'none',
+                    type : 'image',
+
+                    helpers	: {
+                      title	: {
+                        type: 'outside'
+                      },
+                      thumbs	: {
+                        width	: 50,
+                        height	: 50
+                      }
+                    }
+                  });
                 }
 
                 $('.no-result').hide();
@@ -238,7 +253,11 @@
         block += '<div class="row">';
 
 
-        block += '<div class="col col-sm-12"><span id= "'+fid+'"><a class="col-sm-4 text-info" href= "/file/'+fid+'" target="_blank" ><i class="fa fa-lg fa-fw fa-search"></i></a><a class="col-sm-4 studio-img-fullshot text-info"><i class="fa fa-lg fa-fw fa-copy"></i></a><a class=" col-sm-4 studio-img-tag text-info" ><i class="fa fa-lg fa-fw fa-barcode"></i></a></span></div>';
+        block += '<div class="col col-sm-12"><span id= "'+fid+'">\
+        <a rel="fancybox-thumb" href="' + img.uri + '" class="fancybox-thumb col-sm-4 text-info"><i class="fa fa-lg fa-fw fa-search"></i></a> \
+        <a class=" col-sm-4 text-info" ><i class="fa fa-lg fa-fw fa-check text-success"></i></a>\
+        <a class=" col-sm-4 text-info" ><i class="fa fa-lg fa-fw fa-times text-danger"></i></a>\
+        </span></div>';
 
         block += '</div>';
         block += '</div>';

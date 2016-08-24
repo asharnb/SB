@@ -76,3 +76,23 @@ jquery-loading:
     js/loading/src/loadingoverlay.js: {}
   dependencies:
     - core/jquery
+
+fancybox:
+  head: true
+  js:
+    js/fancybox/source/jquery.fancybox.js: {}
+    js/fancybox/lib/jquery.mousewheel-3.0.6.pack.js: {}
+    js/fancybox/source/helpers/jquery.fancybox-buttons.js?v=1.0.5: {}
+    js/fancybox/source/helpers/jquery.fancybox-media.js?v=1.0.6: {}
+    js/fancybox/source/helpers/jquery.fancybox-thumbs.js?v=1.0.7: {}
+  css:
+    theme:
+      js/fancybox/source/jquery.fancybox.css?v=2.1.5: {}
+      js/fancybox/source/helpers/jquery.fancybox-buttons.css?v=1.0.5: {}
+      js/fancybox/source/helpers/jquery.fancybox-thumbs.css?v=1.0.7: {}
+  dependencies:
+    - core/jquery
+
+run-fancybox:
+  js:
+    js/fancybox.js: {}
