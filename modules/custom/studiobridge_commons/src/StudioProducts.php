@@ -1310,19 +1310,46 @@ class StudioProducts implements StudioProductsInterface {
               $data[$photographer][] = $data_row;
             }
 
-            //
             break;
+
           case  'date':
-            //
+
+            $created = $current_product->created->getValue();
+            $created = $created[0]['value'];
+            $created = date('Y-m-d', $created);
+
+            $data[$created][] = $data_row;
+
             break;
           case  'qc_state':
-            //
+
+            $qc_state = $this->StudioQc->getQcRecordsByProduct(1476, $fields = array('qc_state'));
+            if($qc_state){
+              if($recent_qc_record = reset($qc_state)){
+                $qc_state = $recent_qc_record->qc_state;
+                $data[$qc_state][] = $data_row;
+              }else{
+                $data['No QC record'][] = $data_row;
+              }
+            }else{
+              $data['No QC record'][] = $data_row;
+            }
+
             break;
           case  'state':
-            //
+
+            if(count($session_ids) <= 1){
+              $data['new'][] = $data_row;
+            }else{
+              $data['reshoot'][] = $data_row;
+            }
+
             break;
           default:
             //
+            foreach($session_ids as $sid){
+              $data[$sid][] = $data_row;
+            }
 
         }
 
