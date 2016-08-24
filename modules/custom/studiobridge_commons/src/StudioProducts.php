@@ -1143,10 +1143,6 @@ class StudioProducts implements StudioProductsInterface {
             $data_row['images'] = $this->getProductImages($current_product, false, true);
           }
 
-//          if(in_array('sessions', $dataset)){
-//            //$session_ids = $this->checkProductDuplicate($pid, array('sessions'));
-//            $data_row['sessions'] = $this->getSessionDetailsOfProduct($pid, $session_ids);
-//          }
 
           if(in_array('qc', $dataset)){
             $qc_records = $this->StudioQc->getQcRecordsByProduct($pid);
@@ -1160,34 +1156,6 @@ class StudioProducts implements StudioProductsInterface {
             }
             $data_row['qc'] = $qc_array;
           }
-
-//          switch ($group_by) {
-//            case  'sessions':
-//
-//              //$session_ids = $this->checkProductDuplicate($pid, array('sessions'));
-//              foreach($session_ids as $sid){
-//                $data[$sid] = $data_row;
-//              }
-//
-//              break;
-//            case  'photographer':
-//              //
-//              break;
-//            case  'date':
-//              //
-//              break;
-//            case  'qc_state':
-//              //
-//              break;
-//            case  'state':
-//              //
-//              break;
-//            default:
-//              //
-//
-//          }
-
-            //$data[] = $data_row;
 
         }
         elseif ($bundle == 'unmapped_products') {
@@ -1236,10 +1204,6 @@ class StudioProducts implements StudioProductsInterface {
             $data_row['images'] = $this->getProductImages($current_product, false, true);
           }
 
-//          if(in_array('sessions', $dataset)){
-//            $data_row['sessions'] = $this->getSessionDetailsOfProduct($pid, $session_ids);
-//          }
-
           if(in_array('qc', $dataset)){
             $qc_records = $this->StudioQc->getQcRecordsByProduct($pid);
             $qc_array = array();
@@ -1253,43 +1217,11 @@ class StudioProducts implements StudioProductsInterface {
             $data_row['qc'] = $qc_array;
           }
 
-//          //$data[] = $data_row;
-//
-//          switch ($group_by) {
-//            case  'sessions':
-//
-//              //$session_ids = $this->checkProductDuplicate($pid, array('sessions'));
-//              foreach($session_ids as $sid){
-//                $data[$sid] = $data_row;
-//              }
-//
-//              break;
-//            case  'photographer':
-//
-//
-//
-//              //
-//              break;
-//            case  'date':
-//              //
-//              break;
-//            case  'qc_state':
-//              //
-//              break;
-//            case  'state':
-//              //
-//              break;
-//            default:
-//              //
-//
-//          }
-
 
         }
 
-        //$data[] = $data_row;
 
-        $session_details = $this->getSessionDetailsOfProduct($current_product->id(), $session_ids);
+        $session_details = $this->getSessionDetailsOfProduct($session_ids);
         if(in_array('sessions', $dataset)){
           $data_row['sessions'] = $session_details;
         }
@@ -1368,10 +1300,9 @@ class StudioProducts implements StudioProductsInterface {
   /*
    *
    */
-  public function getSessionDetailsOfProduct($nid, $session_ids){
+  public function getSessionDetailsOfProduct($session_ids){
 
     $sessions_data = array();
-    //$session_ids = $this->checkProductDuplicate($nid, array('sessions'));
 
     $sessions = $this->nodeStorage->loadMultiple($session_ids);
 
