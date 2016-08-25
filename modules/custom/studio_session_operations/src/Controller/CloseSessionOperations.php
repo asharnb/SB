@@ -194,7 +194,7 @@ class CloseSessionOperations extends ControllerBase {
     $this->operations[] = array(array(get_class($this), 'AutomaticEmails'), array($this->sid, $this->session_node, $this->pids));
 
 
-    $this->operations[] = array(array(get_class($this), 'closeSession'), array($this->session_node));
+    $this->operations[] = array(array(get_class($this), 'closeSession'), array($this->session_node, $this->draft_product_nids));
 
     // Images physical naming & folder structure
     $this->ImageNameOperations($this->sid);
@@ -206,9 +206,27 @@ class CloseSessionOperations extends ControllerBase {
 
   }
 
-  public static function closeSession($session){
+  public static function closeSession($session, $draft_product_nids){
+
+    $product_nids = $session->field_product->getValue();
+
+    foreach($product_nids as $key => $target){
+      if(in_array($target['target_id'],$draft_product_nids)){
+        unset($product_nids[$key]);
+      }
+    }
+
     $session->field_status->setValue(array('value' => 'closed'));
+    $session->field_product->setValue($product_nids);
     $session->save();
+
+    //
+
+    $draft_products = Node::loadMultiple($draft_product_nids);
+    foreach($draft_products as $product){
+      $product->field_draft->setValue(array('value' => 0));
+      $product->save();
+    }
   }
 
   public function ProductEndTime($sid, $identifier){
@@ -231,7 +249,11 @@ class CloseSessionOperations extends ControllerBase {
     $title = $product->title->getValue();
     \Drupal::logger('Studio')->notice('Product deleted - '. $title[0]['value']);
 
-    $product->delete();
+    //$product->delete();
+
+    $StudioProducts = \Drupal::service('studio.products');
+    $StudioProducts->DeleteProductLog($product);
+
     $context['results']['drop'][] = $product->id();
     \Drupal::state()->delete($key);
   }
