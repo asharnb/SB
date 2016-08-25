@@ -10,15 +10,15 @@
         dataType: "json",
         url: "screens/productsQC?_format=json",
         success: function(data) {
-            $.each(data, function(i) {
-                var obj = data[i];
-                console.log(obj)
-                var group = obj.group;
-                var list = obj.list;
+            var groupedlist = data[0].list;
+            $.each(groupedlist, function(i) {
+
+                var group = groupedlist[i];
+                var list = groupedlist[i];
                 var listViewGroupCont = $('<div/>', {
                     "class": "list-view-group-container"
                 });
-                listViewGroupCont.append('<div class="list-view-group-header"><span>' + group + '</span></div>');
+                listViewGroupCont.append('<div class="list-view-group-header"><span>Session ' + i + '</span></div>');
                 var ul = $('<ul/>', {
                     "class": "no-padding"
                 });
@@ -35,6 +35,8 @@
                     var session = $this.id;
                     var totalimages = $this.totalimages;
                     var sessioninfo = $this.sessions;
+                    var cv = '';
+                    if($this.colorvariant!==undefined) { cv = $this.colorvariant };
 
                     // if(sessioninfo!==null || sessioninfo!==undefined)
                     // $.each(sessioninfo, function(k) {
@@ -45,10 +47,7 @@
 
 
                     //{{session_users.photographer|lower|replace({".": "_" , " " : "_"})}}.jpg
-
-
-
-                    var li = '<li class="item padding-15" data-product-id="' + id + '"> \
+                    var li = '<li class="item padding-15" data-session-id="' + i + '" data-product-id="' + id + '"> \
                                 <div class="checkbox  no-margin p-l-10"> \
                                     <input type="checkbox" value="1" id="emailcheckbox-' + i + "-" + j + '"> \
                                     <label for="emailcheckbox-' + i + "-" + j + '"></label> \
@@ -56,11 +55,9 @@
                                 <div class="inline m-l-15"> \
                                     <p class="recipients no-margin hint-text small">' + concept + '</p> \
                                     <p class="subject no-margin">' + title + '</p> \
-                                    <p class="body no-margin"> \
-                                     Session: ' + session + ' \
-                                    </p> \
+                                    <p class="subject no-margin">' + cv + '</p> \
                                 </div> \
-                                <h4 class="text-success datetime">' + totalimages + '</h1> \
+                                <h4 class="text-navy datetime bold">' + totalimages + '</h1> \
                                 <div class="clearfix"></div> \
                             </li>';
                     ul.append(li);
@@ -85,6 +82,7 @@
 
         e.stopPropagation();
         var id = $(this).attr('data-product-id');
+        var session = $(this).attr('data-session-id');
         var product = null;
         ProductOpened.find('#imagecontainer').empty();
         ProductOpened.find('.product').empty();
@@ -92,37 +90,49 @@
         $.ajax({
             dataType: "json",
             url: "screens/productsQC?_format=json&search="+id,
+            //get product
+            //check if new or reshoot
             success: function(data) {
 
-                console.log(data[0].list[0]);
-                var product = data[0].list[0];
-                //start displaying product information
-                ProductOpened.find('.product-concept').html(product.concept_img_url);
-                ProductOpened.find('.product-identifier').text(product.title);
-                ProductOpened.find('.product-cv').text(product.field_color_variant);
 
-                //append all product images
-                if(product.images!==false){
-                  $.each(product.images, function(j) {
-                    console.log(product.images[j]);
-                    append_img(product.images[j],j)
-                  });
-                  $(".fancybox-thumb").fancybox({
-                    prevEffect	: 'none',
-                    nextEffect	: 'none',
-                    type : 'image',
+                var allproduct = data[0].list;
 
-                    helpers	: {
-                      title	: {
-                        type: 'outside'
-                      },
-                      thumbs	: {
-                        width	: 50,
-                        height	: 50
+
+                $.each(allproduct, function(j) {
+                  if (j == session){
+                      var product = allproduct[j][0];
+                      //start displaying product information
+                      ProductOpened.find('.product-concept').html(product.concept_img_url);
+                      ProductOpened.find('.product-identifier').text(product.title);
+                      ProductOpened.find('.product-cv').text(product.field_color_variant);
+
+                      //append all product images
+                      if(product.images!==false){
+                        $.each(product.images, function(j) {
+                          console.log(product.images[j]);
+                          append_img(product.images[j],j)
+                        });
+                        $(".fancybox-thumb").fancybox({
+                          prevEffect	: 'none',
+                          nextEffect	: 'none',
+                          type : 'image',
+
+                          helpers	: {
+                            title	: {
+                              type: 'outside'
+                            },
+                            thumbs	: {
+                              width	: 50,
+                              height	: 50
+                            }
+                          }
+                        });
                       }
-                    }
-                  });
-                }
+
+                  }
+
+                })
+
 
                 $('.no-result').hide();
                 $('.actions, .email-content-wrapper').show();
@@ -130,7 +140,7 @@
                 $('.menuclipper').menuclipper({
                     bufferWidth: 20
                 });
-                $("#email-content-wrapper").LoadingOverlay("hide", true)
+                $("#email-content-wrapper").LoadingOverlay("hide", true);
             }
         });
         $('.item').removeClass('active');
