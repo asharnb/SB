@@ -1345,4 +1345,88 @@ class StudioProducts implements StudioProductsInterface {
   }
 
 
+  /*
+   * Helper function to get images in a product.
+   *
+   * @param nid
+   *   Node nid value.
+   */
+  public function getProductImagesShotInParticularSession($nid, $sid, $style = 'live_shoot_preview', $containerOlny = false, $nid_is_object = false) {
+
+    $image_uri = array();
+
+    // Load the node.
+    if(!$nid_is_object){
+      $product = $this->nodeStorage->load($nid);
+    }else{
+      $product = $nid;
+    }
+
+    $pid = $product->id();
+
+    if ($product) {
+      // Get available images from the product.
+      //$images = $product->field_images->getValue();
+
+      $StudioImgs = \Drupal::service('studio.imgs');
+      $images = $StudioImgs->getProductImagesOfSessionFromFileLogs($sid, $pid);
+
+      if ($images) {
+        foreach ($images as $img) {
+          $fid = $img->fid;
+
+          // Load the file object.
+          $file = File::load($fid);
+          // Validated file if it is deleted then error will occur.
+          if ($file) {
+            // Get the file name.
+            $file_name = $file->filename->getValue();
+            $file_name = $file_name[0]['value'];
+
+            if($containerOlny){
+              $field_container = $file->field_container->getValue();
+              if($field_container){
+                if($field_container[0]['target_id']){
+                  // Get if image has been tagged
+                  $image_tag = $file->field_tag->getValue();
+                  $image_tag = $image_tag[0]['value'];
+                  // Get the image of style - Live shoot preview.
+                  $image_uri_value = ImageStyle::load($style)->buildUrl($file->getFileUri());
+                  $image_uri[$fid] = array('uri' => $image_uri_value, 'name' => $file_name, 'tag' => $image_tag);
+                }
+              }
+
+            }else{
+
+              // Get if image has been tagged
+              $image_tag = $file->field_tag->getValue();
+              $image_tag = $image_tag[0]['value'];
+
+              $image_container_ref = $file->field_reference->getValue();
+              if(isset($image_container_ref) && !empty($image_container_ref[0]['value'])){
+                $image_container_ref = $image_container_ref[0]['value'];
+                if(!$image_container_ref){
+                  // Get the image of style - Live shoot preview.
+                  $image_uri_value = ImageStyle::load($style)->buildUrl($file->getFileUri());
+                  $image_uri[$fid] = array('uri' => $image_uri_value, 'name' => $file_name, 'tag' => $image_tag);
+                }
+
+              }else{
+                // Get the image of style - Live shoot preview.
+                $image_uri_value = ImageStyle::load($style)->buildUrl($file->getFileUri());
+                $image_uri[$fid] = array('uri' => $image_uri_value, 'name' => $file_name, 'tag' => $image_tag);
+              }
+            }
+
+          }
+
+        }
+        return $image_uri;
+      }
+    }
+    return FALSE;
+  }
+
+
+
 }

@@ -281,7 +281,7 @@ class StudioImgs implements StudioImgsInterface {
   }
 
   /*
-  * Helper function, to insert log into {studio_file_transfers} table.
+  * Helper function, to insert/update weight into {studio_file_transfers} table.
   *
   * @param fid
   *   File object fid.
@@ -311,7 +311,20 @@ class StudioImgs implements StudioImgsInterface {
       $this->AddFileTransfer($fid, $pid, $sid, $cid = 0, $weight);
     }
 
-    $a =1;
+  }
+
+  /*
+   *
+   */
+  public function getProductImagesOfSessionFromFileLogs($sid, $pid){
+
+    $result = $this->database->select('studio_file_transfers', 'spsp')
+      ->fields('spsp', array('fid'))
+      ->condition('spsp.pid', $pid)
+      ->condition('spsp.sid', $sid)
+      ->orderBy('spsp.weight', 'asc');
+    return $result->execute()->fetchAll();
+
   }
 
 }
