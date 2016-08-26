@@ -167,7 +167,8 @@ public function get($type) {
     $orCondition->condition('nid', "$value");
     $query->condition($orCondition);
     $query->range(0, 200);
-    $query->sort($order_field, strtoupper($order_direction));
+    $query->sort('nid',DESC);
+    //$query->sort($order_field, strtoupper($order_direction));
     $result = $query->execute();
 
 
@@ -175,6 +176,7 @@ public function get($type) {
   else {
     $result = \Drupal::entityQuery('node')
     ->condition('type', $bundles, 'IN')
+    ->sort('nid',DESC)
     ->range(0, 200)
     ->execute();
   }
