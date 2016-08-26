@@ -130,7 +130,7 @@ class CloseSessionOperations extends ControllerBase {
 
     if($status == 'closed'){
       drupal_set_message('Session already closed, this operation can\'t be performed.', 'warning');
-      return new RedirectResponse(base_path() . 'view-session/'.$sid);
+      //return new RedirectResponse(base_path() . 'view-session/'.$sid);
     }
 
     // Build required operations for batch process.
@@ -487,6 +487,9 @@ class CloseSessionOperations extends ControllerBase {
     // make sure both values are set.
     if ($field_base_product_id && $images) {
       $i = 1;
+      $j = 1;
+      $StudioImgs = \Drupal::service('studio.imgs');
+
       foreach ($images as $img) {
         // load file entity.
         $file = File::load($img['target_id']);
@@ -535,6 +538,9 @@ class CloseSessionOperations extends ControllerBase {
           }
 
         }
+
+        $StudioImgs->updateWeightToFileTransfer($file->id(), $product->id(), $sid, 0, $j);
+        $j++;
       }
 
     }
