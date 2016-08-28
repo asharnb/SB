@@ -5,7 +5,7 @@
     var ProductList = $('[data-product="list"]');
     var ProductOpened = $('[data-product="opened"]');
 
-    //$("#content").LoadingOverlay("show");
+    $("#content").LoadingOverlay("show");
     ProductList.length && $.ajax({
         dataType: "json",
         url: "screens/productsQC?_format=json",
@@ -78,7 +78,7 @@
         e.stopPropagation();
     });
     $('body').on('click', '.item', function(e) {
-        $("#email-content-wrapper").LoadingOverlay("show");
+        $(".split-details").LoadingOverlay("show");
 
         e.stopPropagation();
         var id = $(this).attr('data-product-id');
@@ -140,7 +140,7 @@
                 $('.menuclipper').menuclipper({
                     bufferWidth: 20
                 });
-                $("#email-content-wrapper").LoadingOverlay("hide", true);
+                $(".split-details").LoadingOverlay("hide", true);
             }
         });
         $('.item').removeClass('active');
