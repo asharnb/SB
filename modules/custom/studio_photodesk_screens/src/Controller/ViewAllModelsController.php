@@ -74,15 +74,43 @@ public function content()
 
   //if results are not empty load each node and get info
   if (!empty($models)) {
-    foreach ($models as $model) {
-      $model_data[] = array( 'id' => $model->id(),
-      'name' => $model->title->getValue(),
-       'gender' => $model->field_model_gender->getValue(),
-       'stats' => $model->field_model_stats->getValue(),
-       'image' => ImageStyle::load('thumbnail')->buildUrl($model->field_model_image->entity->getFileUri()),
-    );
+    foreach($models as $node){
 
-  // }
+      $model_name = $node->title->getValue();
+      if ($model_name) {
+        $name = $model_name[0]['value'];
+      }
+
+      $model_gender = $node->field_model_gender->getValue();
+      if ($model_gender) {
+        $gender = $model_gender[0]['value'];
+      }
+
+      $model_stats = $node->field_model_stats->getValue();
+      if ($model_stats) {
+        $stats = $model_stats[0]['value'];
+      }
+
+      $model_image = $node->field_model_image->getValue();
+      if ($model_image) {
+        $image = $model_image[0]['target_id'];
+
+        if($image){
+          $image_object = $this->fileStorage->load($image);
+          if($image_object){
+            $image_uri_value = ImageStyle::load('thumbnail')->buildUrl($image_object->getFileUri());
+          }
+        }
+
+      }
+
+      $models[] = array(
+        'id' => $node->id(),
+        'name' => $name,
+        'gender' => $gender,
+        'stats' => $stats,
+        'image' => $image_uri_value
+      );
 
   }
 }
