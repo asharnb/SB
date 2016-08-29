@@ -166,8 +166,9 @@ public function get($type) {
     $orCondition = $query->orConditionGroup();
     $orCondition->condition('nid', "$value");
     $query->condition($orCondition);
-    $query->range(0, 50);
-    $query->sort($order_field, strtoupper($order_direction));
+    $query->range(0, 200);
+    $query->sort('nid', DESC);
+    //$query->sort($order_field, strtoupper($order_direction));
     $result = $query->execute();
 
 
@@ -176,7 +177,7 @@ public function get($type) {
     $result = \Drupal::entityQuery('node')
     ->condition('type', $bundles, 'IN')
     ->sort('nid', DESC)
-    ->range(0, 50)
+    ->range(0, 200)
     ->execute();
   }
 
@@ -185,11 +186,16 @@ public function get($type) {
   if ($result) {
     if ($type=='productsQC'){
       //$productsQC = $this->getProductsQC($result);
-
+      if (!empty($_GET['search'])) {
       $dataset = array('id', 'title', 'field_color_variant', 'field_concept_name','image_count', 'view_link','sessions', 'qc', 'images');
+      }else{
+      $dataset = array('id', 'title', 'field_color_variant', 'field_concept_name','image_count', 'view_link','sessions', 'qc');
+      }
+
 
       // 3rd arg - photographer, sessions,date, qc_state, state
-      $productsQC = $this->studioProducts->getProductsData($result, $dataset, 'sessions');
+      $productsQC = $this->studioProducts->getProductsData($result, $dataset, 'date');
+      //krsort($productsQC);
     }else{
       $products = $this->getProducts($result);
     }
@@ -209,9 +215,8 @@ public function get($type) {
     }
 
     if($productsQC){
-
+      //rsort($productsQC);
         $data[] = array(
-          'group'=>'All Products',
           'list' =>
           $productsQC,
         );

@@ -1230,9 +1230,13 @@ class StudioProducts implements StudioProductsInterface {
           case  'sessions':
 
             //$session_ids = $this->checkProductDuplicate($pid, array('sessions'));
+
+            //$data[] = $session_ids;
             foreach($session_ids as $sid){
               $data[$sid][] = $data_row;
             }
+
+
 
             break;
           case  'photographer':
@@ -1255,7 +1259,7 @@ class StudioProducts implements StudioProductsInterface {
             break;
           case  'qc_state':
 
-            $qc_state = $this->StudioQc->getQcRecordsByProduct(1476, $fields = array('qc_state'));
+            $qc_state = $this->StudioQc->getQcRecordsByProduct($current_product->id(), $fields = array('qc_state'));
             if($qc_state){
               if($recent_qc_record = reset($qc_state)){
                 $qc_state = $recent_qc_record->qc_state;

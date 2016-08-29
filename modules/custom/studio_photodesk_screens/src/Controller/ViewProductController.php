@@ -109,7 +109,7 @@ class ViewProductController extends ControllerBase {
       '#product_type' => $bundle,
       '#attached' => array(
         'library' => array(
-          'studio_photodesk_screens/fancybox'
+          'studiobridge/run-fancybox'
         ),
       ),
     ];

@@ -1,3 +1,4 @@
+{{kint()}}
 
 <div class="row">
   <div class="col-sm-12 col-md-12">
@@ -37,10 +38,8 @@
         <th></th>
         <th>Name</th>
         <th>Gender</th>
-        <th>Concepts</th>
-        <th>Meal Preference</th>
-        <th class="no-sort">Total Products</th>
-        <th class="no-sort"></th>
+        <th>Stats</th>
+
       </thead>
 
       <tbody>
@@ -50,19 +49,18 @@
 
 
 
-
+      {% for result in results %}
         <tr>
-          <td>1</td>
-          <td><img src="/{{directory}}/images/models/saahibjeet.jpg" class="img-circle-table " height="20px"></td>
-          <td>Saahibjeet Singh</td>
-          <td>Male</td>
-          <td>Splash</td>
-          <td>No Preference</td>
-          <td>
-            1,265
-          </td>
+          <td>{{result.id}}</td>
+          <td><img src="{{result.image}}" class="img-circle-table " height="20px"></td>
+          <td>{{result.name}}</td>
+          <td>{{result.gender == 1 ? 'Male' : 'Female'}}</td>
+          <td>{{result.stats}}</td>
+
 
         </tr>
+
+        {% endfor %}
 
 
 

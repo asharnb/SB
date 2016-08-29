@@ -26,3 +26,4 @@ libraries:
   - 'studiobridge/chart-js'
   - 'studiobridge/flot-charts'
   - 'studiobridge/jquery-loading'
+  - 'studiobridge/fancybox'

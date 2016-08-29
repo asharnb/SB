@@ -1,34 +1,3 @@
-{#
-/**
-* @file
-* Default theme implementation to display the Session details page.
-*
-* Available variables:
-* - product_type: Mapped or unmapped product; based on this in this file we can make conditions for product details.
-*
-* - images: array of image url & its name
-*   -  uri: Image style uri, to display image  -  {{ ITEM.uri }}
-*   -  name: Name of the image -  {{ ITEM.name }}
-*
-* - product: array contains all properties of unmapped/Mapped products
-*   -  title: Title/Identifier of unmapped/Mapped product   -  {{ ITEM.title.0.value }}
-*   -  field_images: To get count of image, use like -  {{ ITEM.field_images|length }}
-*   -  field_state: Product status/stage.  -  {{ ITEM.field_state.0.value }}
-*   -  created: Timestamp product created - {{ ITEM.create.0.value|date("m/d/Y") }}
-*
-*     -----  NOTE : following this values valid for mapped product --------
-*
-*   -  field_concept_name: Name of concept - {{ ITEM.field_concept_name.0.value }}
-*   -  field_style_family: Name of style family - {{ ITEM.field_style_family.0.value }}
-*   -  field_sku_id: SKU_ID value - {{ ITEM.field_sku_id.0.value }}
-*  todo : check for missing values
-*
-*
-* @ingroup themeable
-*/
-#}
-
-
 
                         <div class="row">
                           <div class="col-sm-12 col-md-12">
