@@ -1,3 +1,5 @@
+{{kint()}}
+
 <div class="row">
   <div class="col-sm-12 col-md-12">
     <h3 class="no-margins p-b-sm"><span>Models</span></h3>
@@ -51,9 +53,9 @@
         <tr>
           <td>{{result.id}}</td>
           <td><img src="{{result.image}}" class="img-circle-table " height="20px"></td>
-          <td>{{result.name.0.value}}</td>
-          <td>{{result.gender.0.value == 1 ? 'Male' : 'Female'}}</td>
-          <td>{{result.stats.0.value}}</td>
+          <td>{{result.name}}</td>
+          <td>{{result.gender == 1 ? 'Male' : 'Female'}}</td>
+          <td>{{result.stats}}</td>
 
 
         </tr>

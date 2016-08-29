@@ -13,6 +13,7 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 use Drupal\Core\Database\Connection;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Drupal\image\Entity\ImageStyle;
+use Drupal\Core\Entity\EntityTypeManager;
 
 
 /**
@@ -33,6 +34,10 @@ class ViewAllModelsController extends ControllerBase
   protected $nodeStorage;
 
   protected $userStorage;
+
+  public $fileStorage;
+
+  protected $entityTypeManager;
   /*
   * {@inheritdoc}
   */
@@ -48,11 +53,13 @@ class ViewAllModelsController extends ControllerBase
 
 public function __construct(Connection $database)
 {
+
+  //$this->entityTypeManager = $entityTypeManager;
+
   $this->database = $database;
-  //$this->formBuilder = $form_builder;
-  //$this->userStorage = $this->entityManager()->getStorage('user');
   $this->nodeStorage = $this->entityTypeManager()->getStorage('node');
   $this->userStorage = $this->entityTypeManager()->getStorage('user');
+  $this->fileStorage = $this->entityTypeManager()->getStorage('file');
 
 }
 
@@ -62,20 +69,33 @@ public function __construct(Connection $database)
 */
 public function content()
 {
-      $query = \Drupal::entityQuery('node');
-      $result = $query
-        ->condition('type', 'models')
-        ->sort('created', 'DESC')
-        ->range(0, 500)
-        ->execute();
+      // $query = \Drupal::entityQuery('node');
+      // $result = $query
+      //   ->condition('type', 'models')
+      //   ->sort('created', 'DESC')
+      //   ->range(0, 50)
+      //   ->execute();
+
+        $model_nids = \Drupal::database()->select('node__field_models', 'c')
+          ->fields('c',array('field_models_target_id'))
+          ->execute()->fetchAll();
 
 
-  //load all the nodes from the result
-  $models = $this->nodeStorage->loadMultiple($result);
 
-  //if results are not empty load each node and get info
-  if (!empty($models)) {
-    foreach($models as $node){
+
+
+if($model_nids){
+  $nids = array();
+  foreach($model_nids as $nid){
+    $nids[] = $nid->field_models_target_id;
+  }
+
+  if($nids){
+    $model_node_objects = $this->nodeStorage->loadMultiple($nids);
+  }
+
+  if($model_node_objects){
+    foreach($model_node_objects as $node){
 
       $model_name = $node->title->getValue();
       if ($model_name) {
@@ -113,17 +133,17 @@ public function content()
         'image' => $image_uri_value
       );
 
+    }
   }
+
 }
-
-
 
 //return array to render
 //return array to render
 return [
   '#theme' => 'view_all_models',
   '#cache' => ['max-age' => 0],
-  '#results' => $model_data,
+  '#results' => $models,
 
 ];
 
