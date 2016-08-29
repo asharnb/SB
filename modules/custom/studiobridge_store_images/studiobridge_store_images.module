@@ -648,3 +648,4 @@ function studiobridge_store_images_form_alter(&$form, \Drupal\Core\Form\FormStat
 function add_session_handler(&$form, &$form_state) {
   $form_state['redirect'] = '/view-sessions2';
 }
+// Testing for new repo commit.
