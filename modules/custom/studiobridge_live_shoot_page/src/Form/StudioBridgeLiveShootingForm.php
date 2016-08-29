@@ -189,6 +189,9 @@ class StudioBridgeLiveShootingForm extends FormBase {
       }
     }
 
+    $StudioModels = \Drupal::service('studio.models');
+    $models = $StudioModels->getModelsBySession($session_id);
+
     $identifier = $identifier_hidden;
 
     $form['session'] = array(
@@ -201,6 +204,12 @@ class StudioBridgeLiveShootingForm extends FormBase {
       '#type' => 'textfield',
       '#default_value' => $identifier,
       '#title' => t(''),
+
+
+    );
+
+    $form['models'] = array(
+      '#models' => $models,
 
 
     );

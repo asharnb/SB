@@ -9,22 +9,25 @@
             <h5 class="no-margins semi-bold p-t-10">Enter Product Tag</h5>
             {{ form|without('resequence','delete','spinner') }}
         </div>
-        <div class="col-sm-2 p-t-50">
+        <div class="col-sm-1 p-t-50">
             {{ form.spinner }}
         </div>
-        <div class="col-sm-5 p-t-10 pull-right">
+        <div class="col-sm-4 p-t-20 pull-right">
 
-          <div class="social-avatar">
-                        <a href="" class="pull-left">
-                          <img src="/themes/studiobridge/images/models/gisele.jpeg" class="img-circle" alt="Sajeewa.niranjan">
-                        </a>
+{% if form.models['#models']|length > 0 %}
+          <div class="social-avatar pull-right">
+                        <span class="pull-left">
+                          <img src="{{form.models['#models'].0.model_image_path}}" class="img-circle" alt="">
+                        </span>
                         <div class="media-body p-xs">
                           <h6 class="no-margins bold">
-                            Gisele Bündchen
+                            {{form.models['#models'].0.model_name}}
                           </h6>
                           <small class="text-complete">Model on shoot</small>
                         </div>
                       </div>
+
+  {% endif %}
         </div>
 
 
@@ -41,7 +44,7 @@
                     <div class="col-lg-6">
                         <dl class="dl-horizontal">
                           <dt>Concept </dt>
-                          {% if form.productdetails['#concept'] == 'Unmapped' %}
+                          {% if form.productdetails['#concept'] == 'Unmapped' or form.productdetails['#concept'] == '' %}
                               <dd id="dd-concept"><span class="bold">Not Available</span></dd>
                           {% else %}
                               <dd id="dd-concept" class="mb-10"><img
