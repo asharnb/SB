@@ -69,16 +69,17 @@ public function __construct(Connection $database)
 */
 public function content()
 {
-      // $query = \Drupal::entityQuery('node');
-      // $result = $query
-      //   ->condition('type', 'models')
-      //   ->sort('created', 'DESC')
-      //   ->range(0, 50)
-      //   ->execute();
+      $query = \Drupal::entityQuery('node');
+      $model_nids = $query
+        ->condition('type', 'models')
+        ->sort('created', 'DESC')
+        ->range(0, 50)
+        ->execute();
+        //->fetchAll();
 
-        $model_nids = \Drupal::database()->select('node__field_models', 'c')
-          ->fields('c',array('field_models_target_id'))
-          ->execute()->fetchAll();
+        // $model_nids = \Drupal::database()->select('node__field_models', 'c')
+        //   ->fields('c',array('field_models_target_id'))
+        //   ->execute()->fetchAll();
 
 
 
@@ -87,10 +88,11 @@ public function content()
 if($model_nids){
   $nids = array();
   foreach($model_nids as $nid){
-    $nids[] = $nid->field_models_target_id;
+    $nids[] = $nid;
   }
 
   if($nids){
+
     $model_node_objects = $this->nodeStorage->loadMultiple($nids);
   }
 
