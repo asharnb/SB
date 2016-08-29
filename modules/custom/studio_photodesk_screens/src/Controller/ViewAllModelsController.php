@@ -99,6 +99,11 @@ if($model_nids){
   if($model_node_objects){
     foreach($model_node_objects as $node){
 
+      $name = '';
+      $gender = '';
+      $stats = '';
+      $image_uri_value = '';
+
       $model_name = $node->title->getValue();
       if ($model_name) {
         $name = $model_name[0]['value'];
