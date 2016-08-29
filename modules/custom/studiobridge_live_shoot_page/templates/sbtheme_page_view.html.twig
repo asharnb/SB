@@ -40,7 +40,12 @@
 
             <div class="col-sm-12 p-sm border-bottom">
               <h5 class="semi-bold m-b-sm">Product Information</h5>
+                {% if form.productdetails['#concept'] == 'Unmapped' %}
+                <div class="alert alert-warning">
+    This is an unmapped product. Please make sure the barcode was entered correctly and matches the physical barcode.
 
+                </div>
+                {% endif %}
                     <div class="col-lg-6">
                         <dl class="dl-horizontal">
                           <dt>Concept </dt>

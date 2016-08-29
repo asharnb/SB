@@ -26,7 +26,7 @@ class CsvMakerController extends ControllerBase {
    */
   public function hello($id, $type, $concept) {
 
-    $head = array('Identifier', 'Photographer', 'Shoot Date', 'Color Variant', 'Session', 'Size Name', 'Size Variant');
+    $head = array('Identifier', 'Photographer', 'Shoot Date', 'Color Variant', 'Session', 'Size Name', 'Size Variant', 'Model Name', 'Model Stats');
     $unMappedHead = array('Identifier', 'Photographer', 'Shoot-Date');
 
     // Load session
@@ -49,6 +49,7 @@ class CsvMakerController extends ControllerBase {
             $file_name = 'Mapped-shootlist-'.$sid.'.csv';
           }
         }
+
 
         $this->array_to_csv_download($head, $rows,$file_name, ',');
 
@@ -221,7 +222,16 @@ class CsvMakerController extends ControllerBase {
 
                   }
 
-                  $rows[] = array(trim($title), $photographer, $date, $color_variant, $sid, $size_name, $size_variant);
+                  $StudioModels = \Drupal::service('studio.models');
+                  $models = $StudioModels->getModelsBySession($sid);
+
+
+                  if($models){
+                    $model_name = $models[0]['model_name'];
+                    $model_stats = $models[0]['model_stats'];
+                  }
+
+                  $rows[] = array(trim($title), $photographer, $date, $color_variant, $sid, $size_name, $size_variant, $model_name, $model_stats);
 
                 }
               }
