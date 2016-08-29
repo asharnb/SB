@@ -18,7 +18,7 @@
                 var listViewGroupCont = $('<div/>', {
                     "class": "list-view-group-container"
                 });
-                listViewGroupCont.append('<div class="list-view-group-header"><span>Session ' + i + '</span></div>');
+                listViewGroupCont.append('<div class="list-view-group-header"><span>' + i + '</span></div>');
                 var ul = $('<ul/>', {
                     "class": "no-padding"
                 });
