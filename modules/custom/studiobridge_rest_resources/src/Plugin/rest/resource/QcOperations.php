@@ -126,6 +126,7 @@ class QcOperations extends ResourceBase {
     $fids = $data->body->value['images'];
     $state = $data->body->value['state'];
 
+
     switch($type){
 
       case  'reject_all':
@@ -136,6 +137,8 @@ class QcOperations extends ResourceBase {
         break;
 
       case  'notes':
+        $note = $data->body->value['note'];
+        $this->notes($sid, $pid,$note);
         break;
 
       case  'reject_img':
@@ -206,7 +209,12 @@ class QcOperations extends ResourceBase {
   }
 
 
-  public function notes($sid, $pid, $fids, $notes){
+  public function notes($sid, $pid, $notes){
+
+    // todo find the last updated state of this product.
+
+    // todo get that record & add as new record.
+
     $this->studioQc->addQcRecord($pid, $sid, $notes, 'approved');
   }
 

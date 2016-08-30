@@ -196,28 +196,6 @@
 
     });
 
-    $(document).on("click",".add-note",function(){
-
-      swal({
-          title: 'Add Note',
-          html:
-              '<div id="warehouse-flag-form">' +
-              '<textarea class="js-text-full text-full form-textarea form-control resize-vertical" data-drupal-selector="edit-field-notes-0-value" title="" data-toggle="tooltip" id="edit-field-notes-0-value" name="field_notes[0][value]" rows="4" cols="60" placeholder="Add notes about this product..." data-original-title=""></textarea>'+
-              '</div>',
-          showCloseButton: true,
-          showCancelButton: true,
-          confirmButtonText:
-              'Add',
-          cancelButtonText:
-              'Cancel'
-      },function () {
-          var option = document.getElementById('flag-option').value;
-          var reason = document.getElementById('flag-reason').value;
-
-          });
-
-    });
-
 
     function append_img(img,fid) {
         if ($('#warpper-img-'+ fid).length > 0) {

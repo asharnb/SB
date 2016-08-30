@@ -95,7 +95,7 @@ class StudioQc implements StudioQcInterface {
           'qc_note' => $qc_note,
           'qc_state' => $qc_state,
           'uid' => $uid,
-          'create' => REQUEST_TIME
+          'created' => REQUEST_TIME
         ))
         ->execute();
 
