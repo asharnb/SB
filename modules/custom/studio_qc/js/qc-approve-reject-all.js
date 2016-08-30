@@ -3,7 +3,7 @@
  */
 
 (function ($) {
-
+    'use strict';
     // function to get csrf token
     function getCsrfToken(callback) {
         $
@@ -27,7 +27,7 @@
             },
             data: JSON.stringify(node),
             success: function (response) {
-                //updateProductInformationBlock(response);
+                console.log(response);
                 alert('success');
             },
             error: function(){
@@ -70,30 +70,31 @@
 
     // click event for approve all.
     // todo change selector based on what is there in template.
-    $("#qc-approve-all").click(function () {
+    $(".approve-all").click(function () {
 
         // todo get following information from specific tags saved or updated from ajax.
         var product = '';
         var session = '';
         var imgs = [1,2];
         var state = 'approve_all';
+        var pid = document.getElementById('selected-pid').value;
 
         swal({
-            title: "Confirm Approve",
-            text: "Are you sure you want to approve all images in this product ?",
-            type: "warning",
+            title: "Approve All?",
+            text: "Are you sure you want to approve all images?",
+            type: "success",
             showCancelButton: true,
-            confirmButtonColor: "#DD6B55",
+            confirmButtonColor: "#00b9e5",
             confirmButtonText: "Approve",
-            closeOnConfirm: false
+            closeOnConfirm: true
         },function () {
-            approveOrRejectRequestProcess(product,session, imgs, state)
+            approveOrRejectRequestProcess(pid,session, imgs, state)
         });
     });
 
     // click event for reject all.
     // todo change selector based on what is there in template.
-    $("#qc-reject-all").click(function () {
+    $(".reject-all").click(function () {
 
         // todo get following information from specific tags saved or updated from ajax.
         var product = '';
@@ -102,13 +103,13 @@
         var state = 'reject_all';
 
         swal({
-            title: "Confirm Reject",
-            text: "Are you sure you want to reject all images in this product ?",
+            title: "Reject All?",
+            text: "Are you sure you want to reject all images?",
             type: "warning",
             showCancelButton: true,
             confirmButtonColor: "#DD6B55",
             confirmButtonText: "Reject",
-            closeOnConfirm: false
+            closeOnConfirm: true
         },function () {
             approveOrRejectRequestProcess(product,session, imgs, state)
         });

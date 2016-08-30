@@ -82,6 +82,7 @@
 
         e.stopPropagation();
         var id = $(this).attr('data-product-id');
+        //console.log(id);
         var session = $(this).attr('data-session-id');
         var product = null;
         ProductOpened.find('#imagecontainer').empty();
@@ -133,7 +134,7 @@
 
                 })
 
-
+                document.getElementById('selected-pid').value = id;
                 $('.no-result').hide();
                 $('.actions, .email-content-wrapper').show();
                 $(".email-content-wrapper").scrollTop(0);
@@ -160,39 +161,6 @@
     $(document).ready(function() {
         $(".list-view-wrapper").scrollbar({ignoreOverlay: false});
         //$(".email-content-wrapper").scrollbar({ignoreOverlay: false});
-
-    });
-
-
-    $(document).on("click",".approve-all",function(){
-      swal({
-          title: "Approve All?",
-          text: "Are you sure you want to approve all images?",
-          type: "success",
-          showCancelButton: true,
-          confirmButtonColor: "#00b9e5",
-          confirmButtonText: "Approve",
-          closeOnConfirm: true
-      },function () {
-          //update_product(1);
-          //alert('approved');
-          });
-
-    });
-
-    $(document).on("click",".reject-all",function(){
-      swal({
-          title: "Reject All?",
-          text: "Are you sure you want to reject all images?",
-          type: "warning",
-          showCancelButton: true,
-          confirmButtonColor: "#DD6B55",
-          confirmButtonText: "Reject",
-          closeOnConfirm: true
-      },function () {
-          //update_product(1);
-          //alert('rejected');
-          });
 
     });
 
@@ -243,7 +211,7 @@
 
         block += '<div class="col col-sm-12"><span id= "'+fid+'">\
         <a rel="fancybox-thumb" href="' + img.uri + '" class="fancybox-thumb col-sm-4 text-info"><i class="fa fa-lg fa-fw fa-search"></i></a> \
-        <a class=" col-sm-4 text-info" ><i class="fa fa-lg fa-fw fa-check text-success"></i></a>\
+        <a class=" col-sm-4 text-info qc-img-approve" ><i class="fa fa-lg fa-fw fa-check text-success"></i></a>\
         <a class=" col-sm-4 text-info" ><i class="fa fa-lg fa-fw fa-times text-danger"></i></a>\
         </span></div>';
 
