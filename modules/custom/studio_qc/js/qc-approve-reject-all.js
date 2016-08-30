@@ -76,6 +76,27 @@
         var product = '';
         var session = '';
         var imgs = [1,2];
+
+
+        var container, inputs, index;
+        var dup_holder = [];
+
+        // Get the container element
+        container = document.getElementById('imagecontainer');
+
+        // Find its child `input` elements
+        inputs = container.getElementsByTagName('input');
+
+        var inc = 1;
+        for (index = 0; index < inputs.length; ++index) {
+            // deal with inputs[index] element.
+            if(inputs[index].type == 'hidden'){
+                dup_holder.push(inputs[index].value);
+            }
+        }
+
+
+
         var state = 'approve_all';
         var pid = document.getElementById('selected-pid').value;
 
@@ -88,7 +109,7 @@
             confirmButtonText: "Approve",
             closeOnConfirm: true
         },function () {
-            approveOrRejectRequestProcess(pid,session, imgs, state)
+            approveOrRejectRequestProcess(pid,session, dup_holder, state)
         });
     });
 
@@ -102,6 +123,27 @@
         var imgs = [1,2];
         var state = 'reject_all';
 
+
+        var container, inputs, index;
+        var dup_holder = [];
+
+        // Get the container element
+        container = document.getElementById('imagecontainer');
+
+        // Find its child `input` elements
+        inputs = container.getElementsByTagName('input');
+
+        var inc = 1;
+        for (index = 0; index < inputs.length; ++index) {
+            // deal with inputs[index] element.
+            if(inputs[index].type == 'hidden'){
+                dup_holder.push(inputs[index].value);
+            }
+        }
+
+
+
+
         swal({
             title: "Reject All?",
             text: "Are you sure you want to reject all images?",
@@ -111,7 +153,7 @@
             confirmButtonText: "Reject",
             closeOnConfirm: true
         },function () {
-            approveOrRejectRequestProcess(product,session, imgs, state)
+            approveOrRejectRequestProcess(product,session, dup_holder, state)
         });
     });
 

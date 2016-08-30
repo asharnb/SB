@@ -130,10 +130,15 @@ class QcOperations extends ResourceBase {
     switch($type){
 
       case  'reject_all':
-        $this->rejectAll($sid, $pid, $fids);
+        if($sid){
+          $this->rejectAll($sid, $pid, $fids);
+        }
         break;
 
       case  'approve_all':
+        if($sid){
+          $this->approveAll($sid, $pid, $fids);
+        }
         break;
 
       case  'notes':
@@ -142,9 +147,11 @@ class QcOperations extends ResourceBase {
         break;
 
       case  'reject_img':
+        $this->rejectImg($fids);
         break;
 
       case  'approve_img':
+        $this->approveImg($fids);
         break;
 
       default:
