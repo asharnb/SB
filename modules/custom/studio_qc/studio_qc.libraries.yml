@@ -12,5 +12,6 @@ live-qc-collection:
     js/live-qc.js: { preprocess: false }
     js/qc-add-note.js: {}
     js/qc-approve-reject-all.js: {}
+    js/qc-approve-reject-one.js: {}
   dependencies:
     - core/jquery

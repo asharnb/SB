@@ -68,32 +68,9 @@
 
     }
 
-    // click event for approve image.
-    // todo change selector based on what is there in template.
-    $("#qc-approve-img").click(function () {
-
-        // todo get following information from specific tags saved or updated from ajax.
-        var product = '';
-        var session = '';
-        var imgs = '';
-        var state = 'approve_img';
-
-        swal({
-            title: "Confirm Approve",
-            text: "Are you sure you want to approve this images in this product ?",
-            type: "warning",
-            showCancelButton: true,
-            confirmButtonColor: "#DD6B55",
-            confirmButtonText: "Approve",
-            closeOnConfirm: false
-        },function () {
-            approveOrRejectRequestProcess(product,session, imgs, state)
-        });
-    });
-
     // click event for reject image.
     // todo change selector based on what is there in template.
-    $("#qc-reject-img").click(function () {
+    $(document).on("click",".qc-img-reject",function(){
 
         // todo get following information from specific tags saved or updated from ajax.
         var product = '';
@@ -103,17 +80,38 @@
 
         swal({
             title: "Confirm Reject",
-            text: "Are you sure you want to reject this images in this product ?",
+            text: "Are you sure you want to reject this image from this product ?",
             type: "warning",
             showCancelButton: true,
             confirmButtonColor: "#DD6B55",
             confirmButtonText: "Reject",
-            closeOnConfirm: false
+            closeOnConfirm: true
         },function () {
             approveOrRejectRequestProcess(product,session, imgs, state)
         });
     });
 
+
+
+    $(document).on("click",".qc-img-approve",function(){
+        var product = '';
+        var session = '';
+        var imgs = '';
+        var state = 'approve_img';
+
+        swal({
+            title: "Confirm Approve",
+            text: "Are you sure you want to approve this image to this product ?",
+            type: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#DD6B55",
+            confirmButtonText: "Approve",
+            closeOnConfirm: true
+        },function () {
+            approveOrRejectRequestProcess(product,session, imgs, state)
+        });
+
+    });
 
 
 })(jQuery);

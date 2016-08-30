@@ -152,7 +152,6 @@
 
     });
 
-
     $('.secondary-sidebar').click(function(e) {
         e.stopPropagation();
     })
@@ -211,8 +210,8 @@
 
         block += '<div class="col col-sm-12"><span id= "'+fid+'">\
         <a rel="fancybox-thumb" href="' + img.uri + '" class="fancybox-thumb col-sm-4 text-info"><i class="fa fa-lg fa-fw fa-search"></i></a> \
-        <a class=" col-sm-4 text-info qc-img-approve" ><i class="fa fa-lg fa-fw fa-check text-success"></i></a>\
-        <a class=" col-sm-4 text-info" ><i class="fa fa-lg fa-fw fa-times text-danger"></i></a>\
+        <a class=" col-sm-4 text-info qc-img-approve" data-img-id="' + fid + '"><i class="fa fa-lg fa-fw fa-check text-success"></i></a>\
+        <a class=" col-sm-4 text-info qc-img-reject" data-img-id="' + fid + '"><i class="fa fa-lg fa-fw fa-times text-danger"></i></a>\
         </span></div>';
 
         block += '</div>';
