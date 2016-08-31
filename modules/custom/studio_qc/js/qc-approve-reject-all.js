@@ -73,10 +73,8 @@
     $(".approve-all").click(function () {
 
         // todo get following information from specific tags saved or updated from ajax.
-        var product = '';
+        var product = document.getElementById('selected-pid').value;
         var session = '';
-        var imgs = [1,2];
-
 
         var container, inputs, index;
         var dup_holder = [];
@@ -118,9 +116,8 @@
     $(".reject-all").click(function () {
 
         // todo get following information from specific tags saved or updated from ajax.
-        var product = '';
+        var product = document.getElementById('selected-pid').value;
         var session = '';
-        var imgs = [1,2];
         var state = 'reject_all';
 
 
@@ -140,8 +137,6 @@
                 dup_holder.push(inputs[index].value);
             }
         }
-
-
 
 
         swal({

@@ -78,7 +78,7 @@
         }, function () {
             //var option = document.getElementById('flag-option').value;
             var note = document.getElementById('edit-field-notes-0-value').value;
-            var pid = 999;
+            var pid = document.getElementById('selected-pid').value;
             var sid = 999;
             console.log(note);
             processAddNoteRequest(pid, sid, note);

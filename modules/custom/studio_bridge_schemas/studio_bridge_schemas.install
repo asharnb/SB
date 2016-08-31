@@ -165,5 +165,5 @@ function studio_bridge_schemas_update_8107(&$sandbox) {
     'primary key' => array('id'),
   );
   $schema = Database::getConnection()->schema();
-  $schema->createTable('studio_products_qc_img_records', $spec);
+  $schema->createTable('studio_qc_img_records', $spec);
 }

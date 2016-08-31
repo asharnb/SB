@@ -488,6 +488,66 @@ class StudioQc implements StudioQcInterface {
     return $records;
   }
 
+  /*
+ * Helper function to add record to studio_qc_img_records table.
+ */
+  public function addQcRecordOfImg($fid, $pid, $sid, $qc_note, $qc_state) {
+
+    $table_exists = $this->database->schema()->tableExists('studio_qc_img_records');
+
+    if ($table_exists) {
+      $uid = $this->currentUser->id();
+      $this->database->insert('studio_qc_img_records')
+        ->fields(array(
+          'pid' => $pid,
+          'sid' => $sid,
+          'fid' => $fid,
+          'qc_note' => $qc_note,
+          'qc_state' => $qc_state,
+          'uid' => $uid,
+          'created' => REQUEST_TIME
+        ))
+        ->execute();
+
+    }
+  }
+
+
+  /*
+ * Helper function, to update notes of the qc records.
+ */
+  public function updateQcNoteOfImg($fid, $sid, $pid, $note){
+
+    $table_exists = $this->database->schema()->tableExists('studio_qc_img_records');
+    $uid = $this->currentUser->id();
+
+    if ($table_exists) {
+      $this->database->update('studio_qc_img_records') // Table name no longer needs {}
+        ->fields(array(
+          'qc_note' => $note,
+        ))
+        ->condition('sid', $sid)
+        ->condition('pid', $pid)
+        ->condition('fid', $fid)
+        ->execute();
+    }
+
+  }
+
+  /*
+ * Helper function, to get qc records of a product.
+ */
+  public function getQcRecordsOfImg($fid, $fields = array('pid','sid','qc_note','qc_state','uid','created')){
+    $result = $this->database->select('studio_qc_img_records', 'spqr')
+      ->fields('spqr', $fields)
+      ->condition('spqr.fid', $fid)
+      ->orderBy('spqr.id', 'desc');
+
+    $records = $result->execute()->fetchAll();
+
+    return $records;
+  }
+
 }
 /*
  * Helper function, to get required fields from products for QC page.
@@ -497,3 +557,4 @@ class StudioQc implements StudioQcInterface {
  * field machine name of product
  *
  */
+
