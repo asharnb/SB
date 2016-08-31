@@ -2,10 +2,16 @@
 (function($) {
     'use strict';
     //attach jquery once here to ensure it runs once on load
+
+
+    $('.full-height-scroll').slimscroll({
+        height: '100%'
+    })
+
     var ProductList = $('[data-product="list"]');
     var ProductOpened = $('[data-product="opened"]');
 
-    $("#content").LoadingOverlay("show");
+    //$("#content").LoadingOverlay("show");
     ProductList.length && $.ajax({
         dataType: "json",
         url: "screens/productsQC?_format=json",

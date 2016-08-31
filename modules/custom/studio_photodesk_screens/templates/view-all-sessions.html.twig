@@ -121,6 +121,10 @@
               <img src="/{{directory}}/images/users/{{result.stylist|lower|replace({".": "_" , " " : "_"})}}.jpg" class="img-circle-table " alt="{{ result.stylist }}">
               <span style="display:none;">{{ result.stylist }}</span>
             {% endif %}
+            {% if not result.models.0.nid == '' %}
+              <img src="{{result.models.0.model_image_path}}" class="img-circle-table " alt="{{ result.models.0.model_name }}">
+              <span style="display:none;">{{ result.models.0.model_name }}</span>
+            {% endif %}
           </td>
           <td><span class="{{date_class}}">{{ date_text }}</span></td>
 

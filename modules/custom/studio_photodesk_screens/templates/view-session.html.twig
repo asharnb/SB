@@ -416,6 +416,14 @@
       </div>
 
       <div class="tab-pane" id="tab-reports">
+
+        {% if session.field_status.0.value == 'open' %}
+        <div class="alert alert-warning">
+            This session is still open. Shoot list might not be exhaustive until session is closed.
+
+        </div>
+        {% endif %}
+
         {% for item in grouped_concepts %}
         <div class="col-md-6">
 

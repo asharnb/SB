@@ -78,7 +78,6 @@ jquery-loading:
     - core/jquery
 
 fancybox:
-  head: true
   js:
     js/fancybox/source/jquery.fancybox.js: {}
     js/fancybox/lib/jquery.mousewheel-3.0.6.pack.js: {}
@@ -96,3 +95,9 @@ fancybox:
 run-fancybox:
   js:
     js/fancybox.js: {}
+
+slimscroll:
+  js:
+    js/slimscroll/jquery.slimscroll.min.js: {}
+  dependencies:
+    - core/jquery

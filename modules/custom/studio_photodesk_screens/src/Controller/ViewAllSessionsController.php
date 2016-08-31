@@ -134,6 +134,12 @@ public function content()
       $photographer = '';
       $vm = '';
       $stylist = '';
+      $models_data = '';
+
+
+      $StudioModels = \Drupal::service('studio.models');
+      $models = $StudioModels->getModelsBySession($session->id());
+
       if(!empty($session->field_photographer->get(0)->target_id)){
         $photographer = $this->userStorage->load($session->field_photographer->get(0)->target_id)->label();
       }
@@ -143,6 +149,11 @@ public function content()
       if(!empty($session->field_stylish->get(0)->target_id)){
         $stylist = $this->userStorage->load($session->field_stylish->get(0)->target_id)->label();
       }
+      if(!empty($models)){
+        $models_data = $models;
+      }
+
+
 
       //set values into array
       $session_data[] = array( 'id' => $session->id(),
@@ -157,6 +168,7 @@ public function content()
       'productcount' => $products,
       'mapped' => $mapped,
       'unmapped' => $unmapped,
+      'models' => $models_data,
     );
 
   // }

@@ -54,6 +54,28 @@
     }
   };
 
+  Drupal.behaviors.modelsdatatable = {
+    attach: function(context) {
+       var oTable = $('#dt_viewmodels').DataTable( {
+        "bSort": true,
+        "bDestroy": true,
+        "iDisplayLength": 30,
+        "order": [[0 , 'desc']],
+        "autoWidth" : true
+      } );
+      $('#dt_search_box').keyup(function(){
+            oTable.search($(this).val()).draw() ;
+      })
+
+      $('#btn_search_reset').click(function(){
+            document.getElementById('dt_search_box').value = "";
+              oTable.search('').draw() ;
+      })
+
+      $('#dt_viewsessions_wrapper').addClass('m-t-n');
+    }
+  };
+
 
   Drupal.behaviors.closesession = {
     attach: function(context) {

@@ -26,7 +26,7 @@ class CsvMakerController extends ControllerBase {
    */
   public function hello($id, $type, $concept) {
 
-    $head = array('Identifier', 'Photographer', 'Shoot Date', 'Color Variant', 'Session', 'Size Name', 'Size Variant', 'Model Name', 'Model Stats');
+    $head = array('Identifier', 'Photographer', 'Shoot Date', 'Color Variant', 'Session',  'Size Variant', 'Model Name', 'Model Stats', 'Model Wears',);
     $unMappedHead = array('Identifier', 'Photographer', 'Shoot-Date');
 
     // Load session
@@ -231,7 +231,7 @@ class CsvMakerController extends ControllerBase {
                     $model_stats = $models[0]['model_stats'];
                   }
 
-                  $rows[] = array(trim($title), $photographer, $date, $color_variant, $sid, $size_name, $size_variant, $model_name, $model_stats);
+                  $rows[] = array(trim($title), $photographer, $date, $color_variant, $sid,  $size_variant, $model_name, $model_stats, 'Size ' . $size_name,);
 
                 }
               }
