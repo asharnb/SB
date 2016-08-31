@@ -144,3 +144,26 @@ function studio_bridge_schemas_update_8106(&$sandbox) {
   $schema = Database::getConnection()->schema();
   $schema->addField('studio_file_transfers', 'weight', $spec);
 }
+
+/*
+ * Implements hook__update_8105().
+ *
+ * {studio_products_qc_records} table.
+ */
+function studio_bridge_schemas_update_8107(&$sandbox) {
+  $spec = array(
+    'fields' => array(
+      'id' => array('type' => 'serial', 'not null' => TRUE,),
+      'pid' => array('type' => 'varchar', 'length' => 20, 'not null' => TRUE,),
+      'sid' => array('type' => 'varchar', 'length' => 20, 'not null' => TRUE,),
+      'fid' => array('type' => 'varchar', 'length' => 20, 'not null' => TRUE,),
+      'qc_note' => array('type' => 'text', 'size' => 'normal', 'not null' => TRUE,),
+      'qc_state' => array('type' => 'varchar', 'length' => 100, 'not null' => TRUE,),
+      'uid' => array('type' => 'varchar', 'length' => 20, 'not null' => TRUE,),
+      'created'   => array('type' => 'int', 'not null' => TRUE, 'default' => 0),
+    ),
+    'primary key' => array('id'),
+  );
+  $schema = Database::getConnection()->schema();
+  $schema->createTable('studio_products_qc_img_records', $spec);
+}

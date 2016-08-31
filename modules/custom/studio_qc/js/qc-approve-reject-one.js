@@ -71,11 +71,10 @@
     // click event for reject image.
     // todo change selector based on what is there in template.
     $(document).on("click",".qc-img-reject",function(){
-
         // todo get following information from specific tags saved or updated from ajax.
         var product = '';
         var session = '';
-        var imgs = '';
+        var imgs = $(this).attr('data-img-id');
         var state = 'reject_img';
 
         swal({
@@ -96,7 +95,7 @@
     $(document).on("click",".qc-img-approve",function(){
         var product = '';
         var session = '';
-        var imgs = '';
+        var imgs = $(this).attr('data-img-id');
         var state = 'approve_img';
 
         swal({

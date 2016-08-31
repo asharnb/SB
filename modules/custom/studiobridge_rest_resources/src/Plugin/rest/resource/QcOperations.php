@@ -147,7 +147,9 @@ class QcOperations extends ResourceBase {
         break;
 
       case  'reject_img':
-        $this->rejectImg($fids);
+        if($fids){
+          $this->rejectImg($fids);
+        }
         break;
 
       case  'approve_img':
