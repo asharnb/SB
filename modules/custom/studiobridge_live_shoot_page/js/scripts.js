@@ -42,9 +42,20 @@
 
 
   });
-  
 
 
+  Drupal.behaviors.clearinput = {
+    attach: function(context, settings) {
+      $('.input-clear').click(function(){
+            document.getElementById('edit-identifier').value = "";
+            document.getElementById('edit-identifier').focus();
+      })
+
+
+    }
+
+
+  };
   Drupal.behaviors.sortable = {
     attach: function(context, settings) {
 
@@ -53,8 +64,10 @@
           start: function(event, ui){
               ui.placeholder.html("<div class='bulkviewfiles file gray-bkground' style='width: 200px; height: 200px; background: #D2D2D2;'></div>");
           },
-          change: function (event, ui){
-
+          update: function (event, ui){
+            $("#sequence-check").removeClass('fa-square-check-o');
+            $("#sequence-check").addClass('fa-square-o');
+            $("#sequence-check").removeClass('text-success');
           },
           stop: function(event, ui){
               ui.placeholder.html("");

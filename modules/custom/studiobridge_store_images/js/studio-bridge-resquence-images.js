@@ -39,6 +39,9 @@
                     closeOnConfirm: true,
                     timer: 1000
                 });
+                $("#sequence-check").removeClass('fa-square-o');
+                $("#sequence-check").addClass('fa-square-check-o');
+                $("#sequence-check").addClass('text-success');
                 // update whole img container
                 var container, inputs, index;
                 var dup_holder = [];

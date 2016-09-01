@@ -9,6 +9,10 @@
             <h5 class="no-margins semi-bold p-t-10">Enter Product Tag</h5>
             {{ form|without('resequence','delete','spinner') }}
         </div>
+        <div class="col-sm-1 p-t-45">
+            <a class="btn input-clear">Clear</a>
+
+        </div>
         <div class="col-sm-1 p-t-50">
             {{ form.spinner }}
         </div>
@@ -228,7 +232,7 @@
                 <h5 >Image sequence</h5>
               </div>
               <div class="col-sm-6 text-right text-muted bold">
-                <h5 class="bold"><i class="fa fw fa-square-o"></i></h5>
+                <h5 class="bold"><i id="sequence-check" class="fa fw fa-check-square-o text-success"></i></h5>
               </div>
 
               <div class="col-sm-6 ">
