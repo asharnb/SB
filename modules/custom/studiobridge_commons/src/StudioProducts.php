@@ -193,7 +193,7 @@ class StudioProducts implements StudioProductsInterface {
       'field_product_import_state' => array('value' => $import_state)
     );
     // Create new node entity.
-    $node = \Drupal::entityManager()->getStorage('node')->create($values);
+    $node = $this->nodeStorage->create($values);
     // Save unmapped node entity.
     $node->save();
 
@@ -419,7 +419,6 @@ class StudioProducts implements StudioProductsInterface {
 //    } catch (\Exception $e) {
 //      $result = json_encode(array('msg' => $e->getMessage()));
 //    }
-
     $result = $this->lookProductServer($url, $user_name, $pass);
 
     $result = $this->checkBarecodesInDB($result, $input, $url_without_input, $user_name, $pass);
@@ -969,9 +968,9 @@ class StudioProducts implements StudioProductsInterface {
     $product = json_decode($result);
     if(count((array)$product) <= 1){
 
-      $table_exists = $this->database->schema()->tableExists('studio_barcodes');
+    //  $table_exists = $this->database->schema()->tableExists('studio_barcodes');
 
-      if($table_exists){
+     // if($table_exists){
         $rows_query = $this->database->select('studio_barcodes', 'sb')
           ->fields('sb', array('Barcode','Color'));
 
@@ -997,7 +996,7 @@ class StudioProducts implements StudioProductsInterface {
           $result = $this->lookProductServer($url, $user_name, $pass);
         }
 
-      }
+      //}
 
     }
 
