@@ -711,24 +711,12 @@ class StudioBridgeLiveShootingForm extends FormBase {
 
 
       if($pids){
-//        $db = \Drupal::database();
-//        $p_drafts = $db->select('node__field_draft', 'c')
-//          ->fields('c')
-//          ->condition('field_draft_value', 1)
-//          ->condition('entity_id',$pids,'IN')
-//          ->execute()->fetchAll();
 
         $p_drafts = $enityQuery->get('node')
           ->condition('type', array('unmapped_products','products'), 'IN')
           ->condition('field_draft',1)
           ->condition('nid',$pids,'IN')
           ->count()->execute();
-
-//        $unm = $db->select('node', 'c')
-//          ->fields('c')
-//          ->condition('type', 'unmapped_products')
-//          ->condition('nid',$pids,'IN')
-//          ->execute()->fetchAll();
 
         $unm = $enityQuery->get('node')
           ->condition('type', 'unmapped_products')

@@ -324,7 +324,8 @@ class StudioProducts implements StudioProductsInterface {
           $fid = $img['target_id'];
 
           // Load the file object.
-          $file = File::load($fid);
+          //$file = File::load($fid);
+          $file = $this->fileStorage->load($fid);
           // Validated file if it is deleted then error will occur.
           if ($file) {
             // Get the file name.
