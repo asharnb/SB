@@ -126,22 +126,35 @@ class QcOperations extends ResourceBase {
     $fids = $data->body->value['images'];
     $state = $data->body->value['state'];
 
+    $sids = $this->getOpenSessionFromProduct($pid);
+
     switch($type){
 
       case  'reject_all':
-        $this->rejectAll($sid, $pid, $fids);
+        if($sid){
+          $this->rejectAll($sid, $pid, $fids);
+        }
         break;
 
       case  'approve_all':
+        if($sid){
+          $this->approveAll($sid, $pid, $fids);
+        }
         break;
 
       case  'notes':
+        $note = $data->body->value['note'];
+        $this->notes($sid, $pid,$note);
         break;
 
       case  'reject_img':
+        if($fids){
+          $this->rejectImg($fids, $pid, $sid, 'rejected');
+        }
         break;
 
       case  'approve_img':
+        $this->approveImg($fids,$pid, $sid, 'approve');
         break;
 
       default:
@@ -206,20 +219,49 @@ class QcOperations extends ResourceBase {
   }
 
 
-  public function notes($sid, $pid, $fids, $notes){
+  public function notes($sid, $pid, $notes){
+
+    // todo find the last updated state of this product.
+
+    // todo get that record & add as new record.
+
     $this->studioQc->addQcRecord($pid, $sid, $notes, 'approved');
   }
 
-  public function rejectImg($fid){
+  public function rejectImg($fid, $pid, $sid, $qc_state){
     $image = $this->fileStorage->load($fid);
     $image->field_qc_state->setValue(array('value'=>'rejected'));
     $image->save();
+
+    // add record to our schema - studio_qc_img_records
+    $this->studioQc->addQcRecordOfImg($fid, $pid, $sid, '', $qc_state);
   }
 
-  public function approveImg($fid){
+  public function approveImg($fid, $pid, $sid, $qc_state){
     $image = $this->fileStorage->load($fid);
     $image->field_qc_state->setValue(array('value'=>'approved'));
     $image->save();
+
+    // add record to our schema - studio_qc_img_records
+    $this->studioQc->addQcRecordOfImg($fid, $pid, $sid, '', $qc_state);
+  }
+
+
+  public function getOpenSessionFromProduct($pid){
+    $sessions_nids = $this->database->select('node__field_product', 'c')
+      ->fields('c', array('entity_id'))
+      ->condition('field_product_target_id', $pid)
+      ->condition('bundle', 'sessions')
+      ->execute()->fetchAll();
+   $a =1;
+    $sids = array();
+    if($sessions_nids){
+      foreach($sessions_nids as $session){
+        $sids[] = $session->entity_id;
+      }
+    }
+    return false;
+
   }
 
 }

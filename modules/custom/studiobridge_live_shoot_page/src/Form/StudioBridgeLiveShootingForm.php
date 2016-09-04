@@ -42,6 +42,8 @@ class StudioBridgeLiveShootingForm extends FormBase {
 
   protected $StudioImgs;
 
+  protected $entityQuery;
+
   /**
   * The state.
   *
@@ -71,6 +73,8 @@ class StudioBridgeLiveShootingForm extends FormBase {
     $this->StudioImgs =  $container->get('studio.imgs');
 
     $this->state = $container->get('state');
+
+    $this->entityQuery = $container->get('entity.query');
   }
 
   /**
@@ -290,18 +294,18 @@ class StudioBridgeLiveShootingForm extends FormBase {
 
 
       if($pids){
-        $db = \Drupal::database();
-        $p_drafts = $db->select('node__field_draft', 'c')
-          ->fields('c')
-          ->condition('field_draft_value', 1)
-          ->condition('entity_id',$pids,'IN')
-          ->execute()->fetchAll();
 
-        $unm = $db->select('node', 'c')
-          ->fields('c')
+        $p_drafts = $this->entityQuery->get('node')
+          ->condition('type', array('unmapped_products','products'), 'IN')
+          ->condition('field_draft',1)
+          ->condition('nid',$pids,'IN')
+          ->count()->execute();
+
+        $unm = $this->entityQuery->get('node')
           ->condition('type', 'unmapped_products')
           ->condition('nid',$pids,'IN')
-          ->execute()->fetchAll();
+          ->count()->execute();
+
       }
 
       $product_state =  '';
@@ -332,8 +336,8 @@ class StudioBridgeLiveShootingForm extends FormBase {
         '#image_count' => $productdetails['image_count'],
         '#image_count_deleted' => $deleted_imgs_count,
         '#total_products' => count($session_products),
-        '#dropped_products' => count($p_drafts),
-        '#unmapped_products' => count($unm),
+        '#dropped_products' => $p_drafts,
+        '#unmapped_products' => $unm,
         '#product_state' => $product_state,
       );
     }
@@ -384,6 +388,7 @@ class StudioBridgeLiveShootingForm extends FormBase {
     $StudioImgs = \Drupal::service('studio.imgs');
     $state = \Drupal::service('state');
     $current_user = \Drupal::service('current_user');
+    $enityQuery = \Drupal::service('entity.query');
     $nodeStorage = \Drupal::service('entity_type.manager')->getStorage('node');
 
     $uid = $current_user->id();
@@ -706,18 +711,17 @@ class StudioBridgeLiveShootingForm extends FormBase {
 
 
       if($pids){
-        $db = \Drupal::database();
-        $p_drafts = $db->select('node__field_draft', 'c')
-          ->fields('c')
-          ->condition('field_draft_value', 1)
-          ->condition('entity_id',$pids,'IN')
-          ->execute()->fetchAll();
 
-        $unm = $db->select('node', 'c')
-          ->fields('c')
+        $p_drafts = $enityQuery->get('node')
+          ->condition('type', array('unmapped_products','products'), 'IN')
+          ->condition('field_draft',1)
+          ->condition('nid',$pids,'IN')
+          ->count()->execute();
+
+        $unm = $enityQuery->get('node')
           ->condition('type', 'unmapped_products')
           ->condition('nid',$pids,'IN')
-          ->execute()->fetchAll();
+          ->count()->execute();
       }
 
       $imgs_deleted = $StudioImgs->getDeletedImgsCount($new_or_old_product_nid);
@@ -749,8 +753,8 @@ class StudioBridgeLiveShootingForm extends FormBase {
         $ajax_response->addCommand(new HtmlCommand('#dd-description', $productdetails['description']));
       $ajax_response->addCommand(new HtmlCommand('#session-total-products', count($session_products)));
 
-      $ajax_response->addCommand(new HtmlCommand('#liveshoot-Unmapped', count($unm)));
-      $ajax_response->addCommand(new InvokeCommand('#liveshoot-drop', 'val', array(count($p_drafts))));
+      $ajax_response->addCommand(new HtmlCommand('#liveshoot-Unmapped', $unm));
+      $ajax_response->addCommand(new InvokeCommand('#liveshoot-drop', 'val', array($p_drafts)));
 
       $ajax_response->addCommand(new InvokeCommand('#product-img-count', 'html', array($productdetails['image_count'])));
       $ajax_response->addCommand(new InvokeCommand('#product-img-count-deleted', 'html', array($imgs_deleted)));

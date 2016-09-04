@@ -88,6 +88,7 @@
 
         e.stopPropagation();
         var id = $(this).attr('data-product-id');
+        //console.log(id);
         var session = $(this).attr('data-session-id');
         var product = null;
         ProductOpened.find('#imagecontainer').empty();
@@ -139,7 +140,7 @@
 
                 })
 
-
+                document.getElementById('selected-pid').value = id;
                 $('.no-result').hide();
                 $('.actions, .email-content-wrapper').show();
                 $(".email-content-wrapper").scrollTop(0);
@@ -157,7 +158,6 @@
 
     });
 
-
     $('.secondary-sidebar').click(function(e) {
         e.stopPropagation();
     })
@@ -166,61 +166,6 @@
     $(document).ready(function() {
         $(".list-view-wrapper").scrollbar({ignoreOverlay: false});
         //$(".email-content-wrapper").scrollbar({ignoreOverlay: false});
-
-    });
-
-
-    $(document).on("click",".approve-all",function(){
-      swal({
-          title: "Approve All?",
-          text: "Are you sure you want to approve all images?",
-          type: "success",
-          showCancelButton: true,
-          confirmButtonColor: "#00b9e5",
-          confirmButtonText: "Approve",
-          closeOnConfirm: true
-      },function () {
-          //update_product(1);
-          //alert('approved');
-          });
-
-    });
-
-    $(document).on("click",".reject-all",function(){
-      swal({
-          title: "Reject All?",
-          text: "Are you sure you want to reject all images?",
-          type: "warning",
-          showCancelButton: true,
-          confirmButtonColor: "#DD6B55",
-          confirmButtonText: "Reject",
-          closeOnConfirm: true
-      },function () {
-          //update_product(1);
-          //alert('rejected');
-          });
-
-    });
-
-    $(document).on("click",".add-note",function(){
-
-      swal({
-          title: 'Add Note',
-          html:
-              '<div id="warehouse-flag-form">' +
-              '<textarea class="js-text-full text-full form-textarea form-control resize-vertical" data-drupal-selector="edit-field-notes-0-value" title="" data-toggle="tooltip" id="edit-field-notes-0-value" name="field_notes[0][value]" rows="4" cols="60" placeholder="Add notes about this product..." data-original-title=""></textarea>'+
-              '</div>',
-          showCloseButton: true,
-          showCancelButton: true,
-          confirmButtonText:
-              'Add',
-          cancelButtonText:
-              'Cancel'
-      },function () {
-          var option = document.getElementById('flag-option').value;
-          var reason = document.getElementById('flag-reason').value;
-
-          });
 
     });
 
@@ -271,8 +216,8 @@
 
         block += '<div class="col col-sm-12"><span id= "'+fid+'">\
         <a rel="fancybox-thumb" href="' + img.uri + '" class="fancybox-thumb col-sm-4 text-info"><i class="fa fa-lg fa-fw fa-search"></i></a> \
-        <a class=" col-sm-4 text-info" ><i class="fa fa-lg fa-fw fa-check text-success"></i></a>\
-        <a class=" col-sm-4 text-info" ><i class="fa fa-lg fa-fw fa-times text-danger"></i></a>\
+        <a class=" col-sm-4 text-info qc-img-approve" data-img-id="' + fid + '"><i class="fa fa-lg fa-fw fa-check text-success"></i></a>\
+        <a class=" col-sm-4 text-info qc-img-reject" data-img-id="' + fid + '"><i class="fa fa-lg fa-fw fa-times text-danger"></i></a>\
         </span></div>';
 
         block += '</div>';

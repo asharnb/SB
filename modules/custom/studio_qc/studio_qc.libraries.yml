@@ -10,5 +10,8 @@ live-qc-collection:
     js/menuclipper/dist/jquery.actual.min.js: {}
     js/menuclipper/dist/jquery.menuclipper.min.js: {}
     js/live-qc.js: { preprocess: false }
+    js/qc-add-note.js: {}
+    js/qc-approve-reject-all.js: {}
+    js/qc-approve-reject-one.js: {}
   dependencies:
     - core/jquery

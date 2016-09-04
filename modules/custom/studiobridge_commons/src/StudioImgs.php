@@ -87,7 +87,7 @@ class StudioImgs implements StudioImgsInterface {
  * @param sid
  *   Session node nid.
  */
-  public function AddFileTransfer($fid, $pid, $sid = 0, $cid = 0) {
+  public function AddFileTransfer($fid, $pid, $sid = 0, $cid = 0, $weight=0) {
     $this->database->insert('studio_file_transfers')
       ->fields(array(
         'fid' => $fid,
@@ -95,6 +95,7 @@ class StudioImgs implements StudioImgsInterface {
         'sid' => $sid,
         'cid' => $cid,
         'created' => REQUEST_TIME,
+        'weight' => $weight,
       ))
       ->execute();
 
@@ -276,6 +277,53 @@ class StudioImgs implements StudioImgsInterface {
         }
       }
     }
+
+  }
+
+  /*
+  * Helper function, to insert/update weight into {studio_file_transfers} table.
+  *
+  * @param fid
+  *   File object fid.
+  * @param pid
+  *   Product node nid.
+  * @param sid
+  *   Session node nid.
+  */
+  public function updateWeightToFileTransfer($fid, $pid, $sid = 0, $cid = 0, $weight) {
+
+    $fields = array(
+      'weight' => $weight,
+    );
+
+    $query = $this->database->update('studio_file_transfers')
+      ->fields($fields)
+      ->condition('fid', $fid)
+      ->condition('pid', $pid);
+    if($sid){
+      $query->condition('sid', $sid);
+    }elseif($cid){
+      $query->condition('cid', $cid);
+    }
+
+    $update_status = $query->execute();
+    if(!$update_status){
+      $this->AddFileTransfer($fid, $pid, $sid, $cid = 0, $weight);
+    }
+
+  }
+
+  /*
+   *
+   */
+  public function getProductImagesOfSessionFromFileLogs($sid, $pid){
+
+    $result = $this->database->select('studio_file_transfers', 'spsp')
+      ->fields('spsp', array('fid'))
+      ->condition('spsp.pid', $pid)
+      ->condition('spsp.sid', $sid)
+      ->orderBy('spsp.weight', 'asc');
+    return $result->execute()->fetchAll();
 
   }
 
