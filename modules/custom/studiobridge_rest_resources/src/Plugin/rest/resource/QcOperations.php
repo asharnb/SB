@@ -128,42 +128,62 @@ class QcOperations extends ResourceBase {
 
     $sids = $this->getOpenSessionFromProduct($pid);
 
+    if(count($sids) > 1 ){
+      return new ResourceResponse(array('message' => 'There are multiple sessions opened', 'type' => 'error'));
+    }elseif(count($sids) == 1){
+      $sid = reset($sids);
+    }elseif(count($sids) == 0){
+      return new ResourceResponse(array('message' => 'This product not found in any open/pause session', 'type' => 'error'));
+    }
+
     switch($type){
 
       case  'reject_all':
         if($sid){
           $this->rejectAll($sid, $pid, $fids);
+
+          return new ResourceResponse(array('message' => 'Successfully rejected all images','type' => 'success', 'data' => array()));
         }
         break;
 
       case  'approve_all':
         if($sid){
           $this->approveAll($sid, $pid, $fids);
+          return new ResourceResponse(array('message' => 'Successfully rejected all images','type' => 'success', 'data' => array()));
+
         }
         break;
 
       case  'notes':
-        $note = $data->body->value['note'];
-        $this->notes($sid, $pid,$note);
+        if($sid){
+          $note = $data->body->value['note'];
+          $this->notes($sid, $pid,$note);
+          return new ResourceResponse(array('message' => 'Successfully rejected all images', 'type' => 'success', 'data' => array()));
+
+        }
         break;
 
       case  'reject_img':
-        if($fids){
+        if($fids & $sid){
           $this->rejectImg($fids, $pid, $sid, 'rejected');
+          return new ResourceResponse(array('message' => 'Successfully rejected all images', 'type' => 'success', 'data' => array()));
         }
         break;
 
       case  'approve_img':
-        $this->approveImg($fids,$pid, $sid, 'approve');
+        if($fids & $sid){
+          $this->approveImg($fids,$pid, $sid, 'approve');
+          return new ResourceResponse(array('message' => 'Successfully rejected all images', 'type' => 'success', 'data' => array()));
+        }
         break;
 
       default:
-        return new ResourceResponse("Implement REST State POST!");
+        return new ResourceResponse(array('message' => 'Invalid request sent', 'type' => 'error', 'data' => array()));
 
     }
 
 
-    return new ResourceResponse(array(rand(1, 999999), array($type, $data)));
+    return new ResourceResponse(array('message' => 'Invalid request sent', 'type' => 'error', 'data' => array()));
 
   }
 
@@ -253,14 +273,40 @@ class QcOperations extends ResourceBase {
       ->condition('field_product_target_id', $pid)
       ->condition('bundle', 'sessions')
       ->execute()->fetchAll();
-   $a =1;
+
     $sids = array();
     if($sessions_nids){
       foreach($sessions_nids as $session){
         $sids[] = $session->entity_id;
       }
     }
-    return false;
+
+    if(count($sids) == 1){
+      $sid = reset($sids);
+      $session_obj = $this->nodeStorage->load($sid);
+      $field_status = $session_obj->field_status->getValue();
+      if($field_status[0]['value'] != 'closed'){
+        return array($sid);
+      }
+
+    }elseif(count($sids) > 1){
+
+      $sids_open = array();
+      $sessions = $this->nodeStorage->loadMultiple($sids);
+      foreach($sessions as $each_session){
+
+        $field_status = $each_session->field_status->getValue();
+        if($field_status[0]['value'] != 'closed'){
+          $sids_open[] = $each_session->id();
+        }
+
+      }
+      return $sids_open;
+
+
+    }
+
+    return array();
 
   }
 
