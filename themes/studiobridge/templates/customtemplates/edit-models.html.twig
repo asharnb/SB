@@ -1,0 +1,54 @@
+
+{{kint()}}
+{{ attach_library('studiobridge/iCheck') }}
+<div class="row">
+  <div class="col-sm-12">
+    <h3 class="no-margins p-b-sm">Add New Model</span></h3>
+    <h4 class="no-margins">Create a new model by adding model stats</h4>
+  </div>
+</div>
+<hr class="simple">
+
+<div class="panel panel-default">
+
+<form>
+  {{ form.form_build_id }}
+  {{ form.form_id }}
+  {{ form.form_token }}
+  <div class="panel-body">
+    <div class="col-lg-8 col-md-9 col-sm-9 col-xs-12 m-l-n">
+     <!-- <div class="col-sm-6 m-b-10">
+      </div> -->
+      <div class="col-sm-6 m-b-10">
+        {{form.title}}
+      </div>
+      <br>
+      <div class="col-sm-6 m-b-10">
+        {{form.field_model_image}}
+      </div>
+      <br>
+
+      <div class="col-sm-8 m-b-10">
+        <h4 style="margin-top: 1px;font-weight: 600;font-size: 14px;">Model Gender <span class="form-required text-danger"> *</span></h4>
+        {% for key, options in form.field_model_gender.widget['#options'] %}
+        <div class="col-sm-4 m-l-n">
+          <input type="radio" name="iCheck" value="{{key}}">    {{options}}
+        </div>
+        {% endfor %}
+
+      </div>
+      <div class="col-sm-6 m-b-10">
+        {{form.field_model_stats}}
+      </div>
+      <br>
+
+      <div class="col-sm-12 m-t-10">
+          <button type="submit"   class="btn btn-complete">Add this model</button>
+      </div>
+
+    </div>
+
+
+  </div>
+</form>
+</div>

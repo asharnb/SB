@@ -101,3 +101,10 @@ slimscroll:
     js/slimscroll/jquery.slimscroll.min.js: {}
   dependencies:
     - core/jquery
+
+validate:
+  js:
+    js/jquery-validation/js/jquery.validate.min.js: {}
+    js/validate.js: {}
+  dependencies:
+    - core/jquery

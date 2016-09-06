@@ -88,12 +88,13 @@ class ViewProductController extends ControllerBase {
       $file = $this->fileStorage->load($fid);
 
       $file_name = $file->filename->getValue();
+      $qc_state = $file->field_qc_state->getValue();
       $file_name = $file_name[0]['value'];
 
       $image_uri_value = ImageStyle::load('live_shoot_preview')->buildUrl($file->getFileUri());
       $image_uri_large = ImageStyle::load('large_image_preview')->buildUrl($file->getFileUri());
       $image_uri_full = file_create_url($file->getFileUri());
-      $images[$fid] = array('fid'=>$fid,'uri'=>$image_uri_value,'name'=>$file_name,'fullimage'=>$image_uri_full, 'largeimage'=>$image_uri_large);
+      $images[$fid] = array('fid'=>$fid,'uri'=>$image_uri_value,'name'=>$file_name,'fullimage'=>$image_uri_full, 'largeimage'=>$image_uri_large, 'qc'=>$qc_state);
 
       $images2[$fid] = $file;
     }

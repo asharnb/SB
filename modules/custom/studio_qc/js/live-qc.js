@@ -4,10 +4,6 @@
     //attach jquery once here to ensure it runs once on load
 
 
-    $('.full-height-scroll').slimscroll({
-        height: '100%'
-    })
-
     var ProductList = $('[data-product="list"]');
     var ProductOpened = $('[data-product="opened"]');
 

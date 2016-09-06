@@ -216,31 +216,40 @@
               <div class="col-sm-6 text-right text-danger bold">
                   <h5 class="bold" id="product-img-count-deleted">{{ form.productdetails['#image_count_deleted'] ? form.productdetails['#image_count_deleted'] : '0' }}</h5>
               </div>
-
               <div class="col-sm-12 m-b-sm">
-                <a class="btn btn-xs studio-product-drop">Drop Product</a>
+                <a class="btn btn-xs">Complete</a>
+                <a class="btn btn-xs studio-product-drop">Drop</a>
+                <a class="btn btn-xs studio-product-flag">Flag</a>
+
               </div>
 
     </div>
   <hr class="simple" style="margin-bottom: 5px !important;">
-    <div  class="row ">
+    <div  class="row">
               <div class="col-sm-12">
                 <h5 class="semi-bold">Completion Checklist</h5>
               </div>
 
+              <div class="row m-n">
               <div class="col-sm-6 ">
                 <h5 >Image sequence</h5>
               </div>
               <div class="col-sm-6 text-right text-muted bold">
-                <h5 class="bold"><i id="sequence-check" class="fa fw fa-check-square-o text-success"></i></h5>
+                <h5 class="bold"><i id="sequence-check" class="fa fa-lg fw fa-check-square-o text-success"></i></h5>
               </div>
-
+            </div>
+            <div class="row m-n">
               <div class="col-sm-6 ">
                 <h5>Tag Image</h5>
               </div>
               <div class="col-sm-6 text-right bold text-muted">
-                <h5 class="bold"><i class="fa fw fa-square-o"></i></h5>
+                <h5 class="bold"><i id="tag-check"class="fa fa-lg fw fa-square-o"></i>
+                  </h5>
               </div>
+
+            </div>
+
+
     </div>
 
   </div>

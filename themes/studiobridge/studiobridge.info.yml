@@ -27,4 +27,4 @@ libraries:
   - 'studiobridge/flot-charts'
   - 'studiobridge/jquery-loading'
   - 'studiobridge/fancybox'
-  - 'studiobridge/slimscroll'
+  - 'studiobridge/validate'

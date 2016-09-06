@@ -30,5 +30,6 @@ function studiobridge_theme(&$existing, $type, $theme, $path) {
         'render element' => 'form',
         'template' => 'customtemplates/add-container',
     );
+
     return $hooks;
 };

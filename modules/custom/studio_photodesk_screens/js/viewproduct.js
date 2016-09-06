@@ -6,7 +6,7 @@
 
 		helpers	: {
 			title	: {
-				type: 'outside'
+				type: 'inside'
 			},
 			thumbs	: {
 				width	: 50,

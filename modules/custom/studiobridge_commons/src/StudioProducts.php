@@ -422,7 +422,7 @@ class StudioProducts implements StudioProductsInterface {
 //    }
     $result = $this->lookProductServer($url, $user_name, $pass);
 
-    $result = $this->checkBarecodesInDB($result, $input, $url_without_input, $user_name, $pass);
+    //$result = $this->checkBarecodesInDB($result, $input, $url_without_input, $user_name, $pass);
 
 
     return $result;

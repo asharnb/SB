@@ -39,13 +39,12 @@
                     var r = '<i class="fa fa-lg fa-barcode txt-color-white"></i>';
                     document.getElementById('seq-' + fid).className += ' tag';
                     document.getElementById('seq-'+ fid).innerHTML = r;
-
                     //todo
                     updateTagClasses(fid, 'tag');
                 }else{
                     swal({
-                        title: "Undo Tag Shot",
-                        text: "Tag shot has been cancelled",
+                        title: "Remove Tag Shot",
+                        text: "Tag shot has been removed",
                         type: "success",
                         showConfirmButton: false,
                         confirmButtonColor: "#DD6B55",
@@ -134,11 +133,15 @@ $(document).on("click",".studio-img-tag",function(){
         if(tag_status == 'tag'){
             var tagItem = document.getElementById(fid);
             var s = '#'+fid+ ' .studio-img-tag';
-            // alert(s);
+            //if image is already tagged
             $(s).addClass('studio-img-un-tag');
             $(s).removeClass('studio-img-tag');
-            $('.studio-img-tag').addClass('studio-img-tag-nutral');
+            $('.studio-img-tag').addClass('studio-img-tag-nutral hidden');
             $('.studio-img-tag').removeClass('studio-img-tag');
+
+            $("#tag-check").addClass('fa-check-square-o');
+            $("#tag-check").removeClass('fa-square-o');
+            $("#tag-check").addClass('text-success');
         }else{
 
             var tagItem = document.getElementById(fid);
@@ -147,7 +150,11 @@ $(document).on("click",".studio-img-tag",function(){
             $(s).addClass('studio-img-tag');
             $(s).removeClass('studio-img-un-tag');
             $('.studio-img-tag-nutral').addClass('studio-img-tag');
-            $('.studio-img-tag-nutral').removeClass('studio-img-tag-nutral');
+            $('.studio-img-tag-nutral').removeClass('studio-img-tag-nutral hidden');
+
+            $("#tag-check").removeClass('fa-check-square-o');
+            $("#tag-check").addClass('fa-square-o');
+            $("#tag-check").removeClass('text-success');
 
         }
 
@@ -178,5 +185,8 @@ $(document).on("click",".studio-img-tag",function(){
             updateTagClasses(tag_fid, 'tag');
         }
     }
+
+
+
 
 })(jQuery);
