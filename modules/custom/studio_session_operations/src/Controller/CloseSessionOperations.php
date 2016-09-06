@@ -485,6 +485,7 @@ class CloseSessionOperations extends ControllerBase {
     $tag_img = \Drupal::state()->get('Image_tag' . '_' . $sid,false);
 
     // make sure both values are set.
+    $field_base_product_id = '1';
     if ($field_base_product_id && $images) {
       $i = 1;
       $j = 1;
