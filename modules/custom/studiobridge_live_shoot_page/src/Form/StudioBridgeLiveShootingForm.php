@@ -602,7 +602,7 @@ class StudioBridgeLiveShootingForm extends FormBase {
 
     // Once product is scanned update it to session
     if (!$is_unmapped_product) {
-      $StudioProducts->addProductToSession($session_id, Node::load($new_or_old_product_nid));
+      $StudioProducts->addProductToSession($session_id, $nodeStorage->load($new_or_old_product_nid));
     }
 
     $state->set('last_scan_product_' . $uid . '_' . $session_id, $identifier);
