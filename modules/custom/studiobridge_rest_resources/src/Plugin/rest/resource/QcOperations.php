@@ -126,10 +126,14 @@ class QcOperations extends ResourceBase {
     $fids = $data->body->value['images'];
     $state = $data->body->value['state'];
 
+    if(count($fids) == 0 && $type != 'notes'){
+      return new ResourceResponse(array('message' => 'No images found!', 'type' => 'error'));
+    }
+
     $sids = $this->getOpenSessionFromProduct($pid);
 
     if(count($sids) > 1 ){
-      return new ResourceResponse(array('message' => 'There are multiple sessions opened', 'type' => 'error'));
+      return new ResourceResponse(array('title'=> '', 'message' => 'There are multiple sessions opened for this product.', 'type' => 'error', 'data' => $sids));
     }elseif(count($sids) == 1){
       $sid = reset($sids);
     }elseif(count($sids) == 0){
@@ -149,7 +153,7 @@ class QcOperations extends ResourceBase {
       case  'approve_all':
         if($sid){
           $this->approveAll($sid, $pid, $fids);
-          return new ResourceResponse(array('message' => 'Successfully rejected all images','type' => 'success', 'data' => array()));
+          return new ResourceResponse(array('message' => 'Successfully approved all images','type' => 'success', 'data' => array()));
 
         }
         break;
@@ -158,7 +162,7 @@ class QcOperations extends ResourceBase {
         if($sid){
           $note = $data->body->value['note'];
           $this->notes($sid, $pid,$note);
-          return new ResourceResponse(array('message' => 'Successfully rejected all images', 'type' => 'success', 'data' => array()));
+          return new ResourceResponse(array('message' => 'Successfully added note to this product', 'type' => 'success', 'data' => array()));
 
         }
         break;
@@ -166,14 +170,14 @@ class QcOperations extends ResourceBase {
       case  'reject_img':
         if($fids & $sid){
           $this->rejectImg($fids, $pid, $sid, 'rejected');
-          return new ResourceResponse(array('message' => 'Successfully rejected all images', 'type' => 'success', 'data' => array()));
+          return new ResourceResponse(array('message' => 'Successfully rejected this image', 'type' => 'success', 'data' => array()));
         }
         break;
 
       case  'approve_img':
         if($fids & $sid){
           $this->approveImg($fids,$pid, $sid, 'approve');
-          return new ResourceResponse(array('message' => 'Successfully rejected all images', 'type' => 'success', 'data' => array()));
+          return new ResourceResponse(array('message' => 'Successfully approved this image', 'type' => 'success', 'data' => array()));
         }
         break;
 
@@ -241,11 +245,21 @@ class QcOperations extends ResourceBase {
 
   public function notes($sid, $pid, $notes){
 
+    $uid = $this->currentUser->id();
     // todo find the last updated state of this product.
-
+    $result = $this->database->select('studio_products_qc_records', 'spqr')
+      ->fields('spqr', array('qc_state'))
+      ->condition('spqr.sid', $sid)
+      ->condition('spqr.pid', $pid)
+      ->condition('spqr.uid', $uid)
+      ->orderBy('spqr.id', 'desc')->range(0, 1);
+    $state = $result->execute()->fetchField();
     // todo get that record & add as new record.
+    if(!$state){
+      $state = 'pending';
+    }
 
-    $this->studioQc->addQcRecord($pid, $sid, $notes, 'approved');
+    $this->studioQc->addQcRecord($pid, $sid, $notes, $state);
   }
 
   public function rejectImg($fid, $pid, $sid, $qc_state){
@@ -255,6 +269,9 @@ class QcOperations extends ResourceBase {
 
     // add record to our schema - studio_qc_img_records
     $this->studioQc->addQcRecordOfImg($fid, $pid, $sid, '', $qc_state);
+
+    // if any image is rejected from the product then product itself rejected
+    $this->studioQc->addQcRecord($pid, $sid, '', 'rejected');
   }
 
   public function approveImg($fid, $pid, $sid, $qc_state){

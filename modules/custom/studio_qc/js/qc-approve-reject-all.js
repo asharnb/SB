@@ -28,7 +28,19 @@
             data: JSON.stringify(node),
             success: function (response) {
                 console.log(response);
-                alert('success');
+                //alert('success');
+
+                swal({
+                    title: "Response",
+                    text: response.message,
+                    type: response.type,
+                    showConfirmButton: false,
+                    confirmButtonColor: "#DD6B55",
+                    confirmButtonText: "OK",
+                    closeOnConfirm: true,
+                    timer:3000
+                });
+
             },
             error: function(){
                 alert('Failed!');
