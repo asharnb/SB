@@ -133,7 +133,7 @@ class QcOperations extends ResourceBase {
     $sids = $this->getOpenSessionFromProduct($pid);
 
     if(count($sids) > 1 ){
-      return new ResourceResponse(array('title'=> '', 'message' => 'There are multiple sessions opened for this product.', 'type' => 'error', 'data' => $sids));
+      return new ResourceResponse(array('message' => 'There are multiple sessions opened for this product.', 'type' => 'error', 'data' => $sids));
     }elseif(count($sids) == 1){
       $sid = reset($sids);
     }elseif(count($sids) == 0){
