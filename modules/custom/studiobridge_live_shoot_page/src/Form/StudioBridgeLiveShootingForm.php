@@ -411,7 +411,6 @@ class StudioBridgeLiveShootingForm extends FormBase {
 
     //get last product from form
     $identifier = $form_state->getValue('identifier');
-    $identifier_old = $form_state->getValue('identifier_hidden'); // @note : this will be the recent product.
 
     $last_scan_product = $state->get('last_scan_product_' . $uid . '_' . $session_id, FALSE);
 
@@ -496,7 +495,6 @@ class StudioBridgeLiveShootingForm extends FormBase {
 
         </script>';
         //
-
 
       }
       else {
@@ -600,16 +598,18 @@ class StudioBridgeLiveShootingForm extends FormBase {
       $StudioProducts->AddEndTimeToProduct($session_id, FALSE, $last_scan_product);
     }
 
-    // Once product is scanned update it to session
-    if (!$is_unmapped_product) {
-      $StudioProducts->addProductToSession($session_id, $nodeStorage->load($new_or_old_product_nid));
-    }
 
     $state->set('last_scan_product_' . $uid . '_' . $session_id, $identifier);
+    $images = '';
 
     if ($new_or_old_product_nid) {
 
       $product_node = $nodeStorage->load($new_or_old_product_nid);
+
+      // Once product is scanned update it to session
+      if (!$is_unmapped_product) {
+        $StudioProducts->addProductToSession($session_id, $product_node);
+      }
 
       $state->set('last_scan_product_nid' . $uid . '_' . $session_id, $new_or_old_product_nid);
 
@@ -625,11 +625,9 @@ class StudioBridgeLiveShootingForm extends FormBase {
 
         $state->set('full_shot' . '_' . $session_id, FALSE);
       }
+      $images = $StudioProducts->getProductImages($product_node, false, true);
     }
 
-
-    $images = $StudioProducts->getProductImages($new_or_old_product_nid);
-    //$images = '';
 
     $block = '<div id="imagecontainer" name="imagecontainer" class="ui-sortable">';
     $i = 1;
@@ -729,7 +727,11 @@ class StudioBridgeLiveShootingForm extends FormBase {
 
       $product_state =  'New';
       if($new_or_old_product_nid){
-        $product_obj = $nodeStorage->load($new_or_old_product_nid);
+        if(is_object($product_node)){
+          $product_obj = $product_node;
+        }else{
+          $product_obj = $nodeStorage->load($new_or_old_product_nid);
+        }
         // Get product state.
         $product_state = 'New';
         $duplicates = $StudioProducts->checkProductDuplicate($new_or_old_product_nid, array('sessions'));
@@ -745,12 +747,12 @@ class StudioBridgeLiveShootingForm extends FormBase {
       }
 
       $ajax_response->addCommand(new HtmlCommand('#dd-identifier', $identifier));
-        $ajax_response->addCommand(new HtmlCommand('#dd-styleno', $productdetails['styleno']));
-        $ajax_response->addCommand(new HtmlCommand('#dd-concept', $concept_image));
-        $ajax_response->addCommand(new HtmlCommand('#dd-colorvariant', $productdetails['colorvariant']));
-        $ajax_response->addCommand(new HtmlCommand('#dd-gender', $productdetails['gender']));
-        $ajax_response->addCommand(new HtmlCommand('#dd-color', $productdetails['color']));
-        $ajax_response->addCommand(new HtmlCommand('#dd-description', $productdetails['description']));
+      $ajax_response->addCommand(new HtmlCommand('#dd-styleno', $productdetails['styleno']));
+      $ajax_response->addCommand(new HtmlCommand('#dd-concept', $concept_image));
+      $ajax_response->addCommand(new HtmlCommand('#dd-colorvariant', $productdetails['colorvariant']));
+      $ajax_response->addCommand(new HtmlCommand('#dd-gender', $productdetails['gender']));
+      $ajax_response->addCommand(new HtmlCommand('#dd-color', $productdetails['color']));
+      $ajax_response->addCommand(new HtmlCommand('#dd-description', $productdetails['description']));
       $ajax_response->addCommand(new HtmlCommand('#session-total-products', count($session_products)));
 
       $ajax_response->addCommand(new HtmlCommand('#liveshoot-Unmapped', $unm));
