@@ -83,9 +83,45 @@
 
     {# Main #}
     {% block main %}
+
         <div id="main" role="main">
 
+          <div class=" border-bottom">
+                  <div class="navbar navbar-static-top" role="navigation" style="margin-bottom: 0">
 
+                      <ul class="nav navbar-top-links navbar-right">
+
+                          <li class="dropdown">
+                              <a class="dropdown-toggle count-info" data-toggle="dropdown" href="#">
+                                <span class="text-muted">QC Notification</span>
+
+                                <span class="animate tada label label-danger">0</span>
+                              </a>
+                              <ul class="dropdown-menu dropdown-alerts">
+                                  <li>
+                                      <a href="mailbox.html">
+                                          <div>
+                                              <i class="fa fa-envelope fa-fw"></i> 1 Max product is rejected
+                                              <span class="pull-right text-muted small">a minutes ago</span>
+                                          </div>
+                                      </a>
+                                  </li>
+                                  <li class="divider"></li>
+                                  <li>
+                                      <a href="profile.html">
+                                          <div>
+                                              <i class="fa fa-twitter fa-fw"></i> 1 Splash shot is missing
+                                              <span class="pull-right text-muted small">2 minutes ago</span>
+                                          </div>
+                                      </a>
+                                  </li>
+
+                              </ul>
+                          </li>
+                      </ul>
+
+                  </div>
+                  </div>
             <div id="content">
                 <div class="col-sm-12">
 
