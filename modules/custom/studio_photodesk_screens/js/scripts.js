@@ -138,7 +138,6 @@
     $(container).each(function() {
 
       var el = jQuery(this);
-      console.log(el.height());
       el.height('auto')
       topPosition = el.position().top;
 

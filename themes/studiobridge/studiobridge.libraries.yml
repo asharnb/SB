@@ -11,14 +11,18 @@ global-styling:
       css/style.css: {}
   js:
     js/app.config.js: {}
-    js/bootstrap/bootstrap.min.js: {}
-    js/smartwidgets/jarvis.widget.min.js: {}
     js/app.min.js: {}
   dependencies:
     - core/jquery
     - core/jquery.ui
     - core/drupal
     - core/jquery.once
+
+bootstrap:
+  js:
+    js/bootstrap.min.js: {}
+  dependencies:
+    - core/jquery
 
 smart-alert:
   css:
